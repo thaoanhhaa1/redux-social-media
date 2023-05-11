@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+#root {
+    overflow: hidden overlay;
+}
+
+.bg-blue-blue-white-4 {
+    background: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0.8)
+        ),
+        #2365ff;
+}
+
+.bg-blue-blue-white-2 {
+    background: linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.4)
+        ),
+        #2365ff;
+}
+
+.bg-dark-mude-white {
+    background: linear-gradient(0deg, #ffffff, #ffffff), #736f72;
+}
+
+.bg-white-white-1 {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)),
+        #ffffff;
+}
