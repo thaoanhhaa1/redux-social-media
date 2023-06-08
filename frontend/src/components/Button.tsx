@@ -1,4 +1,4 @@
-import { ReactElement, useMemo, useState } from 'react';
+import { CSSProperties, ReactElement, useMemo, useState } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const Button = ({
@@ -8,12 +8,14 @@ const Button = ({
     icon,
     className = '',
     onClick = () => {},
+    ...passProps
 }: {
     href?: string;
     to?: string;
     children?: ReactElement;
     icon?: ReactElement;
     className?: string;
+    style?: CSSProperties;
     onClick?: () => void;
 }) => {
     let Type: React.ElementType = 'button';
@@ -41,7 +43,7 @@ const Button = ({
     }
 
     return (
-        <Type className={styles} onClick={onClick} {...props}>
+        <Type className={styles} onClick={onClick} {...props} {...passProps}>
             {icon}
             {children}
         </Type>
