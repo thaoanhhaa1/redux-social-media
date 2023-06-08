@@ -17,7 +17,7 @@ const TopBar = () => {
             <div className="flex items-center gap-[10px]">
                 <Image
                     className="w-10 h-10 rounded-full"
-                    src="https://scontent-hkt1-2.xx.fbcdn.net/v/t39.30808-1/298008203_2883113008649874_7546349808600317930_n.jpg?stp=dst-jpg_p320x320&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_ohc=7M3CrwxyU5kAX_7bHzJ&_nc_ht=scontent-hkt1-2.xx&oh=00_AfDIBdFe30dUfMz0geUGNoSfFdRQnmacQQVdPh8yzjJOCQ&oe=63E8A37E"
+                    src="https://cdn.openai.com/labs/images/A%20cyberpunk%20monster%20in%20a%20control%20room.webp?v=1"
                     alt=""
                 />
                 <div className="flex flex-col gap-[5px]">

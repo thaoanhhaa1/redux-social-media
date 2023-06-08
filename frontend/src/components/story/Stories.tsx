@@ -5,6 +5,7 @@ import Button from '../Button';
 import { LeftIcon, RightIcon } from '../Icons';
 import NewStory from './NewStory';
 import Story from './Story';
+import Wrapper from '../Wrapper';
 
 const Stories = () => {
     const container = useRef<HTMLDivElement>(null);
@@ -41,7 +42,7 @@ const Stories = () => {
     }, []);
 
     return (
-        <div className="bg-white">
+        <Wrapper className="bg-white font-semibold px-[18px] py-[16.5px]">
             <div className="flex items-center justify-between">
                 <span className="text-base text-black leading-[19px]">
                     Stories
@@ -88,7 +89,7 @@ const Stories = () => {
                     />
                 )}
             </div>
-        </div>
+        </Wrapper>
     );
 };
 
