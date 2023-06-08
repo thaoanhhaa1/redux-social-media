@@ -74,6 +74,9 @@ module.exports = {
                 'dark-black-2': '#1B2730',
                 'dark-black-1': '#06141D',
             },
+            boxShadow: {
+                'icon-btn': '0 2px 8px rgba(0, 0, 0, 0.1),0 0 0 1px rgba(0, 0, 0, 0.1)'
+            }
         },
     },
     plugins: [],

@@ -222,3 +222,70 @@ export const DropdownIcon = ({ className }: { className?: string }) => (
         />
     </svg>
 );
+
+export const AddStoryIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={24}
+        height={25}
+        viewBox="0 0 24 25"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g clipPath="url(#clip0_101_3257)">
+            <path
+                d="M11 11.5V5.5H13V11.5H19V13.5H13V19.5H11V13.5H5V11.5H11Z"
+                fill="white"
+            />
+            <path
+                d="M11 11.5V5.5H13V11.5H19V13.5H13V19.5H11V13.5H5V11.5H11Z"
+                fill="black"
+                fillOpacity="0.1"
+            />
+        </g>
+        <defs>
+            <clipPath id="clip0_101_3257">
+                <rect
+                    width={24}
+                    height={24}
+                    fill="white"
+                    transform="translate(0 0.5)"
+                />
+            </clipPath>
+        </defs>
+    </svg>
+);
+
+export const RightIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+        />
+    </svg>
+);
+
+export const LeftIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+    >
+        <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M15.75 19.5L8.25 12l7.5-7.5"
+        />
+    </svg>
+);
