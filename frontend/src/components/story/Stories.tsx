@@ -23,14 +23,15 @@ const Stories = () => {
                     ? storyShowCount + (storyIndex === 0 ? -1 : 0)
                     : -1 * storyShowCount);
 
-            if (newIndex > storyLength) newIndex = storyLength - storyShowCount;
+            if (newIndex + storyShowCount > storyLength)
+                newIndex = storyLength - storyShowCount + 1;
             else if (newIndex < 0) newIndex = 0;
 
             return newIndex;
         });
 
     useEffect(() => {
-        const res = [1, 2, 3, 4, 5, 6, 7, 8];
+        const res: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         setStory(res);
         setStoryLength(res.length);
