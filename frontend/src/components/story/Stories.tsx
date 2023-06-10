@@ -5,7 +5,8 @@ import Button from '../Button';
 import { LeftIcon, RightIcon } from '../Icons';
 import NewStory from './NewStory';
 import Story from './Story';
-import Wrapper from '../Wrapper';
+import Wrapper from '../wrapper/Wrapper';
+import WrapperHeader from '../wrapper/WrapperHeader';
 
 const Stories = () => {
     const container = useRef<HTMLDivElement>(null);
@@ -43,14 +44,7 @@ const Stories = () => {
 
     return (
         <Wrapper className="bg-white font-semibold px-[18px] py-[16.5px]">
-            <div className="flex items-center justify-between">
-                <span className="text-base text-black leading-[19px]">
-                    Stories
-                </span>
-                <Link className="text-sm text-blue leading-[17px]" to="/">
-                    See All
-                </Link>
-            </div>
+            <WrapperHeader title="Stories" titleLink="See All" to="/" />
             <div
                 ref={container}
                 className={

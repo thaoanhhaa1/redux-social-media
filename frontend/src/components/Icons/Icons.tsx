@@ -289,3 +289,285 @@ export const LeftIcon = ({ className }: { className?: string }) => (
         />
     </svg>
 );
+
+export const BottomIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={17}
+        height={17}
+        viewBox="0 0 17 17"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <g clipPath="url(#clip0_127_4264)">
+            <path
+                d="M8.50023 9.67168L13.4502 4.72168L14.8642 6.13568L8.50023 12.4997L2.13623 6.13568L3.55023 4.72168L8.50023 9.67168Z"
+                fill="black"
+            />
+            <path
+                d="M8.50023 9.67168L13.4502 4.72168L14.8642 6.13568L8.50023 12.4997L2.13623 6.13568L3.55023 4.72168L8.50023 9.67168Z"
+                fill="white"
+                fillOpacity="0.05"
+            />
+        </g>
+        <defs>
+            <clipPath id="clip0_127_4264">
+                <rect
+                    width={16}
+                    height={16}
+                    fill="white"
+                    transform="translate(0.5 0.5)"
+                />
+            </clipPath>
+        </defs>
+    </svg>
+);
+
+export const ShareIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={14}
+        height={14}
+        viewBox="0 0 15 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M7.42985 8.6281V1.60419"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M7.42985 8.6281V1.60419"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.13052 6.92078L7.42952 8.62878L5.72852 6.92078"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.13052 6.92078L7.42952 8.62878L5.72852 6.92078"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M10.0495 4.23425C12.1372 4.42675 12.8962 5.20842 12.8962 8.31759C12.8962 12.4593 11.5481 12.4593 7.50033 12.4593C3.45141 12.4593 2.10449 12.4593 2.10449 8.31759C2.10449 5.20842 2.86283 4.42675 4.95116 4.23425"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M10.0495 4.23425C12.1372 4.42675 12.8962 5.20842 12.8962 8.31759C12.8962 12.4593 11.5481 12.4593 7.50033 12.4593C3.45141 12.4593 2.10449 12.4593 2.10449 8.31759C2.10449 5.20842 2.86283 4.42675 4.95116 4.23425"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
+export const RetweetIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={14}
+        height={14}
+        viewBox="0 0 15 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M4.57145 2.68408V10.0446"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M4.57145 2.68408V10.0446"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M2.19189 5.07502C2.19189 5.07502 3.45714 2.68335 4.57073 2.68335C5.68373 2.68335 6.94956 5.07502 6.94956 5.07502"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M2.19189 5.07502C2.19189 5.07502 3.45714 2.68335 4.57073 2.68335C5.68373 2.68335 6.94956 5.07502 6.94956 5.07502"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M10.362 11.3327V3.97223"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M10.362 11.3327V3.97223"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M12.7416 8.94159C12.7416 8.94159 11.4757 11.3333 10.3627 11.3333C9.24972 11.3333 7.98389 8.94159 7.98389 8.94159"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M12.7416 8.94159C12.7416 8.94159 11.4757 11.3333 10.3627 11.3333C9.24972 11.3333 7.98389 8.94159 7.98389 8.94159"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+export const MessagesIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={14}
+        height={14}
+        viewBox="0 0 15 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M9.79783 7.24095H9.80308"
+            stroke="black"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.79783 7.24095H9.80308"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M7.45945 7.24095H7.4647"
+            stroke="black"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M7.45945 7.24095H7.4647"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M5.12058 7.24095H5.12583"
+            stroke="black"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M5.12058 7.24095H5.12583"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M11.6246 11.1241C9.84247 12.9071 7.2021 13.2923 5.04185 12.2932C4.72294 12.1648 2.65883 12.7364 2.21095 12.2891C1.76307 11.8412 2.33523 9.77676 2.20685 9.45781C1.20733 7.29785 1.59307 4.65654 3.37579 2.87416C5.65153 0.597529 9.34887 0.597529 11.6246 2.87416C13.905 5.15431 13.9003 8.84805 11.6246 11.1241Z"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M11.6246 11.1241C9.84247 12.9071 7.2021 13.2923 5.04185 12.2932C4.72294 12.1648 2.65883 12.7364 2.21095 12.2891C1.76307 11.8412 2.33523 9.77676 2.20685 9.45781C1.20733 7.29785 1.59307 4.65654 3.37579 2.87416C5.65153 0.597529 9.34887 0.597529 11.6246 2.87416C13.905 5.15431 13.9003 8.84805 11.6246 11.1241Z"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+export const LikeIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={14}
+        height={14}
+        viewBox="0 0 15 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M2.20464 7.26034C1.57872 5.30617 2.3108 2.87659 4.36239 2.21626C5.44155 1.86801 6.7733 2.15851 7.52989 3.20209C8.2433 2.12001 9.61355 1.87034 10.6916 2.21626C12.7426 2.87659 13.4787 5.30617 12.8534 7.26034C11.8792 10.3578 8.48013 11.9713 7.52989 11.9713C6.58022 11.9713 3.21147 10.394 2.20464 7.26034Z"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M2.20464 7.26034C1.57872 5.30617 2.3108 2.87659 4.36239 2.21626C5.44155 1.86801 6.7733 2.15851 7.52989 3.20209C8.2433 2.12001 9.61355 1.87034 10.6916 2.21626C12.7426 2.87659 13.4787 5.30617 12.8534 7.26034C11.8792 10.3578 8.48013 11.9713 7.52989 11.9713C6.58022 11.9713 3.21147 10.394 2.20464 7.26034Z"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.71045 4.41235C10.4145 4.48469 10.8549 5.04294 10.8287 5.82519"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.71045 4.41235C10.4145 4.48469 10.8549 5.04294 10.8287 5.82519"
+            stroke="white"
+            strokeOpacity="0.45"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);

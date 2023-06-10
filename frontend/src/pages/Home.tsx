@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import Card from '../components/Card';
+import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 
 const Home = () => {
