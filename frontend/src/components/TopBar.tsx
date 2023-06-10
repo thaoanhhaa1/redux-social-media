@@ -21,10 +21,10 @@ const TopBar = () => {
                     alt=""
                 />
                 <div className="flex flex-col gap-[5px]">
-                    <span className="text-dark-black-1 font-semibold leading-[19px]">
+                    <span className="text-dark-black-1 font-semibold">
                         Md mahmudul
                     </span>
-                    <span className="font-semibold text-black-8 text-sm leading-[17px]">
+                    <span className="font-semibold text-black-8 text-sm leading-sm">
                         Profile
                     </span>
                 </div>

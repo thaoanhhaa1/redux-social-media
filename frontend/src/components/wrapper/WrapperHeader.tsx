@@ -10,9 +10,9 @@ const WrapperHeader = ({
     to: string;
 }) => {
     return (
-        <div className="flex items-center justify-between">
-            <span className="text-base text-black leading-[19px]">{title}</span>
-            <Link className="text-sm text-blue leading-[17px]" to={to}>
+        <div className="flex items-center justify-between font-semibold">
+            <span className="text-black">{title}</span>
+            <Link className="text-sm text-blue leading-sm" to={to}>
                 {titleLink}
             </Link>
         </div>

@@ -18,7 +18,7 @@ const SidebarItem = ({ sidebarItem }: { sidebarItem: ISidebar }) => {
             }
         >
             <Icon className="w-4 h-4" />
-            <span className="font-semibold text-sm leading-[17px]">
+            <span className="font-semibold text-sm leading-sm">
                 {sidebarItem.title}
             </span>
         </NavLink>

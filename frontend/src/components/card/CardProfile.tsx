@@ -11,10 +11,8 @@ const CardProfile = () => {
             ></Image>
             <div className="flex justify-between items-center flex-1">
                 <div>
-                    <div className="font-semibold text-base leading-[19px]">
-                        Aisha ado gay
-                    </div>
-                    <p className="mt-[5px] font-semibold text-sm leading-[17px] text-black-8">
+                    <div className="font-semibold">Aisha ado gay</div>
+                    <p className="mt-[5px] font-semibold text-sm leading-sm text-black-8">
                         @Ikramgyy
                     </p>
                 </div>

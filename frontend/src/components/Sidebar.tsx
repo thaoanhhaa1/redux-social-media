@@ -11,7 +11,7 @@ const Sidebar = () => {
                 <Link to={config.routes.home}>
                     <Image src="Vector.svg" alt="" />
                 </Link>
-                <span className="font-medium text-sm text-dark-black-1 leading-[17px]">
+                <span className="font-medium text-sm text-dark-black-1 leading-sm">
                     Hoque
                 </span>
             </div>
@@ -20,7 +20,7 @@ const Sidebar = () => {
                     <SidebarItem key={v4()} sidebarItem={sidebarItem} />
                 ))}
             </div>
-            <button className="mt-10 w-full p-[15px] font-semibold bg-blue-blue-white-2 text-sm text-white leading-[17px] rounded-[10px]">
+            <button className="mt-10 w-full p-[15px] font-semibold bg-blue-blue-white-2 text-sm text-white leading-sm rounded-[10px]">
                 Tweet
             </button>
         </div>

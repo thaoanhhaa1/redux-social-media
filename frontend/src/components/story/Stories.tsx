@@ -43,12 +43,12 @@ const Stories = () => {
     }, []);
 
     return (
-        <Wrapper className="bg-white font-semibold px-[18px] py-[16.5px]">
+        <Wrapper className="bg-white px-[18px] py-[16.5px]">
             <WrapperHeader title="Stories" titleLink="See All" to="/" />
             <div
                 ref={container}
                 className={
-                    'relative mt-5 flex gap-[10px] overflow-x-auto snap-x hidden-scrollbar transition-all'
+                    'relative flex gap-[10px] overflow-x-auto snap-x hidden-scrollbar transition-all'
                 }
                 style={{
                     marginLeft: `-${

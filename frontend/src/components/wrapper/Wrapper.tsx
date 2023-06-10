@@ -9,7 +9,12 @@ const Wrapper = ({
     children: ReactNode;
 }) => {
     return (
-        <div className={classNames('bg-white rounded-[10px]', className)}>
+        <div
+            className={classNames(
+                'bg-white rounded-[10px] flex flex-col gap-5',
+                className,
+            )}
+        >
             {children}
         </div>
     );
