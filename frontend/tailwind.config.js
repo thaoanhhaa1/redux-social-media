@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: 'class',
     content: ['./src/**/*.{js,jsx,ts,tsx}'],
     theme: {
         extend: {
@@ -73,12 +74,15 @@ module.exports = {
                 'dark-black-3': '#28343E',
                 'dark-black-2': '#1B2730',
                 'dark-black-1': '#06141D',
+                'white-45': 'rgba(255,255,255,0.45)',
+                'white-03': 'rgba(255,255,255,0.03)'
             },
             boxShadow: {
                 'icon-btn': '0 2px 8px rgba(0, 0, 0, 0.1),0 0 0 1px rgba(0, 0, 0, 0.1)'
             },
             lineHeight: {
-                sm: '17px'
+                sm: '17px',
+                base: '19px'
             },
         },
     },

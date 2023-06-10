@@ -1,14 +1,16 @@
-import { useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import { classNames } from '../utils';
 
 const Image = ({
     src,
     alt,
     className = '',
+    ...props
 }: {
     src: string;
     alt: string;
     className?: string;
+    style?: CSSProperties;
 }) => {
     const newClass = useMemo(() => {
         const classList: string[] = ['object-cover'];
@@ -19,7 +21,7 @@ const Image = ({
         return classNames(...classList, ...className.split(' '));
     }, [className]);
 
-    return <img className={newClass} src={src} alt={alt} />;
+    return <img className={newClass} src={src} alt={alt} {...props} />;
 };
 
 export default Image;

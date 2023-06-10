@@ -68,9 +68,9 @@ const Stories = () => {
                     storyLength + 1 > storyShowCount && (
                         <Button
                             onClick={() => handleClickBtn(true)}
-                            className="absolute right-[2px] top-2/4 -translate-y-2/4"
+                            className="absolute right-[2px] top-2/4 -translate-y-2/4 dark:bg-[#3e4042]"
                             icon={
-                                <RightIcon className="w-6 h-6 text-[#65676B]" />
+                                <RightIcon className="w-6 h-6 text-[#65676B] dark:text-[#b3b0b8]" />
                             }
                         />
                     )}
@@ -78,8 +78,10 @@ const Stories = () => {
                     <Button
                         onClick={() => handleClickBtn(false)}
                         style={{ left: `${storyIndex * 120 + 2}px` }}
-                        className="absolute top-2/4 -translate-y-2/4"
-                        icon={<LeftIcon className="w-6 h-6 text-[#65676B]" />}
+                        className="absolute top-2/4 -translate-y-2/4 dark:bg-[#3e4042]"
+                        icon={
+                            <LeftIcon className="w-6 h-6 text-[#65676B] dark:text-[#b3b0b8]" />
+                        }
                     />
                 )}
             </div>

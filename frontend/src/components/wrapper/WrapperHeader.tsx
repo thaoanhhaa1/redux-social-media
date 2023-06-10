@@ -11,7 +11,7 @@ const WrapperHeader = ({
 }) => {
     return (
         <div className="flex items-center justify-between font-semibold">
-            <span className="text-black">{title}</span>
+            <span className="text-black dark:text-white">{title}</span>
             <Link className="text-sm text-blue leading-sm" to={to}>
                 {titleLink}
             </Link>

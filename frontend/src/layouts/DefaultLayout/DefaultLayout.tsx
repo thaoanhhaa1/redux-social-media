@@ -8,7 +8,9 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
             <Sidebar />
             <div className="overflow-auto flex-1">
                 <TopBar />
-                <div className="p-5 bg-white-white-1">{children}</div>
+                <div className="p-5 bg-white-white-1 dark:bg-dark-black-1">
+                    {children}
+                </div>
             </div>
         </div>
     );

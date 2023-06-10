@@ -5,7 +5,7 @@ import CardButton from './CardButton';
 const CardInformation = () => {
     return (
         <div className="flex flex-col gap-5 ml-[56px]">
-            <p className="font-medium text-sm leading-[21px] text-[#000]">
+            <p className="font-medium text-sm leading-[21px] text-[#000] dark:text-white">
                 Allah first 😍👏proudly Muslimat 💞 daddy's love & mummy's pride
                 🙌 Be patient 🙌
             </p>
@@ -16,12 +16,28 @@ const CardInformation = () => {
             ></Image>
             <div className="flex justify-between">
                 <div className="flex gap-5">
-                    <CardButton icon={<ShareIcon />} />
-                    <CardButton icon={<RetweetIcon />} />
-                    <CardButton icon={<MessagesIcon />} />
+                    <CardButton
+                        icon={
+                            <ShareIcon className="stroke-white-45 dark:stroke-white-9" />
+                        }
+                    />
+                    <CardButton
+                        icon={
+                            <RetweetIcon className="stroke-white-45 dark:stroke-white-9" />
+                        }
+                    />
+                    <CardButton
+                        icon={
+                            <MessagesIcon className="stroke-white-45 dark:stroke-white-9" />
+                        }
+                    />
                 </div>
                 <div className="flex items-center gap-[6px]">
-                    <CardButton icon={<LikeIcon />} />
+                    <CardButton
+                        icon={
+                            <LikeIcon className="stroke-white-45 dark:stroke-white-9" />
+                        }
+                    />
                     <span className="text-xs leading-[15px] text-black-8">
                         100
                     </span>

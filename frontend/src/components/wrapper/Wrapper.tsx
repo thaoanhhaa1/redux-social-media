@@ -11,7 +11,7 @@ const Wrapper = ({
     return (
         <div
             className={classNames(
-                'bg-white rounded-[10px] flex flex-col gap-5',
+                'bg-white dark:bg-dark-black-2 rounded-[10px] flex flex-col gap-5',
                 className,
             )}
         >
