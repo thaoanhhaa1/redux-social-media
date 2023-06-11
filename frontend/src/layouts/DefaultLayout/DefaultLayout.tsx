@@ -4,13 +4,11 @@ import TopBar from '../../components/TopBar';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     return (
-        <div className="w-screen flex">
+        <div className="flex relative">
             <Sidebar />
-            <div className="overflow-auto flex-1">
+            <div className="overflow-x-auto flex-1 relative">
                 <TopBar />
-                <div className="p-5 bg-white-white-1 dark:bg-dark-black-1">
-                    {children}
-                </div>
+                <div>{children}</div>
             </div>
         </div>
     );

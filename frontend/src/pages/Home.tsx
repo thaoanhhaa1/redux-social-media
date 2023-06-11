@@ -1,24 +1,30 @@
+import { useRef } from 'react';
 import { v4 } from 'uuid';
+import Contact from '../components/Contact';
+import Image from '../components/Image';
+import Members from '../components/Members';
+import Scrollbar from '../components/Scrollbar';
 import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 import Wrapper from '../components/wrapper/Wrapper';
 import WrapperHeader from '../components/wrapper/WrapperHeader';
-import Image from '../components/Image';
-import Members from '../components/Members';
-import Contact from '../components/Contact';
 
 const Home = () => {
+    const parentScrollbarRef = useRef<HTMLDivElement>(null);
     document.getElementsByTagName('html')[0].classList.add('dark');
 
     return (
-        <div className="flex gap-5">
-            <div className="flex flex-col gap-5 overflow-auto flex-1">
+        <div className="pt-[calc(var(--top-bar-height)+20px)] flex gap-5 overscroll-y-auto bg-white-1 dark:bg-dark-black-1 pl-5 pb-5">
+            <div className="flex flex-col gap-5 overflow-auto flex-1 pr-[calc(var(--sidebar-width)+20px)]">
                 <Stories />
                 {new Array(3).fill(null).map(() => (
                     <Card key={v4()} />
                 ))}
             </div>
-            <div className="flex-shrink-0 w-[335px] flex flex-col gap-5">
+            <div
+                ref={parentScrollbarRef}
+                className="group fixed flex t-[calc(var(--top-bar-height)+20px)] right-0 flex-shrink-0 w-[var(--sidebar-width)] h-[calc(100vh-var(--top-bar-height)-20px)] hidden-scrollbar overflow-y-auto flex-col gap-5 pb-5"
+            >
                 <Wrapper className="p-5">
                     <WrapperHeader
                         title="sponsored"
@@ -26,7 +32,7 @@ const Home = () => {
                         to="/"
                     />
                     <Image
-                        className="rounded-[10px]"
+                        className="rounded-[10px] h-[120px]"
                         alt=""
                         src="https://plus.unsplash.com/premium_photo-1686090449366-b7a5a28577aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
                     />
@@ -46,7 +52,7 @@ const Home = () => {
                         to="/"
                     />
                     <Image
-                        className="rounded-[10px]"
+                        className="rounded-[10px] h-[120px]"
                         alt=""
                         src="https://plus.unsplash.com/premium_photo-1686090449366-b7a5a28577aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
                     />
@@ -68,10 +74,11 @@ const Home = () => {
                         titleLink="See more"
                         to="/"
                     />
-                    {new Array(10).fill(null).map(() => (
+                    {new Array(15).fill(null).map(() => (
                         <Contact isOnline={Math.random() > 0.5} key={v4()} />
                     ))}
                 </Wrapper>
+                <Scrollbar parentRef={parentScrollbarRef} />
             </div>
         </div>
     );

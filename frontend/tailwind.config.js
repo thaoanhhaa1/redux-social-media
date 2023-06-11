@@ -4,6 +4,9 @@ module.exports = {
     content: ['./src/**/*.{js,jsx,ts,tsx}'],
     theme: {
         extend: {
+            height: {
+                'top-bar': '75px'
+            },
             colors: {
                 'blue-white-5': '#E9F0FF',
                 'blue-white-4': '#D3E0FF',

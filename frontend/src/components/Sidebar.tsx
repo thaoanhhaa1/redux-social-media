@@ -6,7 +6,7 @@ import Image from './Image';
 
 const Sidebar = () => {
     return (
-        <div className="sticky top-0 h-fit w-[237px] flex-shrink-0 p-5 min-h-screen shadow-[0px_5px_45px_#EBEBED] dark:shadow-none dark:bg-dark-black-2">
+        <div className="sticky top-0 h-fit w-[var(--sidebar-left-width)] flex-shrink-0 p-5 min-h-screen shadow-[0px_5px_45px_#EBEBED] dark:shadow-none dark:bg-dark-black-2">
             <div className="flex items-center gap-4">
                 <Link to={config.routes.home}>
                     <Image src="Vector.svg" alt="" />

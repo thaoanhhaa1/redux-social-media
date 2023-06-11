@@ -1,12 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+:root {
+    --top-bar-height: 75px;
+    --sidebar-width: 335px;
+    --sidebar-left-width: 237px;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     line-height: 19px;
 }
 
 #root {
-    overflow: hidden overlay;
+    // overflow: hidden overlay;
 }
 
 .bg-blue-blue-white-4 {
@@ -38,4 +44,37 @@ body {
 
 .hidden-scrollbar::-webkit-scrollbar {
     display: none;
+}
+
+// Scrollbar Overlay CSS
+.overlay {
+    overflow: overlay;
+}
+
+.overlay::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+
+.overlay::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.overlay:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+    opacity: 1;
+}
+
+.overlay::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+// Scrollbar custom
+.scrollbar div {
+    transition: background-color ease 0.3s, top 0s;
 }
