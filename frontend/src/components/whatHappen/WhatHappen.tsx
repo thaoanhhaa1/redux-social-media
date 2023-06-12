@@ -1,8 +1,6 @@
-import React from 'react';
-import Wrapper from '../wrapper/Wrapper';
+import { ActivityIcon, GalleryIcon, TagFriendIcon } from '../Icons';
 import Image from '../Image';
-import Button from '../Button';
-import { GalleryIcon } from '../Icons';
+import Wrapper from '../wrapper/Wrapper';
 import WhatHappenButton from './WhatHappenButton';
 
 const WhatHappen = () => {
@@ -17,32 +15,37 @@ const WhatHappen = () => {
                 <input
                     type="text"
                     placeholder="What’s happening?"
-                    className="flex-1 rounded-2.5 outline-none border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs placeholder:text-base-black"
+                    className="dark:bg-dark-black-2 flex-1 rounded-2.5 outline-none border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs text-base-black dark:text-white placeholder:text-base-black dark:placeholder:text-white"
                 />
             </div>
             <div className="flex gap-3">
                 <WhatHappenButton
-                    backgroundColor="bg-emerald"
+                    backgroundColor="bg-emerald-white-4 dark:bg-emerald-black-3"
+                    backgroundColorIcon="bg-emerald"
                     icon={<GalleryIcon />}
                     className="flex-1"
                 >
                     Gallery
                 </WhatHappenButton>
                 <WhatHappenButton
-                    backgroundColor="bg-red"
-                    icon={<GalleryIcon />}
+                    backgroundColor="bg-red-white-3 dark:bg-red-black-3"
+                    backgroundColorIcon="bg-red"
+                    icon={<TagFriendIcon />}
                     className="flex-1"
                 >
                     Tag friend
                 </WhatHappenButton>
                 <WhatHappenButton
-                    backgroundColor="bg-yellow"
-                    icon={<GalleryIcon />}
+                    backgroundColor="bg-yellow-white-3 dark:bg-yellow-black-3"
+                    backgroundColorIcon="bg-yellow"
+                    icon={<ActivityIcon />}
                     className="flex-1"
                 >
                     Gallery
                 </WhatHappenButton>
-                <button className="-mx-2 px-2 h-full">:</button>
+                <button className="-mx-2 px-2 h-full text-base-black dark:text-white">
+                    :
+                </button>
             </div>
         </Wrapper>
     );

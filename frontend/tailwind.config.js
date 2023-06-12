@@ -20,7 +20,7 @@ module.exports = {
                 'blue-black-4': '#071433',
                 'blue-black-5': '#030A1A',
                 'emerald-white-5': '#FAFCFC',
-                'emerald-white-4': '#F1F8F7',
+                'emerald-white-4': '#CDF1EB',
                 'emerald-white-3': '#D0ECE8',
                 'emerald-white-2': '#9EDFD4',
                 'emerald-white-1': '#5ACDBA',

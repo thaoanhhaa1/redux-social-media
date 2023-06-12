@@ -1,16 +1,18 @@
 import { ReactNode } from 'react';
-import Button from '../Button';
 import { classNames } from '../../utils';
+import Button from '../Button';
 
 const WhatHappenButton = ({
     icon,
     children,
     backgroundColor,
+    backgroundColorIcon,
     className = '',
 }: {
     icon: ReactNode;
     children: ReactNode;
     backgroundColor: string;
+    backgroundColorIcon: string;
     className?: string;
 }) => {
     return (
@@ -19,14 +21,14 @@ const WhatHappenButton = ({
                 <span
                     className={classNames(
                         'flex justify-center items-center w-[22px] h-[22px] rounded-full',
-                        backgroundColor,
+                        backgroundColorIcon,
                     )}
                 >
                     {icon}
                 </span>
             }
             className={classNames(
-                'bg-opacity-20 text-[#000] font-medium text-xs leading-xs',
+                'text-[#000] dark:text-white font-medium text-xs leading-xs',
                 backgroundColor,
                 className,
             )}
