@@ -11,7 +11,6 @@ import WrapperHeader from '../components/wrapper/WrapperHeader';
 
 const Home = () => {
     const parentScrollbarRef = useRef<HTMLDivElement>(null);
-    document.getElementsByTagName('html')[0].classList.add('dark');
 
     return (
         <div className="pt-[calc(var(--top-bar-height)+20px)] flex gap-5 overscroll-y-auto bg-white-1 dark:bg-dark-black-1 pl-5 pb-5">

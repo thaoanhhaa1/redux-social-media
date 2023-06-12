@@ -327,8 +327,6 @@ export const ShareIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M7.42985 8.6281V1.60419"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -342,8 +340,6 @@ export const ShareIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M9.13052 6.92078L7.42952 8.62878L5.72852 6.92078"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -357,8 +353,6 @@ export const ShareIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M10.0495 4.23425C12.1372 4.42675 12.8962 5.20842 12.8962 8.31759C12.8962 12.4593 11.5481 12.4593 7.50033 12.4593C3.45141 12.4593 2.10449 12.4593 2.10449 8.31759C2.10449 5.20842 2.86283 4.42675 4.95116 4.23425"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -384,8 +378,6 @@ export const RetweetIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M4.57145 2.68408V10.0446"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -399,8 +391,6 @@ export const RetweetIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M2.19189 5.07502C2.19189 5.07502 3.45714 2.68335 4.57073 2.68335C5.68373 2.68335 6.94956 5.07502 6.94956 5.07502"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -414,8 +404,6 @@ export const RetweetIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M10.362 11.3327V3.97223"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -429,8 +417,6 @@ export const RetweetIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M12.7416 8.94159C12.7416 8.94159 11.4757 11.3333 10.3627 11.3333C9.24972 11.3333 7.98389 8.94159 7.98389 8.94159"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -456,8 +442,6 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M9.79783 7.24095H9.80308"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -471,8 +455,6 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M7.45945 7.24095H7.4647"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -486,8 +468,6 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M5.12058 7.24095H5.12583"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -505,8 +485,6 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
             fillRule="evenodd"
             clipRule="evenodd"
             d="M11.6246 11.1241C9.84247 12.9071 7.2021 13.2923 5.04185 12.2932C4.72294 12.1648 2.65883 12.7364 2.21095 12.2891C1.76307 11.8412 2.33523 9.77676 2.20685 9.45781C1.20733 7.29785 1.59307 4.65654 3.37579 2.87416C5.65153 0.597529 9.34887 0.597529 11.6246 2.87416C13.905 5.15431 13.9003 8.84805 11.6246 11.1241Z"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -536,8 +514,6 @@ export const LikeIcon = ({ className }: { className?: string }) => (
             fillRule="evenodd"
             clipRule="evenodd"
             d="M2.20464 7.26034C1.57872 5.30617 2.3108 2.87659 4.36239 2.21626C5.44155 1.86801 6.7733 2.15851 7.52989 3.20209C8.2433 2.12001 9.61355 1.87034 10.6916 2.21626C12.7426 2.87659 13.4787 5.30617 12.8534 7.26034C11.8792 10.3578 8.48013 11.9713 7.52989 11.9713C6.58022 11.9713 3.21147 10.394 2.20464 7.26034Z"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -551,11 +527,89 @@ export const LikeIcon = ({ className }: { className?: string }) => (
         />
         <path
             d="M9.71045 4.41235C10.4145 4.48469 10.8549 5.04294 10.8287 5.82519"
-            // stroke="white"
-            // strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+        />
+    </svg>
+);
+
+export const LikeActiveIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={13}
+        height={12}
+        viewBox="0 0 13 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M9.00249 0.000100845C9.41264 0.000100845 9.82213 0.0563109 10.2115 0.183257C12.6106 0.941146 13.4751 3.49902 12.753 5.73479C12.3435 6.87731 11.674 7.92003 10.7971 8.77203C9.54199 9.95307 8.16464 11.0015 6.68199 11.9046L6.51949 12L6.35049 11.8983C4.86265 11.0015 3.4775 9.95307 2.21065 8.76571C1.33966 7.91372 0.669509 6.87731 0.25351 5.73479C-0.480988 3.49902 0.38351 0.941146 2.80865 0.169994C2.99715 0.106837 3.1915 0.0626266 3.3865 0.0379953H3.4645C3.64715 0.0121007 3.8285 0.000100845 4.0105 0.000100845H4.082C4.4915 0.0121007 4.888 0.0815738 5.27215 0.20852H5.3105C5.3365 0.22052 5.356 0.233783 5.369 0.245783C5.51265 0.290625 5.6485 0.341151 5.7785 0.410624L6.02549 0.517991C6.08518 0.548921 6.15217 0.59618 6.21007 0.637024C6.24675 0.662902 6.27978 0.686205 6.30499 0.701148C6.3156 0.707229 6.32638 0.713344 6.33725 0.719509C6.39298 0.75112 6.45104 0.784048 6.49999 0.820515C7.22214 0.284309 8.09899 -0.00621489 9.00249 0.000100845ZM10.7308 4.54736C10.9973 4.54041 11.2248 4.33262 11.2443 4.06673V3.99158C11.2638 3.10674 10.712 2.30527 9.87282 1.9958C9.60632 1.90675 9.31382 2.04633 9.21633 2.31159C9.12533 2.57685 9.26832 2.86737 9.54132 2.96148C9.95797 3.11306 10.2368 3.51158 10.2368 3.95305V3.97263C10.2245 4.11726 10.2693 4.25684 10.3603 4.3642C10.4513 4.47157 10.5878 4.5341 10.7308 4.54736Z"
+            fill="#C0373E"
+        />
+    </svg>
+);
+
+export const LikeDarkIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={14}
+        height={14}
+        viewBox="0 0 14 14"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M1.70464 7.26034C1.07872 5.30617 1.8108 2.87659 3.86239 2.21626C4.94155 1.86801 6.2733 2.15851 7.02989 3.20209C7.7433 2.12001 9.11355 1.87034 10.1916 2.21626C12.2426 2.87659 12.9787 5.30617 12.3534 7.26034C11.3792 10.3578 7.98013 11.9713 7.02989 11.9713C6.08022 11.9713 2.71147 10.394 1.70464 7.26034Z"
+            stroke="#736F72"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M1.70464 7.26034C1.07872 5.30617 1.8108 2.87659 3.86239 2.21626C4.94155 1.86801 6.2733 2.15851 7.02989 3.20209C7.7433 2.12001 9.11355 1.87034 10.1916 2.21626C12.2426 2.87659 12.9787 5.30617 12.3534 7.26034C11.3792 10.3578 7.98013 11.9713 7.02989 11.9713C6.08022 11.9713 2.71147 10.394 1.70464 7.26034Z"
+            stroke="white"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.21045 4.41235C9.91453 4.48469 10.3549 5.04294 10.3287 5.82519"
+            stroke="#736F72"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M9.21045 4.41235C9.91453 4.48469 10.3549 5.04294 10.3287 5.82519"
+            stroke="white"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
+export const LikeDarkActiveIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={13}
+        height={12}
+        viewBox="0 0 13 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M9.00249 0.000100845C9.41264 0.000100845 9.82213 0.0563109 10.2115 0.183257C12.6106 0.941146 13.4751 3.49902 12.753 5.73479C12.3435 6.87731 11.674 7.92003 10.7971 8.77203C9.54199 9.95307 8.16464 11.0015 6.68199 11.9046L6.51949 12L6.35049 11.8983C4.86265 11.0015 3.4775 9.95307 2.21065 8.76571C1.33966 7.91372 0.669509 6.87731 0.25351 5.73479C-0.480988 3.49902 0.38351 0.941146 2.80865 0.169994C2.99715 0.106837 3.1915 0.0626266 3.3865 0.0379953H3.4645C3.64715 0.0121007 3.8285 0.000100845 4.0105 0.000100845H4.082C4.4915 0.0121007 4.888 0.0815738 5.27215 0.20852H5.3105C5.3365 0.22052 5.356 0.233783 5.369 0.245783C5.51265 0.290625 5.6485 0.341151 5.7785 0.410624L6.02549 0.517991C6.08518 0.548921 6.15217 0.59618 6.21007 0.637024C6.24675 0.662902 6.27978 0.686205 6.30499 0.701148C6.3156 0.707229 6.32638 0.713344 6.33725 0.719509C6.39298 0.75112 6.45104 0.784048 6.49999 0.820515C7.22214 0.284309 8.09899 -0.00621489 9.00249 0.000100845ZM10.7308 4.54736C10.9973 4.54041 11.2248 4.33262 11.2443 4.06673V3.99158C11.2638 3.10674 10.712 2.30527 9.87282 1.9958C9.60632 1.90675 9.31382 2.04633 9.21633 2.31159C9.12533 2.57685 9.26832 2.86737 9.54132 2.96148C9.95797 3.11306 10.2368 3.51158 10.2368 3.95305V3.97263C10.2245 4.11726 10.2693 4.25684 10.3603 4.3642C10.4513 4.47157 10.5878 4.5341 10.7308 4.54736Z"
+            fill="#C0373E"
         />
     </svg>
 );

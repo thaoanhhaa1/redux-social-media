@@ -1,8 +1,18 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import Sidebar from '../../components/Sidebar';
 import TopBar from '../../components/TopBar';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
+    const isDarkTheme = useSelector((state: RootState) => state.theme.isDark);
+
+    useEffect(() => {
+        document
+            .getElementsByTagName('html')[0]
+            .classList[isDarkTheme ? 'add' : 'remove']('dark');
+    }, [isDarkTheme]);
+
     return (
         <div className="flex relative">
             <Sidebar />

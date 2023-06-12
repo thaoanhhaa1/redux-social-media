@@ -10,8 +10,6 @@ const Scrollbar = ({ parentRef }: { parentRef: RefObject<HTMLDivElement> }) => {
     useLayoutEffect(() => {
         const parentElement = parentRef.current;
 
-        console.log([parentElement]);
-        console.log(parentElement?.scrollHeight);
         setHeight(parentElement?.scrollHeight || 0);
         setClientHeight(parentElement?.clientHeight || 0);
 
