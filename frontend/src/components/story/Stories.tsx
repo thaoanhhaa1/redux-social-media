@@ -78,8 +78,10 @@ const Stories = () => {
                     {storyIndex !== storyLength - storyShowCount &&
                         storyLength > storyShowCount && (
                             <Button
+                                large
+                                rounded
                                 onClick={() => handleClickBtn(true)}
-                                className="absolute right-[2px] top-2/4 -translate-y-2/4 dark:bg-[#3e4042]"
+                                className="absolute right-[2px] top-2/4 -translate-y-2/4 dark:bg-[#3e4042] shadow-icon-btn bg-white"
                                 icon={
                                     <RightIcon className="w-6 h-6 text-[#65676B] dark:text-[#b3b0b8]" />
                                 }
@@ -87,10 +89,11 @@ const Stories = () => {
                         )}
                     {storyIndex !== 0 && (
                         <Button
+                            large
+                            rounded
                             onClick={() => handleClickBtn(false)}
-                            // style={{ left: `${storyIndex * 120 + 2}px` }}
                             style={{ left: `2px` }}
-                            className="absolute top-2/4 -translate-y-2/4 dark:bg-[#3e4042]"
+                            className="absolute top-2/4 -translate-y-2/4 dark:bg-[#3e4042] shadow-icon-btn bg-white"
                             icon={
                                 <LeftIcon className="w-6 h-6 text-[#65676B] dark:text-[#b3b0b8]" />
                             }

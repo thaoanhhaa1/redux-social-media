@@ -1,23 +1,26 @@
+import { ReactElement } from 'react';
 import { classNames } from '../../utils';
+import Button from '../Button';
 
 const CardButton = ({
     icon,
     active = false,
 }: {
-    icon: JSX.Element;
+    icon: ReactElement;
     active?: boolean;
 }) => {
     return (
-        <button
+        <Button
+            rounded
+            small
+            icon={icon}
             className={classNames(
-                'flex justify-center items-center w-7 h-7 bg-opacity-5 rounded-full',
+                'bg-opacity-5',
                 active
                     ? 'bg-red-white-2 dark:bg-red-white-2'
                     : 'bg-[#000] dark:bg-dark-black-3',
             )}
-        >
-            {icon}
-        </button>
+        />
     );
 };
 

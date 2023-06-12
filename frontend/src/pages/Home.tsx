@@ -8,6 +8,7 @@ import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 import Wrapper from '../components/wrapper/Wrapper';
 import WrapperHeader from '../components/wrapper/WrapperHeader';
+import WhatHappen from '../components/WhatHappen';
 
 const Home = () => {
     const parentScrollbarRef = useRef<HTMLDivElement>(null);
@@ -15,6 +16,7 @@ const Home = () => {
     return (
         <div className="pt-[calc(var(--top-bar-height)+20px)] flex gap-5 overscroll-y-auto bg-white-1 dark:bg-dark-black-1 pl-5 pb-5">
             <div className="flex flex-col gap-5 overflow-auto flex-1 pr-[calc(var(--sidebar-width)+20px)]">
+                <WhatHappen />
                 <Stories />
                 {new Array(3).fill(null).map(() => (
                     <Card key={v4()} />
@@ -31,7 +33,7 @@ const Home = () => {
                         to="/"
                     />
                     <Image
-                        className="rounded-[10px] h-[120px]"
+                        className="rounded-2.5 h-[120px]"
                         alt=""
                         src="https://plus.unsplash.com/premium_photo-1686090449366-b7a5a28577aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
                     />
@@ -51,7 +53,7 @@ const Home = () => {
                         to="/"
                     />
                     <Image
-                        className="rounded-[10px] h-[120px]"
+                        className="rounded-2.5 h-[120px]"
                         alt=""
                         src="https://plus.unsplash.com/premium_photo-1686090449366-b7a5a28577aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
                     />

@@ -3,14 +3,17 @@ import { v4 } from 'uuid';
 import config from '../config';
 import Image from './Image';
 import SidebarItem from './SidebarItem';
+import Button from './Button';
 
 const Sidebar = () => {
     return (
         <div className="sticky top-0 h-fit w-[var(--sidebar-left-width)] flex-shrink-0 p-5 min-h-screen shadow-[0px_5px_45px_#EBEBED] dark:shadow-none dark:bg-dark-black-2">
             <div className="flex items-center gap-4">
-                <Link to={config.routes.home}>
-                    <Image src="Vector.svg" alt="" />
-                </Link>
+                <Button
+                    small
+                    to={config.routes.home}
+                    icon={<Image src="Vector.svg" alt="" />}
+                />
                 <span className="font-medium text-sm text-dark-black-1 dark:text-white leading-sm">
                     Hoque
                 </span>
@@ -20,9 +23,13 @@ const Sidebar = () => {
                     <SidebarItem key={v4()} sidebarItem={sidebarItem} />
                 ))}
             </div>
-            <button className="mt-10 w-full p-[15px] font-semibold bg-blue-blue-white-2 text-sm text-white leading-sm rounded-[10px]">
+            <Button
+                isWidthFull
+                large
+                className="mt-10 font-semibold bg-blue-white-2 text-sm text-white leading-sm"
+            >
                 Tweet
-            </button>
+            </Button>
         </div>
     );
 };

@@ -21,7 +21,7 @@ const Scrollbar = ({ parentRef }: { parentRef: RefObject<HTMLDivElement> }) => {
     }, [parentRef]);
 
     return (
-        <div className="scrollbar hover:bg-opacity-30 dark:hover:bg-opacity-30 ease-linear duration-300 fixed top-[calc(var(--top-bar-height)+20px)] bottom-0 right-0 w-4 bg-[#CED0D4] dark:bg-[#3e4042] bg-opacity-0 dark:bg-opacity-0 rounded-[10px] px-1">
+        <div className="scrollbar hover:bg-opacity-30 dark:hover:bg-opacity-30 ease-linear duration-300 fixed top-[calc(var(--top-bar-height)+20px)] bottom-0 right-0 w-4 bg-[#CED0D4] dark:bg-[#3e4042] bg-opacity-0 dark:bg-opacity-0 rounded-2.5 px-1">
             <div
                 style={{
                     marginTop: `${(top / height) * clientHeight}px`,

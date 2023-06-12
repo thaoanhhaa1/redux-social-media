@@ -1,45 +1,86 @@
-import { CSSProperties, ReactElement, useMemo, useState } from 'react';
+import {
+    CSSProperties,
+    ReactElement,
+    ReactNode,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const Button = ({
+    isWidthFull = false,
     href = '',
     to = '',
+    rounded = false,
     children,
     icon,
     className = '',
+    small = false,
+    large = false,
+    gap = '2',
+    disabled = false,
+    align = 'center',
     onClick = () => {},
     ...passProps
 }: {
+    isWidthFull?: boolean;
     href?: string;
     to?: string;
-    children?: ReactElement;
+    rounded?: boolean;
+    children?: ReactNode;
     icon?: ReactElement;
     className?: string;
     style?: CSSProperties;
+    small?: boolean;
+    large?: boolean;
+    gap?: string;
+    disabled?: boolean;
+    align?: 'left' | 'center' | 'right';
     onClick?: () => void;
 }) => {
     let Type: React.ElementType = 'button';
     const styles = useMemo(() => {
         let style: string[] = [className];
 
-        if (children === undefined && icon !== undefined) {
+        style.push(
+            'flex items-center',
+            `gap-${gap}`,
+            `justify-${align}`,
+            rounded ? 'rounded-full' : 'rounded-2.5',
+        );
+
+        if (children === undefined)
+            style.push(small ? 'w-7 h-7' : large ? 'w-12 h-12' : 'w-10 h-10');
+        else {
+            if (isWidthFull) style.push('w-full');
             style.push(
-                'flex justify-center items-center w-12 h-12 shadow-icon-btn bg-white rounded-full',
+                small
+                    ? 'px-[30px] h-8'
+                    : large
+                    ? 'px-[10px] h-12'
+                    : 'px-5 h-10',
             );
         }
 
         return style.join(' ');
-    }, [children, className, icon]);
-    const [props, setProps] = useState<
-        LinkProps | { to?: string; href?: string }
-    >({});
+    }, [align, children, className, gap, isWidthFull, large, rounded, small]);
 
-    if (to !== '') {
-        Type = Link;
-        setProps(() => ({ to }));
-    } else if (href !== '') {
-        Type = 'a';
-        setProps(() => ({ href }));
+    const props: LinkProps | { to?: string; href?: string } = {
+        to,
+        href,
+        onClick,
+        ...passProps,
+    };
+
+    if (to !== '') Type = Link;
+    else if (href !== '') Type = 'a';
+
+    if (disabled) {
+        Object.keys(props).forEach(
+            (key) =>
+                key.startsWith('on') && delete props[key as keyof typeof props],
+        );
     }
 
     return (
