@@ -1,12 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { v4 } from 'uuid';
 import Button from '../Button';
 import { LeftIcon, RightIcon } from '../Icons';
-import NewStory from './NewStory';
-import Story from './Story';
 import Wrapper from '../wrapper/Wrapper';
 import WrapperHeader from '../wrapper/WrapperHeader';
+import NewStory from './NewStory';
+import Story from './Story';
 
 const Stories = () => {
     const container = useRef<HTMLDivElement>(null);
