@@ -8,7 +8,7 @@ import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 import Wrapper from '../components/wrapper/Wrapper';
 import WrapperHeader from '../components/wrapper/WrapperHeader';
-import WhatHappen from '../components/WhatHappen';
+import WhatHappen from '../components/whatHappen/WhatHappen';
 
 const Home = () => {
     const parentScrollbarRef = useRef<HTMLDivElement>(null);
