@@ -19,7 +19,7 @@ const CardInformation = () => {
                 🙌 Be patient 🙌
             </p>
             <Image
-                className="rounded-2.5"
+                className="rounded-2.5 aspect-video"
                 alt=""
                 src="https://images.unsplash.com/photo-1685985081360-1d6021f77bc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1157&q=80"
             ></Image>

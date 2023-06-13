@@ -21,8 +21,8 @@ const CardProfile = () => {
                 </div>
                 <div className="flex gap-[5px] text-black-8 dark:text-white font-medium text-xs leading-[15px]">
                     <span>1day</span>
-                    <div className="relative group">
-                        <BottomIcon className="cursor-pointer w-4 h-4 fill-dark-black-2 dark:fill-white-9 group-hover:fill-blue dark:group-hover:fill-blue-white-2 transition" />
+                    <div className="relative group/more">
+                        <BottomIcon className="cursor-pointer w-4 h-4 fill-dark-black-2 dark:fill-white-9 group-hover/more:fill-blue dark:group-hover/more:fill-blue-white-2 transition" />
                         <CardMore />
                     </div>
                 </div>

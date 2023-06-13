@@ -15,7 +15,7 @@ const CardMore = () => {
     return (
         <Wrapper
             gap="0"
-            className="dark:!bg-dark-black-3 transition-all duration-300 invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute -right-1 top-full px-[6px] py-3 shadow-[0px_5px_45px_#EBEBED] shadow-none"
+            className="dark:!bg-dark-black-3 transition-all duration-300 invisible group-hover/more:visible opacity-0 group-hover/more:opacity-100 absolute -right-1 top-full px-[6px] py-3 shadow-[0px_5px_45px_#EBEBED] dark:shadow-none"
         >
             <Button
                 align="left"

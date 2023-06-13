@@ -18,7 +18,9 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
             <Sidebar />
             <div className="overflow-x-auto flex-1 relative">
                 <TopBar />
-                <div>{children}</div>
+                <div className="pt-[calc(var(--top-bar-height)+20px)] bg-white-1 dark:bg-dark-black-1">
+                    {children}
+                </div>
             </div>
         </div>
     );
