@@ -1,5 +1,6 @@
 import { BottomIcon } from '../Icons';
 import Image from '../Image';
+import CardMore from './CardMore';
 
 const CardProfile = () => {
     return (
@@ -20,7 +21,10 @@ const CardProfile = () => {
                 </div>
                 <div className="flex gap-[5px] text-black-8 dark:text-white font-medium text-xs leading-[15px]">
                     <span>1day</span>
-                    <BottomIcon className="w-4 h-4 fill-dark-black-2 dark:fill-white-9" />
+                    <div className="relative group">
+                        <BottomIcon className="cursor-pointer w-4 h-4 fill-dark-black-2 dark:fill-white-9 group-hover:fill-blue dark:group-hover:fill-blue-white-2 transition" />
+                        <CardMore />
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,9 +1,21 @@
+import { classNames } from '../utils';
 import { ClockIcon } from './Icons';
 import Image from './Image';
 
-const Contact = ({ isOnline }: { isOnline: boolean }) => {
+const Contact = ({
+    isOnline,
+    className = '',
+}: {
+    isOnline: boolean;
+    className?: string;
+}) => {
     return (
-        <div className="flex gap-4 cursor-pointer">
+        <div
+            className={classNames(
+                'p-2 flex gap-4 cursor-pointer rounded-2.5 hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all',
+                className,
+            )}
+        >
             <Image
                 alt=""
                 src="https://images.unsplash.com/photo-1526413232644-8a40f03cc03b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"

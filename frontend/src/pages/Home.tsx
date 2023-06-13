@@ -16,8 +16,8 @@ const Home = () => {
     return (
         <div className="pt-[calc(var(--top-bar-height)+20px)] flex gap-5 overscroll-y-auto bg-white-1 dark:bg-dark-black-1 pl-5 pb-5">
             <div className="flex flex-col gap-5 overflow-auto flex-1 pr-[calc(var(--sidebar-width)+20px)]">
-                <WhatHappen />
                 <Stories />
+                <WhatHappen />
                 {new Array(3).fill(null).map(() => (
                     <Card key={v4()} />
                 ))}
@@ -69,14 +69,19 @@ const Home = () => {
                         <Members />
                     </div>
                 </Wrapper>
-                <Wrapper className="flex flex-col gap-5 p-5">
+                <Wrapper gap="0" className="p-5">
                     <WrapperHeader
                         title="Contacts"
                         titleLink="See more"
                         to="/"
+                        className="mb-3"
                     />
                     {new Array(15).fill(null).map(() => (
-                        <Contact isOnline={Math.random() > 0.5} key={v4()} />
+                        <Contact
+                            className="-mx-2"
+                            isOnline={Math.random() > 0.5}
+                            key={v4()}
+                        />
                     ))}
                 </Wrapper>
                 <Scrollbar parentRef={parentScrollbarRef} />

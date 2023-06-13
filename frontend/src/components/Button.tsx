@@ -1,11 +1,4 @@
-import {
-    CSSProperties,
-    ReactElement,
-    ReactNode,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react';
+import { CSSProperties, ReactElement, ReactNode, useMemo } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const Button = ({
@@ -44,7 +37,7 @@ const Button = ({
         let style: string[] = [className];
 
         style.push(
-            'flex items-center',
+            'flex items-center whitespace-nowrap',
             `gap-${gap}`,
             `justify-${align}`,
             rounded ? 'rounded-full' : 'rounded-2.5',
@@ -54,13 +47,14 @@ const Button = ({
             style.push(small ? 'w-7 h-7' : large ? 'w-12 h-12' : 'w-10 h-10');
         else {
             if (isWidthFull) style.push('w-full');
-            style.push(
-                small
-                    ? 'px-[30px] h-8'
-                    : large
-                    ? 'px-[10px] h-12'
-                    : 'px-5 h-10',
-            );
+            if (!className.includes('h-'))
+                style.push(
+                    small
+                        ? 'px-[30px] h-8'
+                        : large
+                        ? 'px-[10px] h-12'
+                        : 'px-5 h-10',
+                );
         }
 
         return style.join(' ');
@@ -86,7 +80,7 @@ const Button = ({
     return (
         <Type className={styles} onClick={onClick} {...props} {...passProps}>
             {icon}
-            {children}
+            {children && <span>{children}</span>}
         </Type>
     );
 };
