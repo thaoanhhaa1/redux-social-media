@@ -5,16 +5,17 @@ import Trend from '../components/trend/Trend';
 import Wrapper from '../components/wrapper/Wrapper';
 import { classNames } from '../utils';
 import NotificationAll from '../components/notification/NotificationAll';
+import NotificationMention from '../components/notification/NotificationMention';
 
 const Notifications = () => {
-    const [isAllActive] = useState(true);
+    const [isAllActive, setAllActive] = useState(false);
 
     return (
         <Page
             scrollChildren={
                 <>
                     <Live />
-                    <Trend></Trend>
+                    <Trend />
                 </>
             }
             scrollWidth="335px"
@@ -25,27 +26,31 @@ const Notifications = () => {
                 </div>
                 <div className="flex">
                     <button
+                        onClick={() => setAllActive(true)}
                         className={classNames(
                             'flex-1 font-bold border-b pb-2',
                             isAllActive
                                 ? 'text-blue dark:text-blue-black-1 border-blue-white-1'
-                                : 'text-black-5 dark:text-white border-base-black',
+                                : 'text-black-5 dark:text-white border-base-black dark:border-dark-black-1',
                         )}
                     >
                         ALL
                     </button>
                     <button
+                        onClick={() => setAllActive(false)}
                         className={classNames(
                             'flex-1 font-bold border-b pb-2',
                             !isAllActive
                                 ? 'text-blue dark:text-blue-black-1 border-blue-white-1'
-                                : 'text-black-5 dark:text-white border-base-black',
+                                : 'text-black-5 dark:text-white border-base-black dark:border-dark-black-1',
                         )}
                     >
                         Mentions
                     </button>
                 </div>
-                {isAllActive && <NotificationAll />}
+                {(isAllActive && <NotificationAll />) || (
+                    <NotificationMention />
+                )}
             </Wrapper>
         </Page>
     );
