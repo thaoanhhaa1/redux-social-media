@@ -10,7 +10,8 @@ const WhatHappen = () => {
                 <Image
                     alt=""
                     src="https://plus.unsplash.com/premium_photo-1674939149224-a4d29cca2b28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60"
-                    className="w-10 h-10 rounded-full"
+                    className="w-10 h-10"
+                    rounded
                 />
                 <input
                     type="text"

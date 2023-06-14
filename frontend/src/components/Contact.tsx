@@ -19,7 +19,8 @@ const Contact = ({
             <Image
                 alt=""
                 src="https://images.unsplash.com/photo-1526413232644-8a40f03cc03b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
-                className="w-[34px] h-[34px] rounded-full"
+                className="w-[34px] h-[34px]"
+                rounded
             />
             <div className="flex-1 flex justify-between items-center">
                 <p className="font-semibold leading-base dark:text-white">

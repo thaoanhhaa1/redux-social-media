@@ -8,7 +8,8 @@ const CardProfile = () => {
             <Image
                 alt=""
                 src="https://cdn.openai.com/labs/images/A%20cyberpunk%20monster%20in%20a%20control%20room.webp?v=1"
-                className="w-10 h-10 rounded-full"
+                className="w-10 h-10"
+                rounded
             ></Image>
             <div className="flex justify-between items-center flex-1">
                 <div>

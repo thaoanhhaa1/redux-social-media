@@ -826,3 +826,35 @@ export const AddListIcon = ({ className }: { className?: string }) => (
         />
     </svg>
 );
+
+export const CloseIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={20}
+        height={20}
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M12.3945 7.59485L7.60254 12.3868"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M12.3996 12.3931L7.59961 7.59314"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M0.75 10.0001C0.75 16.9371 3.063 19.2501 10 19.2501C16.937 19.2501 19.25 16.9371 19.25 10.0001C19.25 3.06312 16.937 0.750122 10 0.750122C3.063 0.750122 0.75 3.06312 0.75 10.0001Z"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);

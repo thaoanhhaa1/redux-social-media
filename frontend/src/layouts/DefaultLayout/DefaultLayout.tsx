@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from 'react';
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../components/sidebar/Sidebar';
 import TopBar from '../../components/TopBar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
