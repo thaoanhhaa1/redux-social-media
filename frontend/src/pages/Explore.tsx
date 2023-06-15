@@ -14,6 +14,7 @@ const Explore = () => {
                     <Card />
                 </>
             }
+            scrollHeight="var(--scroll-height)"
             scrollWidth="var(--explore-sidebar-width)"
         >
             <Live />

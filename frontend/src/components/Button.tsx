@@ -52,7 +52,7 @@ const Button = ({
                     small
                         ? 'px-[30px] h-8'
                         : large
-                        ? 'px-[10px] h-12'
+                        ? 'px-2.5 h-12'
                         : 'px-5 h-10',
                 );
         }

@@ -28,7 +28,7 @@ const Contact = ({
                 </p>
                 <div className="flex gap-2 items-center">
                     {(isOnline && (
-                        <span className="inline-block w-[10px] h-[10px] bg-blue-black-2 rounded-full"></span>
+                        <span className="inline-block w-2.5 h-2.5 bg-blue-black-2 rounded-full"></span>
                     )) || (
                         <ClockIcon className="fill-white-45 dark:fill-white-9" />
                     )}

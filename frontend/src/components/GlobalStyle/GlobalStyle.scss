@@ -5,11 +5,13 @@
     --home-sidebar-width: 335px;
     --explore-sidebar-width: 394px;
     --sidebar-left-width: 237px;
+    --scroll-height: calc(100vh - var(--top-bar-height) - 20px);
 }
 
 body {
     font-family: 'Inter', sans-serif;
     line-height: 19px;
+    overflow-x: hidden;
 }
 
 #root {

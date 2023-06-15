@@ -13,6 +13,7 @@ const Home = () => {
     return (
         <Page
             scrollWidth="var(--home-sidebar-width)"
+            scrollHeight="var(--scroll-height)"
             scrollChildren={
                 <>
                     <Wrapper className="p-5">

@@ -14,7 +14,7 @@ const TopBar = () => {
                     className="w-full pl-12 pr-5 py-[14px] text-black dark:text-white bg-transparent font-medium text-xs leading-[15px] outline-none"
                 />
             </div>
-            <div className="flex items-center gap-[10px]">
+            <div className="flex items-center gap-2.5">
                 <Image
                     className="w-10 h-10"
                     rounded

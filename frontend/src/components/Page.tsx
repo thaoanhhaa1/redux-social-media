@@ -1,27 +1,31 @@
 import { ReactNode } from 'react';
-import ScrollbarWrapper from './scrollbar/ScrollbarWrapper';
-import Card from './card/Card';
 
 const Page = ({
     children,
     scrollChildren,
     scrollWidth,
+    scrollHeight,
 }: {
     children: ReactNode;
     scrollChildren: ReactNode;
     scrollWidth: string;
+    scrollHeight: string;
 }) => {
     return (
-        <div className="flex gap-5 overscroll-y-auto pl-5 pb-5">
-            <div
-                className={'flex flex-col gap-5 overflow-auto flex-1'}
-                style={{ paddingRight: `calc(${scrollWidth} + 20px)` }}
-            >
+        <div className="flex gap-5 pl-5">
+            <div className="flex flex-col gap-5 overflow-auto flex-1 pb-5">
                 {children}
             </div>
-            <ScrollbarWrapper style={{ width: scrollWidth }}>
+            <div
+                style={{
+                    width: scrollWidth,
+                    minHeight: scrollHeight,
+                    top: '95px',
+                }}
+                className="flex flex-col gap-5 max-h-0 sticky overflow-y-auto pb-5"
+            >
                 {scrollChildren}
-            </ScrollbarWrapper>
+            </div>
         </div>
     );
 };

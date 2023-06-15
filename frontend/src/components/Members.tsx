@@ -21,7 +21,7 @@ const Members = () => {
                     <AddStoryIcon className="fill-black-8 dark:fill-white-5" />
                 }
                 rounded
-                className="bg-white-1 dark:bg-white-2 absolute right-0 z-40"
+                className="bg-white-1 dark:bg-white-2 absolute right-0 z-10"
             />
         </div>
     );

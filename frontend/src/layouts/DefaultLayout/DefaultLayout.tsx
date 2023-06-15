@@ -14,11 +14,11 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
     }, [isDarkTheme]);
 
     return (
-        <div className="flex relative">
+        <div className="flex">
             <Sidebar />
-            <div className="overflow-x-auto flex-1 relative">
+            <div className="flex-1">
                 <TopBar />
-                <div className="pt-[calc(var(--top-bar-height)+20px)] bg-white-1 dark:bg-dark-black-1">
+                <div className="w-[calc(100vw_-_var(--sidebar-left-width))] pt-[calc(var(--top-bar-height)+20px)] bg-white-1 dark:bg-dark-black-1">
                     {children}
                 </div>
             </div>

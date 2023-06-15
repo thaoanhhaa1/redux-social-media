@@ -18,6 +18,7 @@ const Notifications = () => {
                     <Trend />
                 </>
             }
+            scrollHeight="var(--scroll-height)"
             scrollWidth="335px"
         >
             <Wrapper className="p-5">

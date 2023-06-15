@@ -59,7 +59,7 @@ const Stories = () => {
             <div ref={container} className="relative">
                 <div
                     className={
-                        'flex gap-[10px] overflow-x-auto snap-x hidden-scrollbar transition-all'
+                        'flex gap-2.5 overflow-x-auto snap-x hidden-scrollbar transition-all'
                     }
                     style={{
                         marginLeft: `-${
