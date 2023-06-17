@@ -4,7 +4,7 @@ import ChatButton from './ChatButton';
 
 const ChatHeader = () => {
     return (
-        <div className="border-b-2 border-white-2">
+        <div className="border-b-2 border-white-2 dark:border-b-black-3">
             <div className="flex gap-[14px] p-5">
                 <Image
                     alt=""
@@ -14,10 +14,10 @@ const ChatHeader = () => {
                 />
                 <div className="flex-1 flex justify-between items-center">
                     <div className="font-semibold">
-                        <div className="text-sm leading-sm text-[#000]">
+                        <div className="text-sm leading-sm text-black dark:text-white">
                             maike.B
                         </div>
-                        <p className="mt-[2px] text-xs leading-xs text-black-8">
+                        <p className="mt-[2px] text-xs leading-xs text-black-8 dark:text-white">
                             online
                         </p>
                     </div>

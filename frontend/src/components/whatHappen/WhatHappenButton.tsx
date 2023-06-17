@@ -28,7 +28,7 @@ const WhatHappenButton = ({
                 </span>
             }
             className={classNames(
-                'text-[#000] dark:text-white font-medium text-xs leading-xs',
+                'text-black dark:text-white font-medium text-xs leading-xs',
                 backgroundColor,
                 className,
             )}

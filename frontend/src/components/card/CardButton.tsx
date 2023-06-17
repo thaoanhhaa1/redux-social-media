@@ -18,7 +18,7 @@ const CardButton = ({
                 'bg-opacity-5',
                 active
                     ? 'bg-red-white-2 dark:bg-red-white-2'
-                    : 'bg-[#000] dark:bg-dark-black-3',
+                    : 'bg-black dark:bg-dark-black-3',
             )}
         />
     );

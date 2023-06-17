@@ -14,7 +14,7 @@ const CardInformation = () => {
 
     return (
         <div className="flex flex-col gap-5 ml-[56px]">
-            <p className="font-medium text-sm leading-[21px] text-[#000] dark:text-white">
+            <p className="font-medium text-sm leading-[21px] text-black dark:text-white">
                 Allah first 😍👏proudly Muslimat 💞 daddy's love & mummy's pride
                 🙌 Be patient 🙌
             </p>

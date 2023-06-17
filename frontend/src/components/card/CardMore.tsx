@@ -20,19 +20,17 @@ const CardMore = () => {
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={
-                    <UnFollowIcon className="fill-[#000] dark:fill-white-1" />
-                }
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<UnFollowIcon className="fill-black dark:fill-white-1" />}
             >
                 unfollow language learning
             </Button>
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
                 icon={
-                    <NotInterestedIcon className="fill-[#000] dark:fill-white-1" />
+                    <NotInterestedIcon className="fill-black dark:fill-white-1" />
                 }
             >
                 Not intersted in this tweet
@@ -40,48 +38,48 @@ const CardMore = () => {
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={<FollowIcon className="fill-[#000] dark:fill-white-1" />}
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<FollowIcon className="fill-black dark:fill-white-1" />}
             >
                 Follow @westminster_eng
             </Button>
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={<MuteIcon className="fill-[#000] dark:fill-white-1" />}
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<MuteIcon className="fill-black dark:fill-white-1" />}
             >
                 Mute @Westminster_Eng
             </Button>
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={<BlockIcon className="fill-[#000] dark:fill-white-1" />}
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<BlockIcon className="fill-black dark:fill-white-1" />}
             >
                 Block @Westminster_Eng
             </Button>
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={<EmbedIcon className="fill-[#000] dark:fill-white-1" />}
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<EmbedIcon className="fill-black dark:fill-white-1" />}
             >
                 Embed Tweet
             </Button>
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={<ReportIcon className="fill-[#000] dark:fill-white-1" />}
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<ReportIcon className="fill-black dark:fill-white-1" />}
             >
                 Report Tweet
             </Button>
             <Button
                 align="left"
                 gap="4"
-                className="p-2 h-auto text-[#000] dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
-                icon={<AddListIcon className="fill-[#000] dark:fill-white-1" />}
+                className="p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all"
+                icon={<AddListIcon className="fill-black dark:fill-white-1" />}
             >
                 Add/remove @Westminster_Eng from Lists
             </Button>

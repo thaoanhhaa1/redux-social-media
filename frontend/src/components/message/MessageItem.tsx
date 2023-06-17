@@ -2,8 +2,8 @@ import Image from '../Image';
 
 const MessageItem = () => {
     return (
-        <div className="[&:not(:last-child)]:pb-2.5 [&:not(:last-child)]:border-b [&:not(:last-child)]:mb-2.5 border-white-3">
-            <div className="cursor-pointer rounded-2.5 p-5 flex gap-5 hover:bg-blue-white-5 ease-linear duration-300">
+        <div className="[&:not(:last-child)]:pb-2.5 [&:not(:last-child)]:border-b [&:not(:last-child)]:mb-2.5 border-white-3 dark:border-dark-black-3">
+            <div className="cursor-pointer rounded-2.5 p-5 flex gap-5 hover:bg-blue-white-5 dark:hover:bg-dark-black-3 ease-linear duration-300">
                 <div className="w-10 h-10 relative">
                     <Image
                         alt=""
@@ -14,14 +14,14 @@ const MessageItem = () => {
                 </div>
                 <div className="flex-1 flex justify-between items-center">
                     <div>
-                        <div className="font-semibold text-black-1">
+                        <div className="font-semibold text-black-1 dark:text-white">
                             karti.w
                         </div>
-                        <p className="mt-[5px] font-semibold text-sm leading-sm text-black-8">
+                        <p className="mt-[5px] font-semibold text-sm leading-sm text-black-8 dark:text-white">
                             See you tomorrow
                         </p>
                     </div>
-                    <span className="w-5 h-5 bg-blue-white-4 rounded-full font-medium text-xs leading-5 text-center text-blue-black-2">
+                    <span className="w-5 h-5 bg-blue-white-4 dark:bg-blue-black-5 rounded-full font-medium text-xs leading-5 text-center text-blue-black-2 dark:text-white">
                         3
                     </span>
                 </div>

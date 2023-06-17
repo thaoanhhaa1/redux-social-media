@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import { v4 } from 'uuid';
 import { IChat } from '../../../interfaces';
 import { getTimeString } from '../../../utils';
 import { ImageIcon, SendIcon, VoiceIcon } from '../../Icons';
-import Textarea from '../../Textarea';
 import Wrapper from '../../wrapper/Wrapper';
 import Sidebar from '../sidebar/Sidebar';
 import ChatButton from './ChatButton';
@@ -122,7 +122,7 @@ const Chat = () => {
                                             index - 1
                                         ].date.getMilliseconds() -
                                             108000) && (
-                                    <div className="text-center text-xs leading-xs text-black-8">
+                                    <div className="font-semibold text-center text-xs leading-xs text-black-8">
                                         {getTimeString(chat.date)}
                                     </div>
                                 )}
@@ -131,9 +131,12 @@ const Chat = () => {
                         ))}
                     </div>
                 </div>
-                <div className="border-t-2 border-white-2">
+                <div className="border-t-2 border-white-2 dark:border-b-black-3">
                     <div className="overflow-auto flex gap-3 px-6 py-[26px]">
-                        <Textarea placeholder="Write a massage...." />
+                        <TextareaAutosize
+                            placeholder="Write a massage...."
+                            className="max-h-[102px] flex-1 font-medium text-sm leading-sm text-black-8 dark:text-white bg-transparent outline-none resize-none self-center"
+                        />
                         <div className="flex items-end gap-3">
                             <ChatButton>
                                 <ImageIcon />

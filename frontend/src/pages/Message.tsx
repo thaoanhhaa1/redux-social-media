@@ -9,16 +9,20 @@ const Message = () => {
                 header={
                     <div>
                         <div className="flex justify-between items-center">
-                            <div className="font-semibold text-[#000]">
+                            <div className="font-semibold text-black dark:text-white">
                                 Messages
                             </div>
-                            <button className="flex-shrink-0 drop-shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)] w-[26px] h-[26px] border border-black-7 rounded-2.5">
+                            <button className="text-black dark:text-white flex-shrink-0 drop-shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)] w-[26px] h-[26px] border border-black-7 dark:border-white rounded-2.5">
                                 +
                             </button>
                         </div>
-                        <div className="flex justify-between items-center mt-2.5 px-5 py-3 rounded-2.5 bg-blue-white-4 font-semibold text-sm leading-sm">
-                            <span className="text-blue-black-2">General</span>
-                            <span className="text-[#000]">Total</span>
+                        <div className="flex justify-between items-center mt-2.5 px-5 py-3 rounded-2.5 bg-blue-white-4 dark:bg-dark-black-3 font-semibold text-sm leading-sm">
+                            <span className="text-blue-black-2 dark:text-blue">
+                                General
+                            </span>
+                            <span className="text-black dark:text-white">
+                                Total
+                            </span>
                         </div>
                     </div>
                 }
