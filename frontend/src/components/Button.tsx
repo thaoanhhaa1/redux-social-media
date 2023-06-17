@@ -43,11 +43,13 @@ const Button = ({
             rounded ? 'rounded-full' : 'rounded-2.5',
         );
 
-        if (children === undefined)
-            style.push(small ? 'w-7 h-7' : large ? 'w-12 h-12' : 'w-10 h-10');
-        else {
-            if (isWidthFull) style.push('w-full');
-            if (!className.includes('h-'))
+        if (isWidthFull) style.push('w-full');
+        if (!className.includes('h-')) {
+            if (children === undefined)
+                style.push(
+                    small ? 'w-7 h-7' : large ? 'w-12 h-12' : 'w-10 h-10',
+                );
+            else
                 style.push(
                     small
                         ? 'px-[30px] h-8'

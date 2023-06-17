@@ -1,6 +1,6 @@
-import MessageItem from '../components/MessageItem';
+import Chat from '../components/message/chat/Chat';
+import MessageItem from '../components/message/MessageItem';
 import ScrollbarFixTop from '../components/scrollbar/ScrollbarFixTop';
-import Wrapper from '../components/wrapper/Wrapper';
 
 const Message = () => {
     return (
@@ -35,9 +35,7 @@ const Message = () => {
                 <MessageItem />
                 <MessageItem />
             </ScrollbarFixTop>
-            <div className="flex-1 flex gap-5">
-                <Wrapper className="p-5">Mess</Wrapper>
-            </div>
+            <Chat />
         </div>
     );
 };

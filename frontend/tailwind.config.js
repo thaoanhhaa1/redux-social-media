@@ -5,7 +5,8 @@ module.exports = {
     theme: {
         extend: {
             height: {
-                'top-bar': '75px'
+                'top-bar': '75px',
+                inherit: 'inherit'
             },
             colors: {
                 'blue-white-5': '#E9F0FF',

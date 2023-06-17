@@ -2,4 +2,6 @@ const classNames = (...classNameList: (string | boolean)[]): string => {
     return classNameList.filter((className) => !!className).join(' ');
 };
 
-export { classNames };
+const numberShow = (number: number) => (number < 10 ? '0' + number : number);
+
+export { classNames, numberShow };
