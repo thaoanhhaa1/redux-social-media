@@ -3,7 +3,7 @@ import Image from './Image';
 
 const TopBar = () => {
     return (
-        <div className="z-40 fixed top-0 right-0 left-[var(--sidebar-left-width)] h-[var(--top-bar-height)] px-5 flex items-center justify-between bg-white dark:bg-dark-black-2 shadow-[shadow-container] dark:shadow-none">
+        <div className="z-40 fixed top-0 right-0 left-[var(--sidebar-left-width)] h-[var(--top-bar-height)] px-5 flex items-center justify-between bg-white dark:bg-dark-black-2 shadow-container dark:shadow-none">
             <div className="relative flex items-center flex-1 max-w-[649px] h-[43px] bg-white-1 dark:bg-dark-black-3 rounded-2.5">
                 <span className="absolute left-5">
                     <SearchIcon className="fill-white-03 dark:fill-white" />

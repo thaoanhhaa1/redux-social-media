@@ -8,11 +8,13 @@ const ScrollbarFixTop = ({
     header,
     children,
     gap = '5',
+    marginBottom = '0px',
 }: {
     className?: string;
     header: ReactNode;
     children: ReactNode;
     gap?: string;
+    marginBottom?: string;
 }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [bodyHeight, setBodyHeight] = useState(0);
@@ -20,7 +22,8 @@ const ScrollbarFixTop = ({
     useLayoutEffect(() => {
         const element = ref.current;
         if (element === null) return;
-        setBodyHeight(element.getBoundingClientRect().top || 0);
+        console.log(element.offsetTop);
+        setBodyHeight(element.offsetTop);
     }, []);
 
     return (
@@ -30,12 +33,15 @@ const ScrollbarFixTop = ({
                 'p-5 flex-shrink-0 sticky top-[calc(var(--top-bar-height)_+_20px)] h-fit',
                 className,
             )}
+            style={{ marginBottom }}
         >
             {header}
-            <div className="overflow-hidden" ref={ref}>
+            <div className="overflow-y-hidden" ref={ref}>
                 <div
                     className="overflow-y-auto scrollbar hidden-scrollbar relative"
-                    style={{ height: `calc(100vh - ${bodyHeight}px - 20px)` }}
+                    style={{
+                        height: `calc(100vh - var(--top-bar-height) - ${bodyHeight}px - 40px - ${marginBottom} )`,
+                    }}
                 >
                     {children}
                     <Scrollbar />

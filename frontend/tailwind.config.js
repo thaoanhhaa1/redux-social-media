@@ -84,12 +84,14 @@ module.exports = {
             },
             boxShadow: {
                 'icon-btn': '0 2px 8px rgba(0, 0, 0, 0.1),0 0 0 1px rgba(0, 0, 0, 0.1)',
-                container: '0px 5px 45px #EBEBED'
+                container: '0px 5px 45px #EBEBED',
+                box: '0px 4px 4px rgba(0, 0, 0, 0.25)'
             },
             lineHeight: {
                 xs: '15px',
                 sm: '17px',
-                base: '19px'
+                base: '19px',
+                xl: '24px'
             },
             borderRadius: {
                 2.5: '10px'

@@ -2,7 +2,7 @@ import Image from './Image';
 
 const BookmarkItem = () => {
     return (
-        <div className="flex gap-5 p-5">
+        <div className="flex gap-5 p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5">
             <Image
                 alt=""
                 src="https://images.unsplash.com/photo-1686903430777-279ba0f25e7f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw0fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60"

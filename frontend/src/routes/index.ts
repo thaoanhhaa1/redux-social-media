@@ -3,6 +3,7 @@ import DefaultLayout from '../layouts/DefaultLayout';
 import Bookmark from '../pages/Bookmark';
 import Explore from '../pages/Explore';
 import Home from '../pages/Home';
+import Lists from '../pages/Lists';
 import Message from '../pages/Message';
 import Notifications from '../pages/Notifications';
 
@@ -30,6 +31,11 @@ const publicRoutes = [
     {
         path: config.routes.bookmarks,
         element: Bookmark,
+        layout: DefaultLayout,
+    },
+    {
+        path: config.routes.lists,
+        element: Lists,
         layout: DefaultLayout,
     },
 ];

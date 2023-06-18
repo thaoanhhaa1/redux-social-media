@@ -13,7 +13,7 @@ const SidebarItem = ({ sidebarItem }: { sidebarItem: ISidebar }) => {
                     isActive
                         ? '!text-blue !fill-blue active bg-blue-white-4 dark:bg-dark-black-3'
                         : 'text-black-8 dark:text-white fill-black-8 dark:fill-white dark:bg-dark-black-2',
-                    'flex gap-4 p-4 rounded-2.5 hover:text-blue-white-2 dark:hover:text-blue-white-2 hover:fill-blue-white-2 dark:hover:fill-blue-white-2 transition-all',
+                    'flex gap-4 p-4 rounded-2.5 hover:text-blue-white-2 dark:hover:text-blue-white-2 hover:fill-blue-white-2 dark:hover:fill-blue-white-2 transition-colors',
                 )
             }
         >

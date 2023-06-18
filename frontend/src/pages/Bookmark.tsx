@@ -14,17 +14,15 @@ const Bookmark = () => {
                     </div>
                 }
             >
-                <div className="-mx-5">
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                    <BookmarkItem />
-                </div>
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
+                <BookmarkItem />
             </ScrollbarFixTop>
             <div className="flex flex-col gap-5">
                 <Card />

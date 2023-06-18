@@ -7,7 +7,7 @@ import Button from '../Button';
 
 const Sidebar = () => {
     return (
-        <div className="sticky top-0 h-fit w-[var(--sidebar-left-width)] flex-shrink-0 p-5 min-h-screen shadow-[shadow-container] dark:shadow-none dark:bg-dark-black-2">
+        <div className="sticky top-0 h-fit w-[var(--sidebar-left-width)] flex-shrink-0 p-5 min-h-screen shadow-container dark:shadow-none dark:bg-dark-black-2">
             <div className="flex items-center gap-4">
                 <Button
                     small

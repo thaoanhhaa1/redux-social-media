@@ -1,14 +1,16 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { classNames } from '../../utils';
 
 const Wrapper = ({
     className = '',
     children,
     gap = '5',
+    ...props
 }: {
     className?: string;
     children: ReactNode;
     gap?: string;
+    style?: CSSProperties;
 }) => {
     return (
         <div
@@ -17,6 +19,7 @@ const Wrapper = ({
                 `gap-${gap}`,
                 className,
             )}
+            {...props}
         >
             {children}
         </div>
