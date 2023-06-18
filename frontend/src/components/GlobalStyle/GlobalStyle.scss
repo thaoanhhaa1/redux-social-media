@@ -78,6 +78,6 @@ body {
 }
 
 // Scrollbar custom
-.scrollbar div {
+.scrollbar > div {
     transition: background-color ease 0.3s, top 0s;
 }

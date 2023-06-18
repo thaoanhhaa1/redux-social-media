@@ -314,47 +314,50 @@ export const BottomIcon = ({ className }: { className?: string }) => (
 export const ShareIcon = ({ className }: { className?: string }) => (
     <svg
         className={className}
-        width={14}
+        width={13}
         height={14}
-        viewBox="0 0 15 14"
+        viewBox="0 0 13 14"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
         <path
-            d="M7.42985 8.6281V1.60419"
-            stroke="black"
+            d="M6.42936 8.6281V1.60419"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M7.42985 8.6281V1.60419"
+            d="M6.42936 8.6281V1.60419"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M9.13052 6.92078L7.42952 8.62878L5.72852 6.92078"
-            stroke="black"
+            d="M8.13052 6.92078L6.42952 8.62878L4.72852 6.92078"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M9.13052 6.92078L7.42952 8.62878L5.72852 6.92078"
+            d="M8.13052 6.92078L6.42952 8.62878L4.72852 6.92078"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M10.0495 4.23425C12.1372 4.42675 12.8962 5.20842 12.8962 8.31759C12.8962 12.4593 11.5481 12.4593 7.50033 12.4593C3.45141 12.4593 2.10449 12.4593 2.10449 8.31759C2.10449 5.20842 2.86283 4.42675 4.95116 4.23425"
-            stroke="black"
+            d="M9.04949 4.23425C11.1372 4.42675 11.8962 5.20842 11.8962 8.31759C11.8962 12.4593 10.5481 12.4593 6.50033 12.4593C2.45141 12.4593 1.10449 12.4593 1.10449 8.31759C1.10449 5.20842 1.86283 4.42675 3.95116 4.23425"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M10.0495 4.23425C12.1372 4.42675 12.8962 5.20842 12.8962 8.31759C12.8962 12.4593 11.5481 12.4593 7.50033 12.4593C3.45141 12.4593 2.10449 12.4593 2.10449 8.31759C2.10449 5.20842 2.86283 4.42675 4.95116 4.23425"
+            d="M9.04949 4.23425C11.1372 4.42675 11.8962 5.20842 11.8962 8.31759C11.8962 12.4593 10.5481 12.4593 6.50033 12.4593C2.45141 12.4593 1.10449 12.4593 1.10449 8.31759C1.10449 5.20842 1.86283 4.42675 3.95116 4.23425"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -365,60 +368,64 @@ export const ShareIcon = ({ className }: { className?: string }) => (
 export const RetweetIcon = ({ className }: { className?: string }) => (
     <svg
         className={className}
-        width={14}
-        height={14}
-        viewBox="0 0 15 14"
+        width={13}
+        height={12}
+        viewBox="0 0 13 12"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
         <path
-            d="M4.57145 2.68408V10.0446"
-            stroke="black"
+            d="M3.57096 1.68408V9.04458"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M4.57145 2.68408V10.0446"
+            d="M3.57096 1.68408V9.04458"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M2.19189 5.07502C2.19189 5.07502 3.45714 2.68335 4.57073 2.68335C5.68373 2.68335 6.94956 5.07502 6.94956 5.07502"
-            stroke="black"
+            d="M1.19141 4.07502C1.19141 4.07502 2.45666 1.68335 3.57024 1.68335C4.68324 1.68335 5.94907 4.07502 5.94907 4.07502"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M2.19189 5.07502C2.19189 5.07502 3.45714 2.68335 4.57073 2.68335C5.68373 2.68335 6.94956 5.07502 6.94956 5.07502"
+            d="M1.19141 4.07502C1.19141 4.07502 2.45666 1.68335 3.57024 1.68335C4.68324 1.68335 5.94907 4.07502 5.94907 4.07502"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M10.362 11.3327V3.97223"
-            stroke="black"
+            d="M9.36198 10.3327V2.97223"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M10.362 11.3327V3.97223"
+            d="M9.36198 10.3327V2.97223"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M12.7416 8.94159C12.7416 8.94159 11.4757 11.3333 10.3627 11.3333C9.24972 11.3333 7.98389 8.94159 7.98389 8.94159"
-            stroke="black"
+            d="M11.7411 7.94159C11.7411 7.94159 10.4752 10.3333 9.36223 10.3333C8.24923 10.3333 6.9834 7.94159 6.9834 7.94159"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M12.7416 8.94159C12.7416 8.94159 11.4757 11.3333 10.3627 11.3333C9.24972 11.3333 7.98389 8.94159 7.98389 8.94159"
+            d="M11.7411 7.94159C11.7411 7.94159 10.4752 10.3333 9.36223 10.3333C8.24923 10.3333 6.9834 7.94159 6.9834 7.94159"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -431,45 +438,48 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
         className={className}
         width={14}
         height={14}
-        viewBox="0 0 15 14"
+        viewBox="0 0 14 14"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
         <path
-            d="M9.79783 7.24095H9.80308"
-            stroke="black"
+            d="M9.29783 7.24107H9.30308"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M9.79783 7.24095H9.80308"
+            d="M9.29783 7.24107H9.30308"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M7.45945 7.24095H7.4647"
-            stroke="black"
+            d="M6.95994 7.24107H6.96519"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M7.45945 7.24095H7.4647"
+            d="M6.95994 7.24107H6.96519"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M5.12058 7.24095H5.12583"
-            stroke="black"
+            d="M4.62107 7.24107H4.62632"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
         />
         <path
-            d="M5.12058 7.24095H5.12583"
+            d="M4.62107 7.24107H4.62632"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth={2}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -477,8 +487,7 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
         <path
             fillRule="evenodd"
             clipRule="evenodd"
-            d="M11.6246 11.1241C9.84247 12.9071 7.2021 13.2923 5.04185 12.2932C4.72294 12.1648 2.65883 12.7364 2.21095 12.2891C1.76307 11.8412 2.33523 9.77676 2.20685 9.45781C1.20733 7.29785 1.59307 4.65654 3.37579 2.87416C5.65153 0.597529 9.34887 0.597529 11.6246 2.87416C13.905 5.15431 13.9003 8.84805 11.6246 11.1241Z"
-            stroke="black"
+            d="M11.1251 11.1242C9.34296 12.9072 6.70259 13.2924 4.54234 12.2933C4.22343 12.1649 2.15932 12.7366 1.71144 12.2892C1.26356 11.8413 1.83572 9.77688 1.70734 9.45793C0.707819 7.29797 1.09356 4.65666 2.87628 2.87428C5.15202 0.597651 8.84936 0.597651 11.1251 2.87428C13.4055 5.15443 13.4008 8.84817 11.1251 11.1242Z"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -486,7 +495,9 @@ export const MessagesIcon = ({ className }: { className?: string }) => (
         <path
             fillRule="evenodd"
             clipRule="evenodd"
-            d="M11.6246 11.1241C9.84247 12.9071 7.2021 13.2923 5.04185 12.2932C4.72294 12.1648 2.65883 12.7364 2.21095 12.2891C1.76307 11.8412 2.33523 9.77676 2.20685 9.45781C1.20733 7.29785 1.59307 4.65654 3.37579 2.87416C5.65153 0.597529 9.34887 0.597529 11.6246 2.87416C13.905 5.15431 13.9003 8.84805 11.6246 11.1241Z"
+            d="M11.1251 11.1242C9.34296 12.9072 6.70259 13.2924 4.54234 12.2933C4.22343 12.1649 2.15932 12.7366 1.71144 12.2892C1.26356 11.8413 1.83572 9.77688 1.70734 9.45793C0.707819 7.29797 1.09356 4.65666 2.87628 2.87428C5.15202 0.597651 8.84936 0.597651 11.1251 2.87428C13.4055 5.15443 13.4008 8.84817 11.1251 11.1242Z"
+            stroke="white"
+            strokeOpacity="0.45"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"

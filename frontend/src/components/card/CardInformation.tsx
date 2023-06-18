@@ -27,17 +27,17 @@ const CardInformation = () => {
                 <div className="flex gap-5">
                     <CardButton
                         icon={
-                            <ShareIcon className="stroke-stroke-icon dark:stroke-white" />
+                            <ShareIcon className="stroke-black dark:stroke-white" />
                         }
                     />
                     <CardButton
                         icon={
-                            <RetweetIcon className="stroke-stroke-icon dark:stroke-white" />
+                            <RetweetIcon className="stroke-black dark:stroke-white" />
                         }
                     />
                     <CardButton
                         icon={
-                            <MessagesIcon className="stroke-stroke-icon dark:stroke-white" />
+                            <MessagesIcon className="stroke-black dark:stroke-white" />
                         }
                     />
                 </div>
@@ -46,7 +46,7 @@ const CardInformation = () => {
                         active={isLike}
                         icon={
                             (isLike && <LikeActiveIcon />) || (
-                                <LikeIcon className="stroke-stroke-icon dark:stroke-white" />
+                                <LikeIcon className="stroke-black dark:stroke-white" />
                             )
                         }
                     />

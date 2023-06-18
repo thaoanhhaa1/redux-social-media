@@ -12,7 +12,7 @@ const Page = ({
     scrollHeight: string;
 }) => {
     return (
-        <div className="flex gap-5 pl-5">
+        <div className="flex gap-5 px-5">
             <div className="flex flex-col gap-5 overflow-auto flex-1 pb-5">
                 {children}
             </div>
