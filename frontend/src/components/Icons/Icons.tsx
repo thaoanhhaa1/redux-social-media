@@ -1381,3 +1381,101 @@ export const PinActiveIcon = ({ className = '' }: { className?: string }) => (
         />
     </svg>
 );
+
+export const CameraIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        // className={classNames('fill-current', className)}
+        width={21}
+        height={20}
+        viewBox="0 0 21 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M13.437 10.9981C13.437 9.26127 12.0286 7.85284 10.2917 7.85284C8.55491 7.85284 7.14648 9.26127 7.14648 10.9981C7.14648 12.7349 8.55491 14.1434 10.2917 14.1434C12.0286 14.1434 13.437 12.7349 13.437 10.9981Z"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M13.437 10.9981C13.437 9.26127 12.0286 7.85284 10.2917 7.85284C8.55491 7.85284 7.14648 9.26127 7.14648 10.9981C7.14648 12.7349 8.55491 14.1434 10.2917 14.1434C12.0286 14.1434 13.437 12.7349 13.437 10.9981Z"
+            stroke="white"
+            strokeOpacity="0.05"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M10.2922 18.7001C18.3375 18.7001 19.2954 16.2896 19.2954 11.0664C19.2954 7.40539 18.8112 5.44645 15.7617 4.60434C15.4817 4.51592 15.1712 4.3475 14.9196 4.07066C14.5133 3.62539 14.2164 2.25803 13.2354 1.84434C12.2543 1.43171 8.31433 1.45066 7.34906 1.84434C6.38485 2.23908 6.07117 3.62539 5.66485 4.07066C5.41327 4.3475 5.1038 4.51592 4.82275 4.60434C1.77327 5.44645 1.28906 7.40539 1.28906 11.0664C1.28906 16.2896 2.24696 18.7001 10.2922 18.7001Z"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M10.2922 18.7001C18.3375 18.7001 19.2954 16.2896 19.2954 11.0664C19.2954 7.40539 18.8112 5.44645 15.7617 4.60434C15.4817 4.51592 15.1712 4.3475 14.9196 4.07066C14.5133 3.62539 14.2164 2.25803 13.2354 1.84434C12.2543 1.43171 8.31433 1.45066 7.34906 1.84434C6.38485 2.23908 6.07117 3.62539 5.66485 4.07066C5.41327 4.3475 5.1038 4.51592 4.82275 4.60434C1.77327 5.44645 1.28906 7.40539 1.28906 11.0664C1.28906 16.2896 2.24696 18.7001 10.2922 18.7001Z"
+            stroke="white"
+            strokeOpacity="0.05"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M15.2045 7.5H15.2135"
+            stroke="black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+        <path
+            d="M15.2045 7.5H15.2135"
+            stroke="white"
+            strokeOpacity="0.05"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+        />
+    </svg>
+);
+
+export const CalendarIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        className={className}
+        width={24}
+        height={25}
+        viewBox="0 0 24 25"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+        <rect y="0.5" width={24} height={24} fill="url(#pattern0)" />
+        <defs>
+            <pattern
+                id="pattern0"
+                patternContentUnits="objectBoundingBox"
+                width={1}
+                height={1}
+            >
+                <use
+                    xlinkHref="#image0_292_2398"
+                    transform="scale(0.0416667)"
+                />
+            </pattern>
+            <image
+                id="image0_292_2398"
+                width={24}
+                height={24}
+                xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAl0lEQVRIS2NkoDFgJGD+f6g8LnWE5BnoasF6oGsDqBRiB4DmOILMQvYBzLtUsgNiNjYLCIkhOwBbHKCIETKMUCRSbAE5wUWSD2hiATmGYtODM5JpbgGhzEfIAQMfBzAfEEyCUK+gqyPaBzS3gFBY45In2gejFtA/o50HBroBuQGPpm8DkB+IXh9QyWxUYygtFgg6iuYWAAB30C4ZOAUkkgAAAABJRU5ErkJggg=="
+            />
+        </defs>
+    </svg>
+);

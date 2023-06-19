@@ -91,7 +91,8 @@ module.exports = {
                 xs: '15px',
                 sm: '17px',
                 base: '19px',
-                xl: '24px'
+                xl: '24px',
+                '4xl': '44px'
             },
             borderRadius: {
                 2.5: '10px'

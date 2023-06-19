@@ -1,4 +1,4 @@
-import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Wrapper from '../wrapper/Wrapper';
 import { classNames } from '../../utils';
 import Scrollbar from './ScrollbarThumb';
@@ -22,7 +22,7 @@ const ScrollbarFixTop = ({
     useLayoutEffect(() => {
         const element = ref.current;
         if (element === null) return;
-        console.log(element.offsetTop);
+        console.log(element.getBoundingClientRect());
         setBodyHeight(element.offsetTop);
     }, []);
 
@@ -40,7 +40,7 @@ const ScrollbarFixTop = ({
                 <div
                     className="overflow-y-auto scrollbar hidden-scrollbar relative"
                     style={{
-                        height: `calc(100vh - var(--top-bar-height) - ${bodyHeight}px - 40px - ${marginBottom} )`,
+                        maxHeight: `calc(100vh - var(--top-bar-height) - ${bodyHeight}px - 40px - ${marginBottom} )`,
                     }}
                 >
                     {children}

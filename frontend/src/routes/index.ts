@@ -1,4 +1,5 @@
 import config from '../config';
+import { IRoute } from '../interfaces';
 import DefaultLayout from '../layouts/DefaultLayout';
 import Bookmark from '../pages/Bookmark';
 import Explore from '../pages/Explore';
@@ -6,37 +7,36 @@ import Home from '../pages/Home';
 import Lists from '../pages/Lists';
 import Message from '../pages/Message';
 import Notifications from '../pages/Notifications';
+import Profile from '../pages/Profile';
 
-const publicRoutes = [
+const publicRoutes: IRoute[] = [
     {
         path: config.routes.home,
         element: Home,
-        layout: DefaultLayout,
     },
     {
         path: config.routes.explore,
         element: Explore,
-        layout: DefaultLayout,
     },
     {
         path: config.routes.notifications,
         element: Notifications,
-        layout: DefaultLayout,
     },
     {
         path: config.routes.messages,
         element: Message,
-        layout: DefaultLayout,
     },
     {
         path: config.routes.bookmarks,
         element: Bookmark,
-        layout: DefaultLayout,
     },
     {
         path: config.routes.lists,
         element: Lists,
-        layout: DefaultLayout,
+    },
+    {
+        path: config.routes.profile,
+        element: Profile,
     },
 ];
 
