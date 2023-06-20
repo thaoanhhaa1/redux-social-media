@@ -1,24 +1,48 @@
+import { useCallback, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import Button from '../components/Button';
+import EditProfile from '../components/EditProfile';
 import Follow from '../components/Follow';
-import { CalendarIcon, CameraIcon } from '../components/Icons';
+import { CalendarIcon, CameraIcon, EditProfileIcon } from '../components/Icons';
 import Image from '../components/Image';
 import ProfileItem from '../components/ProfileItem';
+import StickyBottom from '../components/StickyBottom';
 import Card from '../components/card/Card';
-import ScrollbarFixTop from '../components/scrollbar/ScrollbarFixTop';
 import Stories from '../components/story/Stories';
-import Story from '../components/story/Story';
 import WhatHappen from '../components/whatHappen/WhatHappen';
 import Wrapper from '../components/wrapper/Wrapper';
-import StickyBottom from '../components/StickyBottom';
 
 const Profile = () => {
+    const [isShowModel, setShowModel] = useState(false);
+
+    const handleShowModel = useCallback(
+        () => setShowModel((isShowModel) => !isShowModel),
+        [],
+    );
+
+    useEffect(() => {
+        document.body.style.height = isShowModel ? '100vh' : 'unset';
+        document.body.style.overflow = isShowModel ? 'hidden' : 'unset';
+    }, [isShowModel]);
+
     return (
-        <div className="px-5">
+        <div className="relative px-5">
             <Image
                 alt=""
                 src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
                 className="aspect-[1163/253] h-auto rounded-2.5"
+            />
+            <Button
+                onClick={handleShowModel}
+                className="!px-5 absolute top-[35px] right-[36px] bg-white dark:bg-dark-black-3 text-black dark:text-white font-medium text-xs leading-xs"
+                large
+                icon={<EditProfileIcon />}
+            >
+                Edit profile
+            </Button>
+            <EditProfile
+                isShowModel={isShowModel}
+                handleShowModel={handleShowModel}
             />
             <Wrapper
                 isRow

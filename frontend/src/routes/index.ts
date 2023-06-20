@@ -1,6 +1,5 @@
 import config from '../config';
 import { IRoute } from '../interfaces';
-import DefaultLayout from '../layouts/DefaultLayout';
 import Bookmark from '../pages/Bookmark';
 import Explore from '../pages/Explore';
 import Home from '../pages/Home';
@@ -8,6 +7,7 @@ import Lists from '../pages/Lists';
 import Message from '../pages/Message';
 import Notifications from '../pages/Notifications';
 import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 
 const publicRoutes: IRoute[] = [
     {
@@ -37,6 +37,10 @@ const publicRoutes: IRoute[] = [
     {
         path: config.routes.profile,
         element: Profile,
+    },
+    {
+        path: config.routes.settings,
+        element: Settings,
     },
 ];
 

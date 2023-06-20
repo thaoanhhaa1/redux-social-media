@@ -1,4 +1,10 @@
-import { CSSProperties, ReactElement, ReactNode, useMemo } from 'react';
+import {
+    CSSProperties,
+    MouseEvent,
+    ReactElement,
+    ReactNode,
+    useMemo,
+} from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 
 const Button = ({
@@ -14,6 +20,7 @@ const Button = ({
     gap = '2',
     disabled = false,
     align = 'center',
+    type = 'button',
     onClick = () => {},
     ...passProps
 }: {
@@ -30,7 +37,8 @@ const Button = ({
     gap?: string;
     disabled?: boolean;
     align?: 'left' | 'center' | 'right';
-    onClick?: () => void;
+    type?: 'button' | 'submit';
+    onClick?: (e: MouseEvent) => void;
 }) => {
     let Type: React.ElementType = 'button';
     const styles = useMemo(() => {
@@ -62,7 +70,9 @@ const Button = ({
         return style.join(' ');
     }, [align, children, className, gap, isWidthFull, large, rounded, small]);
 
-    const props: LinkProps | { to?: string; href?: string } = {
+    const props:
+        | LinkProps
+        | { to?: string; href?: string; onClick: (e: MouseEvent) => void } = {
         to,
         href,
         onClick,
@@ -80,7 +90,7 @@ const Button = ({
     }
 
     return (
-        <Type className={styles} onClick={onClick} {...props} {...passProps}>
+        <Type type={type} className={styles} {...props} {...passProps}>
             {icon}
             {children && <span>{children}</span>}
         </Type>

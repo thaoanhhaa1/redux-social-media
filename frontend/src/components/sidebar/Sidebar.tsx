@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
 import { v4 } from 'uuid';
 import config from '../../config';
+import Button from '../Button';
 import Image from '../Image';
 import SidebarItem from './SidebarItem';
-import Button from '../Button';
 
 const Sidebar = () => {
     return (

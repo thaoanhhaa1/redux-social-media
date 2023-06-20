@@ -96,6 +96,9 @@ module.exports = {
             },
             borderRadius: {
                 2.5: '10px'
+            },
+            transitionProperty: {
+                'color-fill': 'color, fill'
             }
         },
     },

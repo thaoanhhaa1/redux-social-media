@@ -1,5 +1,3 @@
-import { classNames } from '../utils';
-
 const ProfileItem = ({
     title,
     number,

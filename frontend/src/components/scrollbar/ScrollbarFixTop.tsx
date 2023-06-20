@@ -1,6 +1,6 @@
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import Wrapper from '../wrapper/Wrapper';
+import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { classNames } from '../../utils';
+import Wrapper from '../wrapper/Wrapper';
 import Scrollbar from './ScrollbarThumb';
 
 const ScrollbarFixTop = ({
@@ -22,7 +22,6 @@ const ScrollbarFixTop = ({
     useLayoutEffect(() => {
         const element = ref.current;
         if (element === null) return;
-        console.log(element.getBoundingClientRect());
         setBodyHeight(element.offsetTop);
     }, []);
 

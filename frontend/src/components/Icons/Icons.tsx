@@ -1382,9 +1382,15 @@ export const PinActiveIcon = ({ className = '' }: { className?: string }) => (
     </svg>
 );
 
-export const CameraIcon = ({ className = '' }: { className?: string }) => (
+export const CameraIcon = ({
+    className = '',
+    stroke = 'black',
+}: {
+    className?: string;
+    stroke?: string;
+}) => (
     <svg
-        // className={classNames('fill-current', className)}
+        className={className}
         width={21}
         height={20}
         viewBox="0 0 21 20"
@@ -1395,7 +1401,7 @@ export const CameraIcon = ({ className = '' }: { className?: string }) => (
             fillRule="evenodd"
             clipRule="evenodd"
             d="M13.437 10.9981C13.437 9.26127 12.0286 7.85284 10.2917 7.85284C8.55491 7.85284 7.14648 9.26127 7.14648 10.9981C7.14648 12.7349 8.55491 14.1434 10.2917 14.1434C12.0286 14.1434 13.437 12.7349 13.437 10.9981Z"
-            stroke="black"
+            stroke={stroke}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1414,7 +1420,7 @@ export const CameraIcon = ({ className = '' }: { className?: string }) => (
             fillRule="evenodd"
             clipRule="evenodd"
             d="M10.2922 18.7001C18.3375 18.7001 19.2954 16.2896 19.2954 11.0664C19.2954 7.40539 18.8112 5.44645 15.7617 4.60434C15.4817 4.51592 15.1712 4.3475 14.9196 4.07066C14.5133 3.62539 14.2164 2.25803 13.2354 1.84434C12.2543 1.43171 8.31433 1.45066 7.34906 1.84434C6.38485 2.23908 6.07117 3.62539 5.66485 4.07066C5.41327 4.3475 5.1038 4.51592 4.82275 4.60434C1.77327 5.44645 1.28906 7.40539 1.28906 11.0664C1.28906 16.2896 2.24696 18.7001 10.2922 18.7001Z"
-            stroke="black"
+            stroke={stroke}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1431,7 +1437,7 @@ export const CameraIcon = ({ className = '' }: { className?: string }) => (
         />
         <path
             d="M15.2045 7.5H15.2135"
-            stroke="black"
+            stroke={stroke}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1477,5 +1483,22 @@ export const CalendarIcon = ({ className = '' }: { className?: string }) => (
                 xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAl0lEQVRIS2NkoDFgJGD+f6g8LnWE5BnoasF6oGsDqBRiB4DmOILMQvYBzLtUsgNiNjYLCIkhOwBbHKCIETKMUCRSbAE5wUWSD2hiATmGYtODM5JpbgGhzEfIAQMfBzAfEEyCUK+gqyPaBzS3gFBY45In2gejFtA/o50HBroBuQGPpm8DkB+IXh9QyWxUYygtFgg6iuYWAAB30C4ZOAUkkgAAAABJRU5ErkJggg=="
             />
         </defs>
+    </svg>
+);
+
+export const EditProfileIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        className={classNames('fill-[#737373] dark:fill-white', className)}
+        width={19}
+        height={22}
+        viewBox="0 0 19 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M8 13V21H0C0 18.8783 0.842855 16.8434 2.34315 15.3431C3.84344 13.8429 5.87827 13 8 13ZM8 12C4.685 12 2 9.315 2 6C2 2.685 4.685 0 8 0C11.315 0 14 2.685 14 6C14 9.315 11.315 12 8 12ZM10.595 17.812C10.4682 17.2784 10.4682 16.7226 10.595 16.189L9.603 15.616L10.603 13.884L11.595 14.457C11.9932 14.0799 12.4745 13.8017 13 13.645V12.5H15V13.645C15.532 13.803 16.012 14.085 16.405 14.457L17.397 13.884L18.397 15.616L17.405 16.189C17.5316 16.7222 17.5316 17.2778 17.405 17.811L18.397 18.384L17.397 20.116L16.405 19.543C16.0068 19.9201 15.5255 20.1983 15 20.355V21.5H13V20.355C12.4745 20.1983 11.9932 19.9201 11.595 19.543L10.603 20.116L9.603 18.384L10.595 17.812ZM14 16C13.7348 16 13.4804 16.1054 13.2929 16.2929C13.1054 16.4804 13 16.7348 13 17C13 17.2652 13.1054 17.5196 13.2929 17.7071C13.4804 17.8946 13.7348 18 14 18C14.2652 18 14.5196 17.8946 14.7071 17.7071C14.8946 17.5196 15 17.2652 15 17C15 16.7348 14.8946 16.4804 14.7071 16.2929C14.5196 16.1054 14.2652 16 14 16Z"
+            fill="black"
+        />
+        <path d="M8 13V21H0C0 18.8783 0.842855 16.8434 2.34315 15.3431C3.84344 13.8429 5.87827 13 8 13ZM8 12C4.685 12 2 9.315 2 6C2 2.685 4.685 0 8 0C11.315 0 14 2.685 14 6C14 9.315 11.315 12 8 12ZM10.595 17.812C10.4682 17.2784 10.4682 16.7226 10.595 16.189L9.603 15.616L10.603 13.884L11.595 14.457C11.9932 14.0799 12.4745 13.8017 13 13.645V12.5H15V13.645C15.532 13.803 16.012 14.085 16.405 14.457L17.397 13.884L18.397 15.616L17.405 16.189C17.5316 16.7222 17.5316 17.2778 17.405 17.811L18.397 18.384L17.397 20.116L16.405 19.543C16.0068 19.9201 15.5255 20.1983 15 20.355V21.5H13V20.355C12.4745 20.1983 11.9932 19.9201 11.595 19.543L10.603 20.116L9.603 18.384L10.595 17.812ZM14 16C13.7348 16 13.4804 16.1054 13.2929 16.2929C13.1054 16.4804 13 16.7348 13 17C13 17.2652 13.1054 17.5196 13.2929 17.7071C13.4804 17.8946 13.7348 18 14 18C14.2652 18 14.5196 17.8946 14.7071 17.7071C14.8946 17.5196 15 17.2652 15 17C15 16.7348 14.8946 16.4804 14.7071 16.2929C14.5196 16.1054 14.2652 16 14 16Z" />
     </svg>
 );

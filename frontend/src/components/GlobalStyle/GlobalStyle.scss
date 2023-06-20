@@ -85,3 +85,8 @@ body {
 .scrollbar > div {
     transition: background-color ease 0.3s, top 0s;
 }
+
+// Custom date input
+.dark ::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
