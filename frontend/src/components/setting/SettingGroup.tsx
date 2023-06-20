@@ -9,8 +9,12 @@ const SettingGroup = ({
 }) => {
     return (
         <div>
-            <div className="font-semibold text-xl leading-xl">{title}</div>
-            <div className="mt-6 grid grid-cols-2 gap-5">{children}</div>
+            <div className="font-semibold text-xl leading-xl dark:text-white">
+                {title}
+            </div>
+            <div className="mt-6 grid dl:grid-cols-2 grid-cols-1 gap-5">
+                {children}
+            </div>
         </div>
     );
 };

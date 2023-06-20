@@ -99,8 +99,14 @@ module.exports = {
             },
             transitionProperty: {
                 'color-fill': 'color, fill'
+            },
+            fontFamily: {
+                base: '\'Inter\', sans-serif'
             }
         },
+        screens: {
+            dl: '896px'
+        }
     },
     plugins: [require('@tailwindcss/line-clamp')],
 };

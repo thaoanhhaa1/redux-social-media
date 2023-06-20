@@ -13,9 +13,7 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    line-height: 19px;
-    overflow-x: hidden;
+    @apply text-black leading-base overflow-x-hidden font-base;
 }
 
 #root {
