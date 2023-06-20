@@ -4,8 +4,15 @@ module.exports = {
     content: ['./src/**/*.{js,jsx,ts,tsx}'],
     theme: {
         extend: {
+            spacing: {
+                '1.25': '0.3125rem' /* 5px */ ,
+                '3.75': '0.9375rem' /* 15px */ ,
+                '7.5': '1.875rem' /* 30px */ ,
+                '8.5': '2.125rem' /* 34px */ ,
+                '17.5': '4.375rem' /* 70px */
+            },
             height: {
-                'top-bar': '75px',
+                'top-bar': '4.6875rem' /* 75px */ ,
                 inherit: 'inherit'
             },
             colors: {
@@ -80,6 +87,8 @@ module.exports = {
                 'dark-black-1': '#06141D',
                 'white-45': 'rgba(255,255,255,0.#28343E)',
                 'white-03': 'rgba(255,255,255,0.03)',
+                'white-opacity-10': 'rgba(255,255,255,0.1)',
+                'black-100': '#000',
                 'stroke-icon': '#848183'
             },
             boxShadow: {
@@ -88,14 +97,14 @@ module.exports = {
                 box: '0px 4px 4px rgba(0, 0, 0, 0.25)'
             },
             lineHeight: {
-                xs: '15px',
-                sm: '17px',
-                base: '19px',
-                xl: '24px',
-                '4xl': '44px'
+                xs: '0.9375rem' /* 15px */ ,
+                sm: '1.0625rem' /* 17px */ ,
+                base: '1.1875rem' /* 19px */ ,
+                xl: '1.5rem' /* 24px */ ,
+                '4xl': '2.75rem /* 144px */'
             },
             borderRadius: {
-                2.5: '10px'
+                2.5: '0.625rem' /* 10px */
             },
             transitionProperty: {
                 'color-fill': 'color, fill'

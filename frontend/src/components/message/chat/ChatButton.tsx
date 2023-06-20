@@ -12,7 +12,7 @@ const ChatButton = ({
     return (
         <Button
             className={classNames(
-                'w-[30px] h-[30px]',
+                'w-7.5 h-7.5',
                 isActive
                     ? 'bg-blue-white-2 dark:bg-blue text-white-1 dark:text-white'
                     : 'bg-white-1 dark:bg-dark-black-3 text-black-8 dark:text-white',

@@ -19,7 +19,7 @@ const Follow = () => {
                         @mushfiqur15
                     </div>
                 </div>
-                <Button className="bg-black dark:bg-dark-black-1 text-white text-xs leading-xs w-[86px] h-[34px]">
+                <Button className="bg-black dark:bg-dark-black-1 text-white text-xs leading-xs w-[86px] h-8.5">
                     Follow
                 </Button>
             </div>

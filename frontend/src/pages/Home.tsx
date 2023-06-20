@@ -31,7 +31,7 @@ const Home = () => {
                             <div className="text-black dark:text-white">
                                 ali baba online shoping
                             </div>
-                            <p className="mt-[5px] text-black-8 dark:text-white-9">
+                            <p className="mt-1.25 text-black-8 dark:text-white-9">
                                 ali baba .com
                             </p>
                         </div>

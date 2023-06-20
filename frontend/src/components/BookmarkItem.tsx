@@ -14,7 +14,7 @@ const BookmarkItem = () => {
                     <div className="font-semibold text-sm leading-sm text-black dark:text-white">
                         Gabriele Corno
                     </div>
-                    <span className="block text-ellipsis overflow-hidden mt-[5px] font-medium text-xs leading-xs text-black-8 dark:text-white-2">
+                    <span className="block text-ellipsis overflow-hidden mt-1.25 font-medium text-xs leading-xs text-black-8 dark:text-white-2">
                         @Gabriele_Corno
                     </span>
                 </div>

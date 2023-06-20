@@ -16,11 +16,11 @@ const CardProfile = () => {
                     <div className="font-semibold dark:text-white">
                         Aisha ado gay
                     </div>
-                    <p className="mt-[5px] font-semibold text-sm leading-sm text-black-8 dark:text-white-9">
+                    <p className="mt-1.25 font-semibold text-sm leading-sm text-black-8 dark:text-white-9">
                         @Ikramgyy
                     </p>
                 </div>
-                <div className="flex gap-[5px] text-black-8 dark:text-white font-medium text-xs leading-[15px]">
+                <div className="flex gap-1.25 text-black-8 dark:text-white font-medium text-xs leading-3.75">
                     <span>1day</span>
                     <div className="relative group/more">
                         <BottomIcon className="cursor-pointer w-4 h-4 fill-black dark:fill-white group-hover/more:fill-blue dark:group-hover/more:fill-blue-white-2 transition" />

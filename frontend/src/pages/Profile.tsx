@@ -46,7 +46,7 @@ const Profile = () => {
             />
             <Wrapper
                 isRow
-                className="relative -mt-[82px] mx-[30px] px-[30px] pb-[2px] shadow-[0px_5px_45px_#EBEBED] dark:shadow-none"
+                className="relative -mt-[82px] mx-7.5 px-7.5 pb-[2px] shadow-[0px_5px_45px_#EBEBED] dark:shadow-none"
             >
                 <div className="relative w-fit">
                     <Image

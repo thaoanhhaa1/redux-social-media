@@ -17,7 +17,7 @@ const SettingItem = ({
                 {icon}
             </span>
             <div className="flex-1 font-semibold">
-                <div className="mb-[5px] text-black dark:text-white">
+                <div className="mb-1.25 text-black dark:text-white">
                     {title}
                 </div>
                 <p className="text-sm leading-sm text-black-8 dark:text-white line-clamp-1">

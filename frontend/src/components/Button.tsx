@@ -59,11 +59,7 @@ const Button = ({
                 );
             else
                 style.push(
-                    small
-                        ? 'px-[30px] h-8'
-                        : large
-                        ? 'px-2.5 h-12'
-                        : 'px-5 h-10',
+                    small ? 'px-7.5 h-8' : large ? 'px-2.5 h-12' : 'px-5 h-10',
                 );
         }
 

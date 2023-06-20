@@ -17,7 +17,7 @@ const MessageItem = () => {
                         <div className="font-semibold text-black-1 dark:text-white">
                             karti.w
                         </div>
-                        <p className="mt-[5px] font-semibold text-sm leading-sm text-black-8 dark:text-white">
+                        <p className="mt-1.25 font-semibold text-sm leading-sm text-black-8 dark:text-white">
                             See you tomorrow
                         </p>
                     </div>

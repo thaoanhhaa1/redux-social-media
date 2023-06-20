@@ -11,7 +11,7 @@ const TopBar = () => {
                 <input
                     placeholder="Search on twitter"
                     type="text"
-                    className="w-full pl-12 pr-5 py-[14px] text-black dark:text-white bg-transparent font-medium text-xs leading-[15px] outline-none"
+                    className="w-full pl-12 pr-5 py-[14px] text-black dark:text-white bg-transparent font-medium text-xs leading-3.75 outline-none"
                 />
             </div>
             <div className="flex items-center gap-2.5">
@@ -21,7 +21,7 @@ const TopBar = () => {
                     src="https://cdn.openai.com/labs/images/A%20cyberpunk%20monster%20in%20a%20control%20room.webp?v=1"
                     alt=""
                 />
-                <div className="flex flex-col gap-[5px]">
+                <div className="flex flex-col gap-1.25">
                     <span className="text-dark-black-1 dark:text-white font-semibold">
                         Md mahmudul
                     </span>

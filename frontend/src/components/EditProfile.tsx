@@ -32,7 +32,7 @@ const EditProfile = ({
         <div
             onClick={handleShowModel}
             className={classNames(
-                'fixed inset-0 bg-[#000] bg-opacity-20 dark:bg-[#000] dark:bg-opacity-50 z-50 cursor-pointer ease-linear duration-150',
+                'fixed inset-0 bg-black-100 bg-opacity-20 dark:bg-black-100 dark:bg-opacity-50 z-50 cursor-pointer ease-linear duration-150',
                 isShowModel ? 'visible opacity-100' : 'opacity-0 invisible',
             )}
         >
@@ -40,15 +40,12 @@ const EditProfile = ({
                 onClick={(e) => e.stopPropagation()}
                 onSubmit={handleSubmit(onSubmit)}
                 className={classNames(
-                    'w-[632px] mt-[70px] mx-auto cursor-default ease-out duration-300',
+                    'w-[632px] mt-17.5 mx-auto cursor-default ease-out duration-300',
                     isShowModel ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
-                <div className="flex items-center gap-5 px-5 py-[15px] bg-black-1 dark:bg-dark-black-2">
-                    <Button
-                        onClick={handleShowModel}
-                        className="w-[34px] h-[34px]"
-                    >
+                <div className="flex items-center gap-5 px-5 py-3.75 bg-black-1 dark:bg-dark-black-2">
+                    <Button onClick={handleShowModel} className="w-8.5 h-8.5">
                         <CloseIcon className="stroke-white-3" />
                     </Button>
                     <div className="-ml-[6px] flex-1 font-semibold text-xl leading-xl text-white">
@@ -56,7 +53,7 @@ const EditProfile = ({
                     </div>
                     <Button
                         type="submit"
-                        className="w-[107px] h-[34px] bg-blue-white-2 text-xl leading-xl text-white"
+                        className="w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white"
                     >
                         save
                     </Button>

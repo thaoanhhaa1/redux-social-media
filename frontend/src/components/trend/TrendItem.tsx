@@ -1,6 +1,6 @@
 const TrendItem = () => {
     return (
-        <div className="cursor-pointer rounded-2.5 p-2 -mx-2 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-[rgba(255,255,255,0.1)] transition-all">
+        <div className="cursor-pointer rounded-2.5 p-2 -mx-2 flex justify-between items-center hover:bg-gray-100 dark:hover:bg-white-opacity-10 transition-all">
             <div className="flex flex-col gap-[2px]">
                 <div className="text-xs leading-xs text-stroke-icon dark:text-[#736F72]">
                     Trending

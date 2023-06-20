@@ -41,10 +41,10 @@ const Lists = () => {
                     <Image
                         alt=""
                         src="https://images.unsplash.com/photo-1686757662326-cb1516c1240b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80"
-                        className="-mt-[70px] mb-[43.5px] w-[200px] aspect-square"
+                        className="-mt-17.5 mb-[43.5px] w-[200px] aspect-square"
                         rounded
                     />
-                    <div className="mt-[18.5px] flex flex-col gap-[5px]">
+                    <div className="mt-[18.5px] flex flex-col gap-1.25">
                         <div className="font-semibold text-3xl text-black dark:text-white">
                             Sunday Suppers
                         </div>

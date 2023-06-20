@@ -7,7 +7,7 @@ const List = ({ isPinned = false }: { isPinned?: boolean }) => {
             <div className="font-semibold text-sm leading-sm text-black-1 dark:text-white">
                 Grandslammers
             </div>
-            <div className="mt-[5px] flex items-center gap-[5px]">
+            <div className="mt-1.25 flex items-center gap-1.25">
                 <Image
                     alt=""
                     src="https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=436&q=80"
@@ -23,8 +23,8 @@ const List = ({ isPinned = false }: { isPinned?: boolean }) => {
                     </span>
                 </div>
                 {(isPinned && (
-                    <PinActiveIcon className="text-[#000] dark:text-white" />
-                )) || <PinIcon className="text-[#000] dark:text-white" />}
+                    <PinActiveIcon className="text-black-100 dark:text-white" />
+                )) || <PinIcon className="text-black-100 dark:text-white" />}
             </div>
         </div>
     );

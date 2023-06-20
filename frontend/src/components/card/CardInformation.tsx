@@ -50,7 +50,7 @@ const CardInformation = () => {
                             )
                         }
                     />
-                    <span className="text-xs leading-[15px] text-black-8">
+                    <span className="text-xs leading-3.75 text-black-8">
                         100
                     </span>
                 </div>
