@@ -1,17 +1,30 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { MouseEvent } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { regexName } from '../constants';
+import { ProfileType } from '../types';
+import { classNames } from '../utils';
 import Button from './Button';
 import { CameraIcon, CloseIcon } from './Icons';
 import Image from './Image';
 import FormGroup from './form/FormGroup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import Label from './form/Label';
 import Input from './form/Input';
-import { classNames } from '../utils';
-import { MouseEvent } from 'react';
+import Label from './form/Label';
 
-const schema = yup.object({}).required();
-type FormData = yup.InferType<typeof schema>;
+const schema = yup
+    .object({
+        name: yup
+            .string()
+            .trim()
+            .required('Please enter your name')
+            .matches(regexName, 'Name must start with a capital letter'),
+        bio: yup.string().trim().required('Please enter your bio'),
+        location: yup.string().trim().required('Please enter your location'),
+        website: yup.string().trim().url('Invalid website'),
+        birthday: yup.string().required('Please enter your birth day'),
+    })
+    .required();
 
 const EditProfile = ({
     isShowModel,
@@ -20,13 +33,20 @@ const EditProfile = ({
     isShowModel: boolean;
     handleShowModel: () => void;
 }) => {
-    const { control, handleSubmit } = useForm<FormData>({
+    const {
+        control,
+        setError,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<ProfileType>({
         resolver: yupResolver(schema),
     });
-    const onSubmit = (data: FormData) => {
+    const onSubmit = (data: ProfileType) => {
         console.log(data);
-        setTimeout(handleShowModel, 1000);
+        // setTimeout(handleShowModel, 1000);
     };
+
+    console.log('🚀 ~ errors:', errors);
 
     return (
         <div

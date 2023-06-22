@@ -14,7 +14,7 @@ const ChatItem = ({ chat }: { chat: IChat }) => {
         >
             <div
                 className={classNames(
-                    'grid grid-cols-1 px-5 gap-1.25 w-fit max-w-[444px]',
+                    'grid grid-cols-1 px-5 gap-1.25 w-fit max-w-[min(444px,_80%)]',
                     chat.userId === '1'
                         ? 'justify-items-end'
                         : 'justify-items-start',

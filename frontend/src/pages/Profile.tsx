@@ -48,11 +48,10 @@ const Profile = () => {
                 isRow
                 className="relative -mt-[82px] mx-7.5 px-7.5 pb-[2px] shadow-[0px_5px_45px_#EBEBED] dark:shadow-none"
             >
-                <div className="relative w-fit">
+                <div className="relative w-[200px] h-[200px] flex-shrink-0">
                     <Image
                         alt=""
                         src="https://images.unsplash.com/photo-1664527184222-420bb0fec61a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80"
-                        className="w-[200px] h-[200px]"
                         rounded
                     />
                     <Button

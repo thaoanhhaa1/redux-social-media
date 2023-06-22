@@ -7,6 +7,8 @@ const routes = {
     lists: '/lists',
     profile: '/profile',
     settings: '/settings',
+    signUp: '/sign-up',
+    signIn: '/sign-in',
 };
 
 export default routes;

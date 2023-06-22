@@ -1,7 +1,20 @@
 import { ReactNode } from 'react';
+import { classNames } from '../../utils';
 
-const FormGroup = ({ children }: { children: ReactNode }) => {
-    return <div className="flex flex-col gap-3">{children}</div>;
+const FormGroup = ({
+    children,
+    className = '',
+}: {
+    children: ReactNode;
+    className?: string;
+}) => {
+    return (
+        <div
+            className={classNames('flex flex-col items-start gap-3', className)}
+        >
+            {children}
+        </div>
+    );
 };
 
 export default FormGroup;

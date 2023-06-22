@@ -8,6 +8,8 @@ import Message from '../pages/Message';
 import Notifications from '../pages/Notifications';
 import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
+import SignUp from '../pages/SignUp';
+import SignIn from '../pages/SignIn';
 
 const publicRoutes: IRoute[] = [
     {
@@ -41,6 +43,16 @@ const publicRoutes: IRoute[] = [
     {
         path: config.routes.settings,
         element: Settings,
+    },
+    {
+        path: config.routes.signUp,
+        element: SignUp,
+        layout: null,
+    },
+    {
+        path: config.routes.signIn,
+        element: SignIn,
+        layout: null,
     },
 ];
 

@@ -87,6 +87,7 @@ module.exports = {
                 'dark-black-1': '#06141D',
                 'white-45': 'rgba(255,255,255,0.#28343E)',
                 'white-03': 'rgba(255,255,255,0.03)',
+                'white-90': 'rgba(255,255,255,0.9)',
                 'white-opacity-10': 'rgba(255,255,255,0.1)',
                 'black-100': '#000',
                 'stroke-icon': '#848183'
@@ -101,7 +102,7 @@ module.exports = {
                 sm: '1.0625rem' /* 17px */ ,
                 base: '1.1875rem' /* 19px */ ,
                 xl: '1.5rem' /* 24px */ ,
-                '4xl': '2.75rem /* 144px */'
+                '4xl': '2.75rem /* 44px */'
             },
             borderRadius: {
                 2.5: '0.625rem' /* 10px */
@@ -114,7 +115,8 @@ module.exports = {
             }
         },
         screens: {
-            dl: '896px'
+            dl: '896px',
+            gx: '1152px'
         }
     },
     plugins: [require('@tailwindcss/line-clamp')],
