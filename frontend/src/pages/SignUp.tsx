@@ -1,25 +1,43 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 import AuthForm from '../components/AuthForm';
+import Button from '../components/Button';
+import ErrorMessage from '../components/form/ErrorMessage';
 import FormGroup from '../components/form/FormGroup';
 import Input from '../components/form/Input';
 import Label from '../components/form/Label';
-import Button from '../components/Button';
-import { Link } from 'react-router-dom';
+import { message, regex } from '../constants';
 import { SignUpType } from '../types';
 
 const schema = yup
     .object({
-        username: yup.string().required(),
-        email: yup.string().required(),
-        password: yup.string().required(),
-        'confirm-password': yup.string().required(),
+        username: yup
+            .string()
+            .required(message.username.require)
+            .matches(regex.username, message.username.regex),
+        email: yup
+            .string()
+            .required(message.email.require)
+            .email(message.email.regex),
+        password: yup
+            .string()
+            .required(message.password.require)
+            .matches(regex.password, message.password.regex),
+        'confirm-password': yup
+            .string()
+            .required(message.password.require)
+            .oneOf([yup.ref('password')], message.confirmPassword.match),
     })
     .required();
 
 const SignUp = () => {
-    const { control, handleSubmit } = useForm<SignUpType>({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignUpType>({
         resolver: yupResolver(schema),
     });
     const onSubmit = (data: SignUpType) => console.log(data);
@@ -33,14 +51,23 @@ const SignUp = () => {
             <FormGroup className="w-[577px]">
                 <Label name="username">Username</Label>
                 <Input control={control} name="username" />
+                {errors.username?.message && (
+                    <ErrorMessage message={errors.username?.message} />
+                )}
             </FormGroup>
             <FormGroup className="w-[577px]">
                 <Label name="email">Email Address</Label>
-                <Input control={control} name="email" type="email" />
+                <Input control={control} name="email" />
+                {errors.email?.message && (
+                    <ErrorMessage message={errors.email?.message} />
+                )}
             </FormGroup>
             <FormGroup className="w-[577px]">
                 <Label name="password">Password</Label>
                 <Input control={control} name="password" type="password" />
+                {errors.password?.message && (
+                    <ErrorMessage message={errors.password?.message} />
+                )}
             </FormGroup>
             <FormGroup className="w-[577px]">
                 <Label name="confirm-password">Confirm Password</Label>
@@ -49,6 +76,11 @@ const SignUp = () => {
                     name="confirm-password"
                     type="password"
                 />
+                {errors['confirm-password']?.message && (
+                    <ErrorMessage
+                        message={errors['confirm-password']?.message}
+                    />
+                )}
             </FormGroup>
             <Button
                 className="w-[577px] bg-blue-white-2 font-semibold text-xl leading-xl text-white"

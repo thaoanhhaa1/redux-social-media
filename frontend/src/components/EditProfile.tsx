@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { MouseEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { regexName } from '../constants';
 import { ProfileType } from '../types';
 import { classNames } from '../utils';
 import Button from './Button';
@@ -11,14 +10,15 @@ import Image from './Image';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
+import { message, regex } from '../constants';
 
 const schema = yup
     .object({
         name: yup
             .string()
             .trim()
-            .required('Please enter your name')
-            .matches(regexName, 'Name must start with a capital letter'),
+            .required(message.name.require)
+            .matches(regex.name, message.name.regex),
         bio: yup.string().trim().required('Please enter your bio'),
         location: yup.string().trim().required('Please enter your location'),
         website: yup.string().trim().url('Invalid website'),
