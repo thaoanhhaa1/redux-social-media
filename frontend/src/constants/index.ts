@@ -21,7 +21,7 @@ const message = {
     },
     username: {
         require: 'Please enter your username',
-        regex: 'Username contains only characters A-Z, a-z, 0-9 and the character _',
+        regex: 'The username should consist solely of characters A-Z, a-z, 0-9, and the underscore (_), and must start with an alphabetical character.',
         existed: 'Username already exists',
     },
     email: {
@@ -41,7 +41,7 @@ const regex = {
     name: new RegExp(
         `^[A-Z${vneseUpper}][a-z${vneseLower}]*(\\s[A-Z${vneseUpper}][a-z${vneseLower}]*)*$`,
     ),
-    username: /^[A-Za-z0-9_]+$/,
+    username: /^[A-Za-z][A-Za-z0-9_]+$/,
     password: /^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[0-9]+)(?=.*[^A-Za-z0-9]+).{8,}$/,
 };
 

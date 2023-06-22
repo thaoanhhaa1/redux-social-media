@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { MouseEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { message, regex } from '../constants';
 import { ProfileType } from '../types';
 import { classNames } from '../utils';
 import Button from './Button';
@@ -10,7 +11,6 @@ import Image from './Image';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
-import { message, regex } from '../constants';
 
 const schema = yup
     .object({
@@ -35,7 +35,6 @@ const EditProfile = ({
 }) => {
     const {
         control,
-        setError,
         handleSubmit,
         formState: { errors },
     } = useForm<ProfileType>({

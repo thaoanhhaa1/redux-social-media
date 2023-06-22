@@ -1,6 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import axios, { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import AuthForm from '../components/AuthForm';
 import Button from '../components/Button';
@@ -8,6 +10,7 @@ import ErrorMessage from '../components/form/ErrorMessage';
 import FormGroup from '../components/form/FormGroup';
 import Input from '../components/form/Input';
 import Label from '../components/form/Label';
+import config from '../config';
 import { message, regex } from '../constants';
 import { SignUpType } from '../types';
 
@@ -40,7 +43,39 @@ const SignUp = () => {
     } = useForm<SignUpType>({
         resolver: yupResolver(schema),
     });
-    const onSubmit = (data: SignUpType) => console.log(data);
+    const navigation = useNavigate();
+
+    const onSubmit = async (users: SignUpType) => {
+        try {
+            const { data } = await axios.post(
+                `${process.env.REACT_APP_END_POINTS}/users/sign-up`,
+                users,
+            );
+
+            document.cookie = data;
+
+            toast.success('Sign up successfully!');
+            navigation(config.routes.home);
+        } catch (error) {
+            const status = (error as AxiosError).request.status;
+            let message = '';
+
+            switch (status) {
+                case 400:
+                    message = 'Username, email and password are required';
+                    break;
+                case 409:
+                    message = 'Username or email already used';
+                    break;
+                default:
+                    message = 'Server is down';
+            }
+
+            toast.error(message, {
+                pauseOnHover: true,
+            });
+        }
+    };
 
     return (
         <AuthForm

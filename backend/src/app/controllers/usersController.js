@@ -1,0 +1,56 @@
+const UserModel = require('../models/userModel')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+module.exports = {
+    signUp: async (req, res, next) => {
+        const {
+            email,
+            username,
+            password
+        } = req.body;
+
+        if (!email || !username || !password) {
+            res.status(400).send("Username, email and password are required")
+            return;
+        }
+
+        // Mật khẩu quá ngắn hoặc email không hợp lệ: 409
+
+        const findUser = await UserModel.findOne({
+            "$or": [{
+                email
+            }, {
+                username
+            }]
+        })
+
+        if (findUser) {
+            res.status(409).send("Username or email already used")
+            return;
+        }
+
+        const salt = await bcrypt.genSalt(Number(process.env.SALT))
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        const user = new UserModel({
+            username,
+            email,
+            password: hashPassword
+        })
+
+        try {
+            const token = jwt.sign({
+                username,
+                email
+            }, process.env.TOKEN_SECRET, {
+                expiresIn: '1d'
+            })
+            await user.save();
+            res.status(201).json(token)
+        } catch (error) {
+            res.status(500).send('Server is down')
+            console.error(error)
+        }
+    }
+}
