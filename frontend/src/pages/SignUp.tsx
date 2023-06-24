@@ -1,9 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios, { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import { AppDispatch } from '../app/store';
 import AuthForm from '../components/AuthForm';
 import Button from '../components/Button';
 import ErrorMessage from '../components/form/ErrorMessage';
@@ -12,6 +13,7 @@ import Input from '../components/form/Input';
 import Label from '../components/form/Label';
 import config from '../config';
 import { message, regex } from '../constants';
+import { fetchUser, setUser, signUp } from '../features/user/userSlice';
 import { SignUpType } from '../types';
 
 const schema = yup
@@ -44,37 +46,21 @@ const SignUp = () => {
         resolver: yupResolver(schema),
     });
     const navigation = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     const onSubmit = async (users: SignUpType) => {
         try {
-            const { data } = await axios.post(
-                `${process.env.REACT_APP_END_POINTS}/users/sign-up`,
-                users,
-            );
+            const data = await dispatch(signUp(users)).unwrap();
 
             document.cookie = data;
 
-            toast.success('Sign up successfully!');
+            const user = await dispatch(fetchUser()).unwrap();
+
+            dispatch(setUser(user));
+
             navigation(config.routes.home);
-        } catch (error) {
-            const status = (error as AxiosError).request.status;
-            let message = '';
-
-            switch (status) {
-                case 400:
-                    message = 'Username, email and password are required';
-                    break;
-                case 409:
-                    message = 'Username or email already used';
-                    break;
-                default:
-                    message = 'Server is down';
-            }
-
-            toast.error(message, {
-                pauseOnHover: true,
-            });
-        }
+            toast.success('Sign Up Success!');
+        } catch (error) {}
     };
 
     return (

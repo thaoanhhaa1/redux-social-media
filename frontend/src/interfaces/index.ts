@@ -1,7 +1,8 @@
+import IChat from './IChat';
+import IRoute from './IRoute';
+import IScrollContext from './IScrollContext';
 import ISidebar from './ISidebar';
 import ITheme from './ITheme';
-import IScrollContext from './IScrollContext';
-import IRoute from './IRoute';
-import IChat from './IChat';
+import IUser from './IUser';
 
-export type { ISidebar, ITheme, IScrollContext, IRoute, IChat };
+export type { IChat, IRoute, IScrollContext, ISidebar, ITheme, IUser };

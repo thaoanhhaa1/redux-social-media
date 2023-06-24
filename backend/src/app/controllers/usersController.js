@@ -52,5 +52,30 @@ module.exports = {
             res.status(500).send('Server is down')
             console.error(error)
         }
+    },
+
+    getUser: async (req, res, next) => {
+        const token = req.headers.authorization
+
+        if (!token) {
+            res.sendStatus(401)
+            return;
+        }
+
+        try {
+            const {
+                username
+            } = jwt.verify(token, process.env.TOKEN_SECRET)
+
+            const user = await UserModel.findOne({
+                username
+            }, {
+                password: 0
+            })
+
+            res.json(user)
+        } catch (error) {
+            res.sendStatus(401)
+        }
     }
 }
