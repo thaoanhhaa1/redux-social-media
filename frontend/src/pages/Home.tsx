@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
+import { RootState } from '../app/store';
 import Contact from '../components/Contact';
 import Image from '../components/Image';
 import Members from '../components/Members';
@@ -10,6 +12,8 @@ import Wrapper from '../components/wrapper/Wrapper';
 import WrapperHeader from '../components/wrapper/WrapperHeader';
 
 const Home = () => {
+    const user = useSelector((state: RootState) => state.user);
+
     return (
         <Page
             scrollWidth="var(--home-sidebar-width)"

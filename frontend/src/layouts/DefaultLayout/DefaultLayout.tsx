@@ -1,8 +1,29 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { AppDispatch } from '../../app/store';
 import TopBar from '../../components/TopBar';
 import Sidebar from '../../components/sidebar/Sidebar';
+import config from '../../config';
+import { fetchUser } from '../../features/user/userSlice';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetch = async () => {
+            try {
+                await dispatch(fetchUser()).unwrap();
+            } catch (error) {
+                navigate(config.routes.signIn);
+            }
+        };
+
+        fetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div className="flex">
             <Sidebar />

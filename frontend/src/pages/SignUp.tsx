@@ -13,7 +13,7 @@ import Input from '../components/form/Input';
 import Label from '../components/form/Label';
 import config from '../config';
 import { message, regex } from '../constants';
-import { fetchUser, setUser, signUp } from '../features/user/userSlice';
+import { fetchUser, signUp } from '../features/user/userSlice';
 import { SignUpType } from '../types';
 
 const schema = yup
@@ -54,9 +54,7 @@ const SignUp = () => {
 
             document.cookie = data;
 
-            const user = await dispatch(fetchUser()).unwrap();
-
-            dispatch(setUser(user));
+            await dispatch(fetchUser()).unwrap();
 
             navigation(config.routes.home);
             toast.success('Sign Up Success!');

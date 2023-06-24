@@ -77,5 +77,34 @@ module.exports = {
         } catch (error) {
             res.sendStatus(401)
         }
+    },
+
+    signIn: async (req, res, next) => {
+        const {
+            email,
+            password
+        } = req.body;
+
+        try {
+            const user = await UserModel.findOne({
+                email
+            })
+
+            const result = await bcrypt.compare(password, user.password)
+
+            if (result) {
+                const token = jwt.sign({
+                    email,
+                    username: user.username
+                }, process.env.TOKEN_SECRET, {
+                    expiresIn: '1d'
+                })
+
+                res.json(token)
+                return;
+            }
+        } catch (error) {}
+
+        res.sendStatus(400)
     }
 }

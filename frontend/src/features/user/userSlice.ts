@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import axiosClient from '../../api/axiosClient';
 import { IUser } from '../../interfaces';
-import { SignUpType } from '../../types';
+import { SignInType, SignUpType } from '../../types';
 
 const initialState: IUser = {
     _id: '',
@@ -40,29 +40,42 @@ const signUp = createAsyncThunk('user/signUp', async (data: SignUpType) => {
     }
 });
 
+const signIn = createAsyncThunk('user/signIn', async (data: SignInType) => {
+    try {
+        const res = await axiosClient.post('users/sign-in', data);
+
+        return res.data;
+    } catch (error) {
+        toast.error('Email or password is incorrect');
+
+        throw error;
+    }
+});
+
 const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     try {
         const res = await axiosClient.get('/users/get-user');
 
         return res.data;
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 });
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        setUser: (state, { payload }) => {
-            state._id = payload._id;
-            state.email = payload.email;
-            state.username = payload.username;
-        },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchUser.fulfilled, (state, { payload }) => {
+                state._id = payload._id;
+                state.email = payload.email;
+                state.username = payload.username;
+            })
+            .addCase(fetchUser.rejected, (state) => {});
     },
 });
 
-const { setUser } = userSlice.actions;
-
-export { fetchUser, setUser, signUp };
+export { fetchUser, signIn, signUp };
 export default userSlice.reducer;
