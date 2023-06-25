@@ -15,6 +15,24 @@ const UserModel = new Schema({
     password: {
         type: String,
         required: true
+    },
+    avatar: {
+        type: String
+    },
+    name: {
+        type: String
+    },
+    bio: {
+        type: String
+    },
+    location: {
+        type: String
+    },
+    website: {
+        type: String
+    },
+    birthday: {
+        type: Date
     }
 }, {
     timestamps: true

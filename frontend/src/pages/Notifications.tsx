@@ -8,7 +8,7 @@ import NotificationAll from '../components/notification/NotificationAll';
 import NotificationMention from '../components/notification/NotificationMention';
 
 const Notifications = () => {
-    const [isAllActive, setAllActive] = useState(false);
+    const [isAllActive, setAllActive] = useState(true);
 
     return (
         <Page

@@ -19,7 +19,7 @@ const WhatHappen = () => {
                     className="dark:bg-dark-black-2 flex-1 rounded-2.5 outline-none border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs text-base-black dark:text-white placeholder:text-base-black dark:placeholder:text-white"
                 />
             </div>
-            <div className="flex gap-3">
+            <div className="flex items-center gap-3">
                 <WhatHappenButton
                     backgroundColor="bg-emerald-white-4 dark:bg-emerald-black-3"
                     backgroundColorIcon="bg-emerald"

@@ -13,8 +13,10 @@ const Page = ({
 }) => {
     return (
         <div className="flex gap-5 px-5">
-            <div className="flex flex-col gap-5 overflow-auto flex-1 pb-5">
-                {children}
+            <div className="flex-1">
+                <div className="max-w-[680px] w-full mx-auto flex flex-col gap-5 overflow-auto pb-5">
+                    {children}
+                </div>
             </div>
             <div
                 style={{

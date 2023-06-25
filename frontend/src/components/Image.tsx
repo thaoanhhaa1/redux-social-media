@@ -1,4 +1,4 @@
-import { CSSProperties, useMemo } from 'react';
+import { CSSProperties, useMemo, useState } from 'react';
 import { classNames } from '../utils';
 
 const Image = ({
@@ -23,8 +23,17 @@ const Image = ({
 
         return classNames(...classList, ...className.split(' '));
     }, [className, rounded]);
+    const [srcImage, setSrcImage] = useState(src);
 
-    return <img className={newClass} src={src} alt={alt} {...props} />;
+    return (
+        <img
+            className={newClass}
+            onError={() => setSrcImage('/no-avatar.png')}
+            src={srcImage}
+            alt={alt}
+            {...props}
+        />
+    );
 };
 
 export default Image;

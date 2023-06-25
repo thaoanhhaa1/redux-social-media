@@ -14,6 +14,7 @@ import config from '../config';
 import { message, regex } from '../constants';
 import { fetchUser, signIn } from '../features/user/userSlice';
 import { SignInType } from '../types';
+import ErrorMessage from '../components/form/ErrorMessage';
 
 const schema = yup
     .object({
@@ -29,7 +30,11 @@ const schema = yup
     .required();
 
 const SignUp = () => {
-    const { control, handleSubmit } = useForm<SignInType>({
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignInType>({
         resolver: yupResolver(schema),
     });
     const dispatch = useDispatch<AppDispatch>();
@@ -53,10 +58,16 @@ const SignUp = () => {
             <FormGroup className="w-[577px]">
                 <Label name="email">Email Address</Label>
                 <Input control={control} name="email" />
+                {errors.email?.message && (
+                    <ErrorMessage message={errors.email?.message} />
+                )}
             </FormGroup>
             <FormGroup className="w-[577px]">
                 <Label name="password">Password</Label>
                 <Input control={control} name="password" type="password" />
+                {errors.password?.message && (
+                    <ErrorMessage message={errors.password?.message} />
+                )}
             </FormGroup>
             <button className="text-white-90 ml-[79.5px] -mt-2 font-medium text-black-4 dark:text-white self-start">
                 Forgot Password

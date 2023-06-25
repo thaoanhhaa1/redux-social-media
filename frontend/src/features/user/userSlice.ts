@@ -9,6 +9,7 @@ const initialState: IUser = {
     _id: '',
     username: '',
     email: '',
+    avatar: '',
 };
 
 const signUp = createAsyncThunk('user/signUp', async (data: SignUpType) => {
