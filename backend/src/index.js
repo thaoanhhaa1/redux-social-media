@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 
 const db = require('./config/db')
 const Router = require('./routes')
+const authMiddleware = require('./app/middlewares/authMiddleware')
 
 const app = express();
 const PORT = 8080
@@ -28,6 +29,9 @@ db.connect();
 
 // middleware trong express xử lý dữ liệu dạng JSON
 app.use(express.json())
+
+// Middleware authentication
+app.use('/api/private', authMiddleware)
 
 // Router init
 Router(app);

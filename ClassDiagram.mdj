@@ -892,7 +892,7 @@
 											"top": 103,
 											"width": 119,
 											"height": 13,
-											"text": "Post"
+											"text": "Tweet"
 										},
 										{
 											"_type": "LabelView",
@@ -4913,7 +4913,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YFHKOsi6lI="
 							},
-							"name": "bio"
+							"name": "bio",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4921,7 +4922,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YFHKOsi6lI="
 							},
-							"name": "location"
+							"name": "location",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4929,7 +4931,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YFHKOsi6lI="
 							},
-							"name": "website"
+							"name": "website",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -4937,7 +4940,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YFHKOsi6lI="
 							},
-							"name": "birthday"
+							"name": "birthday",
+							"type": ""
 						}
 					]
 				},
@@ -5023,7 +5027,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Post",
+					"name": "Tweet",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -5143,7 +5147,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YQUSux9eyE="
 							},
-							"name": "group"
+							"name": "group",
+							"type": ""
 						}
 					]
 				},
@@ -5264,7 +5269,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YX7dO5P6To="
 							},
-							"name": "delete"
+							"name": "delete",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5339,7 +5345,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YsUGPks63k="
 							},
-							"name": "user"
+							"name": "user",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5347,7 +5354,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YsUGPks63k="
 							},
-							"name": "friends"
+							"name": "friends",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5355,7 +5363,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YsUGPks63k="
 							},
-							"name": "mutualFriends"
+							"name": "mutualFriends",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5363,7 +5372,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8YsUGPks63k="
 							},
-							"name": "status"
+							"name": "status",
+							"type": ""
 						}
 					]
 				},
@@ -5411,7 +5421,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8Y1FUvzqMJY="
 							},
-							"name": "user"
+							"name": "user",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5419,7 +5430,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8Y1FUvzqMJY="
 							},
-							"name": "followers"
+							"name": "followers",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5427,7 +5439,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8Y1FUvzqMJY="
 							},
-							"name": "following"
+							"name": "following",
+							"type": ""
 						}
 					]
 				},
@@ -5513,7 +5526,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8ZQOWhGKYZc="
 							},
-							"name": "user"
+							"name": "user",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5521,7 +5535,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8ZQOWhGKYZc="
 							},
-							"name": "title"
+							"name": "title",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5529,7 +5544,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8ZQOWhGKYZc="
 							},
-							"name": "content"
+							"name": "content",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5537,7 +5553,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8ZQOWhGKYZc="
 							},
-							"name": "isViewed"
+							"name": "isViewed",
+							"type": ""
 						}
 					]
 				},
@@ -5555,7 +5572,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8a/edCEmlfM="
 							},
-							"name": "users"
+							"name": "users",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5563,7 +5581,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8a/edCEmlfM="
 							},
-							"name": "messages"
+							"name": "messages",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5571,7 +5590,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8a/edCEmlfM="
 							},
-							"name": "viewed"
+							"name": "viewed",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5579,7 +5599,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8a/edCEmlfM="
 							},
-							"name": "avatar"
+							"name": "avatar",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -5587,7 +5608,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGI8a/edCEmlfM="
 							},
-							"name": "name"
+							"name": "name",
+							"type": ""
 						}
 					]
 				}

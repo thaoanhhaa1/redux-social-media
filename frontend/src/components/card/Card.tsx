@@ -1,9 +1,16 @@
+import { ITweet } from '../../interfaces';
 import { classNames } from '../../utils';
 import Wrapper from '../wrapper/Wrapper';
 import CardInformation from './CardInformation';
 import CardProfile from './CardProfile';
 
-const Card = ({ className = '' }: { className?: string }) => {
+const Card = ({
+    tweet,
+    className = '',
+}: {
+    tweet: ITweet;
+    className?: string;
+}) => {
     return (
         <Wrapper className={classNames('p-5', className)}>
             <CardProfile />

@@ -6,6 +6,7 @@ const Image = ({
     alt,
     rounded = false,
     className = '',
+    fallback = '/no-avatar.png',
     ...props
 }: {
     src: string;
@@ -13,6 +14,7 @@ const Image = ({
     className?: string;
     rounded?: boolean;
     style?: CSSProperties;
+    fallback?: string;
 }) => {
     const newClass = useMemo(() => {
         const classList: string[] = ['object-cover'];
@@ -23,12 +25,12 @@ const Image = ({
 
         return classNames(...classList, ...className.split(' '));
     }, [className, rounded]);
-    const [srcImage, setSrcImage] = useState(src);
+    const [srcImage, setSrcImage] = useState(src || fallback);
 
     return (
         <img
             className={newClass}
-            onError={() => setSrcImage('/no-avatar.png')}
+            onError={() => setSrcImage(fallback)}
             src={srcImage}
             alt={alt}
             {...props}

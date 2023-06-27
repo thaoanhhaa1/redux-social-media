@@ -33,19 +33,12 @@ const EditProfile = ({
     isShowModel: boolean;
     handleShowModel: () => void;
 }) => {
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<ProfileType>({
+    const { control, handleSubmit } = useForm<ProfileType>({
         resolver: yupResolver(schema),
     });
     const onSubmit = (data: ProfileType) => {
         console.log(data);
-        // setTimeout(handleShowModel, 1000);
     };
-
-    console.log('🚀 ~ errors:', errors);
 
     return (
         <div

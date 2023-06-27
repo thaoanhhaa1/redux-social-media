@@ -19,6 +19,9 @@ const UserModel = new Schema({
     avatar: {
         type: String
     },
+    background: {
+        type: String
+    },
     name: {
         type: String
     },

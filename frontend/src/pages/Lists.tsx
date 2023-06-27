@@ -1,3 +1,5 @@
+import Button from '../components/Button';
+import { FollowIcon, MessageIcon } from '../components/Icons';
 import Image from '../components/Image';
 import List from '../components/List';
 import Card from '../components/card/Card';
@@ -44,7 +46,7 @@ const Lists = () => {
                         className="-mt-17.5 mb-[43.5px] w-[200px] aspect-square"
                         rounded
                     />
-                    <div className="mt-[18.5px] flex flex-col gap-1.25">
+                    <div className="mt-[18.5px] flex-1 flex flex-col gap-1.25">
                         <div className="font-semibold text-3xl text-black dark:text-white">
                             Sunday Suppers
                         </div>
@@ -63,6 +65,24 @@ const Lists = () => {
                             <span>106 Members</span>
                             <span className="ml-[14px]">304 Subscribers</span>
                         </div>
+                    </div>
+                    <div className="mr-5 self-center flex flex-col gap-2">
+                        <Button
+                            className="bg-blue text-white"
+                            icon={
+                                <FollowIcon className="w-5.5 h-5.5 fill-current" />
+                            }
+                        >
+                            Follow
+                        </Button>
+                        <Button
+                            className="bg-white-7 text-black"
+                            icon={
+                                <MessageIcon className="w-5.5 h-5.5 fill-current" />
+                            }
+                        >
+                            Message
+                        </Button>
                     </div>
                 </div>
                 <div className="mt-7 grid grid-cols-1 xl:grid-cols-2 gap-5">

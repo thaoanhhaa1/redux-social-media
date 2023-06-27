@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IUser } from '../../interfaces';
 import { SignInType, SignUpType } from '../../types';
@@ -10,15 +11,20 @@ const initialState: IUser = {
     username: '',
     email: '',
     avatar: '',
+    background: '',
+    name: '',
+    bio: '',
+    website: '',
+    birthday: '',
+    createdAt: new Date(),
 };
 
 const signUp = createAsyncThunk('user/signUp', async (data: SignUpType) => {
     try {
-        const res = await axiosClient.post('/users/sign-up', data);
+        const res = await axiosClient.post(api.signUp(), data);
 
         return res.data;
     } catch (error) {
-        console.log('🚀 ~ signUp ~ error:', error);
         const status = (error as AxiosError).request.status;
         let message = '';
 
@@ -43,7 +49,7 @@ const signUp = createAsyncThunk('user/signUp', async (data: SignUpType) => {
 
 const signIn = createAsyncThunk('user/signIn', async (data: SignInType) => {
     try {
-        const res = await axiosClient.post('users/sign-in', data);
+        const res = await axiosClient.post(api.signIn(), data);
 
         return res.data;
     } catch (error) {
@@ -55,7 +61,7 @@ const signIn = createAsyncThunk('user/signIn', async (data: SignInType) => {
 
 const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     try {
-        const res = await axiosClient.get('/users/get-user');
+        const res = await axiosClient.get(api.getUser());
 
         return res.data;
     } catch (error) {
@@ -70,9 +76,12 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchUser.fulfilled, (state, { payload }) => {
-                state._id = payload._id;
-                state.email = payload.email;
-                state.username = payload.username;
+                const createdAt = new Date(payload.createdAt);
+
+                Object.assign(state, {
+                    ...payload,
+                    createdAt,
+                });
             })
             .addCase(fetchUser.rejected, (state) => {});
     },

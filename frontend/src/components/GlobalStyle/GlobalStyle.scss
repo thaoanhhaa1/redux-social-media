@@ -13,7 +13,7 @@
 }
 
 body {
-    @apply text-black leading-base overflow-x-hidden font-base;
+    @apply text-black dark:text-white leading-base overflow-x-hidden font-base;
 }
 
 #root {

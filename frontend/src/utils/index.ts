@@ -1,3 +1,4 @@
+import getMonthYear from './getMonthYear';
 import getTimeString from './getTimeString';
 
 const classNames = (...classNameList: (string | boolean)[]): string => {
@@ -6,4 +7,4 @@ const classNames = (...classNameList: (string | boolean)[]): string => {
 
 const numberShow = (number: number) => (number < 10 ? '0' + number : number);
 
-export { classNames, numberShow, getTimeString };
+export { classNames, getMonthYear, getTimeString, numberShow };

@@ -7,8 +7,11 @@ module.exports = {
             spacing: {
                 '1.25': '0.3125rem' /* 5px */ ,
                 '3.75': '0.9375rem' /* 15px */ ,
+                '4.5': '1.125rem' /* 18px */ ,
+                '5.5': '1.375rem' /* 22px */ ,
                 '7.5': '1.875rem' /* 30px */ ,
                 '8.5': '2.125rem' /* 34px */ ,
+                '8.75': '2.1875rem' /* 35px */ ,
                 '17.5': '4.375rem' /* 70px */
             },
             height: {
@@ -112,6 +115,112 @@ module.exports = {
             },
             fontFamily: {
                 base: '\'Inter\', sans-serif'
+            },
+            keyframes: {
+                spin1: {
+                    '0%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '25%': {
+                        transform: 'rotate(360deg)'
+                    },
+                    '30%': {
+                        transform: 'rotate(370deg)'
+                    },
+                    '35%': {
+                        transform: 'rotate(360deg)'
+                    },
+                    '100%': {
+                        transform: 'rotate(360deg)'
+                    }
+                },
+                spin2: {
+                    '0%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '20%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '30%': {
+                        transform: 'rotate(-180deg)'
+                    },
+                    '35%': {
+                        transform: 'rotate(-190deg)'
+                    },
+                    '40%': {
+                        transform: 'rotate(-180deg)'
+                    },
+                    '78%': {
+                        transform: 'rotate(-180deg)'
+                    },
+                    '95%': {
+                        transform: 'rotate(-360deg)'
+                    },
+                    '98%': {
+                        transform: 'rotate(-370deg)'
+                    },
+                    '100%': {
+                        transform: 'rotate(-360deg)'
+                    }
+                },
+                spin3: {
+                    '0%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '27%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '40%': {
+                        transform: 'rotate(180deg)'
+                    },
+                    '45%': {
+                        transform: 'rotate(190deg)'
+                    },
+                    '50%': {
+                        transform: 'rotate(180deg)'
+                    },
+                    '62%': {
+                        transform: 'rotate(180deg)'
+                    },
+                    '75%': {
+                        transform: 'rotate(360deg)'
+                    },
+                    '80%': {
+                        transform: 'rotate(370deg)'
+                    },
+                    '85%': {
+                        transform: 'rotate(360deg)'
+                    },
+                    '100%': {
+                        transform: 'rotate(360deg)'
+                    }
+                },
+                spin4: {
+                    '0%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '38%': {
+                        transform: 'rotate(0deg)'
+                    },
+                    '60%': {
+                        transform: 'rotate(-360deg)'
+                    },
+                    '65%': {
+                        transform: 'rotate(-370deg)'
+                    },
+                    '75%': {
+                        transform: 'rotate(-360deg)'
+                    },
+                    '100%': {
+                        transform: 'rotate(-360deg)'
+                    }
+                }
+            },
+            animation: {
+                spin1: 'spin1 3s linear infinite',
+                spin2: 'spin2 3s linear 0.2s infinite',
+                spin3: 'spin3 3s linear 0.3s infinite',
+                spin4: 'spin4 3s linear 0.4s infinite'
             }
         },
         screens: {

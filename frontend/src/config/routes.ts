@@ -9,6 +9,7 @@ const routes = {
     settings: '/settings',
     signUp: '/sign-up',
     signIn: '/sign-in',
+    search: '/search',
 };
 
 export default routes;
