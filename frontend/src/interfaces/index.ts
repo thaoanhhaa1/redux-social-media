@@ -3,6 +3,7 @@ import IRoute from './IRoute';
 import IScrollContext from './IScrollContext';
 import ISearch from './ISearch';
 import ISidebar from './ISidebar';
+import IStory from './IStory';
 import ITheme from './ITheme';
 import ITweet from './ITweet';
 import IUser from './IUser';
@@ -13,6 +14,7 @@ export type {
     IScrollContext,
     ISearch,
     ISidebar,
+    IStory,
     ITheme,
     ITweet,
     IUser,

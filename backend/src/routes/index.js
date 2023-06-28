@@ -2,14 +2,16 @@ function Router(app) {
     const users = require('./users')
     const auth = require('./auth')
     const sites = require('./sites')
-    const tweet = require('./tweet')
+    const tweets = require('./tweets')
     const follow = require('./follow')
+    const stories = require('./stories')
 
     app.use('/api/private/users', users)
-    app.use('/api/private/tweet', tweet)
+    app.use('/api/private/tweets', tweets)
     app.use('/api/private/follow', follow)
-    app.use('/api/auth', auth)
+    app.use('/api/private/stories', stories)
     app.use('/api/private', sites)
+    app.use('/api/auth', auth)
 }
 
 module.exports = Router

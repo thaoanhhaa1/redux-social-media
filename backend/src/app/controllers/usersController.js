@@ -1,7 +1,7 @@
 const UserModel = require('../models/userModel')
 
 module.exports = {
- getUser: async (req, res, next) => {
+    getUser: async (req, res, next) => {
         try {
             const username = req.body.username
 
@@ -15,6 +15,25 @@ module.exports = {
         } catch (error) {
             res.sendStatus(401)
         }
+    },
+
+    editProfile: async (req, res, next) => {
+        const {
+            _id,
+            ...data
+        } = req.body;
+
+        try {
+            const result = await UserModel.updateOne({
+                _id
+            }, data)
+
+            if (result.modifiedCount > 0)
+                res.sendStatus()
+        } catch (error) {
+            console.log("🚀 ~ editProfile: ~ error:", error)
+        }
+
+        res.sendStatus(400)
     }
 }
-

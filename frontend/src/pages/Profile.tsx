@@ -16,7 +16,7 @@ import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 import WhatHappen from '../components/whatHappen/WhatHappen';
 import Wrapper from '../components/wrapper/Wrapper';
-import { ITweet, IUser } from '../interfaces';
+import { IStory, ITweet, IUser } from '../interfaces';
 import { getMonthYear } from '../utils';
 
 const Profile = () => {
@@ -28,6 +28,7 @@ const Profile = () => {
     const [followingCount, setFollowingCount] = useState(0);
     const [whoToFollow, setWhoToFollow] = useState<IUser[]>([]);
     const [tweets, setTweets] = useState<ITweet[]>([]);
+    const [stories, setStories] = useState<IStory[]>([]);
 
     const handleShowModel = useCallback(
         () => setShowModel((isShowModel) => !isShowModel),
@@ -47,8 +48,8 @@ const Profile = () => {
                 (await axiosClient.get(api.countFollow())).data,
                 (await axiosClient.get(api.whoToFollow())).data,
                 (await axiosClient.get(api.getMyTweets())).data,
+                (await axiosClient.get(api.getMyStories())).data,
             ]);
-            console.log('🚀 ~ fetch ~ res:', res);
             setLoading(false);
 
             setTweetCount(res[0]);
@@ -56,6 +57,7 @@ const Profile = () => {
             setFollowingCount(res[1][1]);
             setWhoToFollow(res[2]);
             setTweets(res[3]);
+            setStories(res[4]);
         }
 
         fetch();
@@ -106,7 +108,7 @@ const Profile = () => {
                         <div className="flex">
                             <CalendarIcon className="dark:hidden mr-[6px]" />
                             <span className="font-semibold text-black-1 dark:text-white">
-                                Joined {getMonthYear(user.createdAt)}
+                                Joined {getMonthYear(new Date(user.createdAt))}
                             </span>
                         </div>
                     </div>
@@ -129,13 +131,18 @@ const Profile = () => {
                     </div>
                 </div>
             </Wrapper>
-            <div className="flex gap-5 mt-5">
+            <div className="flex gap-5 mt-5 pb-5">
                 <div className="flex-1 flex flex-col gap-5 overflow-auto">
-                    <Stories />
+                    <Stories stories={stories} />
                     <WhatHappen />
-                    {tweets.map((tweet) => (
-                        <Card key={tweet._id} tweet={tweet} />
-                    ))}
+                    {(tweets.length > 0 &&
+                        tweets.map((tweet) => (
+                            <Card key={tweet._id} tweet={tweet} />
+                        ))) || (
+                        <div className="font-semibold text-xl text-center leading-xl text-black-8 dark:text-white">
+                            No posts available
+                        </div>
+                    )}
                 </div>
                 <StickyBottom>
                     <Wrapper className="w-[337px] p-5 mb-5">

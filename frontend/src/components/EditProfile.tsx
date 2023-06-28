@@ -1,13 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MouseEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import * as yup from 'yup';
+import { useAppDispatch } from '../app/hooks';
+import { RootState } from '../app/store';
 import { message, regex } from '../constants';
+import { editProfile, fetchUser } from '../features/user/userSlice';
 import { ProfileType } from '../types';
-import { classNames } from '../utils';
+import { classNames, isAdult } from '../utils';
 import Button from './Button';
 import { CameraIcon, CloseIcon } from './Icons';
 import Image from './Image';
+import ErrorMessage from './form/ErrorMessage';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
@@ -19,10 +24,12 @@ const schema = yup
             .trim()
             .required(message.name.require)
             .matches(regex.name, message.name.regex),
-        bio: yup.string().trim().required('Please enter your bio'),
-        location: yup.string().trim().required('Please enter your location'),
-        website: yup.string().trim().url('Invalid website'),
-        birthday: yup.string().required('Please enter your birth day'),
+        bio: yup.string().trim().required(message.bio.require),
+        location: yup.string().trim().required(message.location.require),
+        website: yup.string().trim().url(message.website.url),
+        birthday: yup.string().required(message.birthday.require),
+        avatar: yup.string(),
+        background: yup.string(),
     })
     .required();
 
@@ -33,11 +40,30 @@ const EditProfile = ({
     isShowModel: boolean;
     handleShowModel: () => void;
 }) => {
-    const { control, handleSubmit } = useForm<ProfileType>({
+    const user = useSelector((state: RootState) => state.user);
+    console.log('🚀 ~ user:', user);
+    const {
+        control,
+        handleSubmit,
+        setError,
+        formState: { errors },
+    } = useForm<ProfileType>({
         resolver: yupResolver(schema),
+        defaultValues: {
+            ...user,
+            birthday: user?.birthday?.substring(0, 10),
+        },
     });
-    const onSubmit = (data: ProfileType) => {
-        console.log(data);
+    const dispatch = useAppDispatch();
+
+    const onSubmit = async (data: ProfileType) => {
+        if (!isAdult(new Date(data.birthday)))
+            setError('birthday', {
+                message: message.birthday.isAdult,
+            });
+
+        await dispatch(editProfile(data));
+        await dispatch(fetchUser());
     };
 
     return (
@@ -98,18 +124,34 @@ const EditProfile = ({
                         <FormGroup>
                             <Label name="name">Name</Label>
                             <Input control={control} name="name" />
+                            {errors.name?.message && (
+                                <ErrorMessage message={errors.name?.message} />
+                            )}
                         </FormGroup>
                         <FormGroup>
                             <Label name="bio">Bio</Label>
                             <Input control={control} name="bio" />
+                            {errors.bio?.message && (
+                                <ErrorMessage message={errors.bio?.message} />
+                            )}
                         </FormGroup>
                         <FormGroup>
                             <Label name="location">Location</Label>
                             <Input control={control} name="location" />
+                            {errors.location?.message && (
+                                <ErrorMessage
+                                    message={errors.location?.message}
+                                />
+                            )}
                         </FormGroup>
                         <FormGroup>
                             <Label name="website">Website</Label>
                             <Input control={control} name="website" />
+                            {errors.website?.message && (
+                                <ErrorMessage
+                                    message={errors.website?.message}
+                                />
+                            )}
                         </FormGroup>
                         <FormGroup>
                             <Label name="birthday">Birth day</Label>
@@ -118,6 +160,11 @@ const EditProfile = ({
                                 control={control}
                                 name="birthday"
                             />
+                            {errors.birthday?.message && (
+                                <ErrorMessage
+                                    message={errors.birthday?.message}
+                                />
+                            )}
                         </FormGroup>
                     </div>
                 </div>

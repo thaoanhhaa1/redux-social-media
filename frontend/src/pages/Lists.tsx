@@ -86,8 +86,8 @@ const Lists = () => {
                     </div>
                 </div>
                 <div className="mt-7 grid grid-cols-1 xl:grid-cols-2 gap-5">
-                    <Card />
-                    <Card />
+                    {/* <Card />
+                    <Card /> */}
                 </div>
             </div>
         </div>

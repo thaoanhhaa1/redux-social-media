@@ -9,9 +9,9 @@ const Explore = () => {
         <Page
             scrollChildren={
                 <>
+                    {/* <Card />
                     <Card />
-                    <Card />
-                    <Card />
+                    <Card /> */}
                 </>
             }
             scrollHeight="var(--scroll-height)"

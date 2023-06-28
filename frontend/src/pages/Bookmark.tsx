@@ -25,11 +25,11 @@ const Bookmark = () => {
                 <BookmarkItem />
             </ScrollbarFixTop>
             <div className="flex flex-col gap-5">
+                {/* <Card />
                 <Card />
                 <Card />
                 <Card />
-                <Card />
-                <Card />
+                <Card /> */}
             </div>
         </div>
     );

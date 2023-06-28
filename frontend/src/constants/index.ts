@@ -18,10 +18,11 @@ const message = {
     },
     birthday: {
         require: 'Please enter your birth day',
+        isAdult: 'User is under 18 years old',
     },
     username: {
         require: 'Please enter your username',
-        regex: 'The username should consist solely of characters A-Z, a-z, 0-9, and the underscore (_), and must start with an alphabetical character.',
+        regex: 'Username should consist solely of characters A-Z, a-z, 0-9, and the underscore (_), and must start with an alphabetical character.',
         existed: 'Username already exists',
     },
     email: {

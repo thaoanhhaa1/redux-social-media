@@ -77,11 +77,11 @@ const Home = () => {
                 </>
             }
         >
-            <Stories />
+            <Stories stories={[]} />
             <WhatHappen />
-            {new Array(3).fill(null).map(() => (
+            {/* {new Array(3).fill(null).map(() => (
                 <Card key={v4()} />
-            ))}
+            ))} */}
         </Page>
     );
 };

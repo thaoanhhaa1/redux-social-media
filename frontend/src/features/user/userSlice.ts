@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IUser } from '../../interfaces';
-import { SignInType, SignUpType } from '../../types';
+import { ProfileType, SignInType, SignUpType } from '../../types';
 
 const initialState: IUser = {
     _id: '',
@@ -16,7 +16,7 @@ const initialState: IUser = {
     bio: '',
     website: '',
     birthday: '',
-    createdAt: new Date(),
+    createdAt: '',
 };
 
 const signUp = createAsyncThunk('user/signUp', async (data: SignUpType) => {
@@ -69,23 +69,29 @@ const fetchUser = createAsyncThunk('user/fetchUser', async () => {
     }
 });
 
+const editProfile = createAsyncThunk(
+    'user/editProfile',
+    async (data: ProfileType) => {
+        try {
+            const res = await axiosClient.post(api.editProfile(), data);
+
+            return res.data;
+        } catch (error) {
+            toast.error('Update profile fail!');
+        }
+    },
+);
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder
-            .addCase(fetchUser.fulfilled, (state, { payload }) => {
-                const createdAt = new Date(payload.createdAt);
-
-                Object.assign(state, {
-                    ...payload,
-                    createdAt,
-                });
-            })
-            .addCase(fetchUser.rejected, (state) => {});
+        builder.addCase(fetchUser.fulfilled, (state, { payload }) => {
+            Object.assign(state, payload);
+        });
     },
 });
 
-export { fetchUser, signIn, signUp };
+export { fetchUser, editProfile, signIn, signUp };
 export default userSlice.reducer;

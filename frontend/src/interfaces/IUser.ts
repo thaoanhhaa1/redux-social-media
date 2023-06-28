@@ -8,7 +8,7 @@ interface IUser {
     bio: string;
     website: string;
     birthday: string;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export default IUser;
