@@ -14,7 +14,7 @@ const TopBar = () => {
                 <Image className="w-10 h-10" rounded src={user.avatar} alt="" />
                 <div className="flex flex-col gap-1.25">
                     <span className="text-dark-black-1 dark:text-white font-semibold">
-                        {user.username}
+                        {user.name || user.username}
                     </span>
                     <span className="font-semibold text-black-8 dark:text-white text-sm leading-sm">
                         Profile

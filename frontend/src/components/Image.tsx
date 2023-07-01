@@ -1,4 +1,11 @@
-import { CSSProperties, useMemo, useState } from 'react';
+import {
+    CSSProperties,
+    LegacyRef,
+    memo,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import { classNames } from '../utils';
 
 const Image = ({
@@ -7,6 +14,7 @@ const Image = ({
     rounded = false,
     className = '',
     fallback = '/no-avatar.png',
+    imageRef,
     ...props
 }: {
     src: string;
@@ -15,6 +23,7 @@ const Image = ({
     rounded?: boolean;
     style?: CSSProperties;
     fallback?: string;
+    imageRef?: LegacyRef<HTMLImageElement> | undefined;
 }) => {
     const newClass = useMemo(() => {
         const classList: string[] = ['object-cover'];
@@ -27,8 +36,14 @@ const Image = ({
     }, [className, rounded]);
     const [srcImage, setSrcImage] = useState(src || fallback);
 
+    useEffect(() => {
+        setSrcImage(src || fallback);
+    }, [src, fallback]);
+
     return (
         <img
+            ref={imageRef}
+            loading="lazy"
             className={newClass}
             onError={() => setSrcImage(fallback)}
             src={srcImage}
@@ -38,4 +53,4 @@ const Image = ({
     );
 };
 
-export default Image;
+export default memo(Image);

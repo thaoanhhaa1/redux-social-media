@@ -1,8 +1,7 @@
 import Live from '../components/Live';
 import Page from '../components/Page';
-import Trend from '../components/trend/Trend';
-import Card from '../components/card/Card';
 import Criket from '../components/criket/Criket';
+import Trend from '../components/trend/Trend';
 
 const Explore = () => {
     return (

@@ -1,21 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { MouseEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import { message, regex } from '../constants';
 import { editProfile, fetchUser } from '../features/user/userSlice';
+import { useImageUpload } from '../hooks';
 import { ProfileType } from '../types';
-import { classNames, isAdult } from '../utils';
+import { classNames, getDateValue, isAdult } from '../utils';
 import Button from './Button';
-import { CameraIcon, CloseIcon } from './Icons';
-import Image from './Image';
+import { CloseIcon } from './Icons';
 import ErrorMessage from './form/ErrorMessage';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
+import ImageUpload from './imageUpload/ImageUpload';
 
 const schema = yup
     .object({
@@ -41,17 +42,22 @@ const EditProfile = ({
     handleShowModel: () => void;
 }) => {
     const user = useSelector((state: RootState) => state.user);
-    console.log('🚀 ~ user:', user);
+    const avatar = useImageUpload(`${user._id}_avatar_${new Date().getTime()}`);
+    const background = useImageUpload(
+        `${user._id}_background_${new Date().getTime()}`,
+    );
+
     const {
         control,
         handleSubmit,
         setError,
+        setValue,
         formState: { errors },
     } = useForm<ProfileType>({
         resolver: yupResolver(schema),
         defaultValues: {
             ...user,
-            birthday: user?.birthday?.substring(0, 10),
+            birthday: getDateValue(user?.birthday),
         },
     });
     const dispatch = useAppDispatch();
@@ -62,8 +68,15 @@ const EditProfile = ({
                 message: message.birthday.isAdult,
             });
 
-        await dispatch(editProfile(data));
-        await dispatch(fetchUser());
+        if (background.image) setValue('background', background.image);
+        if (avatar.image) setValue('avatar', avatar.image);
+
+        try {
+            await dispatch(editProfile(data)).unwrap();
+
+            toast.success('Update successfully!');
+            await dispatch(fetchUser()).unwrap();
+        } catch (error) {}
     };
 
     return (
@@ -90,6 +103,7 @@ const EditProfile = ({
                         Edit profile
                     </div>
                     <Button
+                        disabled={avatar.isLoading || background.isLoading}
                         type="submit"
                         className="w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white"
                     >
@@ -97,29 +111,17 @@ const EditProfile = ({
                     </Button>
                 </div>
                 <div className="h-[calc(100vh_-_134px)] bg-white dark:bg-[#171616] overflow-auto pb-5">
-                    <div className="relative">
-                        <Image
-                            alt=""
-                            src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
-                            className="aspect-[316/53]"
-                        />
-                        <Button
-                            onClick={(e: MouseEvent) => e.stopPropagation()}
-                            className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                            icon={<CameraIcon stroke="white" />}
-                        />
-                    </div>
-                    <div className="relative mx-[18px] -mt-12 w-[100px] h-[100px] rounded-full overflow-hidden">
-                        <Image
-                            alt=""
-                            src="https://images.unsplash.com/photo-1664527184222-420bb0fec61a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1332&q=80"
-                        />
-                        <Button
-                            onClick={(e: MouseEvent) => e.stopPropagation()}
-                            icon={<CameraIcon stroke="black" />}
-                            className="absolute top-0 left-0 w-full h-full bg-white-3 bg-opacity-50"
-                        />
-                    </div>
+                    <ImageUpload
+                        className={classNames('aspect-[316/53]')}
+                        fallback="/no-background.jpg"
+                        src={user.background}
+                        image={background}
+                    />
+                    <ImageUpload
+                        wrapperClassName="mx-[18px] -mt-12 w-[100px] h-[100px] rounded-full"
+                        image={avatar}
+                        src={user.avatar}
+                    />
                     <div className="flex flex-col gap-5 mt-4 px-5">
                         <FormGroup>
                             <Label name="name">Name</Label>

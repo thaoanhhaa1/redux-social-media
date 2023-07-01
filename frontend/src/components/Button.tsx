@@ -6,6 +6,7 @@ import {
     useMemo,
 } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
+import { classNames } from '../utils';
 
 const Button = ({
     isWidthFull = false,
@@ -51,6 +52,7 @@ const Button = ({
             rounded ? 'rounded-full' : 'rounded-2.5',
         );
 
+        if (disabled) style.push('opacity-60');
         if (isWidthFull) style.push('w-full');
         if (!className.includes('h-')) {
             if (children === undefined)
@@ -63,8 +65,18 @@ const Button = ({
                 );
         }
 
-        return style.join(' ');
-    }, [align, children, className, gap, isWidthFull, large, rounded, small]);
+        return classNames(...style);
+    }, [
+        align,
+        children,
+        className,
+        disabled,
+        gap,
+        isWidthFull,
+        large,
+        rounded,
+        small,
+    ]);
 
     const props:
         | LinkProps
@@ -86,7 +98,13 @@ const Button = ({
     }
 
     return (
-        <Type type={type} className={styles} {...props} {...passProps}>
+        <Type
+            disabled={disabled}
+            type={type}
+            className={styles}
+            {...props}
+            {...passProps}
+        >
             {icon}
             {children && <span>{children}</span>}
         </Type>

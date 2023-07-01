@@ -3,7 +3,6 @@ import Contact from '../components/Contact';
 import Image from '../components/Image';
 import Members from '../components/Members';
 import Page from '../components/Page';
-import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 import WhatHappen from '../components/whatHappen/WhatHappen';
 import Wrapper from '../components/wrapper/Wrapper';

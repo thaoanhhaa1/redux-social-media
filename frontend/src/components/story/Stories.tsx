@@ -1,12 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { v4 } from 'uuid';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { IStory } from '../../interfaces';
 import Button from '../Button';
 import { LeftIcon, RightIcon } from '../Icons';
 import Wrapper from '../wrapper/Wrapper';
 import WrapperHeader from '../wrapper/WrapperHeader';
 import NewStory from './NewStory';
 import Story from './Story';
-import { IStory } from '../../interfaces';
 
 const Stories = ({ stories }: { stories: IStory[] }) => {
     const container = useRef<HTMLDivElement>(null);

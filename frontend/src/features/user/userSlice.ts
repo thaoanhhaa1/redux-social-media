@@ -78,6 +78,7 @@ const editProfile = createAsyncThunk(
             return res.data;
         } catch (error) {
             toast.error('Update profile fail!');
+            throw error;
         }
     },
 );
@@ -93,5 +94,5 @@ const userSlice = createSlice({
     },
 });
 
-export { fetchUser, editProfile, signIn, signUp };
+export { editProfile, fetchUser, signIn, signUp };
 export default userSlice.reducer;

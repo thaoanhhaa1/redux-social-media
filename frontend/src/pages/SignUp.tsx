@@ -44,6 +44,12 @@ const SignUp = () => {
         formState: { errors },
     } = useForm<SignUpType>({
         resolver: yupResolver(schema),
+        defaultValues: {
+            username: '',
+            password: '',
+            email: '',
+            'confirm-password': '',
+        },
     });
     const navigation = useNavigate();
     const dispatch = useDispatch<AppDispatch>();

@@ -26,6 +26,7 @@ function Input<T extends FieldValues>({
     const { field } = useController({
         control,
         name: name as Path<T>,
+        defaultValue: '' as PathValue<T, Path<T>>,
     });
     const [isShow, setShow] = useState(false);
 

@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const Pusher = require("pusher");
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 
 const db = require('./config/db')
 const Router = require('./routes')
@@ -29,6 +30,7 @@ db.connect();
 
 // middleware trong express xử lý dữ liệu dạng JSON
 app.use(express.json())
+app.use(bodyParser.json())
 
 // Middleware authentication
 app.use('/api/private', authMiddleware)

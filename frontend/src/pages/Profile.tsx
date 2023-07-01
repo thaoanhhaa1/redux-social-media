@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { v4 } from 'uuid';
 import api from '../api';
 import axiosClient from '../api/axiosClient';
 import { RootState } from '../app/store';

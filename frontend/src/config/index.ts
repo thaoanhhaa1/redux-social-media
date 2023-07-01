@@ -1,3 +1,4 @@
+import images from './images';
 import routes from './routes';
 import sidebar from './sidebar';
 
@@ -9,6 +10,7 @@ const config = {
     vneseLower: vnese.toLowerCase(),
     routes,
     sidebar,
+    images,
 };
 
 export default config;

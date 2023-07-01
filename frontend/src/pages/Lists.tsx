@@ -2,7 +2,6 @@ import Button from '../components/Button';
 import { FollowIcon, MessageIcon } from '../components/Icons';
 import Image from '../components/Image';
 import List from '../components/List';
-import Card from '../components/card/Card';
 import ScrollbarFixTop from '../components/scrollbar/ScrollbarFixTop';
 
 const Lists = () => {

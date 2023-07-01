@@ -1,5 +1,4 @@
 import BookmarkItem from '../components/BookmarkItem';
-import Card from '../components/card/Card';
 import ScrollbarFixTop from '../components/scrollbar/ScrollbarFixTop';
 
 const Bookmark = () => {

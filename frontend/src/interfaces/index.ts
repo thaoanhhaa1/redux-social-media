@@ -1,4 +1,5 @@
 import IChat from './IChat';
+import IImageUpload from './IImageUpload';
 import IRoute from './IRoute';
 import IScrollContext from './IScrollContext';
 import ISearch from './ISearch';
@@ -10,6 +11,7 @@ import IUser from './IUser';
 
 export type {
     IChat,
+    IImageUpload,
     IRoute,
     IScrollContext,
     ISearch,

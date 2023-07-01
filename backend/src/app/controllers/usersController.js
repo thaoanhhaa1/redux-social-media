@@ -29,7 +29,7 @@ module.exports = {
             }, data)
 
             if (result.modifiedCount > 0)
-                res.sendStatus()
+                return res.sendStatus(201)
         } catch (error) {
             console.log("🚀 ~ editProfile: ~ error:", error)
         }
