@@ -42,13 +42,15 @@ const Profile = () => {
     useEffect(() => {
         async function fetch() {
             setLoading(true);
-            const res = await Promise.all([
-                (await axiosClient.get(api.countTweet())).data,
-                (await axiosClient.get(api.countFollow())).data,
-                (await axiosClient.get(api.whoToFollow())).data,
-                (await axiosClient.get(api.getMyTweets())).data,
-                (await axiosClient.get(api.getMyStories())).data,
-            ]);
+            const res = (
+                await Promise.all([
+                    axiosClient.get(api.countTweet()),
+                    axiosClient.get(api.countFollow()),
+                    axiosClient.get(api.whoToFollow()),
+                    axiosClient.get(api.getMyTweets()),
+                    axiosClient.get(api.getMyStories()),
+                ])
+            ).map((item) => item.data);
             setLoading(false);
 
             setTweetCount(res[0]);

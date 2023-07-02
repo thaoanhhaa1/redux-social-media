@@ -1,9 +1,34 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { IUser } from '../interfaces';
 import Button from './Button';
 import Image from './Image';
+import axiosClient from '../api/axiosClient';
+import api from '../api';
+import { toast } from 'react-toastify';
+import { classNames } from '../utils';
 
 const Follow = ({ user }: { user: IUser }) => {
+    const [isFollow, setFollow] = useState(false);
+    const [isLoading, setLoading] = useState(false);
+
+    const handleClickBtn = async () => {
+        try {
+            setLoading(true);
+            const res = await axiosClient.post(
+                api[isFollow ? 'unfollow' : 'follow'](),
+                {
+                    userId: user._id,
+                },
+            );
+            console.log('🚀 ~ res ~ res:', res);
+            setLoading(false);
+            setFollow(!isFollow);
+        } catch (error) {
+            console.error('🚀 ~ handleClickBtn ~ error:', error);
+            toast.error('Follow error');
+        }
+    };
+
     return (
         <div className="flex gap-5 cursor-pointer">
             <Image alt="" src={user.avatar} className="w-10 h-10" rounded />
@@ -16,8 +41,15 @@ const Follow = ({ user }: { user: IUser }) => {
                         @{user.username}
                     </div>
                 </div>
-                <Button className="bg-black dark:bg-dark-black-1 text-white text-xs leading-xs w-[86px] h-8.5">
-                    Follow
+                <Button
+                    isLoading={isLoading}
+                    onClick={handleClickBtn}
+                    className={classNames(
+                        'text-white text-xs leading-xs w-[86px] h-8.5',
+                        isFollow ? 'bg-blue' : 'bg-black dark:bg-dark-black-1',
+                    )}
+                >
+                    {(isFollow && 'Unfollow') || 'Follow'}
                 </Button>
             </div>
         </div>

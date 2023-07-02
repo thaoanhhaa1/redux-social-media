@@ -9,6 +9,7 @@ import { Link, LinkProps } from 'react-router-dom';
 import { classNames } from '../utils';
 
 const Button = ({
+    isLoading = false,
     isWidthFull = false,
     href = '',
     to = '',
@@ -26,6 +27,7 @@ const Button = ({
     ...passProps
 }: {
     isWidthFull?: boolean;
+    isLoading?: boolean;
     href?: string;
     to?: string;
     rounded?: boolean;
@@ -52,7 +54,7 @@ const Button = ({
             rounded ? 'rounded-full' : 'rounded-2.5',
         );
 
-        if (disabled) style.push('opacity-60');
+        if (disabled) style.push('opacity-60 pointer-events-none');
         if (isWidthFull) style.push('w-full');
         if (!className.includes('h-')) {
             if (children === undefined)
@@ -99,14 +101,20 @@ const Button = ({
 
     return (
         <Type
-            disabled={disabled}
+            disabled={disabled || isLoading}
             type={type}
             className={styles}
             {...props}
             {...passProps}
         >
-            {icon}
-            {children && <span>{children}</span>}
+            {(isLoading && (
+                <div className="h-4/5 aspect-square border-4 border-white border-t-transparent rounded-full animate-spin" />
+            )) || (
+                <>
+                    {icon}
+                    {children && <span>{children}</span>}
+                </>
+            )}
         </Type>
     );
 };

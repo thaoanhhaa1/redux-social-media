@@ -1,6 +1,6 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const Pusher = require("pusher");
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
@@ -9,17 +9,18 @@ const Router = require('./routes')
 const authMiddleware = require('./app/middlewares/authMiddleware')
 
 const app = express();
-const PORT = 8080
+const PORT = process.env.PORT
 
-const pusher = new Pusher({
-    appId: "1624436",
-    key: "694366bfed328f4add3f",
-    secret: "b5d76a4ebd0fcb573063",
-    cluster: "ap1",
-    useTLS: true
-});
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 
-require('dotenv').config()
+io.on('connection', (socket) => {
+    console.log(`Socket ${socket.id} connected`);
+
+    socket.on('disconnect', () => {
+        console.log(`Socket ${socket.id} disconnected`);
+    });
+})
 
 app.use(cors({
     allowedHeaders: '*'
@@ -31,6 +32,9 @@ db.connect();
 // middleware trong express xử lý dữ liệu dạng JSON
 app.use(express.json())
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 
 // Middleware authentication
 app.use('/api/private', authMiddleware)

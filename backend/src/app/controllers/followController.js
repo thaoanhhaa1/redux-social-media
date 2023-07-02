@@ -1,4 +1,8 @@
 const FollowModel = require('../models/followModel')
+const UserModel = require('../models/userModel')
+const mongoose = require('mongoose')
+
+FollowModel.watch().on('change', data => console.log(data))
 
 module.exports = {
     countFollow: async (req, res, next) => {
@@ -57,10 +61,14 @@ module.exports = {
                         '$match': {
                             '$expr': {
                                 '$and': [{
-                                    '$ne': ["$_id", _id]
+                                    '$ne': [{
+                                        '$toString': "$_id"
+                                    }, _id]
                                 }, {
                                     '$cond': [{
-                                        '$in': ["$_id", "$$followers"]
+                                        '$in': [{
+                                            '$toString': "$_id"
+                                        }, "$$following"]
                                     }, false, true]
                                 }]
                             }
@@ -77,17 +85,15 @@ module.exports = {
                         '$addFields': {
                             priority: {
                                 '$cond': [{
-                                    '$in': ["$_id", "$$following"]
+                                    '$in': [{
+                                        '$toString': "$_id"
+                                    }, "$$followers"]
                                 }, 1, 0]
                             }
                         }
                     }, {
                         '$sort': {
                             priority: -1
-                        }
-                    }, {
-                        "$project": {
-                            priority: 0
                         }
                     }],
                     as: 'users',
@@ -102,11 +108,104 @@ module.exports = {
             }, {
                 "$limit": limit
             }])
-
             res.json(result)
         } catch (error) {
             console.log("🚀 ~ whoToFollow: ~ error:", error)
             res.sendStatus(400)
         }
+    },
+
+    follow: async (req, res, next) => {
+        const {
+            userId,
+            _id
+        } = req.body;
+        let session;
+
+        try {
+            session = await mongoose.startSession();
+            session.startTransaction();
+
+            const user = await UserModel.findById(userId)
+
+            if (!user) throw new Error('User not found!')
+
+            const result = await Promise.all([
+                FollowModel.updateOne({
+                    user: _id
+                }, {
+                    '$addToSet': {
+                        following: userId
+                    }
+                }),
+                FollowModel.updateOne({
+                    user: userId
+                }, {
+                    '$addToSet': {
+                        followers: _id
+                    }
+                })
+            ])
+            console.log("🚀 ~ follow: ~ result:", result)
+            if (result[0].modifiedCount === 0 || result[1].modifiedCount === 0)
+                throw new Error('Update fail!')
+
+            session.commitTransaction()
+            res.sendStatus(200)
+        } catch (error) {
+            session.abortTransaction();
+            console.error(error)
+            res.sendStatus(400)
+        } finally {
+            session.endSession()
+        }
+
+    },
+
+    unfollow: async (req, res, next) => {
+        const {
+            userId,
+            _id
+        } = req.body;
+        let session;
+
+        try {
+            session = await mongoose.startSession();
+            session.startTransaction();
+
+            const user = await UserModel.findById(userId)
+
+            if (!user) throw new Error('User not found!')
+
+            const result = await Promise.all([
+                FollowModel.updateOne({
+                    user: _id
+                }, {
+                    '$pull': {
+                        following: userId
+                    }
+                }),
+                FollowModel.updateOne({
+                    user: userId
+                }, {
+                    '$pull': {
+                        followers: _id
+                    }
+                })
+            ])
+            console.log("🚀 ~ unfollow: ~ result:", result)
+            if (result[0].modifiedCount === 0 || result[1].modifiedCount === 0)
+                throw new Error('Update fail!')
+
+            session.commitTransaction()
+            res.sendStatus(200)
+        } catch (error) {
+            session.abortTransaction();
+            console.error(error)
+            res.sendStatus(400)
+        } finally {
+            session.endSession()
+        }
+
     }
 }
