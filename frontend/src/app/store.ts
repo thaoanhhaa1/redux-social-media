@@ -1,6 +1,7 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import counterReducer from '../features/counter/counterSlice';
 import searchReducer from '../features/search/searchSlice';
+import socketReducer from '../features/socket/socketSlice';
 import themeReducer from '../features/theme/themeSlice';
 import userReducer from '../features/user/userSlice';
 
@@ -10,6 +11,7 @@ export const store = configureStore({
         theme: themeReducer,
         user: userReducer,
         search: searchReducer,
+        socket: socketReducer,
     },
 });
 

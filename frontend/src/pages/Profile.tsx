@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Socket } from 'socket.io-client';
 import api from '../api';
 import axiosClient from '../api/axiosClient';
 import { RootState } from '../app/store';
@@ -20,7 +21,7 @@ import { getMonthYear } from '../utils';
 
 const Profile = () => {
     const [isShowModel, setShowModel] = useState(false);
-    const user = useSelector((state: RootState) => state.user);
+    const { user, socket } = useSelector((state: RootState) => state);
     const [isLoading, setLoading] = useState(false);
     const [tweetCount, setTweetCount] = useState(0);
     const [followerCount, setFollowerCount] = useState(0);
@@ -35,12 +36,33 @@ const Profile = () => {
     );
 
     useEffect(() => {
+        if (!socket.socket) return;
+        const socketIo = socket.socket as Socket;
+
+        socketIo.on('follower', () => setFollowerCount((count) => count + 1));
+        socketIo.on('following', () => setFollowingCount((count) => count + 1));
+        socketIo.on('un-follower', () =>
+            setFollowerCount((count) => count - 1),
+        );
+        socketIo.on('un-following', () =>
+            setFollowingCount((count) => count - 1),
+        );
+
+        return () => {
+            socketIo.removeListener('follower');
+            socketIo.removeListener('following');
+            socketIo.removeListener('un-follower');
+            socketIo.removeListener('un-following');
+        };
+    }, [socket.socket, user._id]);
+
+    useEffect(() => {
         document.body.style.height = isShowModel ? '100vh' : 'unset';
         document.body.style.overflow = isShowModel ? 'hidden' : 'unset';
     }, [isShowModel]);
 
     useEffect(() => {
-        async function fetch() {
+        (async function () {
             setLoading(true);
             const res = (
                 await Promise.all([
@@ -59,9 +81,7 @@ const Profile = () => {
             setWhoToFollow(res[2]);
             setTweets(res[3]);
             setStories(res[4]);
-        }
-
-        fetch();
+        })();
     }, []);
 
     if (isLoading) return <Loading />;

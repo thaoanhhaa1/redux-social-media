@@ -2,8 +2,6 @@ const FollowModel = require('../models/followModel')
 const UserModel = require('../models/userModel')
 const mongoose = require('mongoose')
 
-FollowModel.watch().on('change', data => console.log(data))
-
 module.exports = {
     countFollow: async (req, res, next) => {
         const _id = req.body._id
@@ -146,18 +144,33 @@ module.exports = {
                     }
                 })
             ])
-            console.log("🚀 ~ follow: ~ result:", result)
             if (result[0].modifiedCount === 0 || result[1].modifiedCount === 0)
                 throw new Error('Update fail!')
 
-            session.commitTransaction()
+            await session.commitTransaction()
+
+            // SOCKET
+            global.sockets.forEach(socket => {
+                const socketID = socket.id;
+                const userID = socket.handshake?.auth?._id;
+
+                if (![_id, userId].includes(userID)) return;
+
+                // To me
+                if (userID === _id)
+                    global.socketIo.to(socketID).emit('following')
+
+                // To following
+                if (userID === userId)
+                    global.socketIo.to(socketID).emit('follower')
+            })
+
             res.sendStatus(200)
         } catch (error) {
-            session.abortTransaction();
-            console.error(error)
+            console.error("🚀 ~ follow: ~ error:", error)
             res.sendStatus(400)
         } finally {
-            session.endSession()
+            await session.endSession()
         }
 
     },
@@ -193,11 +206,27 @@ module.exports = {
                     }
                 })
             ])
-            console.log("🚀 ~ unfollow: ~ result:", result)
             if (result[0].modifiedCount === 0 || result[1].modifiedCount === 0)
                 throw new Error('Update fail!')
 
             session.commitTransaction()
+
+            // SOCKET
+            global.sockets.forEach(socket => {
+                const socketID = socket.id;
+                const userID = socket.handshake?.auth?._id;
+
+                if (![_id, userId].includes(userID)) return;
+
+                // To me
+                if (userID === _id)
+                    global.socketIo.to(socketID).emit('un-following')
+
+                // To following
+                if (userID === userId)
+                    global.socketIo.to(socketID).emit('un-follower')
+            })
+
             res.sendStatus(200)
         } catch (error) {
             session.abortTransaction();

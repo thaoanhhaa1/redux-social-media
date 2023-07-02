@@ -1,28 +1,38 @@
 import { ReactNode, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatch } from '../../app/store';
+import { AppDispatch, RootState } from '../../app/store';
 import TopBar from '../../components/TopBar';
 import Sidebar from '../../components/sidebar/Sidebar';
 import config from '../../config';
+import { connect, disconnect } from '../../features/socket/socketSlice';
 import { fetchUser } from '../../features/user/userSlice';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const user = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
-        const fetch = async () => {
+        (async () => {
             try {
                 await dispatch(fetchUser()).unwrap();
             } catch (error) {
                 navigate(config.routes.signIn);
             }
-        };
-
-        fetch();
+        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (!user._id) return;
+
+        dispatch(connect(user._id));
+
+        return () => {
+            dispatch(disconnect());
+        };
+    }, [dispatch, user._id]);
 
     return (
         <div className="flex">

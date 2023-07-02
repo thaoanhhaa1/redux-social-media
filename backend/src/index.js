@@ -11,23 +11,10 @@ const authMiddleware = require('./app/middlewares/authMiddleware')
 const app = express();
 const PORT = process.env.PORT
 
-const http = require('http').Server(app)
-const io = require('socket.io')(http)
-
-io.on('connection', (socket) => {
-    console.log(`Socket ${socket.id} connected`);
-
-    socket.on('disconnect', () => {
-        console.log(`Socket ${socket.id} disconnected`);
-    });
-})
-
+// MIDDLEWARES
 app.use(cors({
     allowedHeaders: '*'
 }))
-
-// Connect DB
-db.connect();
 
 // middleware trong express xử lý dữ liệu dạng JSON
 app.use(express.json())
@@ -39,10 +26,35 @@ app.use(bodyParser.urlencoded({
 // Middleware authentication
 app.use('/api/private', authMiddleware)
 
+// Connect DB
+db.connect();
+
 // Router init
 Router(app);
 
 mongoose.connection
     .once('open', () => {
-        app.listen(PORT, () => console.log('Server running on port: ' + PORT))
+        const serverWithSocket = app.listen(PORT, () => console.log('Server running on port: ' + PORT))
+
+        const io = require('socket.io')(serverWithSocket, {
+            cors: {
+                origin: "http://localhost:3000",
+                methods: ["GET", "POST"]
+            }
+        }); //? invoking the func also something like func()
+
+        global.sockets = []
+        io.on('connection', (socket) => {
+            console.log(`Socket.io connection ${socket.id}`);
+
+            global.sockets.push(socket)
+            global.socketIo = io;
+            console.log('SOCKETS LENGTH: ', global.sockets.length)
+
+            socket.on('disconnect', function () {
+                global.sockets = global.sockets.filter(s => socket.id !== s.id)
+                console.log('SOCKETS LENGTH: ', global.sockets.length)
+                console.log(`Socket.io disconnect ${socket.id}`);
+            });
+        });
     })

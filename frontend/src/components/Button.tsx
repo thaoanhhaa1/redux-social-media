@@ -54,7 +54,7 @@ const Button = ({
             rounded ? 'rounded-full' : 'rounded-2.5',
         );
 
-        if (disabled) style.push('opacity-60 pointer-events-none');
+        if (disabled || isLoading) style.push('opacity-60 pointer-events-none');
         if (isWidthFull) style.push('w-full');
         if (!className.includes('h-')) {
             if (children === undefined)
@@ -74,6 +74,7 @@ const Button = ({
         className,
         disabled,
         gap,
+        isLoading,
         isWidthFull,
         large,
         rounded,
@@ -92,7 +93,7 @@ const Button = ({
     if (to !== '') Type = Link;
     else if (href !== '') Type = 'a';
 
-    if (disabled) {
+    if (disabled || isLoading) {
         Object.keys(props).forEach(
             (key) =>
                 key.startsWith('on') && delete props[key as keyof typeof props],
