@@ -12,12 +12,12 @@
     --yellow-black-1-color: #cb9a0a;
 }
 
-body {
-    @apply text-black dark:text-white leading-base overflow-x-hidden font-base;
+* {
+    -webkit-tap-highlight-color: transparent;
 }
 
-#root {
-    // overflow: hidden overlay;
+body {
+    @apply text-black dark:text-white leading-base overflow-x-hidden font-base;
 }
 
 .bg-blue-blue-white-4 {

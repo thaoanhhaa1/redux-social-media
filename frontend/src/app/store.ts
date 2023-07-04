@@ -13,6 +13,10 @@ export const store = configureStore({
         search: searchReducer,
         socket: socketReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
 
 export type AppDispatch = typeof store.dispatch;

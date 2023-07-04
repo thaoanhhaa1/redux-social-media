@@ -12,11 +12,9 @@ const WhatHappen = () => {
         <Wrapper className="p-5">
             <div className="flex items-center gap-[14px]">
                 <Image alt="" src={user.avatar} className="w-10 h-10" rounded />
-                <input
-                    type="text"
-                    placeholder="What’s happening?"
-                    className="dark:bg-dark-black-2 flex-1 rounded-2.5 outline-none border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs text-base-black dark:text-white placeholder:text-base-black dark:placeholder:text-white"
-                />
+                <div className="cursor-pointer dark:bg-dark-black-2 flex-1 rounded-2.5 border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs text-base-black dark:text-white">
+                    What’s happening?
+                </div>
             </div>
             <div className="flex items-center gap-3">
                 <WhatHappenButton

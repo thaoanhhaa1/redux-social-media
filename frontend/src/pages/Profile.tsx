@@ -57,11 +57,6 @@ const Profile = () => {
     }, [socket.socket, user._id]);
 
     useEffect(() => {
-        document.body.style.height = isShowModel ? '100vh' : 'unset';
-        document.body.style.overflow = isShowModel ? 'hidden' : 'unset';
-    }, [isShowModel]);
-
-    useEffect(() => {
         (async function () {
             setLoading(true);
             const res = (
@@ -84,7 +79,7 @@ const Profile = () => {
         })();
     }, []);
 
-    if (isLoading) return <Loading />;
+    if (!user._id || isLoading) return <Loading />;
 
     return (
         <div className="relative px-5">

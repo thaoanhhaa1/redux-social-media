@@ -17,6 +17,7 @@ import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
 import ImageUpload from './imageUpload/ImageUpload';
+import Model from './Model';
 
 const schema = yup
     .object({
@@ -80,18 +81,12 @@ const EditProfile = ({
     };
 
     return (
-        <div
-            onClick={handleShowModel}
-            className={classNames(
-                'fixed inset-0 bg-black-100 bg-opacity-20 dark:bg-black-100 dark:bg-opacity-50 z-50 cursor-pointer ease-linear duration-150',
-                isShowModel ? 'visible opacity-100' : 'opacity-0 invisible',
-            )}
-        >
+        <Model isShowModel={isShowModel} handleShowModel={handleShowModel}>
             <form
                 onClick={(e) => e.stopPropagation()}
                 onSubmit={handleSubmit(onSubmit)}
                 className={classNames(
-                    'w-[632px] mt-17.5 mx-auto cursor-default ease-out duration-300',
+                    'w-[632px] cursor-default ease-out duration-300',
                     isShowModel ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
@@ -171,7 +166,7 @@ const EditProfile = ({
                     </div>
                 </div>
             </form>
-        </div>
+        </Model>
     );
 };
 
