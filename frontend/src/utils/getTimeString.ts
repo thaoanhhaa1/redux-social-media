@@ -1,6 +1,4 @@
-function getTime(hours: number, minutes: number, isAM: boolean) {
-    return `${hours - (isAM ? 0 : 12)}:${minutes} ${isAM ? 'AM' : 'PM'}`;
-}
+import getTime from './getTime';
 
 function getDate(date: string) {
     return date.split('/').map((item) => (item.length < 2 ? '0' + item : item));
@@ -34,3 +32,4 @@ function getTimeString(date: Date): string {
 }
 
 export default getTimeString;
+export { getTime, getDate };

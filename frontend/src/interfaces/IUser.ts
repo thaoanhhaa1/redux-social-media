@@ -1,10 +1,6 @@
-interface IUser {
-    _id: string;
-    email: string;
-    username: string;
-    avatar: string;
-    background: string;
-    name: string;
+import IPerson from './IPerson';
+
+interface IUser extends IPerson {
     bio: string;
     website: string;
     birthday: string;

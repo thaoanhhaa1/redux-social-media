@@ -7,8 +7,10 @@ const api = {
     getMyTweets: () => '/private/tweets/get-my-tweets',
     getMyStories: () => '/private/stories/get-my-stories',
     getUser: () => '/private/users/get-user',
+    getUsersOnline: () => '/private/users/get-users-online',
     editProfile: () => '/private/users/edit-profile',
     search: (param: String) => `/private/search/${param}`,
+    updateOnlineStatus: () => '/private/online-status',
     signUp: () => '/auth/sign-up',
     signIn: () => '/auth/sign-in',
 };

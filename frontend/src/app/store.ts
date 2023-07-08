@@ -1,5 +1,5 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import contactsReducer from '../features/contacts/contactsSlice';
 import searchReducer from '../features/search/searchSlice';
 import socketReducer from '../features/socket/socketSlice';
 import themeReducer from '../features/theme/themeSlice';
@@ -7,11 +7,11 @@ import userReducer from '../features/user/userSlice';
 
 export const store = configureStore({
     reducer: {
-        counter: counterReducer,
         theme: themeReducer,
         user: userReducer,
         search: searchReducer,
         socket: socketReducer,
+        contacts: contactsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

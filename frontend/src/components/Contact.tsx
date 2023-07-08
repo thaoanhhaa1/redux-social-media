@@ -1,12 +1,13 @@
-import { classNames } from '../utils';
+import IContact from '../interfaces/IContact';
+import { classNames, getTime } from '../utils';
 import { ClockIcon } from './Icons';
 import Image from './Image';
 
 const Contact = ({
-    isOnline,
+    contact,
     className = '',
 }: {
-    isOnline: boolean;
+    contact: IContact;
     className?: string;
 }) => {
     return (
@@ -17,23 +18,25 @@ const Contact = ({
             )}
         >
             <Image
-                alt=""
-                src="https://images.unsplash.com/photo-1526413232644-8a40f03cc03b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80"
-                className="w-8.5 h-8.5"
+                alt=''
+                src={contact.avatar}
+                className='w-8.5 h-8.5'
                 rounded
             />
-            <div className="flex-1 flex justify-between items-center">
-                <p className="font-semibold leading-base dark:text-white">
-                    Anterio franci
+            <div className='flex-1 flex justify-between items-center'>
+                <p className='font-semibold leading-base dark:text-white'>
+                    {contact.name || contact.username}
                 </p>
-                <div className="flex gap-2 items-center">
-                    {(isOnline && (
-                        <span className="inline-block w-2.5 h-2.5 bg-blue-black-2 rounded-full"></span>
+                <div className='flex gap-2 items-center'>
+                    {(contact.offline && (
+                        <ClockIcon className='fill-white-45 dark:fill-white-9' />
                     )) || (
-                        <ClockIcon className="fill-white-45 dark:fill-white-9" />
+                        <span className='inline-block w-2.5 h-2.5 bg-blue-black-2 rounded-full'></span>
                     )}
-                    <span className="font-semibold text-sm leading-sm text-black-8 dark:text-white-9">
-                        {isOnline ? 'online' : '9.30 AM'}
+                    <span className='font-semibold text-sm leading-sm text-black-8 dark:text-white-9'>
+                        {contact.offline
+                            ? getTime(new Date(contact.offline))
+                            : 'online'}
                     </span>
                 </div>
             </div>
