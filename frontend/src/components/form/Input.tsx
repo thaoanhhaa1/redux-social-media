@@ -33,7 +33,7 @@ function Input<T extends FieldValues>({
     const handleSetShow = () => setShow(!isShow);
 
     return (
-        <div className="w-full relative">
+        <div className='w-full relative'>
             <input
                 placeholder={placeholder}
                 id={name as string}
@@ -47,10 +47,10 @@ function Input<T extends FieldValues>({
             {type === 'password' && (
                 <span
                     onClick={handleSetShow}
-                    className="select-none p-2 absolute right-2 top-2/4 -translate-y-2/4 text-black-5 dark:text-white cursor-pointer"
+                    className='select-none p-2 absolute right-2 top-2/4 -translate-y-2/4 text-black-5 dark:text-white cursor-pointer'
                 >
-                    {(isShow && <EyeIcon className="w-6 h-6" />) || (
-                        <EyeHideIcon className="w-6 h-6" />
+                    {(isShow && <EyeIcon className='w-6 h-6' />) || (
+                        <EyeHideIcon className='w-6 h-6' />
                     )}
                 </span>
             )}

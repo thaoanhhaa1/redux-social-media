@@ -26,18 +26,18 @@ const SearchItem = ({
         <Link
             onClick={handleHiddenSearch}
             to={`${config.routes.lists}?user=${user.username}`}
-            className="cursor-pointer group/close flex items-center gap-5 p-2 rounded-2.5 hover:bg-blue-white-4 dark:bg-dark-black-1 dark:hover:bg-dark-black-3 ease-linear duration-300"
+            className='cursor-pointer group/close flex items-center gap-5 p-2 rounded-2.5 hover:bg-blue-white-4 dark:bg-dark-black-1 dark:hover:bg-dark-black-3 ease-linear duration-300'
         >
-            <Image rounded alt="" src={user.avatar} className="w-9 h-9" />
+            <Image rounded alt='' src={user.avatar} className='w-9 h-9' />
 
-            <div className="flex-1 text-base-black dark:text-white">
+            <div className='flex-1 text-base-black dark:text-white'>
                 {user.name || user.username}
             </div>
             <button
                 onClick={handleClose}
-                className="w-6 h-6 flex justify-center items-center"
+                className='w-6 h-6 flex justify-center items-center'
             >
-                <CloseIcon className="transition-all duration-300 stroke-stroke-icon group-hover/close:stroke-red dark:stroke-white" />
+                <CloseIcon className='transition-all duration-300 text-stroke-icon group-hover/close:text-red dark:text-white' />
             </button>
         </Link>
     );

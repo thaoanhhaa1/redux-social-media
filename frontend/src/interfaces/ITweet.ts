@@ -1,11 +1,11 @@
 interface ITweet {
-    _id: string;
-    user: string;
-    images: string[] | undefined;
-    videos: string[] | undefined;
-    createdAt: Date;
-    likes: string[];
-    group: string | undefined;
+    _id?: string;
+    content?: string;
+    images?: string[];
+    videos?: string[];
+    createdAt?: string;
+    likes?: string[];
+    group?: string;
 }
 
 export default ITweet;

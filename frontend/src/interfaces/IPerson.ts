@@ -1,10 +1,8 @@
-interface IPerson {
-    _id: string;
-    username: string;
+import IUserTweet from './IUserTweet';
+
+interface IPerson extends IUserTweet {
     email: string;
-    avatar: string;
     background: string;
-    name: string;
 }
 
 export default IPerson;

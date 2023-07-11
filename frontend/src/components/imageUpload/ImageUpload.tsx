@@ -3,7 +3,7 @@ import { IImageUpload } from '../../interfaces';
 import { classNames } from '../../utils';
 import { CameraIcon } from '../Icons';
 import Image from '../Image';
-import ImageLoading from '../ImageLoading';
+import ImageLoading from './ImageLoading';
 
 const ImageUpload = ({
     wrapperClassName = '',
@@ -36,7 +36,7 @@ const ImageUpload = ({
             <Image
                 imageRef={image.imageRef}
                 fallback={fallback}
-                alt=""
+                alt=''
                 src={image.image || src}
                 className={classNames(
                     className,
@@ -46,14 +46,14 @@ const ImageUpload = ({
             {(image.isLoading && <ImageLoading src={image.tempImage} />) || (
                 <label className={classNames('absolute', cameraClassName)}>
                     <input
-                        accept="image/*"
-                        name="background"
+                        accept='image/*'
+                        name='background'
                         onChange={handleChangeImage}
                         hidden
-                        type="file"
+                        type='file'
                     />
-                    <span className="flex items-center whitespace-nowrap gap-2 justify-center rounded-2.5 w-10 h-10">
-                        <CameraIcon stroke="white" />
+                    <span className='flex items-center whitespace-nowrap gap-2 justify-center rounded-2.5 w-10 h-10'>
+                        <CameraIcon stroke='white' />
                     </span>
                 </label>
             )}

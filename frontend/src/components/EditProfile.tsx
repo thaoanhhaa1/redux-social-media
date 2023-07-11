@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -12,12 +13,12 @@ import { ProfileType } from '../types';
 import { classNames, getDateValue, isAdult } from '../utils';
 import Button from './Button';
 import { CloseIcon } from './Icons';
+import Model from './Model';
 import ErrorMessage from './form/ErrorMessage';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
 import ImageUpload from './imageUpload/ImageUpload';
-import Model from './Model';
 
 const schema = yup
     .object({
@@ -37,10 +38,10 @@ const schema = yup
 
 const EditProfile = ({
     isShowModel,
-    handleShowModel,
+    setShowModel,
 }: {
     isShowModel: boolean;
-    handleShowModel: () => void;
+    setShowModel: Dispatch<SetStateAction<boolean>>;
 }) => {
     const user = useSelector((state: RootState) => state.user);
     const avatar = useImageUpload(`${user._id}_avatar_${new Date().getTime()}`);
@@ -81,7 +82,10 @@ const EditProfile = ({
     };
 
     return (
-        <Model isShowModel={isShowModel} handleShowModel={handleShowModel}>
+        <Model
+            isShowModel={isShowModel}
+            handleCloseModel={() => setShowModel(false)}
+        >
             <form
                 onClick={(e) => e.stopPropagation()}
                 onSubmit={handleSubmit(onSubmit)}
@@ -90,51 +94,54 @@ const EditProfile = ({
                     isShowModel ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
-                <div className="flex items-center gap-5 px-5 py-3.75 bg-black-1 dark:bg-dark-black-2">
-                    <Button onClick={handleShowModel} className="w-8.5 h-8.5">
-                        <CloseIcon className="stroke-white-3" />
+                <div className='flex items-center gap-5 px-5 py-3.75 bg-black-1 dark:bg-dark-black-2'>
+                    <Button
+                        onClick={() => setShowModel(false)}
+                        className='w-8.5 h-8.5'
+                    >
+                        <CloseIcon className='text-white-3' />
                     </Button>
-                    <div className="-ml-[6px] flex-1 font-semibold text-xl leading-xl text-white">
+                    <div className='-ml-[6px] flex-1 font-semibold text-xl leading-xl text-white'>
                         Edit profile
                     </div>
                     <Button
                         disabled={avatar.isLoading || background.isLoading}
-                        type="submit"
-                        className="w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white"
+                        type='submit'
+                        className='w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
                     >
                         save
                     </Button>
                 </div>
-                <div className="h-[calc(100vh_-_134px)] bg-white dark:bg-[#171616] overflow-auto pb-5">
+                <div className='h-[calc(100vh_-_134px)] bg-white dark:bg-[#171616] overflow-auto pb-5'>
                     <ImageUpload
                         className={classNames('aspect-[316/53]')}
-                        fallback="/no-background.jpg"
+                        fallback='/no-background.jpg'
                         src={user.background}
                         image={background}
                     />
                     <ImageUpload
-                        wrapperClassName="mx-[18px] -mt-12 w-[100px] h-[100px] rounded-full"
+                        wrapperClassName='mx-[18px] -mt-12 w-[100px] h-[100px] rounded-full'
                         image={avatar}
                         src={user.avatar}
                     />
-                    <div className="flex flex-col gap-5 mt-4 px-5">
+                    <div className='flex flex-col gap-5 mt-4 px-5'>
                         <FormGroup>
-                            <Label name="name">Name</Label>
-                            <Input control={control} name="name" />
+                            <Label name='name'>Name</Label>
+                            <Input control={control} name='name' />
                             {errors.name?.message && (
                                 <ErrorMessage message={errors.name?.message} />
                             )}
                         </FormGroup>
                         <FormGroup>
-                            <Label name="bio">Bio</Label>
-                            <Input control={control} name="bio" />
+                            <Label name='bio'>Bio</Label>
+                            <Input control={control} name='bio' />
                             {errors.bio?.message && (
                                 <ErrorMessage message={errors.bio?.message} />
                             )}
                         </FormGroup>
                         <FormGroup>
-                            <Label name="location">Location</Label>
-                            <Input control={control} name="location" />
+                            <Label name='location'>Location</Label>
+                            <Input control={control} name='location' />
                             {errors.location?.message && (
                                 <ErrorMessage
                                     message={errors.location?.message}
@@ -142,8 +149,8 @@ const EditProfile = ({
                             )}
                         </FormGroup>
                         <FormGroup>
-                            <Label name="website">Website</Label>
-                            <Input control={control} name="website" />
+                            <Label name='website'>Website</Label>
+                            <Input control={control} name='website' />
                             {errors.website?.message && (
                                 <ErrorMessage
                                     message={errors.website?.message}
@@ -151,11 +158,11 @@ const EditProfile = ({
                             )}
                         </FormGroup>
                         <FormGroup>
-                            <Label name="birthday">Birth day</Label>
+                            <Label name='birthday'>Birth day</Label>
                             <Input
-                                type="date"
+                                type='date'
                                 control={control}
-                                name="birthday"
+                                name='birthday'
                             />
                             {errors.birthday?.message && (
                                 <ErrorMessage

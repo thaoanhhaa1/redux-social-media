@@ -4,6 +4,7 @@ import searchReducer from '../features/search/searchSlice';
 import socketReducer from '../features/socket/socketSlice';
 import themeReducer from '../features/theme/themeSlice';
 import userReducer from '../features/user/userSlice';
+import myTweetReducer from '../features/myTweet/myTweetSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         search: searchReducer,
         socket: socketReducer,
         contacts: contactsReducer,
+        myTweet: myTweetReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

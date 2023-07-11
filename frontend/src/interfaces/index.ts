@@ -1,3 +1,4 @@
+import ICardContext from './ICardContext';
 import IChat from './IChat';
 import IImageUpload from './IImageUpload';
 import IRoute from './IRoute';
@@ -10,6 +11,7 @@ import ITweet from './ITweet';
 import IUser from './IUser';
 
 export type {
+    ICardContext,
     IChat,
     IImageUpload,
     IRoute,

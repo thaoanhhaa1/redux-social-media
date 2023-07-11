@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode, useLayoutEffect, useRef } from 'react';
-import useScroll from '../../contexts/Scroll';
+import useScroll from '../../contexts/ScrollContext';
 import { classNames } from '../../utils';
 import Scrollbar from './Scrollbar';
 import ScrollbarThumb from './ScrollbarThumb';

@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { v4 } from 'uuid';
+import { RootState } from '../../app/store';
+import { useCardContext } from '../../contexts/CardContext';
 import {
     LikeActiveIcon,
     LikeIcon,
@@ -9,49 +13,51 @@ import {
 import Image from '../Image';
 import CardButton from './CardButton';
 
+const cardIcons = [ShareIcon, RetweetIcon, MessagesIcon];
+
 const CardInformation = () => {
-    const [isLike] = useState(true);
+    const user = useSelector((state: RootState) => state.user);
+    const { tweet } = useCardContext();
+    const isLike = useMemo(
+        () => (tweet.likes || []).includes(user._id),
+        [tweet.likes, user._id],
+    );
 
     return (
-        <div className="flex flex-col gap-5 ml-[56px]">
-            <p className="font-medium text-sm leading-[21px] text-black dark:text-white">
-                Allah first 😍👏proudly Muslimat 💞 daddy's love & mummy's pride
-                🙌 Be patient 🙌
-            </p>
-            <Image
-                className="rounded-2.5 aspect-video"
-                alt=""
-                src="https://images.unsplash.com/photo-1685985081360-1d6021f77bc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1157&q=80"
-            ></Image>
-            <div className="flex justify-between">
-                <div className="flex gap-5">
-                    <CardButton
-                        icon={
-                            <ShareIcon className="stroke-black dark:stroke-white" />
-                        }
-                    />
-                    <CardButton
-                        icon={
-                            <RetweetIcon className="stroke-black dark:stroke-white" />
-                        }
-                    />
-                    <CardButton
-                        icon={
-                            <MessagesIcon className="stroke-black dark:stroke-white" />
-                        }
-                    />
+        <div className='flex flex-col gap-5 ml-[56px]'>
+            {tweet.content && (
+                <p className='font-medium text-sm leading-[21px] text-black dark:text-white'>
+                    {tweet.content}
+                </p>
+            )}
+            {tweet.images && tweet.images.length > 0 && (
+                <Image
+                    className='rounded-2.5 aspect-video'
+                    alt=''
+                    src={tweet.images[0]}
+                />
+            )}
+            <div className='flex justify-between'>
+                <div className='flex gap-5'>
+                    {cardIcons.map((Icon) => (
+                        <CardButton
+                            key={v4()}
+                            className='text-black dark:text-white'
+                            icon={<Icon />}
+                        />
+                    ))}
                 </div>
-                <div className="flex items-center gap-[6px]">
+                <div className='flex items-center gap-[6px]'>
                     <CardButton
                         active={isLike}
                         icon={
                             (isLike && <LikeActiveIcon />) || (
-                                <LikeIcon className="stroke-black dark:stroke-white" />
+                                <LikeIcon className='stroke-black dark:stroke-white' />
                             )
                         }
                     />
-                    <span className="text-xs leading-3.75 text-black-8">
-                        100
+                    <span className='text-xs leading-3.75 text-black-8'>
+                        {(tweet.likes && tweet.likes.length) || 0}
                     </span>
                 </div>
             </div>
