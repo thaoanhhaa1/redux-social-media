@@ -5,19 +5,23 @@ import api from '../api';
 import axiosClient from '../api/axiosClient';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
-import Button from '../components/Button';
-import EditProfile from '../components/EditProfile';
-import Follow from '../components/Follow';
-import { CalendarIcon, CameraIcon, EditProfileIcon } from '../components/Icons';
-import Image from '../components/Image';
-import Loading from '../components/Loading';
-import ProfileItem from '../components/ProfileItem';
-import StickyBottom from '../components/StickyBottom';
-import Card from '../components/card/Card';
-import Stories from '../components/story/Stories';
-import WhatHappen from '../components/whatHappen/WhatHappen';
-import Wrapper from '../components/wrapper/Wrapper';
-import { addTweets } from '../features/myTweet/myTweetSlice';
+import {
+    Button,
+    CalendarIcon,
+    CameraIcon,
+    Card,
+    EditProfile,
+    EditProfileIcon,
+    Follow,
+    Image,
+    Loading,
+    ProfileItem,
+    StickyBottom,
+    Stories,
+    WhatHappen,
+    Wrapper,
+} from '../components';
+import { addTweets } from '../features/myTweet';
 import { IStory, IUser } from '../interfaces';
 import { getMonthYear } from '../utils';
 

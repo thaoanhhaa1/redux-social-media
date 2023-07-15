@@ -13,7 +13,7 @@ import Input from '../components/form/Input';
 import Label from '../components/form/Label';
 import config from '../config';
 import { message, regex } from '../constants';
-import { fetchUser, signUp } from '../features/user/userSlice';
+import { fetchUser, signUp } from '../features/user';
 import { SignUpType } from '../types';
 
 const schema = yup
@@ -70,36 +70,36 @@ const SignUp = () => {
     return (
         <AuthForm
             onSubmit={handleSubmit(onSubmit)}
-            title="Sign up to Hoque"
-            description="it’s free and only rakes a minute"
+            title='Sign up to Hoque'
+            description='it’s free and only rakes a minute'
         >
-            <FormGroup className="w-[577px]">
-                <Label name="username">Username</Label>
-                <Input control={control} name="username" />
+            <FormGroup className='w-[577px]'>
+                <Label name='username'>Username</Label>
+                <Input control={control} name='username' />
                 {errors.username?.message && (
                     <ErrorMessage message={errors.username?.message} />
                 )}
             </FormGroup>
-            <FormGroup className="w-[577px]">
-                <Label name="email">Email Address</Label>
-                <Input control={control} name="email" />
+            <FormGroup className='w-[577px]'>
+                <Label name='email'>Email Address</Label>
+                <Input control={control} name='email' />
                 {errors.email?.message && (
                     <ErrorMessage message={errors.email?.message} />
                 )}
             </FormGroup>
-            <FormGroup className="w-[577px]">
-                <Label name="password">Password</Label>
-                <Input control={control} name="password" type="password" />
+            <FormGroup className='w-[577px]'>
+                <Label name='password'>Password</Label>
+                <Input control={control} name='password' type='password' />
                 {errors.password?.message && (
                     <ErrorMessage message={errors.password?.message} />
                 )}
             </FormGroup>
-            <FormGroup className="w-[577px]">
-                <Label name="confirm-password">Confirm Password</Label>
+            <FormGroup className='w-[577px]'>
+                <Label name='confirm-password'>Confirm Password</Label>
                 <Input
                     control={control}
-                    name="confirm-password"
-                    type="password"
+                    name='confirm-password'
+                    type='password'
                 />
                 {errors['confirm-password']?.message && (
                     <ErrorMessage
@@ -108,27 +108,27 @@ const SignUp = () => {
                 )}
             </FormGroup>
             <Button
-                className="w-[577px] bg-blue-white-2 font-semibold text-xl leading-xl text-white"
+                className='w-[577px] bg-blue-white-2 font-semibold text-xl leading-xl text-white'
                 large
-                type="submit"
+                type='submit'
             >
                 Sign up
             </Button>
-            <span className="max-w-[319px] font-medium text-center text-sm leading-sm text-black dark:text-white">
+            <span className='max-w-[319px] font-medium text-center text-sm leading-sm text-black dark:text-white'>
                 By cliking the sign up button,{' '}
-                <Link className="text-blue" to="/">
+                <Link className='text-blue' to='/'>
                     you agree to our Trems & Conditions
                 </Link>
                 , and{' '}
-                <Link className="text-blue" to="/">
+                <Link className='text-blue' to='/'>
                     privacy policy
                 </Link>
             </span>
-            <span className="max-w-[319px] font-medium text-center text-sm leading-sm text-black-7 dark:text-white">
+            <span className='max-w-[319px] font-medium text-center text-sm leading-sm text-black-7 dark:text-white'>
                 Already a member?{' '}
                 <Link
-                    className="text-blue dark:text-blue-white-2"
-                    to="/sign-in"
+                    className='text-blue dark:text-blue-white-2'
+                    to='/sign-in'
                 >
                     sign in
                 </Link>

@@ -6,13 +6,16 @@ const CardButton = ({
     icon,
     active = false,
     className = '',
+    onClick = () => {},
 }: {
     icon: ReactElement;
     active?: boolean;
     className?: string;
+    onClick?: () => void;
 }) => {
     return (
         <Button
+            onClick={onClick}
             rounded
             small
             icon={icon}

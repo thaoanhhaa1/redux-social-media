@@ -2,12 +2,10 @@ import { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
-import Loading from '../../components/Loading';
-import TopBar from '../../components/TopBar';
-import Sidebar from '../../components/sidebar/Sidebar';
+import { Loading, Sidebar, TopBar } from '../../components';
 import config from '../../config';
-import { connect, disconnect } from '../../features/socket/socketSlice';
-import { fetchUser } from '../../features/user/userSlice';
+import { connect, disconnect } from '../../features/socket';
+import { fetchUser } from '../../features/user';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useDispatch<AppDispatch>();

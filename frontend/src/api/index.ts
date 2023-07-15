@@ -6,6 +6,7 @@ const api = {
     createTweet: () => '/private/tweets',
     countTweet: () => '/private/tweets/count',
     getMyTweets: () => '/private/tweets/get-my-tweets',
+    toggleLike: () => '/private/tweets/toggle-like',
     getFollowingTweets: () => '/private/tweets/get-following-tweets',
     getMyStories: () => '/private/stories/get-my-stories',
     getUser: () => '/private/users/get-user',

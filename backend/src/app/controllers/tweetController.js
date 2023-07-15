@@ -2,7 +2,7 @@ const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
 
 module.exports = {
-    count: async (req, res, next) => {
+    count: async (req, res) => {
         const _id = req.body._id;
 
         try {
@@ -16,7 +16,7 @@ module.exports = {
         }
     },
 
-    getMyTweets: async (req, res, next) => {
+    getMyTweets: async (req, res) => {
         const _id = req.body._id;
         const limit = req.query.limit || 8;
         const skip = req.query.skip || 0;
@@ -110,5 +110,28 @@ module.exports = {
         } catch (error) {
             res.sendStatus(400);
         }
+    },
+
+    toggleLike: async (req, res) => {
+        const { _id, tweetId, isLike } = req.body;
+        const update = {
+            [isLike ? '$addToSet' : '$pull']: {
+                likes: _id,
+            },
+        };
+
+        try {
+            const result = await TweetModel.updateOne(
+                {
+                    _id: tweetId,
+                },
+                update,
+            );
+
+            if (result.modifiedCount > 0) return res.sendStatus(200);
+        } catch (error) {
+            console.error('🚀 ~ toggleLike: ~ error:', error);
+        }
+        res.sendStatus(400);
     },
 };

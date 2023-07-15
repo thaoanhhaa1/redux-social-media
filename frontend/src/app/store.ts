@@ -1,11 +1,11 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
-import contactsReducer from '../features/contacts/contactsSlice';
-import searchReducer from '../features/search/searchSlice';
-import socketReducer from '../features/socket/socketSlice';
-import themeReducer from '../features/theme/themeSlice';
-import userReducer from '../features/user/userSlice';
-import myTweetReducer from '../features/myTweet/myTweetSlice';
-import followingTweetsReducer from '../features/followingTweets/followingTweetsSlice';
+import contactsReducer from '../features/contacts';
+import followingTweetsReducer from '../features/followingTweets';
+import myTweetReducer from '../features/myTweet';
+import searchReducer from '../features/search';
+import socketReducer from '../features/socket';
+import themeReducer from '../features/theme';
+import userReducer from '../features/user';
 
 export const store = configureStore({
     reducer: {

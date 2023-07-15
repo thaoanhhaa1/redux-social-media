@@ -33,8 +33,6 @@ const Card = ({
             moreElement.getBoundingClientRect();
         const { top: topContainer, height: heightContainer } =
             containerElement.getBoundingClientRect();
-        console.log(moreElement.getBoundingClientRect());
-        console.log(containerElement.getBoundingClientRect());
 
         if (topMore + heightMore > topContainer + heightContainer) {
             moreElement.classList.add('!top-0', '-translate-y-full');

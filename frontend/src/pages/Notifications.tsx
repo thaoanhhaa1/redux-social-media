@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import Live from '../components/Live';
-import Page from '../components/Page';
-import Trend from '../components/trend/Trend';
-import Wrapper from '../components/wrapper/Wrapper';
+import { Live, Page, Trend, Wrapper } from '../components';
+import {
+    NotificationAll,
+    NotificationMention,
+} from '../components/notification';
 import { classNames } from '../utils';
-import NotificationAll from '../components/notification/NotificationAll';
-import NotificationMention from '../components/notification/NotificationMention';
 
 const Notifications = () => {
     const [isAllActive, setAllActive] = useState(true);
@@ -18,14 +17,14 @@ const Notifications = () => {
                     <Trend />
                 </>
             }
-            scrollHeight="var(--scroll-height)"
-            scrollWidth="335px"
+            scrollHeight='var(--scroll-height)'
+            scrollWidth='335px'
         >
-            <Wrapper className="p-5">
-                <div className="font-semibold text-blue-black-2">
+            <Wrapper className='p-5'>
+                <div className='font-semibold text-blue-black-2'>
                     Notifications
                 </div>
-                <div className="flex">
+                <div className='flex'>
                     <button
                         onClick={() => setAllActive(true)}
                         className={classNames(

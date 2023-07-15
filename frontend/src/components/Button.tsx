@@ -48,7 +48,7 @@ const Button = ({
         let style: string[] = [className];
 
         style.push(
-            'flex items-center whitespace-nowrap',
+            'flex items-center whitespace-nowrap outline-none',
             `gap-${gap}`,
             `justify-${align}`,
             rounded ? 'rounded-full' : 'rounded-2.5',
@@ -109,7 +109,7 @@ const Button = ({
             {...passProps}
         >
             {(isLoading && (
-                <div className="h-4/5 aspect-square border-4 border-white border-t-transparent rounded-full animate-spin" />
+                <div className='h-4/5 aspect-square border-4 border-white border-t-transparent rounded-full animate-spin' />
             )) || (
                 <>
                     {icon}

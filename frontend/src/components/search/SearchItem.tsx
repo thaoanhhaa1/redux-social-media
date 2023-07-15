@@ -2,7 +2,7 @@ import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
 import config from '../../config';
-import { remove } from '../../features/search/searchSlice';
+import { remove } from '../../features/search';
 import { IUser } from '../../interfaces';
 import { CloseIcon } from '../Icons';
 import Image from '../Image';

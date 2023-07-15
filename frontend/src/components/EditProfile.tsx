@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import { message, regex } from '../constants';
-import { editProfile, fetchUser } from '../features/user/userSlice';
+import { editProfile, fetchUser } from '../features/user';
 import { useImageUpload } from '../hooks';
 import { ProfileType } from '../types';
 import { classNames, getDateValue, isAdult } from '../utils';

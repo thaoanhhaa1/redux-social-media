@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { IImageUpload } from '../../interfaces';
 import { classNames } from '../../utils';
-import { CameraIcon } from '../Icons';
+import { CameraIcon } from '../../components';
 import Image from '../Image';
 import ImageLoading from './ImageLoading';
 

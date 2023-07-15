@@ -3,21 +3,19 @@ import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
-import Contact from '../components/Contact';
-import Image from '../components/Image';
-import Members from '../components/Members';
-import Page from '../components/Page';
-import Card from '../components/card/Card';
-import Stories from '../components/story/Stories';
-import WhatHappen from '../components/whatHappen/WhatHappen';
-import Wrapper from '../components/wrapper/Wrapper';
-import WrapperHeader from '../components/wrapper/WrapperHeader';
 import {
-    getContacts,
-    setOffline,
-    setOnline,
-} from '../features/contacts/contactsSlice';
-import { getTweets } from '../features/followingTweets/followingTweetsSlice';
+    Card,
+    Contact,
+    Image,
+    Members,
+    Page,
+    Stories,
+    WhatHappen,
+    Wrapper,
+} from '../components';
+import { WrapperHeader } from '../components/wrapper';
+import { getContacts, setOffline, setOnline } from '../features/contacts';
+import { getTweets } from '../features/followingTweets';
 
 const Home = () => {
     const { pageCount, contacts } = useSelector(

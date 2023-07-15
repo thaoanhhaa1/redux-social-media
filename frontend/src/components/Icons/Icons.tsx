@@ -510,6 +510,7 @@ export const LikeIcon = ({ className }: { className?: string }) => (
         viewBox='0 0 15 14'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'
+        stroke='currentColor'
     >
         <path
             fillRule='evenodd'

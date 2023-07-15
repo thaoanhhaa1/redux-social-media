@@ -24,6 +24,27 @@ const getTweets = createAsyncThunk('followingTweets/getTweets', async () => {
     }
 });
 
+const toggleLike = createAsyncThunk(
+    'followingTweets/toggleLike',
+    ({
+        userId,
+        tweetId,
+        isLike,
+    }: {
+        userId: string;
+        tweetId: string;
+        isLike: boolean;
+    }) => {
+        try {
+            axiosClient.post(api.toggleLike(), {
+                _id: userId,
+                tweetId,
+                isLike,
+            });
+        } catch (error) {}
+    },
+);
+
 const followingTweetsSlice = createSlice({
     name: 'followingTweets',
     initialState,
@@ -44,4 +65,4 @@ const followingTweetsSlice = createSlice({
 });
 
 export default followingTweetsSlice.reducer;
-export { getTweets };
+export { getTweets, toggleLike };

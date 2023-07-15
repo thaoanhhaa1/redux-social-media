@@ -1,8 +1,10 @@
-import { useMemo } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
+import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
+import { toggleLike } from '../../features/followingTweets';
 import {
     LikeActiveIcon,
     LikeIcon,
@@ -18,10 +20,23 @@ const cardIcons = [ShareIcon, RetweetIcon, MessagesIcon];
 const CardInformation = () => {
     const user = useSelector((state: RootState) => state.user);
     const { tweet } = useCardContext();
-    const isLike = useMemo(
-        () => (tweet.likes || []).includes(user._id),
-        [tweet.likes, user._id],
+    const dispatch = useAppDispatch();
+    const [isLike, setLike] = useState(() =>
+        (tweet.likes || []).includes(user._id),
     );
+    const [numberLike, setNumberLike] = useState(tweet?.likes?.length || 0);
+
+    const handleLike = () => {
+        dispatch(
+            toggleLike({
+                isLike: !isLike,
+                tweetId: tweet._id || '',
+                userId: user._id,
+            }),
+        ).unwrap();
+        setNumberLike(numberLike + (isLike ? -1 : 1));
+        setLike(!isLike);
+    };
 
     return (
         <div className='flex flex-col gap-5 ml-[56px]'>
@@ -50,14 +65,15 @@ const CardInformation = () => {
                 <div className='flex items-center gap-[6px]'>
                     <CardButton
                         active={isLike}
+                        onClick={handleLike}
                         icon={
                             (isLike && <LikeActiveIcon />) || (
-                                <LikeIcon className='stroke-black dark:stroke-white' />
+                                <LikeIcon className='text-black-8 dark:text-white' />
                             )
                         }
                     />
                     <span className='text-xs leading-3.75 text-black-8'>
-                        {(tweet.likes && tweet.likes.length) || 0}
+                        {numberLike}
                     </span>
                 </div>
             </div>

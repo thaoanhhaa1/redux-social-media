@@ -1,7 +1,4 @@
-import Live from '../components/Live';
-import Page from '../components/Page';
-import Criket from '../components/criket/Criket';
-import Trend from '../components/trend/Trend';
+import { Criket, Live, Page, Trend } from '../components';
 
 const Explore = () => {
     return (
@@ -13,8 +10,8 @@ const Explore = () => {
                     <Card /> */}
                 </>
             }
-            scrollHeight="var(--scroll-height)"
-            scrollWidth="var(--explore-sidebar-width)"
+            scrollHeight='var(--scroll-height)'
+            scrollWidth='var(--explore-sidebar-width)'
         >
             <Live />
             <Criket />

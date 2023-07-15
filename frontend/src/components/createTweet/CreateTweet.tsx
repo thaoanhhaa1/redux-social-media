@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { images } from '../../assets';
-import { createTweet } from '../../features/myTweet/myTweetSlice';
+import { createTweet } from '../../features/myTweet';
 import { classNames } from '../../utils';
 import Button from '../Button';
 import { CloseIcon } from '../Icons';
