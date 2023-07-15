@@ -28,7 +28,10 @@ function getTimeString(date: Date): string {
     if (date.getDate() < dateNow.getDate())
         return date.toString().substring(0, 3) + ' ' + time;
 
-    return date.toLocaleTimeString().substring(0, 5);
+    let timeString = date.toLocaleTimeString();
+    if (timeString.charAt(2) !== ':') timeString = '0' + timeString;
+
+    return timeString.substring(0, 5);
 }
 
 export default getTimeString;

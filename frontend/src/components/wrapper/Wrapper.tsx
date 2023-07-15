@@ -1,21 +1,21 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, LegacyRef, ReactNode, forwardRef } from 'react';
 import { classNames } from '../../utils';
 
-const Wrapper = ({
-    className = '',
-    children,
-    gap = '5',
-    isRow = false,
-    ...props
-}: {
+interface IWrapper {
     className?: string;
     children: ReactNode;
     gap?: string;
     style?: CSSProperties;
     isRow?: boolean;
-}) => {
+}
+
+const Wrapper = (
+    { className = '', children, gap = '5', isRow = false, ...props }: IWrapper,
+    ref: LegacyRef<HTMLDivElement> | undefined,
+) => {
     return (
         <div
+            ref={ref}
             className={classNames(
                 'bg-white dark:bg-dark-black-2 rounded-2.5 flex',
                 isRow || 'flex-col',
@@ -29,4 +29,4 @@ const Wrapper = ({
     );
 };
 
-export default Wrapper;
+export default forwardRef(Wrapper);

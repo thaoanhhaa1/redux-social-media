@@ -1,27 +1,61 @@
 import { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Socket } from 'socket.io-client';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import Contact from '../components/Contact';
 import Image from '../components/Image';
 import Members from '../components/Members';
 import Page from '../components/Page';
+import Card from '../components/card/Card';
 import Stories from '../components/story/Stories';
 import WhatHappen from '../components/whatHappen/WhatHappen';
 import Wrapper from '../components/wrapper/Wrapper';
 import WrapperHeader from '../components/wrapper/WrapperHeader';
-import { getContacts } from '../features/contacts/contactsSlice';
+import {
+    getContacts,
+    setOffline,
+    setOnline,
+} from '../features/contacts/contactsSlice';
+import { getTweets } from '../features/followingTweets/followingTweetsSlice';
 
 const Home = () => {
     const { pageCount, contacts } = useSelector(
         (state: RootState) => state.contacts,
     );
+    const { socket, followingTweets } = useSelector(
+        (state: RootState) => state,
+    );
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (contacts.length === 0) dispatch(getContacts(pageCount));
+        if (followingTweets.data.length === 0) dispatch(getTweets());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (!socket.socket) return;
+        const socketIo = socket.socket as Socket;
+
+        socketIo.on('online', (userId) => dispatch(setOnline(userId)));
+
+        socketIo.on('offline', (data: { userId: string; date: string }) => {
+            const date = new Date(data.date);
+
+            dispatch(
+                setOffline({
+                    userId: data.userId,
+                    date,
+                }),
+            );
+        });
+
+        return () => {
+            socketIo.removeListener('offline');
+            socketIo.removeListener('online');
+        };
+    }, [dispatch, socket.socket]);
 
     return (
         <Page
@@ -92,9 +126,15 @@ const Home = () => {
         >
             <Stories stories={[]} />
             <WhatHappen />
-            {/* {new Array(3).fill(null).map(() => (
-                <Card key={v4()} />
-            ))} */}
+            {followingTweets.data.map((item) =>
+                item.tweets.map((tweet) => (
+                    <Card
+                        tweet={tweet}
+                        user={item.user}
+                        key={tweet._id || ''}
+                    />
+                )),
+            )}
         </Page>
     );
 };

@@ -1,3 +1,4 @@
+const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
 
 module.exports = {
@@ -57,6 +58,56 @@ module.exports = {
             res.json(result);
         } catch (error) {
             console.error('🚀 ~ createTweet: ~ error:', error);
+            res.sendStatus(400);
+        }
+    },
+
+    getFollowingTweets: async (req, res) => {
+        const { _id } = req.body;
+
+        try {
+            const tweets = await FollowModel.aggregate([
+                { $match: { user: _id } },
+                { $unwind: '$following' },
+                { $project: { _id: 0, user: 0, followers: 0, __v: 0 } },
+                {
+                    $lookup: {
+                        from: 'users',
+                        as: 'user',
+                        let: { id: '$following' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [{ $toString: '$_id' }, '$$id'],
+                                    },
+                                },
+                            },
+                            { $project: { username: 1, name: 1, avatar: 1 } },
+                        ],
+                    },
+                },
+                { $unwind: '$user' },
+                { $project: { following: 0 } },
+                {
+                    $lookup: {
+                        from: 'tweets',
+                        as: 'tweets',
+                        let: { userId: { $toString: '$user._id' } },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: { $eq: ['$user', '$$userId'] },
+                                },
+                            },
+                        ],
+                    },
+                },
+                { $match: { $expr: { $gt: [{ $size: '$tweets' }, 0] } } },
+            ]);
+
+            res.json(tweets);
+        } catch (error) {
             res.sendStatus(400);
         }
     },

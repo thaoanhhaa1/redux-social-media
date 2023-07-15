@@ -51,31 +51,33 @@ mongoose.connection.once('open', () => {
 
     global.sockets = [];
     io.on('connection', (socket) => {
+        const userId = socket.handshake?.auth?._id;
+
         console.log(`Socket.io connection ${socket.id}`);
+        io.emit('online', userId);
 
         global.sockets.push(socket);
         global.socketIo = io;
-        console.log('SOCKETS LENGTH: ', global.sockets.length);
 
         socket.on('disconnect', async function () {
             global.sockets = global.sockets.filter((s) => socket.id !== s.id);
-            console.log('SOCKETS LENGTH: ', global.sockets.length);
-            console.log(`Socket.io disconnect ${socket.id}`);
+            const date = new Date();
 
-            const userId = socket.handshake?.auth?._id;
+            io.emit('offline', {
+                userId,
+                date,
+            });
 
             if (userId)
-                console.log(
-                    await OnlineStatusModel.updateOne(
-                        {
-                            _id: new mongoose.Types.ObjectId(userId),
+                await OnlineStatusModel.updateOne(
+                    {
+                        _id: new mongoose.Types.ObjectId(userId),
+                    },
+                    {
+                        $set: {
+                            offline: date,
                         },
-                        {
-                            $set: {
-                                offline: new Date(),
-                            },
-                        },
-                    ),
+                    },
                 );
         });
     });

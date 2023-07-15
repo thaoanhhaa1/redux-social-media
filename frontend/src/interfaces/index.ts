@@ -9,6 +9,7 @@ import IStory from './IStory';
 import ITheme from './ITheme';
 import ITweet from './ITweet';
 import IUser from './IUser';
+import IUserTweet from './IUserTweet';
 
 export type {
     ICardContext,
@@ -22,4 +23,5 @@ export type {
     ITheme,
     ITweet,
     IUser,
+    IUserTweet,
 };

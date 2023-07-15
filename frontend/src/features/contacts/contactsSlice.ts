@@ -35,7 +35,24 @@ const getContacts = createAsyncThunk(
 const contactsSlice = createSlice({
     name: 'contacts',
     initialState,
-    reducers: {},
+    reducers: {
+        setOffline: (state, { payload }) => {
+            state.contacts.forEach((contact) => {
+                if (contact._id === payload.userId) {
+                    contact.offline = payload.date;
+                    return;
+                }
+            });
+        },
+        setOnline: (state, { payload }) => {
+            state.contacts.forEach((contact) => {
+                if (contact._id === payload) {
+                    contact.offline = null;
+                    return;
+                }
+            });
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getContacts.pending, (state) => {
@@ -51,6 +68,8 @@ const contactsSlice = createSlice({
             });
     },
 });
+
+export const { setOffline, setOnline } = contactsSlice.actions;
 
 export { getContacts };
 

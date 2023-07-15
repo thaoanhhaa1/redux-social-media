@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/count', tweetController.count);
 router.get('/get-my-tweets', tweetController.getMyTweets);
+router.get('/get-following-tweets', tweetController.getFollowingTweets);
 router.post('/', tweetController.createTweet);
 
 module.exports = router;
