@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -8,9 +8,11 @@ import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import { message, regex } from '../constants';
 import { editProfile, fetchUser } from '../features/user';
+import deleteImage from '../firebase/deleteImage';
 import { useImageUpload } from '../hooks';
 import { ProfileType } from '../types';
 import { classNames, getDateValue, isAdult } from '../utils';
+import getNameStorage from '../utils/getNameStorage';
 import Button from './Button';
 import { CloseIcon } from './Icons';
 import Model from './Model';
@@ -70,16 +72,38 @@ const EditProfile = ({
                 message: message.birthday.isAdult,
             });
 
-        if (background.image) setValue('background', background.image);
-        if (avatar.image) setValue('avatar', avatar.image);
+        if (background.image) {
+            background.image &&
+                user.background &&
+                deleteImage(getNameStorage(user.background));
+            setValue('background', background.image);
+        }
+        if (avatar.image) {
+            avatar.image &&
+                user.avatar &&
+                deleteImage(getNameStorage(user.avatar));
+            setValue('avatar', avatar.image);
+        }
 
         try {
             await dispatch(editProfile(data)).unwrap();
 
             toast.success('Update successfully!');
+            background.setImage('');
+            avatar.setImage('');
+            setShowModel(false);
             await dispatch(fetchUser()).unwrap();
         } catch (error) {}
     };
+
+    useEffect(() => {
+        if (isShowModel) return;
+        background.setImage('');
+        background.image && deleteImage(getNameStorage(background.image));
+        avatar.setImage('');
+        avatar.image && deleteImage(getNameStorage(avatar.image));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isShowModel]);
 
     return (
         <Model

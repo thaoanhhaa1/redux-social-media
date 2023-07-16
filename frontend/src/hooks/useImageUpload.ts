@@ -1,13 +1,9 @@
-import {
-    getDownloadURL,
-    getStorage,
-    ref,
-    uploadBytesResumable,
-} from 'firebase/storage';
 import { useEffect, useRef, useState } from 'react';
 import images from '../config/images';
-import app from '../firebase/config';
+import uploadImage from '../firebase/uploadImage';
 import { IImageUpload } from '../interfaces';
+import deleteImage from '../firebase/deleteImage';
+import getNameStorage from '../utils/getNameStorage';
 
 function useImageUpload(avatarName: string): IImageUpload {
     const imageRef = useRef<HTMLImageElement | null>(null);
@@ -17,49 +13,20 @@ function useImageUpload(avatarName: string): IImageUpload {
     const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
+        const handleLoading = () => setLoading(false);
+        image && deleteImage(getNameStorage(image));
+
         (async function () {
             if (!file || !imageRef.current) return;
             setLoading(true);
             setTempImage(URL.createObjectURL(file));
-
-            const storage = getStorage(app);
-            const storageRef = ref(
-                storage,
-                images.getName(avatarName, file.type.substring(6)),
-            );
-
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const name = images.getName(avatarName, file.type.substring(6));
 
             try {
-                const image = await new Promise((res, rej) => {
-                    uploadTask.on(
-                        'state_changed',
-                        () => {
-                            // const progress =
-                            //     (snapshot.bytesTransferred /
-                            //         snapshot.totalBytes) *
-                            //     100;
-                            // console.log('Upload is ' + progress + '% done');
-                            // switch (snapshot.state) {
-                            //     case 'paused':
-                            //         console.log('Upload is paused');
-                            //         break;
-                            //     case 'running':
-                            //         console.log('Upload is running');
-                            //         break;
-                            // }
-                        },
-                        rej,
-                        () => {
-                            getDownloadURL(uploadTask.snapshot.ref).then(res);
-                        },
-                    );
-                });
+                const image = await uploadImage(name, file);
 
                 setImage(image as string);
-                imageRef.current.addEventListener('load', () =>
-                    setLoading(false),
-                );
+                imageRef.current.addEventListener('load', handleLoading);
             } catch (error) {
                 console.error('🚀 ~ error:', error);
                 setLoading(false);
@@ -68,7 +35,10 @@ function useImageUpload(avatarName: string): IImageUpload {
             }
         })();
 
-        return () => URL.revokeObjectURL(tempImage);
+        return () => {
+            URL.revokeObjectURL(tempImage);
+            imageRef.current?.removeEventListener('load', handleLoading);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [file]);
 
@@ -78,6 +48,7 @@ function useImageUpload(avatarName: string): IImageUpload {
         tempImage,
         isLoading,
         setFile,
+        setImage,
     };
 }
 
