@@ -1,5 +1,6 @@
 import getDateValue from './getDateValue';
 import getMonthYear from './getMonthYear';
+import getNameStorage from './getNameStorage';
 import getTime from './getTime';
 import getTimeString from './getTimeString';
 import isAdult from './isAdult';
@@ -13,6 +14,7 @@ export {
     classNames,
     getDateValue,
     getMonthYear,
+    getNameStorage,
     getTime,
     getTimeString,
     isAdult,

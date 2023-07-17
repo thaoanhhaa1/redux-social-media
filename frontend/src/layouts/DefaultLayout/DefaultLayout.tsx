@@ -5,12 +5,16 @@ import { AppDispatch, RootState } from '../../app/store';
 import { Loading, Sidebar, TopBar } from '../../components';
 import config from '../../config';
 import { connect, disconnect } from '../../features/socket';
+import { getStories } from '../../features/stories';
 import { fetchUser } from '../../features/user';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const user = useSelector((state: RootState) => state.user);
+    const isLoading = useSelector(
+        (state: RootState) => state.stories.isLoading,
+    );
 
     useEffect(() => {
         (async () => {
@@ -20,20 +24,20 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
                 navigate(config.routes.signIn);
             }
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dispatch, navigate]);
 
     useEffect(() => {
         if (!user._id) return;
 
         dispatch(connect(user._id));
+        (async () => await dispatch(getStories()).unwrap())();
 
         return () => {
             dispatch(disconnect());
         };
     }, [dispatch, user._id]);
 
-    if (!user._id) return <Loading />;
+    if (isLoading) return <Loading />;
 
     return (
         <div className='flex'>

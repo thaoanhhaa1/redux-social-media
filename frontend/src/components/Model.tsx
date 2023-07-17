@@ -28,7 +28,9 @@ const Model = ({
             >
                 <div className={className}>
                     <div className='mx-2 min-h-screen flex items-center'>
-                        {children}
+                        <div onClick={(e) => e.stopPropagation()}>
+                            {children}
+                        </div>
                     </div>
                 </div>
             </div>

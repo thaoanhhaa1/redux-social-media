@@ -122,7 +122,7 @@ const Home = () => {
                 </>
             }
         >
-            <Stories stories={[]} />
+            <Stories />
             <WhatHappen />
             {followingTweets.data.map((item) =>
                 item.tweets.map((tweet) => (

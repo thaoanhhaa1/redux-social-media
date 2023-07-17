@@ -14,7 +14,7 @@ import { ProfileType } from '../types';
 import { classNames, getDateValue, isAdult } from '../utils';
 import getNameStorage from '../utils/getNameStorage';
 import Button from './Button';
-import { CloseIcon } from './Icons';
+import { CameraIcon, CloseIcon } from './Icons';
 import Model from './Model';
 import ErrorMessage from './form/ErrorMessage';
 import FormGroup from './form/FormGroup';
@@ -111,7 +111,6 @@ const EditProfile = ({
             handleCloseModel={() => setShowModel(false)}
         >
             <form
-                onClick={(e) => e.stopPropagation()}
                 onSubmit={handleSubmit(onSubmit)}
                 className={classNames(
                     'w-[632px] cursor-default ease-out duration-300',
@@ -142,12 +141,16 @@ const EditProfile = ({
                         fallback='/no-background.jpg'
                         src={user.background}
                         image={background}
-                    />
+                    >
+                        <CameraIcon stroke='white' />
+                    </ImageUpload>
                     <ImageUpload
                         wrapperClassName='mx-[18px] -mt-12 w-[100px] h-[100px] rounded-full'
                         image={avatar}
                         src={user.avatar}
-                    />
+                    >
+                        <CameraIcon stroke='white' />
+                    </ImageUpload>
                     <div className='flex flex-col gap-5 mt-4 px-5'>
                         <FormGroup>
                             <Label name='name'>Name</Label>

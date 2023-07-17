@@ -1,7 +1,6 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, ReactElement } from 'react';
 import { IImageUpload } from '../../interfaces';
 import { classNames } from '../../utils';
-import { CameraIcon } from '../../components';
 import Image from '../Image';
 import ImageLoading from './ImageLoading';
 
@@ -12,6 +11,7 @@ const ImageUpload = ({
     fallback = '/no-avatar.png',
     image,
     src,
+    children,
 }: {
     wrapperClassName?: string;
     cameraClassName?: string;
@@ -19,6 +19,7 @@ const ImageUpload = ({
     fallback?: string;
     image: IImageUpload;
     src: string;
+    children: ReactElement;
 }) => {
     const handleChangeImage = async (e: ChangeEvent) => {
         const inputElement = e.target as HTMLInputElement;
@@ -41,10 +42,16 @@ const ImageUpload = ({
                 className={classNames(
                     className,
                     image.isLoading ? 'invisible' : '',
+                    image.image || src ? 'opacity-100' : 'opacity-0',
                 )}
             />
             {(image.isLoading && <ImageLoading src={image.tempImage} />) || (
-                <label className={classNames('absolute', cameraClassName)}>
+                <label
+                    className={classNames(
+                        'absolute cursor-pointer',
+                        cameraClassName,
+                    )}
+                >
                     <input
                         accept='image/*'
                         name='background'
@@ -53,7 +60,7 @@ const ImageUpload = ({
                         type='file'
                     />
                     <span className='flex items-center whitespace-nowrap gap-2 justify-center rounded-2.5 w-10 h-10'>
-                        <CameraIcon stroke='white' />
+                        {children}
                     </span>
                 </label>
             )}

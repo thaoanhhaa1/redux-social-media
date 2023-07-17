@@ -22,18 +22,18 @@ import {
     Wrapper,
 } from '../components';
 import { addTweets } from '../features/myTweet';
-import { IStory, IUser } from '../interfaces';
+import { IUser } from '../interfaces';
 import { getMonthYear } from '../utils';
+import { useEffectOnce } from 'usehooks-ts';
 
 const Profile = () => {
     const [isShowModelEditProfile, setShowModelEditProfile] = useState(false);
     const { user, socket, myTweet } = useSelector((state: RootState) => state);
     const [isLoading, setLoading] = useState(false);
-    const [tweetCount, setTweetCount] = useState(0);
+    const [tweetCount, setTweetCount] = useState(-1);
     const [followerCount, setFollowerCount] = useState(0);
     const [followingCount, setFollowingCount] = useState(0);
     const [whoToFollow, setWhoToFollow] = useState<IUser[]>([]);
-    const [stories, setStories] = useState<IStory[]>([]);
     const dispatch = useAppDispatch();
 
     const handleShowModel = useCallback(
@@ -62,7 +62,7 @@ const Profile = () => {
         };
     }, [socket.socket, user._id]);
 
-    useEffect(() => {
+    useEffectOnce(() => {
         (async function () {
             setLoading(true);
             const res = (
@@ -70,20 +70,17 @@ const Profile = () => {
                     axiosClient.get(api.countTweet()),
                     axiosClient.get(api.countFollow()),
                     axiosClient.get(api.whoToFollow()),
-                    axiosClient.get(api.getMyStories()),
                     axiosClient.get(api.getMyTweets()),
                 ])
             ).map((item) => item.data);
             setLoading(false);
-
             setTweetCount(res[0]);
             setFollowerCount(res[1][0]);
             setFollowingCount(res[1][1]);
             setWhoToFollow(res[2]);
-            setStories(res[3]);
-            dispatch(addTweets(res[4]));
+            dispatch(addTweets(res[3]));
         })();
-    }, [dispatch]);
+    });
 
     if (!user._id || isLoading) return <Loading />;
 
@@ -155,7 +152,7 @@ const Profile = () => {
             </Wrapper>
             <div className='flex gap-5 mt-5 pb-5'>
                 <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
-                    <Stories stories={stories} />
+                    <Stories all={false} />
                     <WhatHappen />
                     {(myTweet.tweets.length > 0 &&
                         myTweet.tweets.map((tweet) => (

@@ -1,8 +1,9 @@
 const express = require('express');
-const storiesController = require('../app/controllers/storiesController')
+const storiesController = require('../app/controllers/storiesController');
 
 const router = express.Router();
 
-router.get('/get-my-stories', storiesController.getMyStories);
+router.get('/get-stories', storiesController.getStories);
+router.post('/', storiesController.create);
 
 module.exports = router;

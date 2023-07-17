@@ -5,7 +5,7 @@ interface IImageUpload {
     image: string;
     tempImage: string;
     isLoading: boolean;
-    setFile: (file: File) => void;
+    setFile: (file: File | undefined) => void;
     setImage: (image: string) => void;
 }
 
