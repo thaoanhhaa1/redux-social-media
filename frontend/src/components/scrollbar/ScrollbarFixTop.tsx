@@ -21,7 +21,7 @@ const ScrollbarFixTop = ({
 
     useLayoutEffect(() => {
         const element = ref.current;
-        if (element === null) return;
+        if (!element) return;
         setBodyHeight(element.offsetTop);
     }, []);
 
@@ -35,9 +35,9 @@ const ScrollbarFixTop = ({
             style={{ marginBottom }}
         >
             {header}
-            <div className="overflow-y-hidden" ref={ref}>
+            <div className='overflow-y-hidden' ref={ref}>
                 <div
-                    className="overflow-y-auto scrollbar hidden-scrollbar relative"
+                    className='overflow-y-auto scrollbar hidden-scrollbar relative'
                     style={{
                         maxHeight: `calc(100vh - var(--top-bar-height) - ${bodyHeight}px - 40px - ${marginBottom} )`,
                     }}

@@ -14,7 +14,7 @@ const Stories = ({ all = true }: { all?: boolean }) => {
     const [storyLength, setStoryLength] = useState(0);
     const [storyIndex, setStoryIndex] = useState(0);
     const [storyShowCount, setStoryShowCount] = useState(0);
-    const [isShowModel, setShowModel] = useState(false);
+    const [isShowModal, setShowModal] = useState(false);
     const { stories, user } = useSelector((state: RootState) => state);
 
     const handleClickBtn = (isRightBtn: boolean) =>
@@ -56,7 +56,7 @@ const Stories = ({ all = true }: { all?: boolean }) => {
                         }px`,
                     }}
                 >
-                    <NewStory onClick={() => setShowModel(true)} />
+                    <NewStory onClick={() => setShowModal(true)} />
                     {stories.stories
                         .filter((story) => all || story.user === user._id)
                         .map((story) => (
@@ -89,8 +89,8 @@ const Stories = ({ all = true }: { all?: boolean }) => {
                 </div>
             </div>
             <CreateStory
-                isShowModel={isShowModel}
-                setShowModel={setShowModel}
+                isShowModal={isShowModal}
+                setShowModal={setShowModal}
             />
         </Wrapper>
     );

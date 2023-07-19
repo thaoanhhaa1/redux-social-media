@@ -6,6 +6,7 @@ const vnese =
     'ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ';
 
 const config = {
+    THEME_KEY: 'hoque-darkTheme',
     vneseUpper: vnese,
     vneseLower: vnese.toLowerCase(),
     routes,

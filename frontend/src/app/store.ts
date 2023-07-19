@@ -4,13 +4,11 @@ import followingTweetsReducer from '../features/followingTweets';
 import myTweetReducer from '../features/myTweet';
 import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
-import themeReducer from '../features/theme';
-import userReducer from '../features/user';
 import storiesReducer from '../features/stories';
+import userReducer from '../features/user';
 
 export const store = configureStore({
     reducer: {
-        theme: themeReducer,
         user: userReducer,
         search: searchReducer,
         socket: socketReducer,

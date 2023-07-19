@@ -43,7 +43,7 @@ const Image = ({
     return (
         <img
             ref={imageRef}
-            loading="lazy"
+            loading='lazy'
             className={newClass}
             onError={() => setSrcImage(fallback)}
             src={srcImage}

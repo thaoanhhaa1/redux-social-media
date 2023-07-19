@@ -6,7 +6,7 @@ const StickyBottom = ({ children }: { children: ReactNode }) => {
     const [isBottom, setBottom] = useState(true);
 
     useLayoutEffect(() => {
-        if (ref.current === null) return;
+        if (!ref.current) return;
         const element: HTMLDivElement = ref.current;
         const height = element.clientHeight;
         const screenHeight = window.innerHeight - 95;
@@ -18,7 +18,7 @@ const StickyBottom = ({ children }: { children: ReactNode }) => {
     return (
         <div
             style={{ top: isBottom ? `calc(100vh - ${height}px)` : '95px' }}
-            className="h-fit sticky"
+            className='h-fit sticky'
             ref={ref}
         >
             {children}

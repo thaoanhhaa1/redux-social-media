@@ -93,8 +93,10 @@ module.exports = {
                 'white-03': 'rgba(255,255,255,0.03)',
                 'white-90': 'rgba(255,255,255,0.9)',
                 'white-opacity-10': 'rgba(255,255,255,0.1)',
+                'white-opacity-05': 'rgba(255,255,255,0.05)',
                 'black-100': '#000',
                 'black-opacity-10': 'rgba(0, 0, 0, 0.1)',
+                'black-opacity-05': 'rgba(0, 0, 0, 0.05)',
                 'stroke-icon': '#848183',
             },
             boxShadow: {

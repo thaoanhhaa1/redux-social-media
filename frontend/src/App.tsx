@@ -6,16 +6,18 @@ import axiosClient from './api/axiosClient';
 import { RootState } from './app/store';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import { publicRoutes } from './routes';
+import { useLocalStorage } from 'usehooks-ts';
+import config from './config';
 
 function App() {
     const user = useSelector((state: RootState) => state.user);
-    const theme = useSelector((state: RootState) => state.theme);
+    const [isDarkTheme] = useLocalStorage(config.THEME_KEY, true);
 
     useEffect(() => {
         document
             .getElementsByTagName('html')[0]
-            .classList[theme.isDark ? 'add' : 'remove']('dark');
-    }, [theme.isDark]);
+            .classList[isDarkTheme ? 'add' : 'remove']('dark');
+    }, [isDarkTheme]);
 
     useEffect(() => {
         if (!user._id) return;

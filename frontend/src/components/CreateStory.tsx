@@ -8,57 +8,57 @@ import { useImageUpload } from '../hooks';
 import { classNames, getNameStorage } from '../utils';
 import Button from './Button';
 import { CloseIcon, ImageVideoUploadIcon } from './Icons';
-import Model from './Model';
+import Modal from './Modal';
 import ImageUpload from './imageUpload';
 
 const CreateStory = ({
-    isShowModel,
-    setShowModel,
+    isShowModal,
+    setShowModal,
 }: {
-    isShowModel: boolean;
-    setShowModel: Dispatch<SetStateAction<boolean>>;
+    isShowModal: boolean;
+    setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
     const { user, stories } = useSelector((state: RootState) => state);
     const story = useImageUpload(`${user._id}_${new Date().getTime()}`);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (isShowModel) return;
+        if (isShowModal) return;
         story.setImage('');
         story.setFile(undefined);
         story.image && deleteImage(getNameStorage(story.image));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isShowModel]);
+    }, [isShowModal]);
 
     const handleCreateStory = async () => {
         try {
             await dispatch(createStory(story.image)).unwrap();
             story.setImage('');
-            setShowModel(false);
+            setShowModal(false);
         } catch (error) {
             console.error('🚀 ~ handleCreateStory ~ error:', error);
         }
     };
 
     return (
-        <Model
-            isShowModel={isShowModel}
-            handleCloseModel={() => setShowModel(false)}
+        <Modal
+            isShowModal={isShowModal}
+            handleCloseModal={() => setShowModal(false)}
         >
             <div
                 className={classNames(
-                    'max-w-[555px] w-[80vw] cursor-default ease-out duration-300',
+                    'max-w-[555px] w-[80vw] cursor-default ease-out duration-300 rounded-2.5 overflow-hidden bg-white dark:bg-[#242526]',
                     true ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
-                <div className='flex items-center gap-5 px-5 py-3.75 bg-black-1 dark:bg-dark-black-2'>
+                <div className='relative flex justify-between items-center gap-5 px-5 py-3.75 border-b border-black-opacity-10'>
                     <Button
-                        onClick={() => setShowModel(false)}
-                        className='w-8.5 h-8.5 text-white-3 hover:text-red transition-all'
+                        onClick={() => setShowModal(false)}
+                        className='w-8.5 h-8.5 text-stroke-icon dark:text-white hover:text-red dark:hover:text-red transition-all'
                     >
                         <CloseIcon />
                     </Button>
-                    <div className='-ml-[6px] flex-1 font-semibold text-xl leading-xl text-white'>
+                    <div className='absolute left-0 right-0 -ml-[6px] flex-1 font-semibold text-xl leading-xl text-black text-center dark:text-white'>
                         Create story
                     </div>
                     <Button
@@ -71,7 +71,7 @@ const CreateStory = ({
                         save
                     </Button>
                 </div>
-                <div className='flex justify-center items-center w-full aspect-square bg-white'>
+                <div className='flex justify-center items-center w-full aspect-square'>
                     <ImageUpload
                         image={story}
                         src=''
@@ -81,7 +81,7 @@ const CreateStory = ({
                     </ImageUpload>
                 </div>
             </div>
-        </Model>
+        </Modal>
     );
 };
 

@@ -27,7 +27,7 @@ import { getMonthYear } from '../utils';
 import { useEffectOnce } from 'usehooks-ts';
 
 const Profile = () => {
-    const [isShowModelEditProfile, setShowModelEditProfile] = useState(false);
+    const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
     const { user, socket, myTweet } = useSelector((state: RootState) => state);
     const [isLoading, setLoading] = useState(false);
     const [tweetCount, setTweetCount] = useState(-1);
@@ -36,8 +36,8 @@ const Profile = () => {
     const [whoToFollow, setWhoToFollow] = useState<IUser[]>([]);
     const dispatch = useAppDispatch();
 
-    const handleShowModel = useCallback(
-        () => setShowModelEditProfile((isShowModel) => !isShowModel),
+    const handleShowModal = useCallback(
+        () => setShowModalEditProfile((isShowModal) => !isShowModal),
         [],
     );
 
@@ -82,7 +82,7 @@ const Profile = () => {
         })();
     });
 
-    if (!user._id || isLoading) return <Loading />;
+    if (isLoading) return <Loading />;
 
     return (
         <div className='relative px-5'>
@@ -93,7 +93,7 @@ const Profile = () => {
                 className='aspect-[1163/253] h-auto rounded-2.5'
             />
             <Button
-                onClick={handleShowModel}
+                onClick={handleShowModal}
                 className='!px-5 absolute top-[35px] right-[36px] bg-white dark:bg-dark-black-3 text-black dark:text-white font-medium text-xs leading-xs'
                 large
                 icon={<EditProfileIcon />}
@@ -101,8 +101,8 @@ const Profile = () => {
                 Edit profile
             </Button>
             <EditProfile
-                isShowModel={isShowModelEditProfile}
-                setShowModel={setShowModelEditProfile}
+                isShowModal={isShowModalEditProfile}
+                setShowModal={setShowModalEditProfile}
             />
             <Wrapper
                 isRow

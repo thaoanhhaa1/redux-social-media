@@ -15,7 +15,7 @@ import { classNames, getDateValue, isAdult } from '../utils';
 import getNameStorage from '../utils/getNameStorage';
 import Button from './Button';
 import { CameraIcon, CloseIcon } from './Icons';
-import Model from './Model';
+import Modal from './Modal';
 import ErrorMessage from './form/ErrorMessage';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
@@ -39,11 +39,11 @@ const schema = yup
     .required();
 
 const EditProfile = ({
-    isShowModel,
-    setShowModel,
+    isShowModal,
+    setShowModal,
 }: {
-    isShowModel: boolean;
-    setShowModel: Dispatch<SetStateAction<boolean>>;
+    isShowModal: boolean;
+    setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
     const user = useSelector((state: RootState) => state.user);
     const avatar = useImageUpload(`${user._id}_avatar_${new Date().getTime()}`);
@@ -91,35 +91,35 @@ const EditProfile = ({
             toast.success('Update successfully!');
             background.setImage('');
             avatar.setImage('');
-            setShowModel(false);
+            setShowModal(false);
             await dispatch(fetchUser()).unwrap();
         } catch (error) {}
     };
 
     useEffect(() => {
-        if (isShowModel) return;
+        if (isShowModal) return;
         background.setImage('');
         background.image && deleteImage(getNameStorage(background.image));
         avatar.setImage('');
         avatar.image && deleteImage(getNameStorage(avatar.image));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isShowModel]);
+    }, [isShowModal]);
 
     return (
-        <Model
-            isShowModel={isShowModel}
-            handleCloseModel={() => setShowModel(false)}
+        <Modal
+            isShowModal={isShowModal}
+            handleCloseModal={() => setShowModal(false)}
         >
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className={classNames(
                     'w-[632px] cursor-default ease-out duration-300',
-                    isShowModel ? 'translate-y-0' : '-translate-y-10',
+                    isShowModal ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
                 <div className='flex items-center gap-5 px-5 py-3.75 bg-black-1 dark:bg-dark-black-2'>
                     <Button
-                        onClick={() => setShowModel(false)}
+                        onClick={() => setShowModal(false)}
                         className='w-8.5 h-8.5'
                     >
                         <CloseIcon className='text-white-3' />
@@ -200,7 +200,7 @@ const EditProfile = ({
                     </div>
                 </div>
             </form>
-        </Model>
+        </Modal>
     );
 };
 
