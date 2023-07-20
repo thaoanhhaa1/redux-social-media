@@ -1,5 +1,7 @@
+import IActivity from './IActivity';
 import ICardContext from './ICardContext';
 import IChat from './IChat';
+import IFeeling from './IFeeling';
 import IImageUpload from './IImageUpload';
 import IRoute from './IRoute';
 import IScrollContext from './IScrollContext';
@@ -14,8 +16,10 @@ import IUser from './IUser';
 import IUserTweet from './IUserTweet';
 
 export type {
+    IActivity,
     ICardContext,
     IChat,
+    IFeeling,
     IImageUpload,
     IRoute,
     IScrollContext,

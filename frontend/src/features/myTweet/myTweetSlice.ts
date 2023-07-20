@@ -6,9 +6,15 @@ import api from '../../api';
 const initialState: {
     tweets: ITweet[];
     isLoading: boolean;
+    tag: string;
+    feeling: string;
+    image: string;
 } = {
     tweets: [],
     isLoading: false,
+    tag: '',
+    feeling: '',
+    image: '',
 };
 
 const createTweet = createAsyncThunk(
@@ -37,6 +43,13 @@ const myTweetSlice = createSlice({
         addTweets: (state, { payload }) => {
             state.tweets.push(...payload);
         },
+        setTag: (state, { payload }) => {
+            state.tag = payload;
+        },
+        setFeeling: (state, { payload }) => {
+            state.feeling = payload.feeling;
+            state.image = payload.image;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -49,11 +62,13 @@ const myTweetSlice = createSlice({
             .addCase(createTweet.fulfilled, (state, { payload }) => {
                 state.tweets.unshift(payload);
                 state.isLoading = false;
+                state.tag = '';
+                state.feeling = '';
+                state.image = '';
             });
     },
 });
 
-const { addTweets } = myTweetSlice.actions;
-
 export default myTweetSlice.reducer;
-export { createTweet, addTweets };
+export const { addTweets, setFeeling, setTag } = myTweetSlice.actions;
+export { createTweet };

@@ -2,6 +2,7 @@ import {
     ChangeEvent,
     Dispatch,
     SetStateAction,
+    useCallback,
     useEffect,
     useRef,
     useState,
@@ -13,8 +14,9 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { images } from '../../assets';
+import { CreateTweetProvider } from '../../contexts/CreateTweetContext';
 import { createTweet } from '../../features/myTweet';
-import { ISubTweet } from '../../interfaces';
+import SubProps from '../../types/SubProps';
 import { classNames } from '../../utils';
 import Button from '../Button';
 import Image from '../Image';
@@ -22,10 +24,8 @@ import Modal from '../Modal';
 import Tooltip from '../Tooltip';
 import ActionButton from './ActionButton';
 import AudienceTag from './AudienceTag';
-import { Feeling } from './subTweet';
 import Header from './Header';
-
-type SubProps = ({ handleHiddenSub }: ISubTweet) => JSX.Element;
+import { Feeling } from './subTweet';
 
 interface IAction {
     tooltip: string;
@@ -84,9 +84,9 @@ const CreateTweet = ({
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
         setValue(e.target.value);
 
-    const handleHiddenSub = () => {
+    const handleHiddenSub = useCallback(() => {
         setSub(undefined);
-    };
+    }, []);
     const handleCloseModal = () => {
         setSub(undefined);
         setShowModal(false);
@@ -101,12 +101,7 @@ const CreateTweet = ({
 
         setShowModal(false);
     };
-
-    useEffect(() => {
-        if (!isShowModal) setSub(undefined);
-    }, [isShowModal]);
-
-    useEffect(() => {
+    const handleHeightModal = useCallback(() => {
         if (!sub || !subRef.current) {
             setHeight(0);
             return;
@@ -117,119 +112,146 @@ const CreateTweet = ({
         setHeight(element.offsetHeight);
     }, [sub]);
 
+    useEffect(() => {
+        if (!isShowModal) setSub(undefined);
+    }, [isShowModal]);
+
+    useEffect(() => {
+        handleHeightModal();
+    }, [handleHeightModal, sub]);
+
     return (
         <Modal
             isShowModal={isShowModal}
             handleCloseModal={handleCloseModal}
             className='relative max-w-[500px] w-full'
         >
-            <AnimateHeight
-                duration={200}
-                height={height ? height : 'auto'}
-                className='relative w-full rounded-2.5 bg-white dark:bg-[#242526] cursor-default overflow-hidden'
-            >
-                <div
-                    className={classNames(
-                        'relative transition-transform duration-200',
-                        sub ? '-translate-x-full' : 'translate-x-0',
-                    )}
+            <CreateTweetProvider setSub={setSub}>
+                <AnimateHeight
+                    duration={200}
+                    height={height ? height : 'auto'}
+                    className='relative w-full rounded-2.5 bg-white dark:bg-[#242526] cursor-default overflow-hidden'
                 >
-                    {/* Header */}
-                    <Header onClick={() => setShowModal(false)}>
-                        Create tweet
-                    </Header>
+                    <div
+                        className={classNames(
+                            'relative transition-transform duration-200',
+                            sub ? '-translate-x-full' : 'translate-x-0',
+                        )}
+                    >
+                        {/* Header */}
+                        <Header onClick={() => setShowModal(false)}>
+                            Create tweet
+                        </Header>
 
-                    {/* Body */}
-                    <div>
-                        <div className='p-4 flex items-center gap-[11px]'>
-                            <Image
-                                rounded
-                                className='w-10 h-10'
-                                alt=''
-                                src={user.avatar}
+                        {/* Body */}
+                        <div>
+                            <div className='p-4 flex items-center gap-[11px]'>
+                                <Image
+                                    rounded
+                                    className='w-10 h-10'
+                                    alt=''
+                                    src={user.avatar}
+                                />
+                                <div>
+                                    <div className='flex flex-wrap items-center mb-1 font-semibold text-sm leading-sm text-base-black dark:text-white'>
+                                        {user.name || user.username}
+                                        {myTweet.feeling && ' is'}
+                                        {myTweet.feeling && (
+                                            <>
+                                                <Image
+                                                    alt=''
+                                                    src={myTweet.image}
+                                                    className='w-4 h-4 mx-1'
+                                                />
+                                                {myTweet.tag} {myTweet.feeling}
+                                            </>
+                                        )}
+                                    </div>
+                                    <AudienceTag src={images.onlyMe}>
+                                        Only me
+                                    </AudienceTag>
+                                </div>
+                            </div>
+                            <TextareaAutosize
+                                value={value}
+                                onChange={handleChange}
+                                className={classNames(
+                                    'min-h-[154px] px-4 pt-1 pb-2 w-full max-h-[345px] outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
+                                    value.length > 85
+                                        ? 'text-sm leading-sm'
+                                        : 'text-2xl',
+                                )}
+                                placeholder={`What's on your mind, ${
+                                    (user.name &&
+                                        user.name.split(' ').at(-1)) ||
+                                    user.username
+                                }?`}
                             />
-                            <div>
-                                <div className='mb-1 font-semibold text-sm leading-sm text-base-black dark:text-white'>
-                                    {user.name || user.username}
-                                </div>
-                                <AudienceTag src={images.onlyMe}>
-                                    Only me
-                                </AudienceTag>
-                            </div>
                         </div>
-                        <TextareaAutosize
-                            value={value}
-                            onChange={handleChange}
-                            className={classNames(
-                                'min-h-[154px] px-4 pt-1 pb-2 w-full max-h-[345px] outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
-                                value.length > 85
-                                    ? 'text-sm leading-sm'
-                                    : 'text-2xl',
-                            )}
-                            placeholder={`What's on your mind, ${
-                                (user.name && user.name.split(' ').at(-1)) ||
-                                user.username
-                            }?`}
-                        />
-                    </div>
 
-                    {/* Footer */}
-                    <div className='p-4'>
-                        <div className='p-2 flex justify-between items-center border border-[#CED0D4] rounded-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.1)]'>
-                            <span className='font-semibold text-sm leading-sm text-base-black dark:text-white'>
-                                Add to your tweet
-                            </span>
-                            <div className='flex gap-1'>
-                                {actions.map((action) => (
-                                    <Tooltip
-                                        key={v4()}
-                                        tooltip={action.tooltip}
-                                    >
-                                        <ActionButton
-                                            onClick={() =>
-                                                setSub(() => action.sub)
+                        {/* Footer */}
+                        <div className='p-4'>
+                            <div className='p-2 flex justify-between items-center border border-[#CED0D4] rounded-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.1)]'>
+                                <span className='font-semibold text-sm leading-sm text-base-black dark:text-white'>
+                                    Add to your tweet
+                                </span>
+                                <div className='flex gap-1'>
+                                    {actions.map((action) => (
+                                        <Tooltip
+                                            key={v4()}
+                                            tooltip={action.tooltip}
+                                        >
+                                            <ActionButton
+                                                onClick={() =>
+                                                    setSub(() => action.sub)
+                                                }
+                                                src={action.image}
+                                            />
+                                        </Tooltip>
+                                    ))}
+                                </div>
+                            </div>
+                            <Button
+                                onClick={handleSubmit}
+                                disabled={!value}
+                                isWidthFull
+                                className='mt-4 font-semibold bg-blue text-white'
+                            >
+                                Tweet
+                            </Button>
+                        </div>
+
+                        {/* Loading */}
+                        {myTweet.isLoading && (
+                            <div className='absolute inset-0 bg-black bg-opacity-20 flex justify-center items-center'>
+                                <div className='w-10 h-10 border-4 rounded-full border-blue border-t-transparent animate-spin'></div>
+                            </div>
+                        )}
+                    </div>
+                    <div
+                        className={classNames(
+                            'absolute top-0 left-full w-full transition-transform duration-200',
+                            sub ? '-translate-x-full' : 'translate-x-0',
+                        )}
+                    >
+                        {sub &&
+                            (() => {
+                                const Sub = sub;
+
+                                return (
+                                    <div ref={subRef}>
+                                        <Sub
+                                            handleHeightModal={
+                                                handleHeightModal
                                             }
-                                            src={action.image}
+                                            handleHiddenSub={handleHiddenSub}
                                         />
-                                    </Tooltip>
-                                ))}
-                            </div>
-                        </div>
-                        <Button
-                            onClick={handleSubmit}
-                            disabled={!value}
-                            isWidthFull
-                            className='mt-4 font-semibold bg-blue text-white'
-                        >
-                            Tweet
-                        </Button>
+                                    </div>
+                                );
+                            })()}
                     </div>
-
-                    {/* Loading */}
-                    {myTweet.isLoading && (
-                        <div className='absolute inset-0 bg-black bg-opacity-20 flex justify-center items-center'>
-                            <div className='w-10 h-10 border-4 rounded-full border-blue border-t-transparent animate-spin'></div>
-                        </div>
-                    )}
-                </div>
-                <div
-                    className={classNames(
-                        'absolute top-0 left-full w-full transition-transform duration-200',
-                        sub ? '-translate-x-full' : 'translate-x-0',
-                    )}
-                >
-                    {sub &&
-                        [1].map(() => {
-                            const Sub = sub;
-
-                            return (
-                                <div ref={subRef} key={v4()}>
-                                    <Sub handleHiddenSub={handleHiddenSub} />
-                                </div>
-                            );
-                        })}
-                </div>
-            </AnimateHeight>
+                </AnimateHeight>
+            </CreateTweetProvider>
         </Modal>
     );
 };

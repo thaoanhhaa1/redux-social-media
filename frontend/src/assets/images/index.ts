@@ -10,6 +10,10 @@ const images = {
     blessed: require('./C4yAC7LRNGf.png'),
     loved: require('./qcBQ5HblkNF.png'),
     sad: require('./vAd0CBmjF8Y.png'),
+    celebrating: require('./1eo2SUFgxCj.png'),
+    watching: require('./Qu7tUcfMLQQ.png'),
+    eating: require('./BvSNyY4eWn_.png'),
+    drinking: require('./Nf-5mtmcdkl.png'),
 };
 
 export default images;
