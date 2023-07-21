@@ -1,4 +1,5 @@
 import getDateValue from './getDateValue';
+import getKeyFeeling from './getKeyFeeling';
 import getMonthYear from './getMonthYear';
 import getNameStorage from './getNameStorage';
 import getTime from './getTime';
@@ -13,6 +14,7 @@ const classNames = (...classNameList: (string | boolean)[]): string => {
 export {
     classNames,
     getDateValue,
+    getKeyFeeling,
     getMonthYear,
     getNameStorage,
     getTime,

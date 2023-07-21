@@ -16,6 +16,7 @@ import { RootState } from '../../app/store';
 import { images } from '../../assets';
 import { CreateTweetProvider } from '../../contexts/CreateTweetContext';
 import { createTweet } from '../../features/myTweet';
+import { IActionCreateTweet } from '../../interfaces';
 import SubProps from '../../types/SubProps';
 import { classNames } from '../../utils';
 import Button from '../Button';
@@ -27,37 +28,41 @@ import AudienceTag from './AudienceTag';
 import Header from './Header';
 import { Feeling } from './subTweet';
 
-interface IAction {
-    tooltip: string;
-    image: string;
-    sub: SubProps;
-}
-
-const actions: IAction[] = [
+const actions: IActionCreateTweet[] = [
     {
+        title: '',
         tooltip: 'Photo/Video',
         image: images.image,
         sub: Feeling,
+        backgroundColor: '#E4F0D5',
     },
     {
+        title: '',
         tooltip: 'Tag people',
         image: images.tagPeople,
         sub: Feeling,
+        backgroundColor: '#CAEEF9',
     },
     {
+        title: 'feeling',
         tooltip: 'Feeling/activity',
         image: images.feeling,
         sub: Feeling,
+        backgroundColor: '#FEF2D1',
     },
     {
+        title: '',
         tooltip: 'Check in',
         image: images.checkIn,
         sub: Feeling,
+        backgroundColor: '#FBCCD2',
     },
     {
+        title: '',
         tooltip: 'GIF',
         image: images.gif,
         sub: Feeling,
+        backgroundColor: '#D2F0EA',
     },
     {
         tooltip: 'More',
@@ -118,7 +123,7 @@ const CreateTweet = ({
 
     useEffect(() => {
         handleHeightModal();
-    }, [handleHeightModal, sub]);
+    }, [handleHeightModal, sub, myTweet.tag]);
 
     return (
         <Modal
@@ -132,7 +137,7 @@ const CreateTweet = ({
             >
                 <AnimateHeight
                     duration={200}
-                    height={height ? height : 'auto'}
+                    height={height || 'auto'}
                     className='relative w-full rounded-2.5 bg-white dark:bg-[#242526] cursor-default overflow-hidden'
                 >
                     <div
@@ -216,7 +221,7 @@ const CreateTweet = ({
                                                 onClick={() =>
                                                     setSub(() => action.sub)
                                                 }
-                                                src={action.image}
+                                                action={action}
                                             />
                                         </Tooltip>
                                     ))}

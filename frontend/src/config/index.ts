@@ -1,3 +1,4 @@
+import feelings from './feelings';
 import images from './images';
 import routes from './routes';
 import sidebar from './sidebar';
@@ -12,6 +13,7 @@ const config = {
     routes,
     sidebar,
     images,
+    feelings,
 };
 
 export default config;

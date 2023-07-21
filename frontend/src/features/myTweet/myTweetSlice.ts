@@ -45,7 +45,8 @@ const myTweetSlice = createSlice({
         },
         setTag: (state, { payload }) => {
             state.tag = payload;
-            setFeeling('');
+            state.feeling = '';
+            state.image = '';
         },
         setFeeling: (state, { payload }) => {
             state.feeling = payload.feeling;

@@ -1,4 +1,4 @@
-import IActivity from './IActivity';
+import IActionCreateTweet from './IActionCreateTweet';
 import ICardContext from './ICardContext';
 import IChat from './IChat';
 import IFeeling from './IFeeling';
@@ -16,7 +16,7 @@ import IUser from './IUser';
 import IUserTweet from './IUserTweet';
 
 export type {
-    IActivity,
+    IActionCreateTweet,
     ICardContext,
     IChat,
     IFeeling,

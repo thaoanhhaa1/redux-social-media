@@ -1,22 +1,19 @@
-import { memo, useEffect, useState } from 'react';
+import { ChangeEvent, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { RootState } from '../../../../app/store';
-import { images } from '../../../../assets';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { IFeeling, ISubTweet } from '../../../../interfaces';
+import { ISubTweet } from '../../../../interfaces';
+import { TabFeelingType } from '../../../../types';
 import { classNames } from '../../../../utils';
-import { SearchIcon } from '../../../Icons';
 import Header from '../../Header';
-import Activities from './Activities';
-import FeelingItem from './FeelingItem';
+import ListFeeling from './ListFeeling';
+import Search from './Search';
 import Tab from './Tab';
 import Tag from './Tag';
 
-type TabType = 'Feelings' | 'Activities';
-
 const tabs: {
-    title: TabType;
+    title: TabFeelingType;
 }[] = [
     {
         title: 'Feelings',
@@ -26,35 +23,29 @@ const tabs: {
     },
 ];
 
-const feelings: IFeeling[] = [
-    {
-        image: images.happy,
-        title: 'happy',
-    },
-    {
-        image: images.blessed,
-        title: 'blessed',
-    },
-    {
-        image: images.loved,
-        title: 'loved',
-    },
-    {
-        image: images.sad,
-        title: 'sad',
-    },
-];
-
 const Feeling = ({ handleHiddenSub }: ISubTweet) => {
+    const [value, setValue] = useState('');
     const { handleHeightModal } = useCreateTweet();
     const myTweet = useSelector((state: RootState) => state.myTweet);
-    const [tabActive, setTabActive] = useState<TabType>(() =>
+    const [tabActive, setTabActive] = useState<TabFeelingType>(() =>
         !myTweet.tag || myTweet.tag === 'feeling' ? 'Feelings' : 'Activities',
     );
+
+    const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+    };
 
     useEffect(() => {
         handleHeightModal();
     }, [handleHeightModal, tabActive]);
+
+    useEffect(() => {
+        value || handleHeightModal();
+    }, [handleHeightModal, value]);
+
+    useEffect(() => {
+        setValue('');
+    }, [tabActive, myTweet.tag]);
 
     return (
         <>
@@ -77,30 +68,25 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
 
                 {/* Search */}
                 <div className='flex items-center px-4 py-2 -y-2 gap-2'>
-                    {myTweet.tag && myTweet.tag !== 'feeling' && <Tag />}
-                    <div className='flex flex-1 items-center pl-2.5 bg-[#F0F2F5] rounded-full overflow-hidden'>
-                        <SearchIcon className='text-[#65676b]' />
-                        <input
-                            placeholder='Search'
-                            type='text'
-                            className='flex-1 p-1.5 bg-[#F0F2F5] border-none outline-none text-[#050505] placeholder:text-[#65676b]'
-                        />
-                    </div>
+                    {tabActive === 'Activities' &&
+                        myTweet.tag &&
+                        myTweet.tag !== 'feeling' && <Tag />}
+                    <Search
+                        value={value}
+                        handleChangeSearch={handleChangeSearch}
+                    />
                 </div>
 
                 {/* Tab */}
                 <div
                     className={classNames(
-                        'p-2 grid',
+                        'relative p-2 grid',
                         tabActive === 'Feelings'
                             ? 'grid-cols-2'
                             : 'grid-cols-1',
                     )}
                 >
-                    {(tabActive === 'Feelings' &&
-                        feelings.map((feeling) => (
-                            <FeelingItem key={v4()} feeling={feeling} />
-                        ))) || <Activities />}
+                    <ListFeeling tabActive={tabActive} value={value} />
                 </div>
             </div>
         </>

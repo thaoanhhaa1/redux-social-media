@@ -3,11 +3,11 @@ import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { setFeeling } from '../../../../features/myTweet';
-import { IActivity } from '../../../../interfaces';
+import { IFeeling } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
 
-const ActivityDetail = ({ activity }: { activity: IActivity }) => {
+const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
     const { setSub, handleHeightModal } = useCreateTweet();
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const dispatch = useAppDispatch();
@@ -15,8 +15,8 @@ const ActivityDetail = ({ activity }: { activity: IActivity }) => {
     const handleClick = () => {
         dispatch(
             setFeeling({
-                feeling: activity.title,
-                image: activity.image,
+                feeling: feeling.title,
+                image: feeling.image,
             }),
         );
         setSub(undefined);
@@ -28,11 +28,11 @@ const ActivityDetail = ({ activity }: { activity: IActivity }) => {
             onClick={handleClick}
             className={classNames(
                 'flex items-center gap-3 p-1.5 rounded-lg hover:bg-black-opacity-05 transition-all cursor-pointer',
-                myTweet.feeling === activity.title ? 'bg-black-opacity-05' : '',
+                myTweet.feeling === feeling.title ? 'bg-black-opacity-05' : '',
             )}
         >
-            <Image alt='' src={activity.image} className='w-[50px] h-[50px]' />
-            <span>{activity.title}</span>
+            <Image alt='' src={feeling.image} className='w-[50px] h-[50px]' />
+            <span>{feeling.title}</span>
         </div>
     );
 };
