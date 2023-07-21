@@ -1905,3 +1905,22 @@ export const LockCloseIcon = ({ className }: { className?: string }) => (
         />
     </svg>
 );
+
+export const XMarkIcon = ({ className }: { className?: string }) => (
+    <svg
+        xmlns='http://www.w3.org/2000/svg'
+        fill='none'
+        viewBox='0 0 24 24'
+        strokeWidth={1.5}
+        stroke='currentColor'
+        width={12}
+        height={12}
+        className={className}
+    >
+        <path
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M6 18L18 6M6 6l12 12'
+        />
+    </svg>
+);

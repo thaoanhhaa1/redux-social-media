@@ -14,6 +14,10 @@ const images = {
     watching: require('./Qu7tUcfMLQQ.png'),
     eating: require('./BvSNyY4eWn_.png'),
     drinking: require('./Nf-5mtmcdkl.png'),
+    friendship: require('./5ooeZJWLOSl.png'),
+    aBirthday: require('./Q5DAVMG-eCj.png'),
+    yourSpecialDay: require('./Lt9KbIk9NFp.png'),
+    birthdays: require('./Q5DAVMG-eCj.png'),
 };
 
 export default images;

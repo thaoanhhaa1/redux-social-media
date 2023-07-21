@@ -1,13 +1,17 @@
 import { memo, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
+import { RootState } from '../../../../app/store';
 import { images } from '../../../../assets';
-import { IActivity, IFeeling, ISubTweet } from '../../../../interfaces';
+import useCreateTweet from '../../../../contexts/CreateTweetContext';
+import { IFeeling, ISubTweet } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import { SearchIcon } from '../../../Icons';
 import Header from '../../Header';
-import ActivityItem from './ActivityItem';
+import Activities from './Activities';
 import FeelingItem from './FeelingItem';
 import Tab from './Tab';
+import Tag from './Tag';
 
 type TabType = 'Feelings' | 'Activities';
 
@@ -41,30 +45,12 @@ const feelings: IFeeling[] = [
     },
 ];
 
-const activities: Array<IActivity> = [
-    {
-        title: 'Celebrating',
-        image: images.celebrating,
-    },
-    {
-        title: 'Watching',
-        image: images.watching,
-    },
-    {
-        title: 'Eating',
-        image: images.eating,
-    },
-    {
-        title: 'Drinking',
-        image: images.drinking,
-    },
-];
-
-const Feeling = ({
-    handleHiddenSub,
-    handleHeightModal = () => {},
-}: ISubTweet) => {
-    const [tabActive, setTabActive] = useState<TabType>('Feelings');
+const Feeling = ({ handleHiddenSub }: ISubTweet) => {
+    const { handleHeightModal } = useCreateTweet();
+    const myTweet = useSelector((state: RootState) => state.myTweet);
+    const [tabActive, setTabActive] = useState<TabType>(() =>
+        !myTweet.tag || myTweet.tag === 'feeling' ? 'Feelings' : 'Activities',
+    );
 
     useEffect(() => {
         handleHeightModal();
@@ -90,13 +76,14 @@ const Feeling = ({
                 </div>
 
                 {/* Search */}
-                <div className='px-4 py-2 -y-2'>
-                    <div className='flex items-center pl-2.5 bg-[#F0F2F5] rounded-full overflow-hidden'>
+                <div className='flex items-center px-4 py-2 -y-2 gap-2'>
+                    {myTweet.tag && myTweet.tag !== 'feeling' && <Tag />}
+                    <div className='flex flex-1 items-center pl-2.5 bg-[#F0F2F5] rounded-full overflow-hidden'>
                         <SearchIcon className='text-[#65676b]' />
                         <input
                             placeholder='Search'
                             type='text'
-                            className='flex-1 px-[6px] py-2 bg-[#F0F2F5] border-none outline-none text-[#050505] placeholder:text-[#65676b]'
+                            className='flex-1 p-1.5 bg-[#F0F2F5] border-none outline-none text-[#050505] placeholder:text-[#65676b]'
                         />
                     </div>
                 </div>
@@ -113,10 +100,7 @@ const Feeling = ({
                     {(tabActive === 'Feelings' &&
                         feelings.map((feeling) => (
                             <FeelingItem key={v4()} feeling={feeling} />
-                        ))) ||
-                        activities.map((activity) => (
-                            <ActivityItem activity={activity} key={v4()} />
-                        ))}
+                        ))) || <Activities />}
                 </div>
             </div>
         </>

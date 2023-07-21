@@ -13,22 +13,27 @@ const CreateTweetContext = createContext({
     setSub: (
         sub:
             | MemoExoticComponent<
-                  ({
-                      handleHiddenSub,
-                      handleHeightModal,
-                  }: ISubTweet) => JSX.Element
+                  ({ handleHiddenSub }: ISubTweet) => JSX.Element
               >
             | undefined,
     ) => {},
+    handleHeightModal: () => {},
 });
 
 function CreateTweetProvider({
     setSub,
+    handleHeightModal,
     ...props
 }: {
     setSub: Dispatch<SetStateAction<SubProps | undefined>>;
+    handleHeightModal: () => void;
 } & PropsWithChildren) {
-    return <CreateTweetContext.Provider value={{ setSub }} {...props} />;
+    return (
+        <CreateTweetContext.Provider
+            value={{ setSub, handleHeightModal }}
+            {...props}
+        />
+    );
 }
 
 function useCreateTweet() {

@@ -126,7 +126,10 @@ const CreateTweet = ({
             handleCloseModal={handleCloseModal}
             className='relative max-w-[500px] w-full'
         >
-            <CreateTweetProvider setSub={setSub}>
+            <CreateTweetProvider
+                setSub={setSub}
+                handleHeightModal={handleHeightModal}
+            >
                 <AnimateHeight
                     duration={200}
                     height={height ? height : 'auto'}
@@ -163,7 +166,15 @@ const CreateTweet = ({
                                                     src={myTweet.image}
                                                     className='w-4 h-4 mx-1'
                                                 />
-                                                {myTweet.tag} {myTweet.feeling}
+                                                {myTweet.tag}
+                                                <span
+                                                    onClick={() =>
+                                                        setSub(Feeling)
+                                                    }
+                                                    className='ml-1 cursor-pointer hover:underline'
+                                                >
+                                                    {myTweet.feeling}
+                                                </span>
                                             </>
                                         )}
                                     </div>
@@ -241,9 +252,6 @@ const CreateTweet = ({
                                 return (
                                     <div ref={subRef}>
                                         <Sub
-                                            handleHeightModal={
-                                                handleHeightModal
-                                            }
                                             handleHiddenSub={handleHiddenSub}
                                         />
                                     </div>
