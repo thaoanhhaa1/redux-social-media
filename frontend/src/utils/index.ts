@@ -1,24 +1,14 @@
-import getDateValue from './getDateValue';
-import getKeyFeeling from './getKeyFeeling';
-import getMonthYear from './getMonthYear';
-import getNameStorage from './getNameStorage';
-import getTime from './getTime';
-import getTimeString from './getTimeString';
-import isAdult from './isAdult';
-import numberShow from './numberShow';
+export { default as getDateValue } from './getDateValue';
+export { default as getKeyFeeling } from './getKeyFeeling';
+export { default as getMonthYear } from './getMonthYear';
+export { default as getNameStorage } from './getNameStorage';
+export { default as getTime } from './getTime';
+export { default as getTimeString } from './getTimeString';
+export { default as isAdult } from './isAdult';
+export { default as numberShow } from './numberShow';
 
-const classNames = (...classNameList: (string | boolean)[]): string => {
+export const classNames = (
+    ...classNameList: (string | boolean | undefined)[]
+): string => {
     return classNameList.filter((className) => !!className).join(' ');
-};
-
-export {
-    classNames,
-    getDateValue,
-    getKeyFeeling,
-    getMonthYear,
-    getNameStorage,
-    getTime,
-    getTimeString,
-    isAdult,
-    numberShow,
 };

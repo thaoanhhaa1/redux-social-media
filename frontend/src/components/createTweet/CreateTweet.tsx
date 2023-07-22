@@ -26,7 +26,8 @@ import Tooltip from '../Tooltip';
 import ActionButton from './ActionButton';
 import AudienceTag from './AudienceTag';
 import Header from './Header';
-import { Feeling } from './subTweet';
+import LinkAction from './LinkAction';
+import { Feeling, Locations } from './subTweet';
 
 const actions: IActionCreateTweet[] = [
     {
@@ -51,10 +52,10 @@ const actions: IActionCreateTweet[] = [
         backgroundColor: '#FEF2D1',
     },
     {
-        title: '',
+        title: 'location',
         tooltip: 'Check in',
         image: images.checkIn,
-        sub: Feeling,
+        sub: Locations,
         backgroundColor: '#FBCCD2',
     },
     {
@@ -163,24 +164,23 @@ const CreateTweet = ({
                                 <div>
                                     <div className='flex flex-wrap items-center mb-1 font-semibold text-sm leading-sm text-base-black dark:text-white'>
                                         {user.name || user.username}
-                                        {myTweet.feeling && ' is'}
+                                        {(myTweet.feeling ||
+                                            myTweet.location) &&
+                                            ' is'}
                                         {myTweet.feeling && (
-                                            <>
-                                                <Image
-                                                    alt=''
-                                                    src={myTweet.image}
-                                                    className='w-4 h-4 mx-1'
-                                                />
-                                                {myTweet.tag}
-                                                <span
-                                                    onClick={() =>
-                                                        setSub(Feeling)
-                                                    }
-                                                    className='ml-1 cursor-pointer hover:underline'
-                                                >
-                                                    {myTweet.feeling}
-                                                </span>
-                                            </>
+                                            <LinkAction
+                                                image={myTweet.image}
+                                                sub={Feeling}
+                                                tag={myTweet.tag}
+                                                title={myTweet.feeling}
+                                            />
+                                        )}
+                                        {myTweet.location && (
+                                            <LinkAction
+                                                sub={Locations}
+                                                tag='in'
+                                                title={myTweet.location.title}
+                                            />
                                         )}
                                     </div>
                                     <AudienceTag src={images.onlyMe}>

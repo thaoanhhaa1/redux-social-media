@@ -15,6 +15,7 @@ const api = {
     editProfile: () => '/private/users/edit-profile',
     search: (param: String) => `/private/search/${param}`,
     updateOnlineStatus: () => '/private/online-status',
+    getLocations: () => '/private/locations',
     signUp: () => '/auth/sign-up',
     signIn: () => '/auth/sign-in',
 };

@@ -1,15 +1,16 @@
-import { ChangeEvent, memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
+import { useSearch } from '../../../../hooks';
 import { ISubTweet } from '../../../../interfaces';
 import { TabFeelingType } from '../../../../types';
 import { classNames } from '../../../../utils';
 import Header from '../../Header';
+import Search from '../Search';
 import Wrapper from '../Wrapper';
 import ListFeeling from './ListFeeling';
-import Search from './Search';
 import Tab from './Tab';
 import Tag from './Tag';
 
@@ -25,16 +26,12 @@ const tabs: {
 ];
 
 const Feeling = ({ handleHiddenSub }: ISubTweet) => {
-    const [value, setValue] = useState('');
+    const { value, setValue, handleChangeSearch } = useSearch();
     const { handleHeightModal } = useCreateTweet();
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const [tabActive, setTabActive] = useState<TabFeelingType>(() =>
         !myTweet.tag || myTweet.tag === 'feeling' ? 'Feelings' : 'Activities',
     );
-
-    const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
-    };
 
     useEffect(() => {
         handleHeightModal();
@@ -46,7 +43,7 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
 
     useEffect(() => {
         setValue('');
-    }, [tabActive, myTweet.tag]);
+    }, [tabActive, myTweet.tag, setValue]);
 
     return (
         <>

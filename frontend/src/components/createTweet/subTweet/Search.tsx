@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { SearchIcon } from '../../../Icons';
+import { SearchIcon } from '../../Icons';
 
 const Search = ({
     value,

@@ -1,2 +1,2 @@
 export { default as Feeling } from './feeling';
-export { default as Location } from './Location';
+export { default as Locations } from './location';
