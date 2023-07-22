@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import ScrollbarCustomize from './ScrollbarCustomize';
 
 const Page = ({
     children,
@@ -18,16 +19,26 @@ const Page = ({
                     {children}
                 </div>
             </div>
-            <div
+            <ScrollbarCustomize
                 style={{
                     width: scrollWidth,
                     minHeight: scrollHeight,
                     top: '95px',
                 }}
-                className='flex flex-col gap-5 max-h-0 sticky overflow-y-auto pb-5'
+                className='flex flex-col gap-5 max-h-0 overflow-y-auto pb-5'
             >
                 {scrollChildren}
-            </div>
+            </ScrollbarCustomize>
+            {/* <div
+                style={{
+                    width: scrollWidth,
+                    minHeight: scrollHeight,
+                    top: '95px',
+                }}
+                className='scrollbar flex flex-col gap-5 max-h-0 sticky overflow-y-auto pb-5'
+            >
+                {scrollChildren}
+            </div> */}
         </div>
     );
 };
