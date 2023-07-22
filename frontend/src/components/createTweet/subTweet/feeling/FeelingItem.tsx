@@ -11,15 +11,19 @@ const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const dispatch = useAppDispatch();
     const { setSub } = useCreateTweet();
+    const isActive = feeling.title === myTweet.feeling;
 
     const handleClick = () => {
-        dispatch(setTag('feeling'));
-        dispatch(
-            setFeeling({
-                feeling: feeling.title,
-                image: feeling.image,
-            }),
-        );
+        if (isActive) dispatch(setTag(''));
+        else {
+            dispatch(setTag('feeling'));
+            dispatch(
+                setFeeling({
+                    feeling: feeling.title,
+                    image: feeling.image,
+                }),
+            );
+        }
         setSub(undefined);
     };
 
@@ -28,7 +32,7 @@ const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
             onClick={handleClick}
             className={classNames(
                 'flex items-center gap-3 p-2 hover:bg-[rgba(68,73,80,0.15)] transition-all rounded-lg cursor-pointer',
-                feeling.title === myTweet.feeling && 'bg-black-opacity-05',
+                isActive && 'bg-black-opacity-05',
             )}
         >
             <div className='flex-shrink-0 p-2 bg-[#E4E6EB] rounded-full'>

@@ -44,7 +44,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
             <Sidebar />
             <div className='flex-1 w-[calc(100vw_-_var(--home-sidebar-width))]'>
                 <TopBar />
-                <div className='w-full min-h-screen pt-[calc(var(--top-bar-height)+20px)] bg-white-1 dark:bg-dark-black-1'>
+                <div className='w-full min-h-[100vh_-_var(--top-bar-height)] pt-5 bg-white-1 dark:bg-dark-black-1'>
                     {children}
                 </div>
             </div>

@@ -9,7 +9,6 @@ import { TabFeelingType } from '../../../../types';
 import { classNames } from '../../../../utils';
 import Header from '../../Header';
 import Search from '../Search';
-import Wrapper from '../Wrapper';
 import ListFeeling from './ListFeeling';
 import Tab from './Tab';
 import Tag from './Tag';
@@ -76,18 +75,16 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
                 </div>
 
                 {/* Tab */}
-                <Wrapper>
-                    <div
-                        className={classNames(
-                            'relative p-2 grid',
-                            tabActive === 'Feelings'
-                                ? 'grid-cols-2'
-                                : 'grid-cols-1',
-                        )}
-                    >
-                        <ListFeeling tabActive={tabActive} value={value} />
-                    </div>
-                </Wrapper>
+                <div
+                    className={classNames(
+                        'relative min-h-[80px] p-2 grid',
+                        tabActive === 'Feelings'
+                            ? 'grid-cols-2'
+                            : 'grid-cols-1',
+                    )}
+                >
+                    <ListFeeling tabActive={tabActive} value={value} />
+                </div>
             </div>
         </>
     );

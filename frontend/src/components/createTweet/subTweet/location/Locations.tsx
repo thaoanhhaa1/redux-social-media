@@ -9,7 +9,6 @@ import { useSearch } from '../../../../hooks';
 import { ILocation, ISubTweet } from '../../../../interfaces';
 import Header from '../../Header';
 import Search from '../Search';
-import Wrapper from '../Wrapper';
 import Location from './Location';
 
 const Locations = ({ handleHiddenSub }: ISubTweet) => {
@@ -54,29 +53,26 @@ const Locations = ({ handleHiddenSub }: ISubTweet) => {
             <div className='px-4 h-[52px] flex items-center'>
                 <Search value={value} handleChangeSearch={handleChangeSearch} />
             </div>
-            <Wrapper>
-                <div className='p-2'>
-                    {isLoading && (
-                        <div className='w-10 h-10 border-4 border-blue border-t-transparent animate-spin rounded-full mx-auto'></div>
-                    )}
-                    {!isLoading && locations.length === 0 && (
-                        <p className='text-center text-sm leading-sm text-[#65676B]'>
-                            No locations to show
-                        </p>
-                    )}
-                    {!isLoading && locations.length > 0 && locationState && (
-                        <Location location={locationState} key={v4()} />
-                    )}
-                    {!isLoading &&
-                        locations.length > 0 &&
-                        locations.map((location) => {
-                            if (location.title === locationState?.title)
-                                return '';
+            <div className='p-2'>
+                {isLoading && (
+                    <div className='w-10 h-10 border-4 border-blue border-t-transparent animate-spin rounded-full mx-auto'></div>
+                )}
+                {!isLoading && locations.length === 0 && (
+                    <p className='text-center text-sm leading-sm text-[#65676B]'>
+                        No locations to show
+                    </p>
+                )}
+                {!isLoading && locations.length > 0 && locationState && (
+                    <Location location={locationState} key={v4()} />
+                )}
+                {!isLoading &&
+                    locations.length > 0 &&
+                    locations.map((location) => {
+                        if (location.title === locationState?.title) return '';
 
-                            return <Location location={location} key={v4()} />;
-                        })}
-                </div>
-            </Wrapper>
+                        return <Location location={location} key={v4()} />;
+                    })}
+            </div>
         </>
     );
 };

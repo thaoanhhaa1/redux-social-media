@@ -8,7 +8,7 @@ const TopBar = () => {
     const user = useSelector((state: RootState) => state.user);
 
     return (
-        <div className='z-40 fixed top-0 right-0 left-[var(--sidebar-left-width)] h-[var(--top-bar-height)] px-5 flex items-center justify-between bg-white dark:bg-dark-black-2 shadow-container dark:shadow-none'>
+        <div className='z-40 sticky top-0 right-0 left-[var(--sidebar-left-width)] h-[var(--top-bar-height)] px-5 flex items-center justify-between bg-white dark:bg-dark-black-2 shadow-container dark:shadow-none'>
             <Search />
             <div className='flex items-center gap-2.5'>
                 <Image className='w-10 h-10' rounded src={user.avatar} alt='' />
