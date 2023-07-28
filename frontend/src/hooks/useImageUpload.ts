@@ -37,6 +37,7 @@ function useImageUpload(avatarName: string): IImageUpload {
 
         return () => {
             URL.revokeObjectURL(tempImage);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             imageRef.current?.removeEventListener('load', handleLoading);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -17,7 +17,8 @@
 }
 
 body {
-    @apply text-black dark:text-white leading-base overflow-x-hidden font-base;
+    text-rendering: optimizespeed;
+    @apply text-black dark:text-white leading-base overflow-x-hidden font-base select-none;
 }
 
 .bg-blue-blue-white-4 {

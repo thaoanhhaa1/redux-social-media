@@ -230,6 +230,9 @@ module.exports = {
             zIndex: {
                 1: 1,
             },
+            transitionDelay: {
+                0: '0ms',
+            },
         },
         screens: {
             dl: '896px',
