@@ -3,6 +3,7 @@ import {
     MouseEvent,
     ReactNode,
     UIEvent,
+    useCallback,
     useEffect,
     useRef,
     useState,
@@ -10,6 +11,18 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { classNames } from '../utils';
+
+function getScroll(
+    elementRef: never,
+    e: UIEvent<HTMLDivElement> | MouseEvent<HTMLDivElement>,
+) {
+    const element = elementRef as HTMLDivElement;
+    const elementTrack = e.target as HTMLDivElement;
+    const top = element.getBoundingClientRect().top;
+    const clientY = (e as MouseEvent<HTMLDivElement>).clientY;
+
+    return { element, elementTrack, top, clientY };
+}
 
 const ScrollbarCustomize = ({
     className = '',
@@ -25,25 +38,24 @@ const ScrollbarCustomize = ({
     const [scrollHeight, setScrollHeight] = useState(0);
     const [scrollThumbHeight, setScrollThumbHeight] = useState(0);
     const [scrollThumbTop, setScrollThumbTop] = useState(0);
-    const contacts = useSelector((state: RootState) => state.contacts);
     const [selectThumb, setSelectThumb] = useState(false);
     const [selectClientY, setSelectClientY] = useState(0);
+    const [top, setTop] = useState(0);
+    const contacts = useSelector((state: RootState) => state.contacts);
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        const element = e.target as HTMLDivElement;
-        const elementScroll: HTMLDivElement = ref.current;
-        const scrollTop = element.scrollTop;
+        const { element, elementTrack } = getScroll(ref.current, e);
+        const scrollTop = elementTrack.scrollTop;
 
-        elementScroll.scrollTop = scrollTop;
-        setScrollThumbTop((element.scrollTop * offsetHeight) / scrollHeight);
+        elementTrack.scrollTop = scrollTop;
+        element.scrollTop = scrollTop;
+        setScrollThumbTop((scrollTop * offsetHeight) / scrollHeight);
     };
 
     const handleClickTrack = (e: MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        const elementTrack = e.target as HTMLDivElement;
-        const element: HTMLDivElement = ref.current;
-        const top = element.getBoundingClientRect().top;
+        const { element, elementTrack, top } = getScroll(ref.current, e);
         const positionClick = e.clientY - top;
         let scrollThumbTopNew;
 
@@ -56,15 +68,14 @@ const ScrollbarCustomize = ({
             );
         else return;
 
-        element.scrollTop = (scrollThumbTopNew * scrollHeight) / offsetHeight;
-        elementTrack.scrollTop =
-            (scrollThumbTopNew * scrollHeight) / offsetHeight;
+        const scroll = (scrollThumbTopNew * scrollHeight) / offsetHeight;
+        element.scrollTop = scroll;
+        elementTrack.scrollTop = scroll;
     };
 
     const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
         if (!ref.current) return;
-        const element: HTMLDivElement = ref.current;
-        const top = element.getBoundingClientRect().top;
+        const { top } = getScroll(ref.current, e);
         const positionClick = e.clientY - top;
 
         if (
@@ -73,17 +84,14 @@ const ScrollbarCustomize = ({
         ) {
             setSelectThumb(true);
             setSelectClientY(e.clientY);
+            setTop(scrollThumbTop);
         }
     };
 
-    useEffect(() => {
-        const handleMouseUp = () => {
-            setSelectThumb(false);
-        };
-
-        const handleMouseMove = (e: globalThis.MouseEvent) => {
+    const handleMouseMove = useCallback(
+        (e: globalThis.MouseEvent) => {
             if (!ref.current) return;
-            let scroll = e.clientY - selectClientY;
+            let scroll = e.clientY - selectClientY + top;
             const elementTrack = e.target as HTMLDivElement;
             const element: HTMLDivElement = ref.current;
 
@@ -91,26 +99,26 @@ const ScrollbarCustomize = ({
             else if (scroll > offsetHeight - scrollThumbHeight)
                 scroll = offsetHeight - scrollThumbHeight;
 
-            element.scrollTop = (scroll * scrollHeight) / offsetHeight;
-            elementTrack.scrollTop = (scroll * scrollHeight) / offsetHeight;
-        };
+            const scrollFit = (scroll * scrollHeight) / offsetHeight;
+            element.scrollTop = scrollFit;
+            elementTrack.scrollTop = scrollFit;
+        },
+        [offsetHeight, scrollHeight, scrollThumbHeight, selectClientY, top],
+    );
+
+    useEffect(() => {
+        const handleMouseUp = () => setSelectThumb(false);
 
         if (selectThumb) {
-            document.body.addEventListener('mouseup', handleMouseUp);
-            document.body.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+            window.addEventListener('mousemove', handleMouseMove);
         }
 
         return () => {
-            document.body.removeEventListener('mouseup', handleMouseUp);
-            document.body.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('mousemove', handleMouseMove);
         };
-    }, [
-        offsetHeight,
-        scrollHeight,
-        scrollThumbHeight,
-        selectClientY,
-        selectThumb,
-    ]);
+    }, [handleMouseMove, selectThumb]);
 
     useEffect(() => {
         if (!ref.current) return;
@@ -140,6 +148,7 @@ const ScrollbarCustomize = ({
                         onClick={handleClickTrack}
                         onScroll={handleScroll}
                         onMouseDown={handleMouseDown}
+                        style={{ height: `${offsetHeight}px` }}
                         className='scrollbar scrollbar--track overflow-auto absolute right-0 top-0 bottom-0 w-4 bg-[#CED0D4] bg-opacity-0 hover:bg-opacity-30 ease-linear duration-300'
                     >
                         <div
@@ -153,7 +162,7 @@ const ScrollbarCustomize = ({
                             top: `${scrollThumbTop}px`,
                         }}
                         className={classNames(
-                            'pointer-events-none scrollbar--thumb absolute top-0 right-0 px-1 w-4 h-4 opacity-0 group-hover/scrollbar:opacity-100 group-hover/scrollbar:delay-0 delay-500 duration-100 transition-opacity ease-linear',
+                            'pointer-events-none select-none scrollbar--thumb absolute top-0 right-0 px-1 w-4 h-4 opacity-0 group-hover/scrollbar:opacity-100 group-hover/scrollbar:delay-0 delay-500 duration-100 transition-opacity ease-linear',
                             selectThumb && '!opacity-100',
                         )}
                     >
