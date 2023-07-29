@@ -27,8 +27,12 @@ const CreateStory = ({
         story.setImage('');
         story.setFile(undefined);
         story.image && deleteImage(getNameStorage(story.image));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isShowModal]);
+
+        return () => {
+            if (!isShowModal && story.image)
+                deleteImage(getNameStorage(story.image));
+        };
+    }, [isShowModal, story]);
 
     const handleCreateStory = async () => {
         try {
@@ -47,14 +51,14 @@ const CreateStory = ({
         >
             <div
                 className={classNames(
-                    'max-w-[555px] w-[80vw] cursor-default ease-out duration-300 rounded-2.5 overflow-hidden bg-white dark:bg-[#242526]',
+                    'max-w-[555px] w-[calc(100vw-16px)] xxs:w-[80vw] cursor-default ease-out duration-300 rounded-2.5 overflow-hidden bg-white dark:bg-[#242526]',
                     true ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
-                <div className='relative flex justify-between items-center gap-5 px-5 py-3.75 border-b border-black-opacity-10'>
+                <div className='relative flex justify-between items-center gap-5 px-2 xxs:px-5 py-2 xxs:py-3.75 border-b border-black-opacity-10'>
                     <Button
                         onClick={() => setShowModal(false)}
-                        className='w-8.5 h-8.5 text-stroke-icon dark:text-white hover:text-red dark:hover:text-red transition-all'
+                        className='z-1 w-8.5 h-8.5 text-stroke-icon dark:text-white hover:text-red dark:hover:text-red transition-all'
                     >
                         <CloseIcon />
                     </Button>
@@ -66,7 +70,7 @@ const CreateStory = ({
                         onClick={handleCreateStory}
                         disabled={story.isLoading || !story.image}
                         type='submit'
-                        className='w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
+                        className='z-1 w-[80px] xxs:w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
                     >
                         save
                     </Button>

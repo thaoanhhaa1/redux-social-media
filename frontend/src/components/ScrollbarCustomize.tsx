@@ -26,10 +26,12 @@ function getScroll(
 
 const ScrollbarCustomize = ({
     className = '',
+    containerClassName = '',
     style = {},
     children,
 }: {
     className?: string;
+    containerClassName?: string;
     style?: CSSProperties;
     children: ReactNode;
 }) => {
@@ -133,7 +135,12 @@ const ScrollbarCustomize = ({
     }, [contacts]);
 
     return (
-        <div className='relative group/scrollbar'>
+        <div
+            className={classNames(
+                'relative group/scrollbar',
+                containerClassName,
+            )}
+        >
             <div
                 ref={ref}
                 onScroll={handleScroll}

@@ -43,7 +43,7 @@ const Card = ({
         <CardProvider value={{ user, tweet }}>
             <Wrapper
                 ref={ref as Ref<HTMLDivElement> | undefined}
-                className={classNames('card p-5', className)}
+                className={classNames('card p-2 xxs:p-5', className)}
             >
                 <CardProfile />
                 <CardInformation />

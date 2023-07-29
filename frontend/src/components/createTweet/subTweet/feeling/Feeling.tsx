@@ -64,7 +64,7 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
                 </div>
 
                 {/* Search */}
-                <div className='flex items-center px-4 py-2 -y-2 gap-2'>
+                <div className='flex items-center px-2 xxs:px-4 py-2 -y-2 gap-2'>
                     {tabActive === 'Activities' &&
                         myTweet.tag &&
                         myTweet.tag !== 'feeling' && <Tag />}

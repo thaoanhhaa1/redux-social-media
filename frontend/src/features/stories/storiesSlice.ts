@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IStories } from '../../interfaces';
+import { v4 } from 'uuid';
 
 const initialState: IStories = {
     stories: [],
@@ -41,7 +42,12 @@ const storiesSlice = createSlice({
             })
             .addCase(createStory.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
-                state.stories.unshift(payload);
+                state.stories.unshift({
+                    _id: v4(),
+                    createdAt: '',
+                    story: payload,
+                    user: '',
+                });
             })
             .addCase(getStories.pending, (state) => {
                 state.isLoading = true;

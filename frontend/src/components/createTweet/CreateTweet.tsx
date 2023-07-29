@@ -130,7 +130,7 @@ const CreateTweet = ({
         <Modal
             isShowModal={isShowModal}
             handleCloseModal={handleCloseModal}
-            className='relative max-w-[500px] w-full'
+            className='relative max-w-[500px] w-[calc(100vw-16px)]'
         >
             <CreateTweetProvider
                 setSub={setSub}
@@ -156,7 +156,7 @@ const CreateTweet = ({
 
                                 {/* Body */}
                                 <div>
-                                    <div className='p-4 flex items-center gap-[11px]'>
+                                    <div className='p-2 xxxs:p-4 flex items-center gap-[11px]'>
                                         <Image
                                             rounded
                                             className='w-10 h-10'
@@ -197,10 +197,10 @@ const CreateTweet = ({
                                         value={value}
                                         onChange={handleChange}
                                         className={classNames(
-                                            'min-h-[154px] px-4 pt-1 pb-2 w-full max-h-[345px] outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
+                                            'min-h-[154px] px-2 xxxs:px-4 pt-1 pb-2 w-full max-h-[345px] outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
                                             value.length > 85
                                                 ? 'text-sm leading-sm'
-                                                : 'text-2xl',
+                                                : 'text-sm leading-sm xxs:text-2xl',
                                         )}
                                         placeholder={`What's on your mind, ${
                                             (user.name &&
@@ -211,27 +211,20 @@ const CreateTweet = ({
                                 </div>
 
                                 {/* Footer */}
-                                <div className='p-4'>
+                                <div className='p-2 xxs:p-4'>
                                     <div className='p-2 flex justify-between items-center border border-[#CED0D4] rounded-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.1)]'>
-                                        <span className='font-semibold text-sm leading-sm text-base-black dark:text-white'>
+                                        <span className='hidden xxxs:block font-semibold text-sm leading-sm text-base-black dark:text-white'>
                                             Add to your tweet
                                         </span>
                                         <div className='flex gap-1'>
                                             {actions.map((action) => (
-                                                <Tooltip
+                                                <ActionButton
                                                     key={v4()}
-                                                    tooltip={action.tooltip}
-                                                >
-                                                    <ActionButton
-                                                        onClick={() =>
-                                                            setSub(
-                                                                () =>
-                                                                    action.sub,
-                                                            )
-                                                        }
-                                                        action={action}
-                                                    />
-                                                </Tooltip>
+                                                    onClick={() =>
+                                                        setSub(() => action.sub)
+                                                    }
+                                                    action={action}
+                                                />
                                             ))}
                                         </div>
                                     </div>
@@ -239,7 +232,7 @@ const CreateTweet = ({
                                         onClick={handleSubmit}
                                         disabled={!value}
                                         isWidthFull
-                                        className='mt-4 font-semibold bg-blue text-white'
+                                        className='mt-2 xxxs:mt-4 font-semibold bg-blue text-white'
                                     >
                                         Tweet
                                     </Button>

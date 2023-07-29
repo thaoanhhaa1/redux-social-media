@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useWindowSize } from 'usehooks-ts';
 import { RootState } from '../../app/store';
 import Button from '../Button';
 import CreateStory from '../CreateStory';
@@ -16,6 +17,7 @@ const Stories = ({ all = true }: { all?: boolean }) => {
     const [storyShowCount, setStoryShowCount] = useState(0);
     const [isShowModal, setShowModal] = useState(false);
     const { stories, user } = useSelector((state: RootState) => state);
+    const { width } = useWindowSize();
 
     const handleClickBtn = (isRightBtn: boolean) =>
         setStoryIndex((storyIndex) => {
@@ -36,10 +38,11 @@ const Stories = ({ all = true }: { all?: boolean }) => {
         const width = container.current?.clientWidth || 0;
 
         setStoryShowCount(Math.floor(width / 110));
-    }, []);
+        setStoryIndex(0);
+    }, [width]);
 
     return (
-        <Wrapper className='bg-white px-[18px] py-[16.5px] overflow-hidden'>
+        <Wrapper className='bg-white px-2 xxs:px-[18px] py-2 xxs:py-[16.5px] overflow-hidden'>
             <WrapperHeader title='Stories' titleLink='See All' to='/' />
             <div ref={container} className='relative'>
                 <div
