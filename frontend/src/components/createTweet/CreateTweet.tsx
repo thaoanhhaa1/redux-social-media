@@ -22,12 +22,12 @@ import { classNames } from '../../utils';
 import Button from '../Button';
 import Image from '../Image';
 import Modal from '../Modal';
-import Tooltip from '../Tooltip';
 import ActionButton from './ActionButton';
 import AudienceTag from './AudienceTag';
 import Header from './Header';
 import LinkAction from './LinkAction';
 import { Feeling, Locations } from './subTweet';
+import TagPeople from './subTweet/tagPeople/TagPeople';
 
 const actions: IActionCreateTweet[] = [
     {
@@ -38,10 +38,10 @@ const actions: IActionCreateTweet[] = [
         backgroundColor: '#E4F0D5',
     },
     {
-        title: '',
+        title: 'tagPeople',
         tooltip: 'Tag people',
         image: images.tagPeople,
-        sub: Feeling,
+        sub: TagPeople,
         backgroundColor: '#CAEEF9',
     },
     {
@@ -167,7 +167,8 @@ const CreateTweet = ({
                                             <div className='flex flex-wrap items-center mb-1 font-semibold text-sm leading-sm text-base-black dark:text-white'>
                                                 {user.name || user.username}
                                                 {(myTweet.feeling ||
-                                                    myTweet.location) &&
+                                                    myTweet.location ||
+                                                    myTweet.tagPeople) &&
                                                     ' is'}
                                                 {myTweet.feeling && (
                                                     <LinkAction
@@ -177,6 +178,23 @@ const CreateTweet = ({
                                                         title={myTweet.feeling}
                                                     />
                                                 )}
+                                                {myTweet.tagPeople &&
+                                                    myTweet.tagPeople.map(
+                                                        (tag, index) => (
+                                                            <LinkAction
+                                                                sub={TagPeople}
+                                                                tag={
+                                                                    index
+                                                                        ? 'and'
+                                                                        : 'with'
+                                                                }
+                                                                title={
+                                                                    tag.name ||
+                                                                    tag.username
+                                                                }
+                                                            />
+                                                        ),
+                                                    )}
                                                 {myTweet.location && (
                                                     <LinkAction
                                                         sub={Locations}

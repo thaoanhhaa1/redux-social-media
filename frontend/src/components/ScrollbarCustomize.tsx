@@ -11,6 +11,7 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { classNames } from '../utils';
+import { useWindowSize } from 'usehooks-ts';
 
 function getScroll(
     elementRef: never,
@@ -44,6 +45,7 @@ const ScrollbarCustomize = ({
     const [selectClientY, setSelectClientY] = useState(0);
     const [top, setTop] = useState(0);
     const contacts = useSelector((state: RootState) => state.contacts);
+    const { width, height } = useWindowSize();
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
         if (!ref.current) return;
@@ -132,7 +134,7 @@ const ScrollbarCustomize = ({
         setOffsetHeight(offsetHeight);
         setScrollHeight(scrollHeight);
         setScrollThumbHeight(offsetHeight ** 2 / scrollHeight);
-    }, [contacts]);
+    }, [contacts, width, height, children]);
 
     return (
         <div
@@ -144,7 +146,7 @@ const ScrollbarCustomize = ({
             <div
                 ref={ref}
                 onScroll={handleScroll}
-                className={classNames('scrollbar', className)}
+                className={classNames('scrollbar overflow-y-auto', className)}
                 style={style}
             >
                 {children}

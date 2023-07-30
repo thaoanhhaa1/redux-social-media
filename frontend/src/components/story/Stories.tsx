@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useWindowSize } from 'usehooks-ts';
 import { RootState } from '../../app/store';
@@ -18,13 +18,22 @@ const Stories = ({ all = true }: { all?: boolean }) => {
     const [isShowModal, setShowModal] = useState(false);
     const { stories, user } = useSelector((state: RootState) => state);
     const { width } = useWindowSize();
+    const marginLeft = useMemo(
+        () =>
+            storyLength && storyLength < storyIndex + storyShowCount
+                ? (storyLength + 1) * 120 -
+                  10 -
+                  (container.current?.clientWidth || 0)
+                : storyIndex * 120,
+        [storyIndex, storyLength, storyShowCount],
+    );
 
     const handleClickBtn = (isRightBtn: boolean) =>
         setStoryIndex((storyIndex) => {
             let newIndex = storyIndex + (isRightBtn ? 1 : -1) * storyShowCount;
 
             if (newIndex + storyShowCount > storyLength)
-                newIndex = storyLength - storyShowCount;
+                newIndex = storyLength - storyShowCount + 1;
             else if (newIndex < 0) newIndex = 0;
 
             return newIndex;
@@ -37,7 +46,7 @@ const Stories = ({ all = true }: { all?: boolean }) => {
     useLayoutEffect(() => {
         const width = container.current?.clientWidth || 0;
 
-        setStoryShowCount(Math.floor(width / 110));
+        setStoryShowCount(Math.floor((width + 10) / 120));
         setStoryIndex(0);
     }, [width]);
 
@@ -46,17 +55,9 @@ const Stories = ({ all = true }: { all?: boolean }) => {
             <WrapperHeader title='Stories' titleLink='See All' to='/' />
             <div ref={container} className='relative'>
                 <div
-                    className={
-                        'flex gap-2.5 overflow-x-auto snap-x hidden-scrollbar transition-all'
-                    }
+                    className='flex gap-2.5 overflow-x-auto snap-x hidden-scrollbar transition-all'
                     style={{
-                        marginLeft: `-${
-                            storyLength - storyShowCount === storyIndex
-                                ? (storyLength - 1) * 120 +
-                                  110 -
-                                  (container.current?.clientWidth || 0)
-                                : storyIndex * 120
-                        }px`,
+                        marginLeft: `-${marginLeft}px`,
                     }}
                 >
                     <NewStory onClick={() => setShowModal(true)} />
@@ -65,8 +66,8 @@ const Stories = ({ all = true }: { all?: boolean }) => {
                         .map((story) => (
                             <Story url={story.story} key={story._id} />
                         ))}
-                    {storyIndex !== storyLength - storyShowCount &&
-                        storyLength > storyShowCount && (
+                    {storyIndex !== storyLength - storyShowCount + 1 &&
+                        storyLength + 1 > storyShowCount && (
                             <Button
                                 large
                                 rounded

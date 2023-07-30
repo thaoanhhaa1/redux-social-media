@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { ILocation, ITweet } from '../../interfaces';
+import { ILocation, ITweet, IUserTweet } from '../../interfaces';
 
 const initialState: {
     tweets: ITweet[];
@@ -10,12 +10,14 @@ const initialState: {
     feeling: string;
     image: string;
     location?: ILocation;
+    tagPeople: IUserTweet[] | undefined;
 } = {
     tweets: [],
     isLoading: false,
     tag: '',
     feeling: '',
     image: '',
+    tagPeople: undefined,
 };
 
 const createTweet = createAsyncThunk(
@@ -62,6 +64,15 @@ const myTweetSlice = createSlice({
         ) => {
             state.location = payload;
         },
+        addTagPeople: (state, { payload }: { payload: IUserTweet }) => {
+            if (state.tagPeople) state.tagPeople.push(payload);
+            else state.tagPeople = [payload];
+        },
+        removeTagPeople: (state, { payload }: { payload: string }) => {
+            state.tagPeople = state?.tagPeople?.filter(
+                (user) => user._id !== payload,
+            );
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -82,6 +93,13 @@ const myTweetSlice = createSlice({
 });
 
 export default myTweetSlice.reducer;
-export const { addTweets, setFeeling, setTag, init, setLocation } =
-    myTweetSlice.actions;
+export const {
+    addTweets,
+    setFeeling,
+    setTag,
+    init,
+    setLocation,
+    addTagPeople,
+    removeTagPeople,
+} = myTweetSlice.actions;
 export { createTweet };

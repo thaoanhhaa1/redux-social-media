@@ -26,7 +26,7 @@ const Page = ({
                     top: '95px',
                 }}
                 containerClassName='hidden xl:block'
-                className='flex flex-col gap-5 max-h-0 sticky overflow-y-auto pb-5'
+                className='flex flex-col gap-5 max-h-0 sticky pb-5'
             >
                 {scrollChildren}
             </ScrollbarCustomize>

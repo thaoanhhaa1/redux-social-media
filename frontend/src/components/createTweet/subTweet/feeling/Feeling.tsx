@@ -69,6 +69,7 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
                         myTweet.tag &&
                         myTweet.tag !== 'feeling' && <Tag />}
                     <Search
+                        placeholder='Search'
                         value={value}
                         handleChangeSearch={handleChangeSearch}
                     />
