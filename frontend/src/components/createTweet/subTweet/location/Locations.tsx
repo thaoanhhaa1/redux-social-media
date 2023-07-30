@@ -50,8 +50,12 @@ const Locations = ({ handleHiddenSub }: ISubTweet) => {
             <Header onClick={handleHiddenSub} isSub>
                 Search for location
             </Header>
-            <div className='px-4 h-[52px] flex items-center'>
-                <Search value={value} handleChangeSearch={handleChangeSearch} />
+            <div className='px-2 xxs:px-4 h-[52px] flex items-center'>
+                <Search
+                    placeholder='Where are you?'
+                    value={value}
+                    handleChangeSearch={handleChangeSearch}
+                />
             </div>
             <div className='p-2'>
                 {isLoading && (

@@ -39,7 +39,7 @@ const CardInformation = () => {
     };
 
     return (
-        <div className='flex flex-col gap-5 ml-[56px]'>
+        <div className='flex flex-col gap-2 xxs:gap-5 ml-12 xxs:ml-[56px]'>
             {tweet.content && (
                 <p className='font-medium text-sm leading-[21px] text-black dark:text-white'>
                     {tweet.content}
@@ -53,7 +53,7 @@ const CardInformation = () => {
                 />
             )}
             <div className='flex justify-between'>
-                <div className='flex gap-5'>
+                <div className='flex gap-2 xxs:gap-5'>
                     {cardIcons.map((Icon) => (
                         <CardButton
                             key={v4()}

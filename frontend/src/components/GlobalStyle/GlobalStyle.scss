@@ -5,6 +5,7 @@
     --home-sidebar-width: 335px;
     --explore-sidebar-width: 394px;
     --sidebar-left-width: 237px;
+    --sidebar-left-mobile-width: 64px;
     --scroll-height: calc(100vh - var(--top-bar-height) - 20px);
 
     --emerald-black-1-color: #03b79a;
@@ -17,7 +18,8 @@
 }
 
 body {
-    @apply text-black dark:text-white leading-base overflow-x-hidden font-base;
+    text-rendering: optimizespeed;
+    @apply text-black dark:text-white leading-base overflow-x-hidden font-base select-none;
 }
 
 .bg-blue-blue-white-4 {
@@ -82,6 +84,12 @@ body {
 // Scrollbar custom
 .scrollbar > div {
     transition: background-color ease 0.3s, top 0s;
+}
+
+// Hidden default icon
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
 }
 
 // Custom date input

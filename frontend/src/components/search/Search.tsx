@@ -50,7 +50,7 @@ const Search = () => {
                 className='search-input w-full pl-12 pr-5 py-[14px] text-black dark:text-white bg-transparent font-medium text-xs leading-3.75 outline-none'
             />
             {isShowResult && (
-                <div className='absolute left-0 w-full top-[calc(100%_+_8px)] p-2 bg-white dark:bg-dark-black-1 rounded-2.5 shadow-[0px_2px_12px_rgba(0,0,0,0.2)]'>
+                <div className='absolute left-0 w-[calc(100vw-80px)] xxs:w-full top-[calc(100%_+_8px)] p-2 bg-white dark:bg-dark-black-1 rounded-2.5 shadow-[0px_2px_12px_rgba(0,0,0,0.2)]'>
                     {(results.length > 0 && !isLoading && (
                         <>
                             {Boolean(search) || (

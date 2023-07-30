@@ -8,7 +8,7 @@ const CardProfile = () => {
     const { user, tweet } = useCardContext();
 
     return (
-        <div className='flex gap-4'>
+        <div className='flex gap-2 xxs:gap-4'>
             <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
             <div className='flex justify-between items-center flex-1'>
                 <div>
@@ -19,7 +19,7 @@ const CardProfile = () => {
                         @{user.username}
                     </p>
                 </div>
-                <div className='flex gap-1.25 text-black-8 dark:text-white font-medium text-xs leading-3.75'>
+                <div className='hidden xxs:flex gap-1.25 text-black-8 dark:text-white font-medium text-xs leading-3.75'>
                     <span>
                         {getTimeString(new Date(tweet.createdAt || ''))}
                     </span>

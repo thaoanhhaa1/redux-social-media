@@ -12,8 +12,8 @@ const WhatHappen = () => {
     const [isShowModal, setShowModal] = useState(false);
 
     return (
-        <Wrapper className='p-5'>
-            <div className='flex items-center gap-[14px]'>
+        <Wrapper className='p-2 xxs:p-5'>
+            <div className='flex items-center gap-2 xxs:gap-[14px]'>
                 <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
                 <div
                     onClick={() => setShowModal(true)}
@@ -27,7 +27,7 @@ const WhatHappen = () => {
                     backgroundColor='bg-emerald-white-4 dark:bg-emerald-black-3'
                     backgroundColorIcon='bg-emerald'
                     icon={<GalleryIcon />}
-                    className='flex-1'
+                    className='hidden xs:flex flex-1'
                 >
                     Gallery
                 </WhatHappenButton>
@@ -35,7 +35,7 @@ const WhatHappen = () => {
                     backgroundColor='bg-red-white-3 dark:bg-red-black-3'
                     backgroundColorIcon='bg-red'
                     icon={<TagFriendIcon />}
-                    className='flex-1'
+                    className='hidden xxxs:flex flex-1'
                 >
                     Tag friend
                 </WhatHappenButton>

@@ -19,7 +19,7 @@ const Wrapper = (
             className={classNames(
                 'bg-white dark:bg-dark-black-2 rounded-2.5 flex',
                 isRow || 'flex-col',
-                `gap-${gap}`,
+                `gap-2 xxs:gap-${gap}`,
                 className,
             )}
             {...props}

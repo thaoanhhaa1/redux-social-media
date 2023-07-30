@@ -230,10 +230,17 @@ module.exports = {
             zIndex: {
                 1: 1,
             },
+            transitionDelay: {
+                0: '0ms',
+            },
         },
         screens: {
+            xxxs: '350px',
+            xxs: '508px',
+            xs: '576px',
             dl: '896px',
             gx: '1152px',
+            xl: '1160px',
         },
     },
     plugins: [require('@tailwindcss/line-clamp')],

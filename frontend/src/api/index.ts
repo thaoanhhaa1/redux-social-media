@@ -1,6 +1,7 @@
 const api = {
     countFollow: () => '/private/follow/count',
     whoToFollow: () => '/private/follow/who-to-follow',
+    getFriends: () => '/private/follow/friends',
     follow: () => '/private/follow/follow',
     unfollow: () => '/private/follow/unfollow',
     createTweet: () => '/private/tweets',
