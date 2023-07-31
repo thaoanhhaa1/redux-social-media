@@ -72,6 +72,8 @@ const myTweetSlice = createSlice({
             state.tagPeople = state?.tagPeople?.filter(
                 (user) => user._id !== payload,
             );
+
+            if (state.tagPeople?.length === 0) state.tagPeople = undefined;
         },
     },
     extraReducers: (builder) => {

@@ -21,8 +21,9 @@ const Home = () => {
     const { pageCount, contacts } = useSelector(
         (state: RootState) => state.contacts,
     );
-    const { socket, followingTweets } = useSelector(
-        (state: RootState) => state,
+    const socket = useSelector((state: RootState) => state.socket);
+    const followingTweets = useSelector(
+        (state: RootState) => state.followingTweets,
     );
     const dispatch = useAppDispatch();
 

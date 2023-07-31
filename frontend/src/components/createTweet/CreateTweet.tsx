@@ -84,7 +84,8 @@ const CreateTweet = ({
     const [sub, setSub] = useState<SubProps | undefined>();
     const [height, setHeight] = useState<number>(0);
     const subRef = useRef<HTMLDivElement | null>(null);
-    const { user, myTweet } = useSelector((state: RootState) => state);
+    const user = useSelector((state: RootState) => state.user);
+    const myTweet = useSelector((state: RootState) => state.myTweet);
     const dispatch = useAppDispatch();
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
@@ -182,6 +183,7 @@ const CreateTweet = ({
                                                     myTweet.tagPeople.map(
                                                         (tag, index) => (
                                                             <LinkAction
+                                                                key={v4()}
                                                                 sub={TagPeople}
                                                                 tag={
                                                                     index

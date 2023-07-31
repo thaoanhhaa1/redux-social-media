@@ -16,7 +16,8 @@ const Stories = ({ all = true }: { all?: boolean }) => {
     const [storyIndex, setStoryIndex] = useState(0);
     const [storyShowCount, setStoryShowCount] = useState(0);
     const [isShowModal, setShowModal] = useState(false);
-    const { stories, user } = useSelector((state: RootState) => state);
+    const stories = useSelector((state: RootState) => state.stories);
+    const user = useSelector((state: RootState) => state.user);
     const { width } = useWindowSize();
     const marginLeft = useMemo(
         () =>

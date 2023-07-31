@@ -18,7 +18,8 @@ const CreateStory = ({
     isShowModal: boolean;
     setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const { user, stories } = useSelector((state: RootState) => state);
+    const stories = useSelector((state: RootState) => state.stories);
+    const user = useSelector((state: RootState) => state.user);
     const story = useImageUpload(`${user._id}_${new Date().getTime()}`);
     const dispatch = useAppDispatch();
 

@@ -275,8 +275,8 @@ module.exports = {
 
     friends: async (req, res) => {
         const _id = req.body._id;
-        const { value, tagged } = req.query;
-        console.log('🚀 ~ friends: ~ tagged:', tagged);
+        const value = req.query.value;
+        const tagged = req.query.tagged ?? [];
 
         try {
             const users = await FollowModel.aggregate([
@@ -309,12 +309,47 @@ module.exports = {
                                             {
                                                 $or: [
                                                     {
-                                                        name: new RegExp(value),
+                                                        $regexMatch: {
+                                                            input: '$name',
+                                                            regex: new RegExp(
+                                                                value,
+                                                                'i',
+                                                            ),
+                                                        },
                                                     },
                                                     {
-                                                        username: new RegExp(
-                                                            value,
-                                                        ),
+                                                        $and: [
+                                                            {
+                                                                $not: {
+                                                                    $ifNull: [
+                                                                        '$name',
+                                                                        0,
+                                                                    ],
+                                                                },
+                                                            },
+                                                            {
+                                                                $regexMatch: {
+                                                                    input: '$username',
+                                                                    regex: new RegExp(
+                                                                        value,
+                                                                        'i',
+                                                                    ),
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                $not: [
+                                                    {
+                                                        $in: [
+                                                            {
+                                                                $toString:
+                                                                    '$_id',
+                                                            },
+                                                            tagged,
+                                                        ],
                                                     },
                                                 ],
                                             },
@@ -349,7 +384,7 @@ module.exports = {
 
             res.json(users);
         } catch (error) {
-            res.sendStatus(400);
+            res.json([]);
             console.error('🚀 ~ followers: ~ error:', error);
         }
     },
