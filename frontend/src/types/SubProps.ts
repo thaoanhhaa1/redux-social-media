@@ -1,8 +1,5 @@
-import { MemoExoticComponent } from 'react';
 import { ISubTweet } from '../interfaces';
 
-type SubProps = MemoExoticComponent<
-    ({ handleHiddenSub }: ISubTweet) => JSX.Element
->;
+type SubProps = (({ handleHiddenSub }: ISubTweet) => JSX.Element) | undefined;
 
 export default SubProps;

@@ -1,22 +1,14 @@
 import {
     Dispatch,
-    MemoExoticComponent,
     PropsWithChildren,
     SetStateAction,
     createContext,
     useContext,
 } from 'react';
-import { ISubTweet } from '../interfaces';
 import SubProps from '../types/SubProps';
 
 const CreateTweetContext = createContext({
-    setSub: (
-        sub:
-            | MemoExoticComponent<
-                  ({ handleHiddenSub }: ISubTweet) => JSX.Element
-              >
-            | undefined,
-    ) => {},
+    setSub: (sub: SubProps) => {},
     handleHeightModal: () => {},
 });
 
@@ -25,7 +17,7 @@ function CreateTweetProvider({
     handleHeightModal,
     ...props
 }: {
-    setSub: Dispatch<SetStateAction<SubProps | undefined>>;
+    setSub: Dispatch<SetStateAction<SubProps>>;
     handleHeightModal: () => void;
 } & PropsWithChildren) {
     return (

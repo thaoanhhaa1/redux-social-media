@@ -1,5 +1,6 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import slugify from 'slugify';
 import api from '../../../../api';
 import axiosClient from '../../../../api/axiosClient';
 import { RootState } from '../../../../app/store';
@@ -12,7 +13,6 @@ import Header from '../../Header';
 import Search from '../Search';
 import TagPeopleItem from './TagPeopleItem';
 import TaggedItem from './TaggedItem';
-import slugify from 'slugify';
 
 const TagPeople = ({ handleHiddenSub }: ISubTweet) => {
     const { value, setValue, handleChangeSearch } = useSearch();
@@ -130,4 +130,4 @@ const TagPeople = ({ handleHiddenSub }: ISubTweet) => {
     );
 };
 
-export default memo(TagPeople);
+export default TagPeople;

@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { RootState } from '../../../../app/store';
@@ -91,4 +91,4 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
     );
 };
 
-export default memo(Feeling);
+export default Feeling;

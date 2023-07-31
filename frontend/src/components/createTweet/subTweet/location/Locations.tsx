@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import api from '../../../../api';
@@ -81,4 +81,4 @@ const Locations = ({ handleHiddenSub }: ISubTweet) => {
     );
 };
 
-export default memo(Locations);
+export default Locations;

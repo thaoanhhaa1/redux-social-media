@@ -26,7 +26,7 @@ import ActionButton from './ActionButton';
 import AudienceTag from './AudienceTag';
 import Header from './Header';
 import LinkAction from './LinkAction';
-import { Feeling, Locations } from './subTweet';
+import { Feeling, Gif, Locations } from './subTweet';
 import TagPeople from './subTweet/tagPeople/TagPeople';
 
 const actions: IActionCreateTweet[] = [
@@ -59,10 +59,10 @@ const actions: IActionCreateTweet[] = [
         backgroundColor: '#FBCCD2',
     },
     {
-        title: '',
+        title: 'gif',
         tooltip: 'GIF',
         image: images.gif,
-        sub: Feeling,
+        sub: Gif,
         backgroundColor: '#D2F0EA',
     },
     {
@@ -81,7 +81,7 @@ const CreateTweet = ({
     setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
     const [value, setValue] = useState('');
-    const [sub, setSub] = useState<SubProps | undefined>();
+    const [sub, setSub] = useState<SubProps>();
     const [height, setHeight] = useState<number>(0);
     const subRef = useRef<HTMLDivElement | null>(null);
     const user = useSelector((state: RootState) => state.user);
