@@ -18,6 +18,8 @@ const images = {
     aBirthday: require('./Q5DAVMG-eCj.png'),
     yourSpecialDay: require('./Lt9KbIk9NFp.png'),
     birthdays: require('./Q5DAVMG-eCj.png'),
+    liveVideo: require('./v1iF2605Cb5.png'),
+    lifeEvent: require('./CenxFlWjtJO.png'),
 };
 
 export default images;

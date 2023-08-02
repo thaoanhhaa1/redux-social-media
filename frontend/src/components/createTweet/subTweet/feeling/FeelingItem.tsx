@@ -31,8 +31,8 @@ const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
         <div
             onClick={handleClick}
             className={classNames(
-                'flex items-center gap-3 p-2 hover:bg-[rgba(68,73,80,0.15)] transition-all rounded-lg cursor-pointer',
-                isActive && 'bg-black-opacity-05',
+                'flex items-center gap-3 p-2 hover:bg-[rgba(68,73,80,0.15)] dark:hover:bg-white-opacity-10 transition-all rounded-lg cursor-pointer',
+                isActive && 'bg-black-opacity-05 dark:bg-[#18191A]',
             )}
         >
             <div className='flex-shrink-0 p-2 bg-[#E4E6EB] rounded-full'>

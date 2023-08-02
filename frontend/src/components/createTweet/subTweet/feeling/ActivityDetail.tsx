@@ -24,7 +24,7 @@ const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
                 }),
             );
         }
-        setSub(undefined);
+        setSub();
         handleHeightModal();
     };
 
@@ -32,7 +32,7 @@ const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
         <div
             onClick={handleClick}
             className={classNames(
-                'flex items-center gap-3 p-1.5 rounded-lg hover:bg-black-opacity-05 transition-all cursor-pointer',
+                'flex items-center gap-3 p-1.5 rounded-lg hover:bg-black-opacity-05 dark:hover:bg-white-opacity-10 transition-all cursor-pointer',
                 isActive ? 'bg-black-opacity-05' : '',
             )}
         >

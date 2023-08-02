@@ -10,6 +10,8 @@ const routes = {
     signUp: '/sign-up',
     signIn: '/sign-in',
     search: '/search',
+    liveVideo: '/live-video',
+    notFound: '*',
 };
 
 export default routes;

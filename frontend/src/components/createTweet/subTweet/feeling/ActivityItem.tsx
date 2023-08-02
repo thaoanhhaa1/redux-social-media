@@ -12,7 +12,7 @@ const ActivityItem = ({ feeling }: { feeling: IFeeling }) => {
     return (
         <div
             onClick={handleClick}
-            className='flex items-center gap-3 p-[6px] transition-all hover:bg-black-opacity-05 cursor-pointer rounded-lg'
+            className='flex items-center gap-3 p-[6px] transition-all hover:bg-black-opacity-05 dark:hover:bg-white-opacity-10 cursor-pointer rounded-lg'
         >
             <div className='flex-shrink-0 p-2 bg-[#E4E6EB] rounded-full'>
                 <Image alt='' src={feeling.image} className='flex-1 w-5 h-5' />

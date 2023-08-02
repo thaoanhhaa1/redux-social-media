@@ -12,6 +12,7 @@ const initialState: {
     location?: ILocation;
     tagPeople?: IUserTweet[];
     gif?: IGif;
+    isShowUploadImage?: boolean;
 } = {
     tweets: [],
     isLoading: false,
@@ -77,6 +78,15 @@ const myTweetSlice = createSlice({
         setGif: (state, { payload }: { payload: IGif | undefined }) => {
             state.gif = payload;
         },
+        setShowUploadImage: (
+            state,
+            { payload }: { payload: boolean | undefined },
+        ) => {
+            state.isShowUploadImage = payload;
+        },
+        setImage: (state, { payload }) => {
+            state.image = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -106,5 +116,7 @@ export const {
     addTagPeople,
     removeTagPeople,
     setGif,
+    setShowUploadImage,
+    setImage,
 } = myTweetSlice.actions;
 export { createTweet };

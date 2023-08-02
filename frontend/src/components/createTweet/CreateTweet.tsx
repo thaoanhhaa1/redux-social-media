@@ -14,9 +14,9 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { images } from '../../assets';
+import config from '../../config';
 import { CreateTweetProvider } from '../../contexts/CreateTweetContext';
 import { createTweet } from '../../features/myTweet';
-import { IActionCreateTweet } from '../../interfaces';
 import SubProps from '../../types/SubProps';
 import { classNames } from '../../utils';
 import Button from '../Button';
@@ -28,52 +28,8 @@ import AudienceTag from './AudienceTag';
 import GifSelect from './GifSelect';
 import Header from './Header';
 import LinkAction from './LinkAction';
-import { Feeling, Gif, Locations, TagPeople } from './subTweet';
-
-const actions: IActionCreateTweet[] = [
-    {
-        title: '',
-        tooltip: 'Photo/Video',
-        image: images.image,
-        sub: Feeling,
-        backgroundColor: '#E4F0D5',
-        disabled: 'gif',
-    },
-    {
-        title: 'tagPeople',
-        tooltip: 'Tag people',
-        image: images.tagPeople,
-        sub: TagPeople,
-        backgroundColor: '#CAEEF9',
-    },
-    {
-        title: 'feeling',
-        tooltip: 'Feeling/activity',
-        image: images.feeling,
-        sub: Feeling,
-        backgroundColor: '#FEF2D1',
-    },
-    {
-        title: 'location',
-        tooltip: 'Check in',
-        image: images.checkIn,
-        sub: Locations,
-        backgroundColor: '#FBCCD2',
-    },
-    {
-        title: 'gif',
-        tooltip: 'GIF',
-        image: images.gif,
-        sub: Gif,
-        backgroundColor: '#D2F0EA',
-        disabled: 'image',
-    },
-    {
-        tooltip: 'More',
-        image: images.more,
-        sub: Feeling,
-    },
-];
+import UploadImage from './UploadImage';
+import { Feeling, Locations, TagPeople } from './subTweet';
 
 // Max-height: 559px
 const CreateTweet = ({
@@ -97,6 +53,7 @@ const CreateTweet = ({
     const handleHiddenSub = useCallback(() => {
         setSub(undefined);
     }, []);
+
     const handleCloseModal = () => {
         setSub(undefined);
         setShowModal(false);
@@ -106,11 +63,13 @@ const CreateTweet = ({
         await dispatch(
             createTweet({
                 content: value,
+                images: myTweet.image ? [myTweet.image] : undefined,
             }),
         ).unwrap();
 
         setShowModal(false);
     };
+
     const handleHeightModal = useCallback(() => {
         if (!sub || !subRef.current) {
             setHeight(0);
@@ -217,8 +176,8 @@ const CreateTweet = ({
                                             </AudienceTag>
                                         </div>
                                     </div>
-                                    <ScrollbarCustomize className='flex flex-col min-h-[154px] max-h-[322px]'>
-                                        <div className='px-2 xxxs:px-4 pt-1 pb-2 '>
+                                    <ScrollbarCustomize className='flex flex-col min-h-[154px] max-h-[322px] px-2 xxxs:px-4'>
+                                        <label className='cursor-text flex-1 pt-1 pb-2 '>
                                             <TextareaAutosize
                                                 value={value}
                                                 onChange={handleChange}
@@ -236,8 +195,11 @@ const CreateTweet = ({
                                                     user.username
                                                 }?`}
                                             />
-                                            <GifSelect />
-                                        </div>
+                                        </label>
+                                        <GifSelect />
+                                        {myTweet.isShowUploadImage && (
+                                            <UploadImage />
+                                        )}
                                     </ScrollbarCustomize>
                                 </div>
 
@@ -248,26 +210,27 @@ const CreateTweet = ({
                                             Add to your tweet
                                         </span>
                                         <div className='flex gap-1'>
-                                            {actions.map((action) => (
-                                                <ActionButton
-                                                    disabled={
-                                                        !!action.disabled &&
-                                                        !!myTweet[
-                                                            action.disabled as keyof typeof myTweet
-                                                        ]
-                                                    }
-                                                    key={v4()}
-                                                    onClick={() =>
-                                                        setSub(() => action.sub)
-                                                    }
-                                                    action={action}
-                                                />
-                                            ))}
+                                            {config.createTweetActions.map(
+                                                (action, index) => {
+                                                    if (
+                                                        index >
+                                                        config.CREATE_TWEET_ACTION_NUMBER
+                                                    )
+                                                        return null;
+
+                                                    return (
+                                                        <ActionButton
+                                                            key={v4()}
+                                                            action={action}
+                                                        />
+                                                    );
+                                                },
+                                            )}
                                         </div>
                                     </div>
                                     <Button
                                         onClick={handleSubmit}
-                                        disabled={!value}
+                                        disabled={!value && !myTweet.image}
                                         isWidthFull
                                         className='mt-2 xxxs:mt-4 font-semibold bg-blue text-white'
                                     >
@@ -277,7 +240,7 @@ const CreateTweet = ({
 
                                 {/* Loading */}
                                 {myTweet.isLoading && (
-                                    <div className='absolute inset-0 bg-black bg-opacity-20 flex justify-center items-center'>
+                                    <div className='absolute inset-0 bg-black bg-opacity-5 backdrop-blur-[1px] flex justify-center items-center'>
                                         <div className='w-10 h-10 border-4 rounded-full border-blue border-t-transparent animate-spin'></div>
                                     </div>
                                 )}

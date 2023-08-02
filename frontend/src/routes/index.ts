@@ -10,6 +10,7 @@ import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
+import NotFound from '../pages/NotFound';
 
 const publicRoutes: IRoute[] = [
     {
@@ -53,6 +54,10 @@ const publicRoutes: IRoute[] = [
         path: config.routes.signIn,
         element: SignIn,
         layout: null,
+    },
+    {
+        path: config.routes.notFound,
+        element: NotFound,
     },
 ];
 
