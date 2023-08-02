@@ -14,7 +14,10 @@ const LinkAction = ({
     sub: SubProps;
 }) => {
     const { setSub } = useCreateTweet();
-    const Sub = sub;
+
+    const handleClick = () => {
+        setSub(sub);
+    };
 
     return (
         <>
@@ -22,7 +25,7 @@ const LinkAction = ({
             &nbsp;
             {tag}
             <span
-                onClick={() => setSub(Sub)}
+                onClick={handleClick}
                 className='ml-1 cursor-pointer hover:underline'
             >
                 {title}

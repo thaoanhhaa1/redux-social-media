@@ -8,10 +8,8 @@ import {
     useRef,
     useState,
 } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../app/store';
-import { classNames } from '../utils';
 import { useWindowSize } from 'usehooks-ts';
+import { classNames } from '../utils';
 
 function getScroll(
     elementRef: never,
@@ -30,11 +28,13 @@ const ScrollbarCustomize = ({
     containerClassName = '',
     style = {},
     children,
+    onScroll = (e: UIEvent<HTMLDivElement>) => {},
 }: {
     className?: string;
     containerClassName?: string;
     style?: CSSProperties;
     children: ReactNode;
+    onScroll?: (e: UIEvent<HTMLDivElement>) => void;
 }) => {
     const ref = useRef(null);
     const [offsetHeight, setOffsetHeight] = useState(0);
@@ -44,17 +44,23 @@ const ScrollbarCustomize = ({
     const [selectThumb, setSelectThumb] = useState(false);
     const [selectClientY, setSelectClientY] = useState(0);
     const [top, setTop] = useState(0);
-    const contacts = useSelector((state: RootState) => state.contacts);
     const { width, height } = useWindowSize();
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+        onScroll(e);
+
         if (!ref.current) return;
         const { element, elementTrack } = getScroll(ref.current, e);
         const scrollTop = elementTrack.scrollTop;
+        const scrollHeight = element.scrollHeight;
+        const offsetHeight = element.offsetHeight;
 
         elementTrack.scrollTop = scrollTop;
         element.scrollTop = scrollTop;
+        setOffsetHeight(offsetHeight);
+        setScrollHeight(scrollHeight);
         setScrollThumbTop((scrollTop * offsetHeight) / scrollHeight);
+        setScrollThumbHeight(offsetHeight ** 2 / scrollHeight);
     };
 
     const handleClickTrack = (e: MouseEvent<HTMLDivElement>) => {
@@ -134,7 +140,11 @@ const ScrollbarCustomize = ({
         setOffsetHeight(offsetHeight);
         setScrollHeight(scrollHeight);
         setScrollThumbHeight(offsetHeight ** 2 / scrollHeight);
-    }, [contacts, width, height, children]);
+        if (scrollThumbTop)
+            setScrollThumbTop(
+                (element.scrollTop * offsetHeight) / scrollHeight,
+            );
+    }, [width, height, children, scrollThumbTop]);
 
     return (
         <div

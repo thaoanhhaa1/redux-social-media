@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import api from '../../../../api';
@@ -6,13 +6,13 @@ import axiosClient from '../../../../api/axiosClient';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { useSearch } from '../../../../hooks';
-import { ILocation, ISubTweet } from '../../../../interfaces';
+import { ILocation } from '../../../../interfaces';
 import Header from '../../Header';
 import Search from '../Search';
 import Location from './Location';
 
-const Locations = ({ handleHiddenSub }: ISubTweet) => {
-    const { handleHeightModal } = useCreateTweet();
+const Locations = () => {
+    const { handleHeightModal, handleHiddenSub } = useCreateTweet();
     const { value, handleChangeSearch } = useSearch();
     const [locations, setLocations] = useState<ILocation[]>([]);
     const [isLoading, setLoading] = useState<boolean>(true);
@@ -81,4 +81,4 @@ const Locations = ({ handleHiddenSub }: ISubTweet) => {
     );
 };
 
-export default Locations;
+export default memo(Locations);

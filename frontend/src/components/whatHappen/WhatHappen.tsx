@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { ActivityIcon, GalleryIcon, TagFriendIcon } from '../Icons';
 import Image from '../Image';
+import CreateTweet from '../createTweet/CreateTweet';
 import Wrapper from '../wrapper/Wrapper';
 import WhatHappenButton from './WhatHappenButton';
-import CreateTweet from '../createTweet/CreateTweet';
-import { useState } from 'react';
 
 const WhatHappen = () => {
     const user = useSelector((state: RootState) => state.user);

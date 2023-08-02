@@ -22,12 +22,13 @@ import { classNames } from '../../utils';
 import Button from '../Button';
 import Image from '../Image';
 import Modal from '../Modal';
+import ScrollbarCustomize from '../ScrollbarCustomize';
 import ActionButton from './ActionButton';
 import AudienceTag from './AudienceTag';
+import GifSelect from './GifSelect';
 import Header from './Header';
 import LinkAction from './LinkAction';
-import { Feeling, Gif, Locations } from './subTweet';
-import TagPeople from './subTweet/tagPeople/TagPeople';
+import { Feeling, Gif, Locations, TagPeople } from './subTweet';
 
 const actions: IActionCreateTweet[] = [
     {
@@ -36,6 +37,7 @@ const actions: IActionCreateTweet[] = [
         image: images.image,
         sub: Feeling,
         backgroundColor: '#E4F0D5',
+        disabled: 'gif',
     },
     {
         title: 'tagPeople',
@@ -64,6 +66,7 @@ const actions: IActionCreateTweet[] = [
         image: images.gif,
         sub: Gif,
         backgroundColor: '#D2F0EA',
+        disabled: 'image',
     },
     {
         tooltip: 'More',
@@ -136,12 +139,13 @@ const CreateTweet = ({
             <CreateTweetProvider
                 setSub={setSub}
                 handleHeightModal={handleHeightModal}
+                handleHiddenSub={handleHiddenSub}
             >
                 <div className='w-full rounded-2.5 overflow-hidden'>
                     <AnimateHeight
                         duration={200}
                         height={height || 'auto'}
-                        className='max-h-[80vh] relative bg-white dark:bg-[#242526] cursor-default overflow-hidden'
+                        className='relative bg-white dark:bg-[#242526] cursor-default overflow-hidden'
                     >
                         <div
                             className={classNames(
@@ -213,21 +217,28 @@ const CreateTweet = ({
                                             </AudienceTag>
                                         </div>
                                     </div>
-                                    <TextareaAutosize
-                                        value={value}
-                                        onChange={handleChange}
-                                        className={classNames(
-                                            'min-h-[154px] px-2 xxxs:px-4 pt-1 pb-2 w-full max-h-[345px] outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
-                                            value.length > 85
-                                                ? 'text-sm leading-sm'
-                                                : 'text-sm leading-sm xxs:text-2xl',
-                                        )}
-                                        placeholder={`What's on your mind, ${
-                                            (user.name &&
-                                                user.name.split(' ').at(-1)) ||
-                                            user.username
-                                        }?`}
-                                    />
+                                    <ScrollbarCustomize className='flex flex-col min-h-[154px] max-h-[322px]'>
+                                        <div className='px-2 xxxs:px-4 pt-1 pb-2 '>
+                                            <TextareaAutosize
+                                                value={value}
+                                                onChange={handleChange}
+                                                className={classNames(
+                                                    'flex-1 w-full outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
+                                                    value.length > 85
+                                                        ? 'text-sm leading-sm'
+                                                        : 'text-sm leading-sm xxs:text-2xl',
+                                                )}
+                                                placeholder={`What's on your mind, ${
+                                                    (user.name &&
+                                                        user.name
+                                                            .split(' ')
+                                                            .at(-1)) ||
+                                                    user.username
+                                                }?`}
+                                            />
+                                            <GifSelect />
+                                        </div>
+                                    </ScrollbarCustomize>
                                 </div>
 
                                 {/* Footer */}
@@ -239,6 +250,12 @@ const CreateTweet = ({
                                         <div className='flex gap-1'>
                                             {actions.map((action) => (
                                                 <ActionButton
+                                                    disabled={
+                                                        !!action.disabled &&
+                                                        !!myTweet[
+                                                            action.disabled as keyof typeof myTweet
+                                                        ]
+                                                    }
                                                     key={v4()}
                                                     onClick={() =>
                                                         setSub(() => action.sub)
@@ -268,7 +285,7 @@ const CreateTweet = ({
                         </div>
                         <div
                             className={classNames(
-                                'absolute h-[80vh] overflow-y-auto top-0 left-full w-full transition-transform duration-200',
+                                'absolute max-h-[85vh] overflow-y-auto top-0 left-full w-full transition-transform duration-200',
                                 sub ? '-translate-x-full' : 'translate-x-0',
                             )}
                         >
@@ -278,11 +295,7 @@ const CreateTweet = ({
 
                                     return (
                                         <div ref={subRef}>
-                                            <Sub
-                                                handleHiddenSub={
-                                                    handleHiddenSub
-                                                }
-                                            />
+                                            <Sub />
                                         </div>
                                     );
                                 })()}

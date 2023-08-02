@@ -7,9 +7,11 @@ import Tooltip from '../Tooltip';
 
 const ActionButton = ({
     action,
+    disabled = false,
     onClick,
 }: {
     action: IActionCreateTweet;
+    disabled?: boolean;
     onClick: () => void;
 }) => {
     const myTweet = useSelector((state: RootState) => state.myTweet);
@@ -21,6 +23,7 @@ const ActionButton = ({
     return (
         <Tooltip tooltip={action.tooltip}>
             <Button
+                disabled={disabled}
                 onClick={onClick}
                 rounded
                 style={styles}

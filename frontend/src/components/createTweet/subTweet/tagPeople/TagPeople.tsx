@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import slugify from 'slugify';
 import api from '../../../../api';
@@ -6,7 +6,7 @@ import axiosClient from '../../../../api/axiosClient';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { useSearch } from '../../../../hooks';
-import { ISubTweet, IUserTweet } from '../../../../interfaces';
+import { IUserTweet } from '../../../../interfaces';
 import Button from '../../../Button';
 import ScrollbarCustomize from '../../../ScrollbarCustomize';
 import Header from '../../Header';
@@ -14,9 +14,9 @@ import Search from '../Search';
 import TagPeopleItem from './TagPeopleItem';
 import TaggedItem from './TaggedItem';
 
-const TagPeople = ({ handleHiddenSub }: ISubTweet) => {
+const TagPeople = () => {
     const { value, setValue, handleChangeSearch } = useSearch();
-    const { handleHeightModal } = useCreateTweet();
+    const { handleHeightModal, handleHiddenSub } = useCreateTweet();
     const [users, setUsers] = useState<Array<IUserTweet>>([]);
     const [isLoading, setLoading] = useState<boolean>(true);
     const myTweet = useSelector((state: RootState) => state.myTweet);
@@ -130,4 +130,4 @@ const TagPeople = ({ handleHiddenSub }: ISubTweet) => {
     );
 };
 
-export default TagPeople;
+export default memo(TagPeople);

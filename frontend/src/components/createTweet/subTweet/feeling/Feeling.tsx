@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { v4 } from 'uuid';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { useSearch } from '../../../../hooks';
-import { ISubTweet } from '../../../../interfaces';
 import { TabFeelingType } from '../../../../types';
 import { classNames } from '../../../../utils';
 import Header from '../../Header';
@@ -24,9 +23,9 @@ const tabs: {
     },
 ];
 
-const Feeling = ({ handleHiddenSub }: ISubTweet) => {
+const Feeling = () => {
     const { value, setValue, handleChangeSearch } = useSearch();
-    const { handleHeightModal } = useCreateTweet();
+    const { handleHeightModal, handleHiddenSub } = useCreateTweet();
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const [tabActive, setTabActive] = useState<TabFeelingType>(() =>
         !myTweet.tag || myTweet.tag === 'feeling' ? 'Feelings' : 'Activities',
@@ -91,4 +90,4 @@ const Feeling = ({ handleHiddenSub }: ISubTweet) => {
     );
 };
 
-export default Feeling;
+export default memo(Feeling);

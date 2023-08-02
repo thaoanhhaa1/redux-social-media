@@ -6,6 +6,7 @@ interface IActionCreateTweet {
     image: string;
     sub: SubProps;
     backgroundColor?: string;
+    disabled?: string;
 }
 
 export default IActionCreateTweet;

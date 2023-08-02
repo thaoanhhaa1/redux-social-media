@@ -8,6 +8,7 @@ const vnese =
 
 const config = {
     THEME_KEY: 'hoque-darkTheme',
+    GIFS_PER_PAGE: 5,
     vneseUpper: vnese,
     vneseLower: vnese.toLowerCase(),
     routes,
