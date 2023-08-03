@@ -39,9 +39,23 @@ module.exports = {
     },
 
     createTweet: async (req, res) => {
-        const { _id, content, images, videos, group } = req.body;
+        const {
+            _id,
+            content,
+            images,
+            videos,
+            group,
+            feeling,
+            location,
+            tagPeople,
+            gif,
+        } = req.body;
 
-        if (![content, images, videos].some(Boolean))
+        if (
+            ![content, images, videos, feeling, location, tagPeople, gif].some(
+                Boolean,
+            )
+        )
             return res.sendStatus(400);
 
         try {
@@ -52,6 +66,10 @@ module.exports = {
                 user: _id,
                 videos,
                 group,
+                feeling,
+                location,
+                tagPeople,
+                gif,
             });
 
             const result = await tweet.save();

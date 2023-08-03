@@ -35,7 +35,7 @@ const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
                 isActive && 'bg-black-opacity-05 dark:bg-[#18191A]',
             )}
         >
-            <div className='flex-shrink-0 p-2 bg-[#E4E6EB] rounded-full'>
+            <div className='flex-shrink-0 p-2 bg-[#E4E6EB] dark:bg-[#3E4042] rounded-full'>
                 <Image alt='' src={feeling.image} className='w-5 h-5' />
             </div>
             <span className='flex-1'>{feeling.title}</span>

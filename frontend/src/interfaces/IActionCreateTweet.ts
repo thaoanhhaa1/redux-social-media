@@ -6,7 +6,7 @@ interface IActionCreateTweet {
     image: string;
     sub?: SubProps;
     backgroundColor?: string;
-    disabled?: string;
+    disabled?: string[];
     link?: string;
 }
 

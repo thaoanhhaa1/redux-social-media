@@ -1,31 +1,46 @@
 import { useNavigate } from 'react-router-dom';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { IActionCreateTweet } from '../../../../interfaces';
-import Image from '../../../Image';
 import { useAppDispatch } from '../../../../app/hooks';
+import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { setShowUploadImage } from '../../../../features/myTweet';
+import { useActionCreateTweetBtn } from '../../../../hooks';
+import { IActionCreateTweet } from '../../../../interfaces';
+import { classNames } from '../../../../utils';
+import Image from '../../../Image';
+import { CheckIcon } from '../../../Icons';
 
 const MoreItem = ({ item }: { item: IActionCreateTweet }) => {
     const navigate = useNavigate();
     const { setSub } = useCreateTweet();
     const dispatch = useAppDispatch();
+    const { disabled, active } = useActionCreateTweetBtn(item);
 
     const handleClick = () => {
+        if (disabled) return;
+
         if (item.link) navigate(item.link);
-        else if (item.tooltip === 'Photo/Video')
+        else if (item.tooltip === 'Photo/Video') {
             dispatch(setShowUploadImage(true));
-        else setSub(item.sub);
+            setSub();
+        } else setSub(item.sub);
     };
 
     return (
         <div
             onClick={handleClick}
-            className='flex items-center gap-1 py-[2px] rounded-lg hover:bg-black-opacity-05 transition-all cursor-pointer'
+            className={classNames(
+                'flex items-center gap-1 pr-2 py-[2px] rounded-lg transition-all cursor-pointer',
+                disabled &&
+                    'grayscale brightness-30 dark:brightness-50 pointer-events-none',
+                active
+                    ? 'bg-[rgba(45,_136,_255,_0.1)]'
+                    : 'hover:bg-black-opacity-05 dark:hover:bg-white-opacity-10',
+            )}
         >
             <div className='w-10 h-10 p-2'>
                 <Image alt='' className='w-6 h-6' src={item.image} />
             </div>
-            <div className='font-semibold'>{item.tooltip}</div>
+            <div className='flex-1 font-semibold'>{item.tooltip}</div>
+            {active && <CheckIcon className='text-blue' />}
         </div>
     );
 };

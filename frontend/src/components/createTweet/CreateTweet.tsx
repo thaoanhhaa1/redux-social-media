@@ -63,10 +63,20 @@ const CreateTweet = ({
         await dispatch(
             createTweet({
                 content: value,
-                images: myTweet.image ? [myTweet.image] : undefined,
+                images: myTweet.images,
+                feeling: myTweet.image
+                    ? {
+                          title: `${myTweet.tag} ${myTweet.feeling}`,
+                          image: myTweet.image,
+                      }
+                    : undefined,
+                location: myTweet.location?._id,
+                tagPeople: myTweet.tagPeople?.map((tag) => tag._id),
+                gif: myTweet.gif,
             }),
         ).unwrap();
 
+        setValue('');
         setShowModal(false);
     };
 
@@ -171,8 +181,8 @@ const CreateTweet = ({
                                                     />
                                                 )}
                                             </div>
-                                            <AudienceTag src={images.onlyMe}>
-                                                Only me
+                                            <AudienceTag src={images.public}>
+                                                Public
                                             </AudienceTag>
                                         </div>
                                     </div>
@@ -182,10 +192,10 @@ const CreateTweet = ({
                                                 value={value}
                                                 onChange={handleChange}
                                                 className={classNames(
-                                                    'flex-1 w-full outline-none resize-none text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
-                                                    value.length > 85
-                                                        ? 'text-sm leading-sm'
-                                                        : 'text-sm leading-sm xxs:text-2xl',
+                                                    'flex-1 w-full outline-none resize-none text-sm leading-sm text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
+                                                    value.length > 85 ||
+                                                        myTweet.isShowUploadImage ||
+                                                        'xxs:text-2xl',
                                                 )}
                                                 placeholder={`What's on your mind, ${
                                                     (user.name &&
@@ -205,7 +215,7 @@ const CreateTweet = ({
 
                                 {/* Footer */}
                                 <div className='p-2 xxs:p-4'>
-                                    <div className='p-2 flex justify-between items-center border border-[#CED0D4] rounded-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.1)]'>
+                                    <div className='p-2 flex justify-between items-center border border-[#CED0D4] dark:border-[#3E4042] rounded-2.5 shadow-[0_1px_2px_rgba(0,0,0,0.1)]'>
                                         <span className='hidden xxxs:block font-semibold text-sm leading-sm text-base-black dark:text-white'>
                                             Add to your tweet
                                         </span>

@@ -5,16 +5,19 @@ import { IGif, ILocation, ITweet, IUserTweet } from '../../interfaces';
 
 const initialState: {
     tweets: ITweet[];
+    newTweets: ITweet[];
     isLoading: boolean;
     tag: string;
     feeling: string;
     image?: string;
+    images?: string[];
     location?: ILocation;
     tagPeople?: IUserTweet[];
     gif?: IGif;
     isShowUploadImage?: boolean;
 } = {
     tweets: [],
+    newTweets: [],
     isLoading: false,
     tag: '',
     feeling: '',
@@ -29,6 +32,10 @@ const createTweet = createAsyncThunk(
                 images: tweet.images,
                 videos: tweet.videos,
                 group: tweet.group,
+                feeling: tweet.feeling,
+                location: tweet.location,
+                tagPeople: tweet.tagPeople,
+                gif: tweet.gif,
             });
 
             return res.data;
@@ -85,7 +92,7 @@ const myTweetSlice = createSlice({
             state.isShowUploadImage = payload;
         },
         setImage: (state, { payload }) => {
-            state.image = payload;
+            state.images = [payload];
         },
     },
     extraReducers: (builder) => {
@@ -97,7 +104,7 @@ const myTweetSlice = createSlice({
                 state.isLoading = false;
             })
             .addCase(createTweet.fulfilled, (state, { payload }) => {
-                state.tweets.unshift(payload);
+                state.newTweets.unshift(payload);
                 state.isLoading = false;
                 state.tag = '';
                 state.feeling = '';

@@ -2,6 +2,7 @@ import { images } from '../assets';
 import {
     Feeling,
     Gif,
+    LifeEvent,
     Locations,
     More,
     TagPeople,
@@ -11,11 +12,11 @@ import routes from './routes';
 
 const createTweetActions: IActionCreateTweet[] = [
     {
-        title: '',
+        title: 'isShowUploadImage',
         tooltip: 'Photo/Video',
         image: images.image,
         backgroundColor: '#E4F0D5',
-        disabled: 'gif',
+        disabled: ['gif'],
     },
     {
         title: 'tagPeople',
@@ -44,7 +45,7 @@ const createTweetActions: IActionCreateTweet[] = [
         image: images.gif,
         sub: Gif,
         backgroundColor: '#D2F0EA',
-        disabled: 'image',
+        disabled: ['isShowUploadImage'],
     },
     {
         tooltip: 'More',
@@ -52,13 +53,18 @@ const createTweetActions: IActionCreateTweet[] = [
         sub: More,
     },
     {
+        title: 'liveVideo',
         tooltip: 'Live video',
         image: images.liveVideo,
         link: routes.liveVideo,
+        disabled: ['isShowUploadImage', 'gif'],
     },
     {
+        title: 'lifeEvent',
         tooltip: 'Life event',
         image: images.lifeEvent,
+        disabled: ['isShowUploadImage', 'gif'],
+        sub: LifeEvent,
     },
 ];
 

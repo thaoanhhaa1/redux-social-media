@@ -29,7 +29,7 @@ const ListFeeling = ({
 
     if (feelingSearches.length === 0)
         return (
-            <div className='absolute left-0 right-0 p-2 text-center text-sm leading-sm text-[#65676B]'>
+            <div className='absolute left-0 right-0 p-2 text-center text-sm leading-sm text-[#65676B] dark:text-[#8A8D91]'>
                 Nothing found
             </div>
         );

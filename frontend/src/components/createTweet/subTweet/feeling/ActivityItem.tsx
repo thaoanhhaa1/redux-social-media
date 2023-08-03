@@ -14,7 +14,7 @@ const ActivityItem = ({ feeling }: { feeling: IFeeling }) => {
             onClick={handleClick}
             className='flex items-center gap-3 p-[6px] transition-all hover:bg-black-opacity-05 dark:hover:bg-white-opacity-10 cursor-pointer rounded-lg'
         >
-            <div className='flex-shrink-0 p-2 bg-[#E4E6EB] rounded-full'>
+            <div className='flex-shrink-0 p-2 bg-[#E4E6EB] dark:bg-[#3E4042] rounded-full'>
                 <Image alt='' src={feeling.image} className='flex-1 w-5 h-5' />
             </div>
             <span className='flex-1'>{feeling.title}...</span>

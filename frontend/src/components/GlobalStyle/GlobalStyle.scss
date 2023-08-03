@@ -97,3 +97,7 @@ input::-ms-clear {
 .dark ::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
+
+.dark .invert-icon {
+    filter: invert(89%) sepia(6%) hue-rotate(185deg);
+}

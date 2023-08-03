@@ -25,8 +25,9 @@ const Location = ({ location }: { location: ILocation }) => {
         <div
             onClick={handleClick}
             className={classNames(
-                'p-1.5 flex items-center gap-3 h-[52px] rounded-lg cursor-pointer hover:bg-black-opacity-05 transition-all',
-                isActive && 'bg-black-opacity-05 text-blue',
+                'p-1.5 flex items-center gap-3 h-[52px] rounded-lg cursor-pointer hover:bg-black-opacity-05 dark:hover:bg-white-opacity-10 transition-all',
+                isActive &&
+                    'bg-black-opacity-05 dark:bg-white-opacity-10 text-blue',
             )}
         >
             <div className='p-1 flex-shrink-0 rounded-lg bg-[#65676B]'>

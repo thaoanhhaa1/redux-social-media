@@ -15,7 +15,7 @@ const Tag = () => {
             <span className='capitalize'>{myTweet.tag}...</span>
             <button
                 onClick={handleClick}
-                className='block -mr-1.5 p-1.5 rounded-full hover:bg-black-opacity-05 transition-all'
+                className='block -mr-1.5 p-1.5 rounded-full hover:bg-black-opacity-05 dark:bg-white-opacity-10 transition-all'
             >
                 <XMarkIcon />
             </button>

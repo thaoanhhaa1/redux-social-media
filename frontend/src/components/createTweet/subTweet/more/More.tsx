@@ -13,7 +13,7 @@ const More = () => {
             <Header onClick={handleHiddenSub} isSub>
                 Add to your post
             </Header>
-            <div className='grid grid-cols-2 px-2 py-1 gap-2'>
+            <div className='grid grid-cols-2 p-2 gap-2'>
                 {config.createTweetActions.map((item, index) => {
                     if (index === config.CREATE_TWEET_ACTION_NUMBER)
                         return null;

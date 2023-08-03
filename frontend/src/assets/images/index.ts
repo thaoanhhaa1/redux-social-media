@@ -20,6 +20,10 @@ const images = {
     birthdays: require('./Q5DAVMG-eCj.png'),
     liveVideo: require('./v1iF2605Cb5.png'),
     lifeEvent: require('./CenxFlWjtJO.png'),
+    lock: require('./JgqJqE4kFfK.png'),
+    public: require('./KV7QFf-Yspp.png'),
+    backgroundLifeEvent: require('./st43MlfQdGP.png'),
+    work: require('./tv-E-vHm5BI.png'),
 };
 
 export default images;

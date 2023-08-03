@@ -24,6 +24,28 @@ const tweetModel = new Schema(
         group: {
             type: String,
         },
+        feeling: {
+            title: {
+                type: String,
+            },
+            image: {
+                type: String,
+            },
+        },
+        location: {
+            type: String,
+        },
+        tagPeople: {
+            type: Array,
+        },
+        gif: {
+            title: {
+                type: String,
+            },
+            url: {
+                type: String,
+            },
+        },
     },
     {
         timestamps: true,

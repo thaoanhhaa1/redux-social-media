@@ -22,9 +22,11 @@ const Home = () => {
         (state: RootState) => state.contacts,
     );
     const socket = useSelector((state: RootState) => state.socket);
+    const myTweet = useSelector((state: RootState) => state.myTweet);
     const followingTweets = useSelector(
         (state: RootState) => state.followingTweets,
     );
+    const user = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -125,6 +127,9 @@ const Home = () => {
         >
             <Stories />
             <WhatHappen />
+            {myTweet.newTweets.map((tweet) => (
+                <Card tweet={tweet} user={user} key={tweet._id || ''} />
+            ))}
             {followingTweets.data.map((item) =>
                 item.tweets.map((tweet) => (
                     <Card
