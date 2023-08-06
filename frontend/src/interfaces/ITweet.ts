@@ -1,3 +1,6 @@
+import ILocation from './ILocation';
+import IUserTweet from './IUserTweet';
+
 interface ITweet {
     _id?: string;
     content?: string;
@@ -10,8 +13,8 @@ interface ITweet {
         title: string;
         image: string;
     };
-    location?: string;
-    tagPeople?: string[];
+    location?: ILocation;
+    tagPeople?: IUserTweet[];
     gif?: {
         title: string;
         url: string;

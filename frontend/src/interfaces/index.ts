@@ -5,6 +5,7 @@ export type { default as IFeeling } from './IFeeling';
 export type { default as IGif } from './IGif';
 export type { default as IImageUpload } from './IImageUpload';
 export type { default as ILocation } from './ILocation';
+export type { default as IProfile } from './IProfile';
 export type { default as IRoute } from './IRoute';
 export type { default as IScrollContext } from './IScrollContext';
 export type { default as ISearch } from './ISearch';

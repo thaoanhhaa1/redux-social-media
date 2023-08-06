@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
-import api from '../api';
-import axiosClient from '../api/axiosClient';
+import { useEffectOnce } from 'usehooks-ts';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
@@ -21,19 +20,16 @@ import {
     WhatHappen,
     Wrapper,
 } from '../components';
-import { addTweets } from '../features/myTweet';
-import { IUser } from '../interfaces';
+import { getMyTweets } from '../features/myTweet';
+import { dec, getProfile, inc } from '../features/profile';
 import { getMonthYear } from '../utils';
-import { useEffectOnce } from 'usehooks-ts';
 
 const Profile = () => {
     const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
-    const { user, socket, myTweet } = useSelector((state: RootState) => state);
-    const [isLoading, setLoading] = useState(false);
-    const [tweetCount, setTweetCount] = useState(-1);
-    const [followerCount, setFollowerCount] = useState(0);
-    const [followingCount, setFollowingCount] = useState(0);
-    const [whoToFollow, setWhoToFollow] = useState<IUser[]>([]);
+    const { user, socket, myTweet, profile } = useSelector(
+        (state: RootState) => state,
+    );
+    const [isLoading, setLoading] = useState(true);
     const dispatch = useAppDispatch();
 
     const handleShowModal = useCallback(
@@ -45,14 +41,10 @@ const Profile = () => {
         if (!socket.socket) return;
         const socketIo = socket.socket as Socket;
 
-        socketIo.on('follower', () => setFollowerCount((count) => count + 1));
-        socketIo.on('following', () => setFollowingCount((count) => count + 1));
-        socketIo.on('un-follower', () =>
-            setFollowerCount((count) => count - 1),
-        );
-        socketIo.on('un-following', () =>
-            setFollowingCount((count) => count - 1),
-        );
+        socketIo.on('follower', () => dispatch(inc('follower')));
+        socketIo.on('following', () => dispatch(inc('following')));
+        socketIo.on('un-follower', () => dispatch(dec('follower')));
+        socketIo.on('un-following', () => dispatch(dec('following')));
 
         return () => {
             socketIo.removeListener('follower');
@@ -60,25 +52,17 @@ const Profile = () => {
             socketIo.removeListener('un-follower');
             socketIo.removeListener('un-following');
         };
-    }, [socket.socket, user._id]);
+    }, [dispatch, socket.socket, user._id]);
 
     useEffectOnce(() => {
         (async function () {
-            setLoading(true);
-            const res = (
+            if (!profile.isLoading)
                 await Promise.all([
-                    axiosClient.get(api.countTweet()),
-                    axiosClient.get(api.countFollow()),
-                    axiosClient.get(api.whoToFollow()),
-                    axiosClient.get(api.getMyTweets()),
-                ])
-            ).map((item) => item.data);
+                    dispatch(getProfile()),
+                    dispatch(getMyTweets()),
+                ]);
+
             setLoading(false);
-            setTweetCount(res[0]);
-            setFollowerCount(res[1][0]);
-            setFollowingCount(res[1][1]);
-            setWhoToFollow(res[2]);
-            dispatch(addTweets(res[3]));
         })();
     });
 
@@ -135,17 +119,17 @@ const Profile = () => {
                         <ProfileItem
                             color='--emerald-black-1-color'
                             title='Tweets'
-                            number={tweetCount}
+                            number={profile.tweetCount}
                         />
                         <ProfileItem
                             color='--red-black-1-color'
                             title='Followers'
-                            number={followerCount}
+                            number={profile.followerCount}
                         />
                         <ProfileItem
                             color='--yellow-black-1-color'
                             title='Following'
-                            number={followingCount}
+                            number={profile.followingCount}
                         />
                     </div>
                 </div>
@@ -154,6 +138,9 @@ const Profile = () => {
                 <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
                     <Stories all={false} />
                     <WhatHappen />
+                    {myTweet.newTweets.map((tweet) => (
+                        <Card tweet={tweet} user={user} key={tweet._id || ''} />
+                    ))}
                     {(myTweet.tweets.length > 0 &&
                         myTweet.tweets.map((tweet) => (
                             <Card key={tweet._id} user={user} tweet={tweet} />
@@ -168,7 +155,7 @@ const Profile = () => {
                         <div className='font-semibold text-xl leading-xl text-black dark:text-white'>
                             Who to follow
                         </div>
-                        {whoToFollow.map((user) => (
+                        {profile.whoToFollow.map((user) => (
                             <Follow key={user._id} user={user} />
                         ))}
                         <button className='w-fit font-medium text-xs leading-xs text-blue-white-2 dark:text-blue'>

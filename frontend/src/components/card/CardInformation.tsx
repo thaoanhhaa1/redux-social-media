@@ -41,7 +41,7 @@ const CardInformation = () => {
     return (
         <div className='flex flex-col gap-2 xxs:gap-5 ml-12 xxs:ml-[56px]'>
             {tweet.content && (
-                <p className='font-medium text-sm leading-[21px] text-black dark:text-white'>
+                <p className='font-medium text-sm leading-[21px] text-black dark:text-white break-words'>
                     {tweet.content}
                 </p>
             )}
@@ -50,6 +50,13 @@ const CardInformation = () => {
                     className='rounded-2.5 aspect-video'
                     alt=''
                     src={tweet.images[0]}
+                />
+            )}
+            {tweet.gif && (
+                <Image
+                    className='rounded-2.5 aspect-video'
+                    alt={tweet.gif.title}
+                    src={tweet.gif.url}
                 />
             )}
             <div className='flex justify-between'>

@@ -15,7 +15,7 @@ const UploadImage = () => {
         dispatch(setShowUploadImage());
         if (image.image) deleteImage(getNameStorage(image.image));
         image.setImage('');
-        dispatch(setImage(''));
+        dispatch(setImage());
     };
 
     useEffect(() => {

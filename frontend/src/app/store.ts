@@ -2,6 +2,7 @@ import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import contactsReducer from '../features/contacts';
 import followingTweetsReducer from '../features/followingTweets';
 import myTweetReducer from '../features/myTweet';
+import profileReducer from '../features/profile';
 import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
 import storiesReducer from '../features/stories';
@@ -16,6 +17,7 @@ export const store = configureStore({
         myTweet: myTweetReducer,
         followingTweets: followingTweetsReducer,
         stories: storiesReducer,
+        profile: profileReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -27,24 +27,30 @@ const createTweet = createAsyncThunk(
     'myTweet/createTweet',
     async (tweet: ITweet) => {
         try {
-            const res = await axiosClient.post(api.createTweet(), {
+            await axiosClient.post(api.createTweet(), {
                 content: tweet.content,
                 images: tweet.images,
                 videos: tweet.videos,
                 group: tweet.group,
                 feeling: tweet.feeling,
                 location: tweet.location,
-                tagPeople: tweet.tagPeople,
+                tagPeople: tweet.tagPeople?.map((tag) => tag._id),
                 gif: tweet.gif,
             });
 
-            return res.data;
+            return tweet;
         } catch (error) {
             console.error('🚀 ~ error:', error);
             throw error;
         }
     },
 );
+
+const getMyTweets = createAsyncThunk('myTweet/getMyTweets', async () => {
+    const res = await axiosClient.get(api.getMyTweets());
+
+    return res.data;
+});
 
 const myTweetSlice = createSlice({
     name: 'myTweet',
@@ -91,8 +97,8 @@ const myTweetSlice = createSlice({
         ) => {
             state.isShowUploadImage = payload;
         },
-        setImage: (state, { payload }) => {
-            state.images = [payload];
+        setImage: (state, { payload }: { payload: string | undefined }) => {
+            state.images = payload ? [payload] : undefined;
         },
     },
     extraReducers: (builder) => {
@@ -109,6 +115,9 @@ const myTweetSlice = createSlice({
                 state.tag = '';
                 state.feeling = '';
                 state.image = '';
+            })
+            .addCase(getMyTweets.fulfilled, (state, { payload }) => {
+                state.tweets.push(...payload);
             });
     },
 });
@@ -126,4 +135,4 @@ export const {
     setShowUploadImage,
     setImage,
 } = myTweetSlice.actions;
-export { createTweet };
+export { createTweet, getMyTweets };

@@ -37,6 +37,7 @@ const tweetModel = new Schema(
         },
         tagPeople: {
             type: Array,
+            required: true,
         },
         gif: {
             title: {

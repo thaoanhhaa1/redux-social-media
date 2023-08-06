@@ -22,14 +22,65 @@ module.exports = {
         const skip = req.query.skip || 0;
 
         try {
-            const myTweets = await TweetModel.find({
-                user: _id,
-            })
-                .skip(skip)
-                .limit(limit)
-                .sort({
-                    createdAt: -1,
-                });
+            const myTweets = await TweetModel.aggregate([
+                { $match: { user: _id } },
+                { $sort: { createdAt: -1 } },
+                { $skip: skip },
+                { $limit: limit },
+                {
+                    $lookup: {
+                        from: 'locations',
+                        as: 'location',
+                        let: { location: '$location' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $eq: [
+                                            { $toString: '$_id' },
+                                            '$$location',
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+                {
+                    $addFields: {
+                        location: {
+                            $ifNull: [{ $arrayElemAt: ['$location', 0] }, null],
+                        },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        as: 'tagPeople',
+                        let: { tagPeople: '$tagPeople' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $in: [
+                                            { $toString: '$_id' },
+                                            { $ifNull: ['$$tagPeople', []] },
+                                        ],
+                                    },
+                                },
+                            },
+                            {
+                                $project: {
+                                    name: 1,
+                                    username: 1,
+                                    name: 1,
+                                    avatar: 1,
+                                },
+                            },
+                        ],
+                    },
+                },
+            ]);
 
             res.json(myTweets);
         } catch (error) {
@@ -68,7 +119,7 @@ module.exports = {
                 group,
                 feeling,
                 location,
-                tagPeople,
+                tagPeople: tagPeople ?? [],
                 gif,
             });
 

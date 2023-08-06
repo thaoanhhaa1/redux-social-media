@@ -4,6 +4,7 @@ import {
     SetStateAction,
     useCallback,
     useEffect,
+    useMemo,
     useRef,
     useState,
 } from 'react';
@@ -46,6 +47,23 @@ const CreateTweet = ({
     const user = useSelector((state: RootState) => state.user);
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const dispatch = useAppDispatch();
+    const disabled = useMemo(
+        () =>
+            !value &&
+            !myTweet.images?.length &&
+            !myTweet.tagPeople?.length &&
+            !myTweet.feeling &&
+            !myTweet.location &&
+            !myTweet.gif,
+        [
+            myTweet.feeling,
+            myTweet.gif,
+            myTweet.images?.length,
+            myTweet.location,
+            myTweet.tagPeople?.length,
+            value,
+        ],
+    );
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
         setValue(e.target.value);
@@ -70,8 +88,8 @@ const CreateTweet = ({
                           image: myTweet.image,
                       }
                     : undefined,
-                location: myTweet.location?._id,
-                tagPeople: myTweet.tagPeople?.map((tag) => tag._id),
+                location: myTweet.location,
+                tagPeople: myTweet.tagPeople,
                 gif: myTweet.gif,
             }),
         ).unwrap();
@@ -240,7 +258,7 @@ const CreateTweet = ({
                                     </div>
                                     <Button
                                         onClick={handleSubmit}
-                                        disabled={!value && !myTweet.image}
+                                        disabled={disabled}
                                         isWidthFull
                                         className='mt-2 xxxs:mt-4 font-semibold bg-blue text-white'
                                     >

@@ -1,4 +1,4 @@
-import { Ref, useRef } from 'react';
+import { Ref, memo, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 import CardProvider from '../../contexts/CardContext';
 import { ITweet } from '../../interfaces';
@@ -52,4 +52,4 @@ const Card = ({
     );
 };
 
-export default Card;
+export default memo(Card);
