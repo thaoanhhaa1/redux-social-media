@@ -17,8 +17,7 @@ import { RootState } from '../../app/store';
 import { images } from '../../assets';
 import config from '../../config';
 import { CreateTweetProvider } from '../../contexts/CreateTweetContext';
-import { createTweet } from '../../features/myTweet';
-import SubProps from '../../types/SubProps';
+import { createTweet, setSub, setValue } from '../../features/myTweet';
 import { classNames } from '../../utils';
 import Button from '../Button';
 import Image from '../Image';
@@ -40,8 +39,6 @@ const CreateTweet = ({
     isShowModal: boolean;
     setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const [value, setValue] = useState('');
-    const [sub, setSub] = useState<SubProps>();
     const [height, setHeight] = useState<number>(0);
     const subRef = useRef<HTMLDivElement | null>(null);
     const user = useSelector((state: RootState) => state.user);
@@ -49,7 +46,7 @@ const CreateTweet = ({
     const dispatch = useAppDispatch();
     const disabled = useMemo(
         () =>
-            !value &&
+            !myTweet.value &&
             !myTweet.images?.length &&
             !myTweet.tagPeople?.length &&
             !myTweet.feeling &&
@@ -61,16 +58,16 @@ const CreateTweet = ({
             myTweet.images?.length,
             myTweet.location,
             myTweet.tagPeople?.length,
-            value,
+            myTweet.value,
         ],
     );
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
-        setValue(e.target.value);
+        dispatch(setValue(e.target.value));
 
     const handleHiddenSub = useCallback(() => {
-        setSub(undefined);
-    }, []);
+        dispatch(setSub(undefined));
+    }, [dispatch]);
 
     const handleCloseModal = () => {
         setSub(undefined);
@@ -80,7 +77,7 @@ const CreateTweet = ({
     const handleSubmit = async () => {
         await dispatch(
             createTweet({
-                content: value,
+                content: myTweet.value,
                 images: myTweet.images,
                 feeling: myTweet.image
                     ? {
@@ -99,7 +96,7 @@ const CreateTweet = ({
     };
 
     const handleHeightModal = useCallback(() => {
-        if (!sub || !subRef.current) {
+        if (!myTweet.sub || !subRef.current) {
             setHeight(0);
             return;
         }
@@ -107,7 +104,7 @@ const CreateTweet = ({
         const element: HTMLDivElement = subRef.current;
 
         setHeight(element.offsetHeight);
-    }, [sub]);
+    }, [myTweet.sub]);
 
     useEffect(() => {
         if (!isShowModal) setSub(undefined);
@@ -115,7 +112,7 @@ const CreateTweet = ({
 
     useEffect(() => {
         handleHeightModal();
-    }, [handleHeightModal, sub, myTweet.tag]);
+    }, [handleHeightModal, myTweet.sub, myTweet.tag]);
 
     return (
         <Modal
@@ -124,7 +121,6 @@ const CreateTweet = ({
             className='relative max-w-[500px] w-[calc(100vw-16px)]'
         >
             <CreateTweetProvider
-                setSub={setSub}
                 handleHeightModal={handleHeightModal}
                 handleHiddenSub={handleHiddenSub}
             >
@@ -137,7 +133,9 @@ const CreateTweet = ({
                         <div
                             className={classNames(
                                 'max-h-[min(600px,_80vh)] overflow-y-auto transition-transform duration-200',
-                                sub ? '-translate-x-full' : 'translate-x-0',
+                                myTweet.sub
+                                    ? '-translate-x-full'
+                                    : 'translate-x-0',
                             )}
                         >
                             <div className='relative'>
@@ -207,11 +205,11 @@ const CreateTweet = ({
                                     <ScrollbarCustomize className='flex flex-col min-h-[154px] max-h-[322px] px-2 xxxs:px-4'>
                                         <label className='cursor-text flex-1 pt-1 pb-2 '>
                                             <TextareaAutosize
-                                                value={value}
+                                                value={myTweet.value}
                                                 onChange={handleChange}
                                                 className={classNames(
                                                     'flex-1 w-full outline-none resize-none text-sm leading-sm text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
-                                                    value.length > 85 ||
+                                                    myTweet.value.length > 85 ||
                                                         myTweet.isShowUploadImage ||
                                                         'xxs:text-2xl',
                                                 )}
@@ -277,12 +275,14 @@ const CreateTweet = ({
                         <div
                             className={classNames(
                                 'absolute max-h-[85vh] overflow-y-auto top-0 left-full w-full transition-transform duration-200',
-                                sub ? '-translate-x-full' : 'translate-x-0',
+                                myTweet.sub
+                                    ? '-translate-x-full'
+                                    : 'translate-x-0',
                             )}
                         >
-                            {sub &&
+                            {myTweet.sub &&
                                 (() => {
-                                    const Sub = sub;
+                                    const Sub = myTweet.sub;
 
                                     return (
                                         <div ref={subRef}>

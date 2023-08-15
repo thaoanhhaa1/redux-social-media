@@ -1,26 +1,24 @@
 import { useLocalStorage } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
 import config from '../../config';
-import useCreateTweet from '../../contexts/CreateTweetContext';
-import { setShowUploadImage } from '../../features/myTweet';
+import { setShowUploadImage, setSub } from '../../features/myTweet';
 import { useActionCreateTweetBtn } from '../../hooks';
 import { IActionCreateTweet } from '../../interfaces';
+import { classNames } from '../../utils';
 import Button from '../Button';
 import Image from '../Image';
 import Tooltip from '../Tooltip';
-import { classNames } from '../../utils';
 
 const ActionButton = ({ action }: { action: IActionCreateTweet }) => {
     const { disabled, active } = useActionCreateTweetBtn(action);
     const [isDarkTheme] = useLocalStorage(config.THEME_KEY, true);
-    const { setSub } = useCreateTweet();
     const dispatch = useAppDispatch();
     let styles = {};
 
     const handleClick = () => {
         if (action.tooltip === 'Photo/Video')
             dispatch(setShowUploadImage(true));
-        else setSub(action.sub);
+        else dispatch(setSub(action.sub));
     };
 
     if (active)

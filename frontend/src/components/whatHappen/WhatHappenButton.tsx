@@ -8,15 +8,18 @@ const WhatHappenButton = ({
     backgroundColor,
     backgroundColorIcon,
     className = '',
+    onClick,
 }: {
     icon: ReactNode;
     children: ReactNode;
     backgroundColor: string;
     backgroundColorIcon: string;
     className?: string;
+    onClick: () => void;
 }) => {
     return (
         <Button
+            onClick={onClick}
             icon={
                 <span
                     className={classNames(

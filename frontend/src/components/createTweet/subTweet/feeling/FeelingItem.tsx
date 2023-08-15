@@ -1,16 +1,14 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../app/hooks';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { setFeeling, setTag } from '../../../../features/myTweet';
+import { RootState } from '../../../../app/store';
+import { setFeeling, setSub, setTag } from '../../../../features/myTweet';
 import { IFeeling } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
-import { RootState } from '../../../../app/store';
 
 const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const dispatch = useAppDispatch();
-    const { setSub } = useCreateTweet();
     const isActive = feeling.title === myTweet.feeling;
 
     const handleClick = () => {
@@ -24,7 +22,7 @@ const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
                 }),
             );
         }
-        setSub(undefined);
+        dispatch(setSub(undefined));
     };
 
     return (

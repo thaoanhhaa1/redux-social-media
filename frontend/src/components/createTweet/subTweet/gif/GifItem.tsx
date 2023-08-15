@@ -1,16 +1,14 @@
 import { useAppDispatch } from '../../../../app/hooks';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { setGif } from '../../../../features/myTweet';
+import { setGif, setSub } from '../../../../features/myTweet';
 import { IGif } from '../../../../interfaces';
 import Image from '../../../Image';
 
 const GifItem = ({ gif }: { gif: IGif }) => {
     const dispatch = useAppDispatch();
-    const { setSub } = useCreateTweet();
 
     const handleClick = () => {
         dispatch(setGif(gif));
-        setSub();
+        dispatch(setSub(undefined));
     };
 
     return (
