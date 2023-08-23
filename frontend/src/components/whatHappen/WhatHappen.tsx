@@ -6,7 +6,7 @@ import { setShowUploadImage, setSub } from '../../features/myTweet';
 import { ActivityIcon, GalleryIcon, TagFriendIcon } from '../Icons';
 import Image from '../Image';
 import CreateTweet from '../createTweet';
-import { Feeling, TagPeople } from '../createTweet/subTweet';
+import { Feeling, More, TagPeople } from '../createTweet/subTweet';
 import Wrapper from '../wrapper';
 import WhatHappenButton from './WhatHappenButton';
 
@@ -64,7 +64,13 @@ const WhatHappen = () => {
                 >
                     filing/activity
                 </WhatHappenButton>
-                <button className='-mx-2 px-2 h-full text-base-black dark:text-white'>
+                <button
+                    onClick={() => {
+                        setShowModal(true);
+                        dispatch(setSub(More));
+                    }}
+                    className='-mx-2 px-2 h-full text-base-black dark:text-white'
+                >
                     :
                 </button>
             </div>
