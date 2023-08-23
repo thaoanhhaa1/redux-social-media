@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IGif, ILocation, ITweet, IUserTweet } from '../../interfaces';
+import SubProps from '../../types/SubProps';
 
 const initialState: {
     tweets: ITweet[];
@@ -15,12 +16,15 @@ const initialState: {
     tagPeople?: IUserTweet[];
     gif?: IGif;
     isShowUploadImage?: boolean;
+    value: string;
+    sub?: SubProps;
 } = {
     tweets: [],
     newTweets: [],
     isLoading: false,
     tag: '',
     feeling: '',
+    value: '',
 };
 
 const createTweet = createAsyncThunk(
@@ -100,6 +104,12 @@ const myTweetSlice = createSlice({
         setImage: (state, { payload }: { payload: string | undefined }) => {
             state.images = payload ? [payload] : undefined;
         },
+        setValue: (state, { payload }: { payload: string }) => {
+            state.value = payload;
+        },
+        setSub: (state, { payload }: { payload: SubProps | undefined }) => {
+            state.sub = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -134,5 +144,7 @@ export const {
     setGif,
     setShowUploadImage,
     setImage,
+    setValue,
+    setSub,
 } = myTweetSlice.actions;
 export { createTweet, getMyTweets };

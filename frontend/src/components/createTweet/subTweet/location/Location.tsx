@@ -1,14 +1,12 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { setLocation } from '../../../../features/myTweet';
+import { setLocation, setSub } from '../../../../features/myTweet';
 import { ILocation } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
 
 const Location = ({ location }: { location: ILocation }) => {
-    const { setSub } = useCreateTweet();
     const dispatch = useAppDispatch();
     const locationState = useSelector(
         (state: RootState) => state.myTweet.location,
@@ -18,7 +16,7 @@ const Location = ({ location }: { location: ILocation }) => {
     const handleClick = () => {
         if (isActive) dispatch(setLocation(undefined));
         else dispatch(setLocation(location));
-        setSub(undefined);
+        dispatch(setSub(undefined));
     };
 
     return (

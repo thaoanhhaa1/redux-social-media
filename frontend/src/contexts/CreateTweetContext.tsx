@@ -1,31 +1,21 @@
-import {
-    Dispatch,
-    PropsWithChildren,
-    SetStateAction,
-    createContext,
-    useContext,
-} from 'react';
-import SubProps from '../types/SubProps';
+import { PropsWithChildren, createContext, useContext } from 'react';
 
 const CreateTweetContext = createContext({
-    setSub: (sub?: SubProps) => {},
     handleHeightModal: () => {},
     handleHiddenSub: () => {},
 });
 
 function CreateTweetProvider({
-    setSub,
     handleHeightModal,
     handleHiddenSub,
     ...props
 }: {
-    setSub: Dispatch<SetStateAction<SubProps>>;
     handleHeightModal: () => void;
     handleHiddenSub: () => void;
 } & PropsWithChildren) {
     return (
         <CreateTweetContext.Provider
-            value={{ setSub, handleHeightModal, handleHiddenSub }}
+            value={{ handleHeightModal, handleHiddenSub }}
             {...props}
         />
     );

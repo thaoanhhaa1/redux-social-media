@@ -2,13 +2,13 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { setFeeling, setTag } from '../../../../features/myTweet';
+import { setFeeling, setSub, setTag } from '../../../../features/myTweet';
 import { IFeeling } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
 
 const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
-    const { setSub, handleHeightModal } = useCreateTweet();
+    const { handleHeightModal } = useCreateTweet();
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const dispatch = useAppDispatch();
     const isActive = myTweet.feeling === feeling.title;
@@ -24,7 +24,7 @@ const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
                 }),
             );
         }
-        setSub();
+        dispatch(setSub(undefined));
         handleHeightModal();
     };
 

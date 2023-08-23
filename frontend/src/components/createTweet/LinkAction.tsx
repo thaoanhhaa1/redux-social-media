@@ -1,4 +1,5 @@
-import useCreateTweet from '../../contexts/CreateTweetContext';
+import { useAppDispatch } from '../../app/hooks';
+import { setSub } from '../../features/myTweet';
 import SubProps from '../../types/SubProps';
 import Image from '../Image';
 
@@ -13,10 +14,10 @@ const LinkAction = ({
     title: string;
     sub: SubProps;
 }) => {
-    const { setSub } = useCreateTweet();
+    const dispatch = useAppDispatch();
 
     const handleClick = () => {
-        setSub(sub);
+        dispatch(setSub(sub));
     };
 
     return (

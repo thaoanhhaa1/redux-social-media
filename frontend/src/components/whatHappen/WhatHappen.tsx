@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
+import { setShowUploadImage, setSub } from '../../features/myTweet';
 import { ActivityIcon, GalleryIcon, TagFriendIcon } from '../Icons';
 import Image from '../Image';
-import CreateTweet from '../createTweet/CreateTweet';
-import Wrapper from '../wrapper/Wrapper';
+import CreateTweet from '../createTweet';
+import { Feeling, More, TagPeople } from '../createTweet/subTweet';
+import Wrapper from '../wrapper';
 import WhatHappenButton from './WhatHappenButton';
 
 const WhatHappen = () => {
     const user = useSelector((state: RootState) => state.user);
+    const myTweet = useSelector((state: RootState) => state.myTweet);
+    const dispatch = useAppDispatch();
     const [isShowModal, setShowModal] = useState(false);
 
     return (
@@ -19,7 +24,7 @@ const WhatHappen = () => {
                     onClick={() => setShowModal(true)}
                     className='cursor-pointer dark:bg-dark-black-2 flex-1 rounded-2.5 border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs text-base-black dark:text-white'
                 >
-                    What’s happening?
+                    {myTweet.value || 'What’s happening?'}
                 </div>
             </div>
             <div className='flex items-center gap-3'>
@@ -28,10 +33,18 @@ const WhatHappen = () => {
                     backgroundColorIcon='bg-emerald'
                     icon={<GalleryIcon />}
                     className='hidden xs:flex flex-1'
+                    onClick={() => {
+                        setShowModal(true);
+                        dispatch(setShowUploadImage(true));
+                    }}
                 >
                     Gallery
                 </WhatHappenButton>
                 <WhatHappenButton
+                    onClick={() => {
+                        setShowModal(true);
+                        dispatch(setSub(TagPeople));
+                    }}
                     backgroundColor='bg-red-white-3 dark:bg-red-black-3'
                     backgroundColorIcon='bg-red'
                     icon={<TagFriendIcon />}
@@ -40,6 +53,10 @@ const WhatHappen = () => {
                     Tag friend
                 </WhatHappenButton>
                 <WhatHappenButton
+                    onClick={() => {
+                        setShowModal(true);
+                        dispatch(setSub(Feeling));
+                    }}
                     backgroundColor='bg-yellow-white-3 dark:bg-yellow-black-3'
                     backgroundColorIcon='bg-yellow'
                     icon={<ActivityIcon />}
@@ -47,7 +64,13 @@ const WhatHappen = () => {
                 >
                     filing/activity
                 </WhatHappenButton>
-                <button className='-mx-2 px-2 h-full text-base-black dark:text-white'>
+                <button
+                    onClick={() => {
+                        setShowModal(true);
+                        dispatch(setSub(More));
+                    }}
+                    className='-mx-2 px-2 h-full text-base-black dark:text-white'
+                >
                     :
                 </button>
             </div>
