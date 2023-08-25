@@ -4,7 +4,11 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { toggleList, toggleUserList } from '../../features/followingTweets';
+import {
+    toggleList,
+    toggleUserFollow,
+    toggleUserList,
+} from '../../features/followingTweets';
 import { ICardMoreBtn } from '../../interfaces';
 import {
     AddListIcon,
@@ -18,6 +22,7 @@ import {
 } from '../Icons';
 import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
+import { toggleFollow } from '../../services';
 
 const CardMore = () => {
     const { user } = useCardContext();
@@ -39,9 +44,15 @@ const CardMore = () => {
             temp.push(
                 {
                     icon: FollowIcon,
-                    title: `${true ? 'Follow' : 'Unfollow'} @${user.username}`,
-                    active: false,
+                    title: `${user.follow ? 'Unfollow' : 'Follow'} @${
+                        user.username
+                    }`,
+                    active: user.follow,
                     activeIcon: UnFollowIcon,
+                    onClick: async () => {
+                        await toggleFollow(user._id, user.follow);
+                        dispatch(toggleUserFollow(user._id));
+                    },
                 },
                 {
                     icon: BlockIcon,
@@ -71,7 +82,14 @@ const CardMore = () => {
             );
 
         return temp;
-    }, [dispatch, owner._id, user._id, user.isInList, user.username]);
+    }, [
+        dispatch,
+        owner._id,
+        user._id,
+        user.follow,
+        user.isInList,
+        user.username,
+    ]);
 
     return (
         <Wrapper

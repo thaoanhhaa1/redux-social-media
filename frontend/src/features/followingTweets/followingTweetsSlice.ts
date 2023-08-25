@@ -68,6 +68,14 @@ const followingTweetsSlice = createSlice({
                 }
             });
         },
+        toggleUserFollow: (state, { payload }: { payload: string }) => {
+            state.data.forEach((item) => {
+                if (item.user._id === payload) {
+                    item.user.follow = !item.user.follow;
+                    return;
+                }
+            });
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -86,4 +94,5 @@ const followingTweetsSlice = createSlice({
 
 export default followingTweetsSlice.reducer;
 export { getTweets, toggleLike, toggleList };
-export const { toggleUserList } = followingTweetsSlice.actions;
+export const { toggleUserList, toggleUserFollow } =
+    followingTweetsSlice.actions;

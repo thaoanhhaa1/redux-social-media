@@ -1,11 +1,10 @@
 import { memo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { IUser } from '../interfaces';
+import { toggleFollow } from '../services';
+import { classNames } from '../utils';
 import Button from './Button';
 import Image from './Image';
-import axiosClient from '../api/axiosClient';
-import api from '../api';
-import { toast } from 'react-toastify';
-import { classNames } from '../utils';
 
 const Follow = ({ user }: { user: IUser }) => {
     const [isFollow, setFollow] = useState(false);
@@ -14,13 +13,8 @@ const Follow = ({ user }: { user: IUser }) => {
     const handleClickBtn = async () => {
         try {
             setLoading(true);
-            const res = await axiosClient.post(
-                api[isFollow ? 'unfollow' : 'follow'](),
-                {
-                    userId: user._id,
-                },
-            );
-            console.log('🚀 ~ res ~ res:', res);
+            await toggleFollow(user._id, isFollow);
+
             setLoading(false);
             setFollow(!isFollow);
         } catch (error) {
@@ -30,14 +24,14 @@ const Follow = ({ user }: { user: IUser }) => {
     };
 
     return (
-        <div className="flex gap-5 cursor-pointer">
-            <Image alt="" src={user.avatar} className="w-10 h-10" rounded />
-            <div className="flex-1 flex justify-between items-center gap-2">
-                <div className="flex-1">
-                    <div className="font-semibold text-sm leading-sm text-black dark:text-white">
+        <div className='flex gap-5 cursor-pointer'>
+            <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
+            <div className='flex-1 flex justify-between items-center gap-2'>
+                <div className='flex-1'>
+                    <div className='font-semibold text-sm leading-sm text-black dark:text-white'>
                         {user.name || user.username}
                     </div>
-                    <div className="font-semibold text-xs leading-sm text-black-8 dark:text-white">
+                    <div className='font-semibold text-xs leading-sm text-black-8 dark:text-white'>
                         @{user.username}
                     </div>
                 </div>

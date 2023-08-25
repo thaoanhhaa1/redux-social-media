@@ -144,6 +144,7 @@ module.exports = {
         }
     },
 
+    // [POST] /api/private/follow/follow
     follow: async (req, res) => {
         const { userId, _id } = req.body;
         let session;
@@ -208,6 +209,7 @@ module.exports = {
         }
     },
 
+    // [POST] /api/private/follow/unfollow
     unfollow: async (req, res) => {
         const { userId, _id } = req.body;
         let session;

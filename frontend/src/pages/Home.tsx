@@ -32,7 +32,7 @@ const Home = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (!user) return;
+        if (!user._id) return;
 
         (async () => {
             const queries = [dispatch(getStories()).unwrap()];
@@ -46,7 +46,7 @@ const Home = () => {
             dispatch(setLoading(false));
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [dispatch, user]);
 
     useEffect(() => {
         if (!socket.socket) return;
