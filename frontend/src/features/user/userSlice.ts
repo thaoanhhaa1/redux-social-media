@@ -3,10 +3,10 @@ import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { IUser } from '../../interfaces';
 import { ProfileType, SignInType, SignUpType } from '../../types';
+import { IUserProfile } from '../../interfaces';
 
-const initialState: IUser = {
+const initialState: IUserProfile = {
     _id: '',
     username: '',
     email: '',

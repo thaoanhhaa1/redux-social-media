@@ -1,8 +1,7 @@
 import { Ref, memo, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 import CardProvider from '../../contexts/CardContext';
-import { ITweet } from '../../interfaces';
-import IUserTweet from '../../interfaces/IUserTweet';
+import { IPersonTweet, ITweet } from '../../interfaces';
 import { classNames } from '../../utils';
 import Wrapper from '../wrapper/Wrapper';
 import CardInformation from './CardInformation';
@@ -13,7 +12,7 @@ const Card = ({
     tweet,
     className = '',
 }: {
-    user: IUserTweet;
+    user: IPersonTweet;
     tweet: ITweet;
     className?: string;
 }) => {

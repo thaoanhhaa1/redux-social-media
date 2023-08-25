@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 import { v4 } from 'uuid';
-import { IUserTweet } from '../interfaces';
+import { IPerson } from '../interfaces';
 
-const TagPeople = ({ tagPeople }: { tagPeople: IUserTweet[] }) => {
+const TagPeople = ({ tagPeople }: { tagPeople: IPerson[] }) => {
     return (
         <>
             &nbsp;with&nbsp;

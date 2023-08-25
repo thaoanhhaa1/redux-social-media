@@ -1,5 +1,5 @@
 import ILocation from './ILocation';
-import IUserTweet from './IUserTweet';
+import IUserTweet from './IPerson';
 
 interface ITweet {
     _id?: string;

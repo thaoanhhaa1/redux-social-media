@@ -825,16 +825,42 @@ export const AddListIcon = ({ className }: { className?: string }) => (
         className={className}
         width={22}
         height={22}
-        viewBox='0 0 21 20'
-        fill='none'
         xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 24 24'
+        strokeWidth={2}
+        stroke='currentColor'
+        fill='none'
+        strokeLinecap='round'
+        strokeLinejoin='round'
     >
-        <path d='M0 14.536H10V16.536H0V14.536ZM0 7.53601H20V9.53601H0V7.53601ZM0 0.536011H20V2.53601H0V0.536011ZM16 14.536V11.536H18V14.536H21V16.536H18V19.536H16V16.536H13V14.536H16Z' />
-        <path
-            d='M0 14.536H10V16.536H0V14.536ZM0 7.53601H20V9.53601H0V7.53601ZM0 0.536011H20V2.53601H0V0.536011ZM16 14.536V11.536H18V14.536H21V16.536H18V19.536H16V16.536H13V14.536H16Z'
-            fill='white'
-            fillOpacity='0.45'
-        />
+        <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+        <path d='M19 8h-14' />
+        <path d='M5 12h9' />
+        <path d='M11 16h-6' />
+        <path d='M15 16h6' />
+        <path d='M18 13v6' />
+    </svg>
+);
+
+export const RemoveListIcon = ({ className }: { className?: string }) => (
+    <svg
+        className={className}
+        width={22}
+        height={22}
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 24 24'
+        strokeWidth={2}
+        stroke='currentColor'
+        fill='none'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+    >
+        <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+        <path d='M19 8h-14' />
+        <path d='M5 12h7' />
+        <path d='M12 16h-7' />
+        <path d='M16 14l4 4' />
+        <path d='M20 14l-4 4' />
     </svg>
 );
 

@@ -17,6 +17,8 @@ const api = {
     search: (param: String) => `/private/search/${param}`,
     updateOnlineStatus: () => '/private/online-status',
     getLocations: () => '/private/locations',
+    toggleList: (isAdd: boolean) =>
+        `/private/lists/${isAdd ? 'add' : 'remove'}`,
     signUp: () => '/auth/sign-up',
     signIn: () => '/auth/sign-in',
 };

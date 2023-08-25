@@ -1,4 +1,4 @@
-import IUser from './IUser';
+import IUser from './IUserProfile';
 
 interface ISearch {
     results: IUser[];

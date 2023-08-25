@@ -1,9 +1,9 @@
 import { useAppDispatch } from '../../../../app/hooks';
 import { addTagPeople } from '../../../../features/myTweet';
-import { IUserTweet } from '../../../../interfaces';
+import { IPerson } from '../../../../interfaces';
 import Image from '../../../Image';
 
-const TagPeopleItem = ({ user }: { user: IUserTweet }) => {
+const TagPeopleItem = ({ user }: { user: IPerson }) => {
     const dispatch = useAppDispatch();
     const handleClick = () => dispatch(addTagPeople(user));
 

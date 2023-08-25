@@ -1,10 +1,8 @@
 import IPerson from './IPerson';
 
 interface IUser extends IPerson {
-    bio: string;
-    website: string;
-    birthday: string;
-    createdAt: string;
+    email: string;
+    background: string;
 }
 
 export default IUser;

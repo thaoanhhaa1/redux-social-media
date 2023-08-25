@@ -1,4 +1,4 @@
-import IPerson from './IPerson';
+import IPerson from './IUser';
 
 interface IContact extends IPerson {
     offline: string | null;

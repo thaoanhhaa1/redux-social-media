@@ -1,18 +1,15 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { Loading, Sidebar, TopBar } from '../../components';
 import config from '../../config';
-import { connect, disconnect } from '../../features/socket';
-import { getStories } from '../../features/stories';
 import { fetchUser } from '../../features/user';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const user = useSelector((state: RootState) => state.user);
-    const [isLoadingPage, setLoadingPage] = useState(true);
+    const { isLoading } = useSelector((state: RootState) => state.page);
 
     useEffect(() => {
         (async () => {
@@ -24,22 +21,13 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
         })();
     }, [dispatch, navigate]);
 
-    useEffect(() => {
-        if (!user._id) return;
-
-        dispatch(connect(user._id));
-        (async () => await dispatch(getStories()).unwrap())();
-        setLoadingPage(false);
-
-        return () => {
-            dispatch(disconnect());
-        };
-    }, [dispatch, user._id]);
-
-    if (isLoadingPage) return <Loading />;
-
     return (
         <div className='flex'>
+            {isLoading && (
+                <div className='fixed inset-0 bg-white dark:bg-dark-black-3 z-50'>
+                    <Loading />
+                </div>
+            )}
             <Sidebar />
             <div className='flex-1 w-[calc(100vw_-_var(--home-sidebar-width))]'>
                 <TopBar />

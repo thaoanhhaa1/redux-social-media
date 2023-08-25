@@ -7,6 +7,8 @@ const CardContext = createContext<ICardContext>({
         avatar: '',
         name: '',
         username: '',
+        follow: false,
+        isInList: false,
     },
     tweet: {},
 });

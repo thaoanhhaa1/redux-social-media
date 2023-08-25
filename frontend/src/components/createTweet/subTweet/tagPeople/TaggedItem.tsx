@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
-import { IUserTweet } from '../../../../interfaces';
-import { XMarkIcon } from '../../../Icons';
 import { removeTagPeople } from '../../../../features/myTweet';
+import { IPerson } from '../../../../interfaces';
+import { XMarkIcon } from '../../../Icons';
 
-const TaggedItem = ({ user }: { user: IUserTweet }) => {
+const TaggedItem = ({ user }: { user: IPerson }) => {
     const dispatch = useDispatch();
 
     const handleClick = () => dispatch(removeTagPeople(user._id));

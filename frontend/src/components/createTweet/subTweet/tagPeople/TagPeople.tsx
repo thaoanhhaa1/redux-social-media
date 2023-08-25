@@ -6,7 +6,7 @@ import axiosClient from '../../../../api/axiosClient';
 import { RootState } from '../../../../app/store';
 import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { useSearch } from '../../../../hooks';
-import { IUserTweet } from '../../../../interfaces';
+import { IPerson } from '../../../../interfaces';
 import Button from '../../../Button';
 import ScrollbarCustomize from '../../../ScrollbarCustomize';
 import Header from '../../Header';
@@ -17,7 +17,7 @@ import TaggedItem from './TaggedItem';
 const TagPeople = () => {
     const { value, setValue, handleChangeSearch } = useSearch();
     const { handleHeightModal, handleHiddenSub } = useCreateTweet();
-    const [users, setUsers] = useState<Array<IUserTweet>>([]);
+    const [users, setUsers] = useState<Array<IPerson>>([]);
     const [isLoading, setLoading] = useState<boolean>(true);
     const myTweet = useSelector((state: RootState) => state.myTweet);
     const filterUsers = useMemo(

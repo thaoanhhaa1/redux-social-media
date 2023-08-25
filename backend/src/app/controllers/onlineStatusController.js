@@ -2,6 +2,7 @@ const { default: mongoose } = require('mongoose');
 const onlineStatusModel = require('../models/onlineStatusModel');
 
 module.exports = {
+    // [POST] /api/private/online-status
     updateOnlineStatus: async (req, res, next) => {
         const { _id } = req.body;
 
@@ -16,11 +17,10 @@ module.exports = {
                     },
                 },
             );
-            console.log('🚀 ~ updateOnlineStatus: ~ result:', result);
 
             if (result.modifiedCount > 0) return res.sendStatus(200);
         } catch (error) {
-            console.error('🚀 ~ updateOnlineStatus: ~ error:', error);
+            next(error);
         }
 
         res.sendStatus(400);

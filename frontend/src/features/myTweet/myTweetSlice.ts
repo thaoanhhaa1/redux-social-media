@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { IGif, ILocation, ITweet, IUserTweet } from '../../interfaces';
+import { IGif, ILocation, ITweet, IPerson } from '../../interfaces';
 import SubProps from '../../types/SubProps';
 
 const initialState: {
@@ -13,7 +13,7 @@ const initialState: {
     image?: string;
     images?: string[];
     location?: ILocation;
-    tagPeople?: IUserTweet[];
+    tagPeople?: IPerson[];
     gif?: IGif;
     isShowUploadImage?: boolean;
     value: string;
@@ -81,7 +81,7 @@ const myTweetSlice = createSlice({
         ) => {
             state.location = payload;
         },
-        addTagPeople: (state, { payload }: { payload: IUserTweet }) => {
+        addTagPeople: (state, { payload }: { payload: IPerson }) => {
             if (state.tagPeople) state.tagPeople.push(payload);
             else state.tagPeople = [payload];
         },

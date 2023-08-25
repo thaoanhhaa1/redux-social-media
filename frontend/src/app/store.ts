@@ -7,6 +7,7 @@ import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
 import storiesReducer from '../features/stories';
 import userReducer from '../features/user';
+import pageReducer from '../features/page';
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         followingTweets: followingTweetsReducer,
         stories: storiesReducer,
         profile: profileReducer,
+        page: pageReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -1,8 +1,8 @@
+import IPersonTweet from './IPersonTweet';
 import ITweet from './ITweet';
-import IUserTweet from './IUserTweet';
 
 interface ICardContext {
-    user: IUserTweet;
+    user: IPersonTweet;
     tweet: ITweet;
 }
 

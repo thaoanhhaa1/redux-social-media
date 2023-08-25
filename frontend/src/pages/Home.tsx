@@ -16,6 +16,8 @@ import {
 import { WrapperHeader } from '../components/wrapper';
 import { getContacts, setOffline, setOnline } from '../features/contacts';
 import { getTweets } from '../features/followingTweets';
+import { setLoading } from '../features/page';
+import { getStories } from '../features/stories';
 
 const Home = () => {
     const { pageCount, contacts } = useSelector(
@@ -30,10 +32,21 @@ const Home = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (contacts.length === 0) dispatch(getContacts(pageCount));
-        if (followingTweets.data.length === 0) dispatch(getTweets());
+        if (!user) return;
+
+        (async () => {
+            const queries = [dispatch(getStories()).unwrap()];
+
+            if (contacts.length === 0)
+                queries.push(dispatch(getContacts(pageCount)).unwrap());
+            if (followingTweets.data.length === 0)
+                queries.push(dispatch(getTweets()).unwrap());
+
+            await Promise.all(queries);
+            dispatch(setLoading(false));
+        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         if (!socket.socket) return;

@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ITweet, IUserTweet } from '../../interfaces';
-import axiosClient from '../../api/axiosClient';
 import api from '../../api';
+import axiosClient from '../../api/axiosClient';
+import { IPersonTweet, ITweet } from '../../interfaces';
 
 const initialState: {
     data: Array<{
-        user: IUserTweet;
+        user: IPersonTweet;
         tweets: Array<ITweet>;
     }>;
     isLoading: boolean;
@@ -45,10 +45,30 @@ const toggleLike = createAsyncThunk(
     },
 );
 
+const toggleList = createAsyncThunk(
+    'followingTweets/toggleList',
+    async ({ userId, isAdd }: { userId: string; isAdd: boolean }) => {
+        const res = await axiosClient.post(api.toggleList(isAdd), {
+            userId,
+        });
+
+        return res.data;
+    },
+);
+
 const followingTweetsSlice = createSlice({
     name: 'followingTweets',
     initialState,
-    reducers: {},
+    reducers: {
+        toggleUserList: (state, { payload }: { payload: string }) => {
+            state.data.forEach((item) => {
+                if (item.user._id === payload) {
+                    item.user.isInList = !item.user.isInList;
+                    return;
+                }
+            });
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getTweets.pending, (state) => {
@@ -65,4 +85,5 @@ const followingTweetsSlice = createSlice({
 });
 
 export default followingTweetsSlice.reducer;
-export { getTweets, toggleLike };
+export { getTweets, toggleLike, toggleList };
+export const { toggleUserList } = followingTweetsSlice.actions;

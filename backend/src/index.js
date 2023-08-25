@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const db = require('./config/db');
 const Router = require('./routes');
 const authMiddleware = require('./app/middlewares/authMiddleware');
+const handleErrorMiddleware = require('./app/middlewares/handleErrorMiddleware');
 const OnlineStatusModel = require('./app/models/onlineStatusModel');
 
 const app = express();
@@ -36,6 +37,9 @@ db.connect();
 
 // Router init
 Router(app);
+
+// Middleware handle error
+app.use(handleErrorMiddleware);
 
 mongoose.connection.once('open', () => {
     const serverWithSocket = app.listen(PORT, () =>
