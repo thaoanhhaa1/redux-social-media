@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
@@ -10,6 +11,7 @@ import {
     toggleUserList,
 } from '../../features/followingTweets';
 import { ICardMoreBtn } from '../../interfaces';
+import { toggleFollow } from '../../services';
 import {
     AddListIcon,
     BlockIcon,
@@ -22,7 +24,6 @@ import {
 } from '../Icons';
 import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
-import { toggleFollow } from '../../services';
 
 const CardMore = () => {
     const { user } = useCardContext();
@@ -52,6 +53,12 @@ const CardMore = () => {
                     onClick: async () => {
                         await toggleFollow(user._id, user.follow);
                         dispatch(toggleUserFollow(user._id));
+
+                        toast.success(
+                            `${user.follow ? 'Unfollow' : 'Follow'} @${
+                                user.username
+                            } successfully!`,
+                        );
                     },
                 },
                 {
@@ -77,6 +84,12 @@ const CardMore = () => {
                             }),
                         ).unwrap();
                         dispatch(toggleUserList(user._id));
+
+                        toast.success(
+                            `${user.follow ? 'Remove' : 'Add'} @${
+                                user.username
+                            } from lists successfully!`,
+                        );
                     },
                 },
             );
