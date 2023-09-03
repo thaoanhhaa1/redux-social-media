@@ -17,6 +17,7 @@ module.exports = {
             },
             height: {
                 'top-bar': '4.6875rem' /* 75px */,
+                15: '3.75rem' /* 60px */,
                 inherit: 'inherit',
             },
             colors: {

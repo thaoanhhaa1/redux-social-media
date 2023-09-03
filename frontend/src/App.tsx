@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
 import api from './api';
 import axiosClient from './api/axiosClient';
 import { RootState } from './app/store';
+import config from './config';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import { publicRoutes } from './routes';
-import { useLocalStorage } from 'usehooks-ts';
-import config from './config';
 
 function App() {
     const user = useSelector((state: RootState) => state.user);

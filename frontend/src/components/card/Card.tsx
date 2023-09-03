@@ -11,10 +11,12 @@ const Card = ({
     user,
     tweet,
     className = '',
+    isPopup = false,
 }: {
     user: IPersonTweet;
     tweet: ITweet;
     className?: string;
+    isPopup?: boolean;
 }) => {
     const ref = useRef<HTMLDivElement | undefined>();
 
@@ -39,7 +41,7 @@ const Card = ({
     });
 
     return (
-        <CardProvider value={{ user, tweet }}>
+        <CardProvider value={{ user, tweet, isPopup }}>
             <Wrapper
                 ref={ref as Ref<HTMLDivElement> | undefined}
                 className={classNames('card p-2 xxs:p-5', className)}

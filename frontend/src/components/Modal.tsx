@@ -1,29 +1,28 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { classNames } from '../utils';
 import Portal from './Portal';
+import { FocusOn } from 'react-focus-on';
 
 const Modal = ({
     isShowModal,
-    handleCloseModal,
     children,
     className = '',
+    handleCloseModal,
 }: {
     isShowModal: boolean;
-    handleCloseModal: () => void;
     children: ReactNode;
     className?: string;
+    handleCloseModal: () => void;
 }) => {
     const [isMouseDown, setMouseDown] = useState<boolean>(false);
 
-    const handleMouseDown = () => setMouseDown(true);
+    const handleMouseDown = () => {
+        setMouseDown(true);
+    };
     const handleMouseUp = () => {
         if (isMouseDown) handleCloseModal();
         setMouseDown(false);
     };
-
-    useEffect(() => {
-        document.body.classList[isShowModal ? 'add' : 'remove']('scroll');
-    }, [isShowModal]);
 
     return (
         <Portal>
@@ -40,7 +39,7 @@ const Modal = ({
                         className='flex items-center justify-center'
                         onMouseDown={(e) => e.stopPropagation()}
                     >
-                        {children}
+                        {isShowModal && <FocusOn>{children}</FocusOn>}
                     </div>
                 </div>
             </div>

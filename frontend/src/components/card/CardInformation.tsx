@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import { toggleLike } from '../../features/followingTweets';
+import { classNames } from '../../utils';
 import {
     LikeActiveIcon,
     LikeIcon,
@@ -13,12 +13,13 @@ import {
     ShareIcon,
 } from '../Icons';
 import Image from '../Image';
+import CardPopup from '../cardPopup/CardPopup';
 import CardButton from './CardButton';
-
-const cardIcons = [ShareIcon, RetweetIcon, MessagesIcon];
 
 const CardInformation = () => {
     const user = useSelector((state: RootState) => state.user);
+    const card = useCardContext();
+    const [isShowCardPopup, setShowCardPopup] = useState(false);
     const { tweet } = useCardContext();
     const dispatch = useAppDispatch();
     const [isLike, setLike] = useState(() =>
@@ -38,8 +39,18 @@ const CardInformation = () => {
         setLike(!isLike);
     };
 
+    const handleComment = () => {
+        if (card.isPopup) return;
+        setShowCardPopup(true);
+    };
+
     return (
-        <div className='flex flex-col gap-2 xxs:gap-5 ml-12 xxs:ml-[56px]'>
+        <div
+            className={classNames(
+                'flex flex-col gap-2 xxs:gap-5',
+                card.isPopup || 'ml-12 xxs:ml-[56px]',
+            )}
+        >
             {tweet.content && (
                 <p className='font-medium text-sm leading-[21px] text-black dark:text-white break-words'>
                     {tweet.content}
@@ -59,31 +70,39 @@ const CardInformation = () => {
                     src={tweet.gif.url}
                 />
             )}
+
+            {/* Action Btn */}
             <div className='flex justify-between'>
                 <div className='flex gap-2 xxs:gap-5'>
-                    {cardIcons.map((Icon) => (
-                        <CardButton
-                            key={v4()}
-                            className='text-black dark:text-white'
-                            icon={<Icon />}
-                        />
-                    ))}
+                    <CardButton icon={<ShareIcon />} />
+                    <CardButton icon={<RetweetIcon />} />
+                    <CardButton
+                        onClick={handleComment}
+                        icon={<MessagesIcon />}
+                    />
                 </div>
                 <div className='flex items-center gap-[6px]'>
                     <CardButton
                         active={isLike}
+                        className='text-black-8 dark:text-white'
                         onClick={handleLike}
-                        icon={
-                            (isLike && <LikeActiveIcon />) || (
-                                <LikeIcon className='text-black-8 dark:text-white' />
-                            )
-                        }
+                        icon={(isLike && <LikeActiveIcon />) || <LikeIcon />}
                     />
                     <span className='text-xs leading-3.75 text-black-8'>
                         {numberLike}
                     </span>
                 </div>
             </div>
+
+            {/* Card Popup */}
+            {card.isPopup || (
+                <CardPopup
+                    isShow={isShowCardPopup}
+                    setShow={setShowCardPopup}
+                    tweet={card.tweet}
+                    user={card.user}
+                />
+            )}
         </div>
     );
 };

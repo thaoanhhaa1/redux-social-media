@@ -5,7 +5,7 @@ import Button from '../Button';
 const CardButton = ({
     icon,
     active = false,
-    className = '',
+    className = 'text-black dark:text-white',
     onClick = () => {},
 }: {
     icon: ReactElement;

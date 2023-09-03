@@ -13,7 +13,6 @@ import {
     EditProfileIcon,
     Follow,
     Image,
-    Loading,
     ProfileItem,
     StickyBottom,
     Stories,
@@ -21,6 +20,7 @@ import {
     Wrapper,
 } from '../components';
 import { getMyTweets } from '../features/myTweet';
+import { setLoading } from '../features/page';
 import { dec, getProfile, inc } from '../features/profile';
 import { getMonthYear } from '../utils';
 
@@ -29,7 +29,6 @@ const Profile = () => {
     const { user, socket, myTweet, profile } = useSelector(
         (state: RootState) => state,
     );
-    const [isLoading, setLoading] = useState(true);
     const dispatch = useAppDispatch();
 
     const handleShowModal = useCallback(
@@ -62,11 +61,9 @@ const Profile = () => {
                     dispatch(getMyTweets()),
                 ]);
 
-            setLoading(false);
+            dispatch(setLoading(false));
         })();
     });
-
-    if (isLoading) return <Loading />;
 
     return (
         <div className='relative px-5'>

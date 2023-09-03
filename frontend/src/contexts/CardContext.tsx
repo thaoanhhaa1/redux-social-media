@@ -11,6 +11,7 @@ const CardContext = createContext<ICardContext>({
         isInList: false,
     },
     tweet: {},
+    isPopup: false,
 });
 
 const CardProvider = ({
