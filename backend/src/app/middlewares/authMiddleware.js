@@ -4,7 +4,10 @@ async function authMiddleware(req, res, next) {
     const token = req.headers.authorization;
 
     if (!token) {
-        res.sendStatus(401);
+        res.status(401).json({
+            status: 401,
+            message: 'Unauthorized',
+        });
         return;
     }
 
@@ -15,7 +18,10 @@ async function authMiddleware(req, res, next) {
         req.body._id = _id;
         next();
     } catch (error) {
-        res.sendStatus(401);
+        res.status(401).json({
+            status: 401,
+            message: 'Unauthorized',
+        });
     }
 }
 

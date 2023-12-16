@@ -60,13 +60,14 @@ module.exports = {
 
             res.json(stories);
         } catch (error) {
-            console.log('🚀 ~ getMyStories: ~ error:', error);
-            res.sendStatus(400);
+            next(error);
         }
     },
 
-    create: async (req, res) => {
+    create: async (req, res, next) => {
         const { _id, url } = req.body;
+
+        if (!url) return next(new Error());
 
         try {
             const story = new StoryModel({
@@ -77,7 +78,7 @@ module.exports = {
             await story.save();
             res.json(url);
         } catch (error) {
-            res.sendStatus(400);
+            next(error);
         }
     },
 };

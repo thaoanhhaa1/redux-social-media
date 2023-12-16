@@ -3,15 +3,28 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const swaggerUi = require('swagger-ui-express');
 
 const db = require('./config/db');
 const Router = require('./routes');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 const handleErrorMiddleware = require('./app/middlewares/handleErrorMiddleware');
 const OnlineStatusModel = require('./app/models/onlineStatusModel');
+const swaggerDocument = require('../swagger.json');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 7890;
+
+// Use swagger
+const options = {
+    explorer: true,
+};
+
+app.use(
+    '/api/swagger',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, options),
+);
 
 // MIDDLEWARES
 app.use(

@@ -33,7 +33,10 @@ module.exports = {
             }
         } catch (error) {
             console.log('🚀 ~ countFollow: ~ error:', error);
-            res.sendStatus(400);
+            res.status(400).sendStatus({
+                status: 400,
+                message: 'Bad request',
+            });
         }
     },
 
@@ -131,10 +134,10 @@ module.exports = {
                     $replaceWith: '$users',
                 },
                 {
-                    $skip: skip,
+                    $skip: +skip,
                 },
                 {
-                    $limit: limit,
+                    $limit: +limit,
                 },
             ]);
             res.json(result);

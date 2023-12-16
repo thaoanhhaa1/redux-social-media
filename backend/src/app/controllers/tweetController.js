@@ -18,8 +18,8 @@ module.exports = {
 
     getMyTweets: async (req, res, next) => {
         const _id = req.body._id;
-        const limit = req.query.limit || 8;
-        const skip = req.query.skip || 0;
+        const limit = +req.query.limit || 8;
+        const skip = +req.query.skip || 0;
 
         try {
             const myTweets = await TweetModel.aggregate([
@@ -73,7 +73,6 @@ module.exports = {
                                 $project: {
                                     name: 1,
                                     username: 1,
-                                    name: 1,
                                     avatar: 1,
                                 },
                             },
@@ -106,7 +105,7 @@ module.exports = {
                 Boolean,
             )
         )
-            return res.sendStatus(400);
+            return next(new Error());
 
         try {
             const tweet = new TweetModel({

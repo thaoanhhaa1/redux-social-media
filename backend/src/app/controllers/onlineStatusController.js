@@ -7,7 +7,7 @@ module.exports = {
         const { _id } = req.body;
 
         try {
-            const result = await onlineStatusModel.updateOne(
+            await onlineStatusModel.updateOne(
                 {
                     _id: new mongoose.Types.ObjectId(_id),
                 },
@@ -18,11 +18,9 @@ module.exports = {
                 },
             );
 
-            if (result.modifiedCount > 0) return res.sendStatus(200);
+            res.sendStatus(200);
         } catch (error) {
             next(error);
         }
-
-        res.sendStatus(400);
     },
 };

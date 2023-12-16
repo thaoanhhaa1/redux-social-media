@@ -9,7 +9,10 @@ module.exports = {
         const { email, username, password } = req.body;
 
         if (!email || !username || !password) {
-            res.status(400).send('Username, email and password are required');
+            res.status(400).json({
+                status: 400,
+                message: 'Username, email and password are required',
+            });
             return;
         }
 
@@ -27,7 +30,10 @@ module.exports = {
         });
 
         if (findUser) {
-            res.status(409).send('Username or email already used');
+            res.status(409).json({
+                status: 409,
+                message: 'Username or email already used',
+            });
             return;
         }
 
@@ -67,7 +73,10 @@ module.exports = {
 
             res.status(201).json(token);
         } catch (error) {
-            res.status(500).send('Server is down');
+            res.status(500).json({
+                status: 500,
+                message: 'Server is down',
+            });
             console.error(error);
         }
     },
@@ -100,6 +109,9 @@ module.exports = {
             }
         } catch (error) {}
 
-        res.sendStatus(400);
+        res.status(400).json({
+            status: 400,
+            message: 'Bad request',
+        });
     },
 };

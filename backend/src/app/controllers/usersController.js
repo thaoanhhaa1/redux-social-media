@@ -17,7 +17,10 @@ module.exports = {
 
             res.json(user);
         } catch (error) {
-            res.sendStatus(401);
+            res.status(401).json({
+                status: 401,
+                message: 'Unauthorized',
+            });
         }
     },
 
@@ -32,12 +35,22 @@ module.exports = {
                 data,
             );
 
-            if (result.modifiedCount > 0) return res.sendStatus(201);
+            const user = await UserModel.findOne(
+                { _id },
+                {
+                    password: 0,
+                },
+            );
+
+            if (result.modifiedCount > 0) return res.status(201).json(user);
         } catch (error) {
             console.log('🚀 ~ editProfile: ~ error:', error);
         }
 
-        res.sendStatus(400);
+        res.status(400).sendStatus({
+            status: 400,
+            message: 'Bad request',
+        });
     },
 
     getContactUsers: async (req, res, next) => {
@@ -110,7 +123,10 @@ module.exports = {
             res.send(result);
         } catch (error) {
             console.error('🚀 ~ getUsersOnline: ~ error:', error);
-            res.sendStatus(400);
+            res.status(400).sendStatus({
+                status: 400,
+                message: 'Bad request',
+            });
         }
     },
 };
