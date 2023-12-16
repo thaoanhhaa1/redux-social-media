@@ -20,11 +20,8 @@ const options = {
     explorer: true,
 };
 
-app.use(
-    '/api/swagger',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocument, options),
-);
+app.use('/api/swagger', swaggerUi.serve);
+app.get('/api/swagger', swaggerUi.setup(swaggerDocument, options));
 
 // MIDDLEWARES
 app.use(
