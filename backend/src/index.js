@@ -20,6 +20,7 @@ const options = {
     explorer: true,
 };
 
+app.use(express.static('/api/swagger'));
 app.use('/api/swagger', swaggerUi.serve);
 app.get('/api/swagger', swaggerUi.setup(swaggerDocument, options));
 
