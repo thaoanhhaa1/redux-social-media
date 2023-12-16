@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
+require('swagger-ui-dist').absolutePath();
 
 const db = require('./config/db');
 const Router = require('./routes');
@@ -18,11 +19,15 @@ const PORT = process.env.PORT || 7890;
 // Use swagger
 const options = {
     explorer: true,
+    customCssUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.5/swagger-ui.min.css',
 };
 
-app.use(express.static('/api/swagger'));
-app.use('/api/swagger', swaggerUi.serve);
-app.get('/api/swagger', swaggerUi.setup(swaggerDocument, options));
+app.use(
+    '/api/swagger',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, options),
+);
 
 // MIDDLEWARES
 app.use(
