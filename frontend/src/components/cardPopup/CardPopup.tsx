@@ -20,19 +20,22 @@ const CardPopup = ({
 }) => {
     return (
         <Modal isShowModal={isShow} handleCloseModal={() => setShow(false)}>
-            <div className='max-w-[min(calc(100vw-8px),700px)] rounded-lg overflow-hidden bg-white'>
-                <header className='flex items-center justify-center h-15 text-xl leading-xl border-b border-[#CED0D4] bg-white'>
+            <div className='mx-auto w-[min(calc(100vw-8px),700px)] rounded-lg overflow-y-visible bg-white'>
+                <header className='flex items-center justify-center h-15 text-xl leading-xl border-b border-[#CED0D4] bg-white rounded-t-lg'>
                     <strong>{user.name || user.username}'s Tweet</strong>
                 </header>
-                <ScrollbarCustomize className='max-h-[calc(100vh-124px)] overflow-y-auto'>
+                <ScrollbarCustomize
+                    overflow='visible'
+                    className='max-h-[calc(100vh-124px)] overflow-y-visible'
+                >
                     <Card
                         isPopup
                         className={className}
                         tweet={tweet}
                         user={user}
                     />
-                    <CardComment user={user} />
                 </ScrollbarCustomize>
+                <CardComment user={user} />
             </div>
         </Modal>
     );

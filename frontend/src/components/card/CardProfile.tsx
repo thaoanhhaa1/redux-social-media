@@ -9,7 +9,7 @@ const CardProfile = () => {
     const { user, tweet } = useCardContext();
 
     return (
-        <div className='flex gap-2 xxs:gap-4'>
+        <div className='flex gap-2 xxs:gap-4 overflow-y-visible'>
             <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
             <div className='flex justify-between items-center flex-1 gap-2'>
                 <div>

@@ -4,14 +4,17 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import api from './api';
 import axiosClient from './api/axiosClient';
+import { useAppDispatch } from './app/hooks';
 import { RootState } from './app/store';
 import config from './config';
+import { connect } from './features/socket';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import { publicRoutes } from './routes';
 
 function App() {
     const user = useSelector((state: RootState) => state.user);
     const [isDarkTheme] = useLocalStorage(config.THEME_KEY, true);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         document
@@ -22,8 +25,9 @@ function App() {
     useEffect(() => {
         if (!user._id) return;
 
+        dispatch(connect(user._id));
         axiosClient.post(api.updateOnlineStatus());
-    }, [user._id]);
+    }, [dispatch, user._id]);
 
     return (
         <Router>

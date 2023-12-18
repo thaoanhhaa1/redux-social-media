@@ -10,7 +10,7 @@ const CardComment = ({ user }: { user: IPersonTweet }) => {
     const { value, handleChangeSearch } = useSearch();
 
     return (
-        <div className='sticky bottom-0 flex bg-white -mt-5 p-5 gap-2 xxs:gap-4'>
+        <div className='flex bg-white -mt-5 p-5 gap-2 xxs:gap-4 rounded-b-lg'>
             <Image className='w-8 h-8' alt='' src={user.avatar} rounded />
             <ScrollbarCustomize
                 containerClassName='flex-1'

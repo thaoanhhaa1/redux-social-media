@@ -34,12 +34,14 @@ const Modal = ({
                     isShowModal ? 'visible opacity-100' : 'invisible opacity-0',
                 )}
             >
-                <div className={classNames('mx-2', className)}>
+                <div className={classNames('mx-2 w-fit', className)}>
                     <div
-                        className='flex items-center justify-center'
+                        className='flex items-center justify-center w-fit'
                         onMouseDown={(e) => e.stopPropagation()}
                     >
-                        {isShowModal && <FocusOn>{children}</FocusOn>}
+                        {isShowModal && (
+                            <FocusOn className='w-fit'>{children}</FocusOn>
+                        )}
                     </div>
                 </div>
             </div>

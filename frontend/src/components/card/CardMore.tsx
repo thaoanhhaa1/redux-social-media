@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { v4 } from 'uuid';
@@ -24,6 +24,7 @@ import {
 } from '../Icons';
 import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
+import { useEffectOnce } from 'usehooks-ts';
 
 const CardMore = () => {
     const { user } = useCardContext();
@@ -103,6 +104,12 @@ const CardMore = () => {
         user.isInList,
         user.username,
     ]);
+    const { isPopup } = useCardContext();
+    const [show, setShow] = useState<boolean>(!isPopup);
+
+    useEffectOnce(() => setShow(true));
+
+    if (!show) return null;
 
     return (
         <Wrapper

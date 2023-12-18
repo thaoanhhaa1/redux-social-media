@@ -13,7 +13,11 @@ axiosClient.interceptors.request.use(async (config) => {
     } = {};
 
     if (document.cookie) {
-        customersHeader.Authorization = document.cookie;
+        const cookie = (document.cookie as string).includes(' ')
+            ? document.cookie.split(' ')[1]
+            : document.cookie;
+
+        customersHeader.Authorization = cookie;
     }
 
     const newConfig = {

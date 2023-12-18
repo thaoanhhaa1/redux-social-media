@@ -28,12 +28,14 @@ const ScrollbarCustomize = ({
     containerClassName = '',
     style = {},
     children,
+    overflow,
     onScroll = (e: UIEvent<HTMLDivElement>) => {},
 }: {
     className?: string;
     containerClassName?: string;
     style?: CSSProperties;
     children: ReactNode;
+    overflow?: 'visible' | 'auto';
     onScroll?: (e: UIEvent<HTMLDivElement>) => void;
 }) => {
     const ref = useRef(null);
@@ -134,6 +136,7 @@ const ScrollbarCustomize = ({
         if (!ref.current) return;
 
         const element: HTMLDivElement = ref.current;
+
         const scrollHeight = element.scrollHeight;
         const offsetHeight = element.offsetHeight;
 
@@ -156,19 +159,24 @@ const ScrollbarCustomize = ({
             <div
                 ref={ref}
                 onScroll={handleScroll}
-                className={classNames('scrollbar overflow-y-auto', className)}
+                className={classNames(
+                    'scrollbar',
+                    overflow ? `overflow-y-${overflow}` : 'overflow-y-auto',
+                )}
                 style={style}
             >
-                {children}
+                <div className={classNames(className, 'scrollbar')}>
+                    {children}
+                </div>
             </div>
-            {scrollHeight > offsetHeight && (
+            {offsetHeight && scrollHeight > offsetHeight && (
                 <>
                     <div
                         onClick={handleClickTrack}
                         onScroll={handleScroll}
                         onMouseDown={handleMouseDown}
                         style={{ height: `${offsetHeight}px` }}
-                        className='scrollbar scrollbar--track overflow-auto absolute right-0 top-0 bottom-0 w-4 bg-[#CED0D4] bg-opacity-0 hover:bg-opacity-30 ease-linear duration-300'
+                        className='scrollbar scrollbar--track overflow-auto absolute right-0 top-0 bottom-0 w-4 bg-[#CED0D4] bg-opacity-0 hover:bg-opacity-30 ease-linear transition-opacity duration-300'
                     >
                         <div
                             className='w-full'
