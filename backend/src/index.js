@@ -4,8 +4,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
-const fs = require('fs');
-const YAML = require('yaml');
 require('swagger-ui-dist').absolutePath();
 
 const db = require('./config/db');
@@ -13,9 +11,7 @@ const Router = require('./routes');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 const handleErrorMiddleware = require('./app/middlewares/handleErrorMiddleware');
 const OnlineStatusModel = require('./app/models/onlineStatusModel');
-
-const file = fs.readFileSync('./swagger.yaml', 'utf8');
-const swaggerDocument = YAML.parse(file);
+const swaggerDocument = require('../swagger.json');
 
 const app = express();
 const PORT = process.env.PORT || 7890;
