@@ -10,7 +10,10 @@ const CardContext = createContext<ICardContext>({
         follow: false,
         isInList: false,
     },
-    tweet: {},
+    tweet: {
+        comments: [],
+        skip: 0,
+    },
     isPopup: false,
 });
 

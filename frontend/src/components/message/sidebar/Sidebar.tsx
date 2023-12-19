@@ -1,18 +1,18 @@
 import {
     DangerCircleIcon,
     DeleteIcon,
-    MoreIcon,
+    MoreCircleIcon,
     VolumeOffIcon,
 } from '../../Icons';
 import SidebarButton from './SidebarButton';
 
 const Sidebar = () => {
     return (
-        <div className="my-8 flex flex-col justify-between">
+        <div className='my-8 flex flex-col justify-between'>
             <SidebarButton>
-                <MoreIcon />
+                <MoreCircleIcon />
             </SidebarButton>
-            <div className="flex flex-col gap-4">
+            <div className='flex flex-col gap-4'>
                 <SidebarButton>
                     <VolumeOffIcon />
                 </SidebarButton>

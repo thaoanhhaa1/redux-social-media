@@ -1,3 +1,4 @@
+import IComment from './IComment';
 import ILocation from './ILocation';
 import IUserTweet from './IPerson';
 
@@ -19,6 +20,9 @@ interface ITweet {
         title: string;
         url: string;
     };
+    numberOfComments?: number;
+    comments: IComment[];
+    skip: number;
 }
 
 export default ITweet;

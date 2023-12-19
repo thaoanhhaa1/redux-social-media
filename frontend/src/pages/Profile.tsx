@@ -13,6 +13,7 @@ import {
     EditProfileIcon,
     Follow,
     Image,
+    Loading,
     ProfileItem,
     StickyBottom,
     Stories,
@@ -64,6 +65,9 @@ const Profile = () => {
             dispatch(setLoading(false));
         })();
     });
+
+    if (!user._id) return <Loading />;
+    console.log('🚀 ~ Profile ~ user:', user);
 
     return (
         <div className='relative px-5'>

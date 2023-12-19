@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { IGif, ILocation, ITweet, IPerson } from '../../interfaces';
+import { IGif, ILocation, IPerson, ITweet } from '../../interfaces';
+import IComment from '../../interfaces/IComment';
 import SubProps from '../../types/SubProps';
 
 const initialState: {
@@ -110,6 +111,18 @@ const myTweetSlice = createSlice({
         setSub: (state, { payload }: { payload: SubProps | undefined }) => {
             state.sub = payload;
         },
+        setComments: (
+            state,
+            {
+                payload: { tweetId, comments },
+            }: { payload: { tweetId: string; comments: IComment[] } },
+        ) => {
+            state.tweets.find((tweet) => {
+                if (tweet._id === tweetId)
+                    return tweet.comments.push(...comments);
+                return false;
+            });
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -126,9 +139,19 @@ const myTweetSlice = createSlice({
                 state.feeling = '';
                 state.image = '';
             })
-            .addCase(getMyTweets.fulfilled, (state, { payload }) => {
-                state.tweets.push(...payload);
-            });
+            .addCase(
+                getMyTweets.fulfilled,
+                (state, { payload }: { payload: ITweet[] }) => {
+                    state.tweets.push(
+                        ...payload.map((tweet) => {
+                            tweet.skip = 0;
+                            tweet.comments = [];
+
+                            return tweet;
+                        }),
+                    );
+                },
+            );
     },
 });
 
@@ -146,5 +169,6 @@ export const {
     setImage,
     setValue,
     setSub,
+    setComments,
 } = myTweetSlice.actions;
 export { createTweet, getMyTweets };

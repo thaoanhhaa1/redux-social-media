@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { IPersonTweet, ITweet } from '../../interfaces';
+import { IPerson, IPersonTweet, ITweet } from '../../interfaces';
+import IComment from '../../interfaces/IComment';
+import { comments } from '../../constants';
 
 const initialState: {
     data: Array<{
@@ -56,6 +58,43 @@ const toggleList = createAsyncThunk(
     },
 );
 
+const getComments = createAsyncThunk(
+    'followingTweets/getComments',
+    async ({ tweetId, skip }: { tweetId: String; skip: number }) => {
+        const res = await axiosClient.get(api.getComments(tweetId), {
+            params: {
+                skip,
+                limit: comments.LIMIT,
+            },
+        });
+
+        return res.data;
+    },
+);
+
+const postComment = createAsyncThunk(
+    'followingTweets/postComment',
+    async ({
+        user,
+        content,
+        parent,
+        tweetId,
+    }: {
+        user: IPerson;
+        content: string;
+        parent?: string;
+        tweetId: string;
+    }) => {
+        const res = await axiosClient.post(api.postComments(tweetId), {
+            user,
+            content,
+            parent,
+        });
+
+        return res.data;
+    },
+);
+
 const followingTweetsSlice = createSlice({
     name: 'followingTweets',
     initialState,
@@ -88,11 +127,50 @@ const followingTweetsSlice = createSlice({
             .addCase(getTweets.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
                 state.data = payload;
-            });
+
+                state.data.forEach((item) => {
+                    item.tweets.forEach((tweet) => {
+                        tweet.skip = 0;
+                        tweet.comments = [];
+                    });
+                });
+            })
+            .addCase(
+                getComments.fulfilled,
+                (state, { payload }: { payload: IComment[] }) => {
+                    if (payload.length) {
+                        const tweetId = payload[0].post;
+
+                        state.data.find((item) =>
+                            item.tweets.find((tweet) => {
+                                if (tweet._id === tweetId) {
+                                    tweet.skip += 1;
+                                    return tweet.comments.push(...payload);
+                                }
+                                return false;
+                            }),
+                        );
+                    }
+                },
+            )
+            .addCase(
+                postComment.fulfilled,
+                (state, { payload }: { payload: IComment }) => {
+                    const tweetId = payload.post;
+
+                    state.data.find((item) =>
+                        item.tweets.find((tweet) => {
+                            if (tweet._id === tweetId)
+                                return tweet.comments.unshift(payload);
+                            return false;
+                        }),
+                    );
+                },
+            );
     },
 });
 
 export default followingTweetsSlice.reducer;
-export { getTweets, toggleLike, toggleList };
+export { getTweets, toggleLike, toggleList, getComments, postComment };
 export const { toggleUserList, toggleUserFollow } =
     followingTweetsSlice.actions;

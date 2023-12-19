@@ -47,6 +47,8 @@ const Footer = ({
                 location: myTweet.location,
                 tagPeople: myTweet.tagPeople,
                 gif: myTweet.gif,
+                comments: [],
+                skip: 0,
             }),
         ).unwrap();
 

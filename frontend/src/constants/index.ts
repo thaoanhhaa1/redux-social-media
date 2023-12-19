@@ -1,4 +1,5 @@
 import config from '../config';
+import comments from './comments';
 
 const { vneseUpper, vneseLower } = config;
 
@@ -46,4 +47,4 @@ const regex = {
     password: /^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[0-9]+)(?=.*[^A-Za-z0-9]+).{8,}$/,
 };
 
-export { regex, message };
+export { regex, message, comments };

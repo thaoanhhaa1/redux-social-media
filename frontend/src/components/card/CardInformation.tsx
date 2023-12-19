@@ -74,12 +74,27 @@ const CardInformation = () => {
             {/* Action Btn */}
             <div className='flex justify-between'>
                 <div className='flex gap-2 xxs:gap-5'>
-                    <CardButton icon={<ShareIcon />} />
-                    <CardButton icon={<RetweetIcon />} />
-                    <CardButton
-                        onClick={handleComment}
-                        icon={<MessagesIcon />}
-                    />
+                    <div className='flex items-center gap-[6px]'>
+                        <CardButton icon={<ShareIcon />} />
+                        <span className='text-xs leading-3.75 text-black-8'>
+                            0
+                        </span>
+                    </div>
+                    <div className='flex items-center gap-[6px]'>
+                        <CardButton icon={<RetweetIcon />} />
+                        <span className='text-xs leading-3.75 text-black-8'>
+                            0
+                        </span>
+                    </div>
+                    <div className='flex items-center gap-[6px]'>
+                        <CardButton
+                            onClick={handleComment}
+                            icon={<MessagesIcon />}
+                        />
+                        <span className='text-xs leading-3.75 text-black-8'>
+                            {tweet.numberOfComments ?? 0}
+                        </span>
+                    </div>
                 </div>
                 <div className='flex items-center gap-[6px]'>
                     <CardButton
@@ -99,8 +114,6 @@ const CardInformation = () => {
                 <CardPopup
                     isShow={isShowCardPopup}
                     setShow={setShowCardPopup}
-                    tweet={card.tweet}
-                    user={card.user}
                 />
             )}
         </div>
