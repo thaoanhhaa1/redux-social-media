@@ -74,16 +74,28 @@ module.exports = {
 
             const result = await comment.save();
 
-            await TweetModel.updateOne(
-                {
-                    _id: new mongoose.Types.ObjectId(tweetId),
-                },
-                {
-                    [tweet.numberOfComments ? '$inc' : '$set']: {
-                        numberOfComments: 1,
+            if (comment.parent)
+                await CommentModel.updateOne(
+                    {
+                        _id: new mongoose.Types.ObjectId(comment.parent),
                     },
-                },
-            );
+                    {
+                        $inc: {
+                            numberOfComments: 1,
+                        },
+                    },
+                );
+            else
+                await TweetModel.updateOne(
+                    {
+                        _id: new mongoose.Types.ObjectId(tweetId),
+                    },
+                    {
+                        [tweet.numberOfComments ? '$inc' : '$set']: {
+                            numberOfComments: 1,
+                        },
+                    },
+                );
 
             req.status(201).json(result);
         } catch (error) {

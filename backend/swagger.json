@@ -1821,7 +1821,7 @@
         "/private/tweets/{tweet_id}/comments": {
             "get": {
                 "summary": "Get comments by tweet id",
-                "description": "Get comments by tweet id",
+                "description": "Get comments by tweet id, comments are sorted in descending order by number of comments, number of likes and creation date, and only parent comments are taken",
                 "tags": ["Comment"],
                 "security": [
                     {
@@ -1874,7 +1874,13 @@
                                         },
                                         "content": "This is my comment",
                                         "likes": ["64ab69a49ba42e9d39d28d8d"],
-                                        "parent": null
+                                        "parent": null,
+                                        "numberOfLikes": 0,
+                                        "numberOfComments": 0,
+                                        "deleted": false,
+                                        "createdAt": "2023-12-19T07:47:47.975Z",
+                                        "updatedAt": "2023-12-19T07:47:47.975Z",
+                                        "__v": 0
                                     }
                                 ],
                                 "schema": {
@@ -2006,7 +2012,13 @@
                                     },
                                     "content": "This is my comment",
                                     "likes": ["64ab69a49ba42e9d39d28d8d"],
-                                    "parent": null
+                                    "parent": null,
+                                    "numberOfLikes": 0,
+                                    "numberOfComments": 0,
+                                    "deleted": false,
+                                    "createdAt": "2023-12-19T07:47:47.975Z",
+                                    "updatedAt": "2023-12-19T07:47:47.975Z",
+                                    "__v": 0
                                 },
                                 "schema": {
                                     "$ref": "#/components/schemas/Comment"
@@ -2154,7 +2166,13 @@
                                     },
                                     "content": "This is my comment",
                                     "likes": ["64ab69a49ba42e9d39d28d8d"],
-                                    "parent": null
+                                    "parent": null,
+                                    "numberOfLikes": 0,
+                                    "numberOfComments": 0,
+                                    "deleted": false,
+                                    "createdAt": "2023-12-19T07:47:47.975Z",
+                                    "updatedAt": "2023-12-19T07:47:47.975Z",
+                                    "__v": 0
                                 },
                                 "schema": {
                                     "$ref": "#/components/schemas/Comment"
@@ -2273,7 +2291,13 @@
                                     },
                                     "content": "This is my comment",
                                     "likes": ["64ab69a49ba42e9d39d28d8d"],
-                                    "parent": null
+                                    "parent": null,
+                                    "numberOfLikes": 0,
+                                    "numberOfComments": 0,
+                                    "deleted": false,
+                                    "createdAt": "2023-12-19T07:47:47.975Z",
+                                    "updatedAt": "2023-12-19T07:47:47.975Z",
+                                    "__v": 0
                                 },
                                 "schema": {
                                     "$ref": "#/components/schemas/Comment"
@@ -2374,7 +2398,13 @@
                                     },
                                     "content": "This is my comment",
                                     "likes": ["64ab69a49ba42e9d39d28d8d"],
-                                    "parent": null
+                                    "parent": null,
+                                    "numberOfLikes": 0,
+                                    "numberOfComments": 0,
+                                    "deleted": false,
+                                    "createdAt": "2023-12-19T07:47:47.975Z",
+                                    "updatedAt": "2023-12-19T07:47:47.975Z",
+                                    "__v": 0
                                 },
                                 "schema": {
                                     "$ref": "#/components/schemas/Comment"
@@ -2637,7 +2667,8 @@
                     },
                     "post": {
                         "type": "string",
-                        "description": "The post to which the comment belongs"
+                        "format": "ObjectId",
+                        "description": "ID of tweet"
                     },
                     "user": {
                         "type": "object",
@@ -2673,6 +2704,31 @@
                     "parent": {
                         "type": "string",
                         "description": "The ID of the parent comment, if any"
+                    },
+                    "numberOfLikes": {
+                        "type": "integer",
+                        "description": "Number of reactions of the comment",
+                        "default": 0
+                    },
+                    "numberOfComments": {
+                        "type": "integer",
+                        "description": "Number of replies to comments",
+                        "default": 0
+                    },
+                    "deleted": {
+                        "type": "boolean",
+                        "description": "If correct, the comment has been deleted",
+                        "default": false
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time to post comment"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time to update comments"
                     }
                 },
                 "required": ["_id", "post", "user", "content", "likes"]

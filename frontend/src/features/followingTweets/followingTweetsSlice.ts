@@ -4,6 +4,7 @@ import axiosClient from '../../api/axiosClient';
 import { IPerson, IPersonTweet, ITweet } from '../../interfaces';
 import IComment from '../../interfaces/IComment';
 import { comments } from '../../constants';
+import { getParentComment } from '../../utils';
 
 const initialState: {
     data: Array<{
@@ -141,11 +142,18 @@ const followingTweetsSlice = createSlice({
                     if (payload.length) {
                         const tweetId = payload[0].post;
 
+                        const comments = payload.map((comment) => {
+                            comment.comments = [];
+                            comment.level = 0;
+
+                            return comment;
+                        });
+
                         state.data.find((item) =>
                             item.tweets.find((tweet) => {
                                 if (tweet._id === tweetId) {
                                     tweet.skip += 1;
-                                    return tweet.comments.push(...payload);
+                                    return tweet.comments.push(...comments);
                                 }
                                 return false;
                             }),
@@ -156,12 +164,23 @@ const followingTweetsSlice = createSlice({
             .addCase(
                 postComment.fulfilled,
                 (state, { payload }: { payload: IComment }) => {
+                    payload.comments = [];
                     const tweetId = payload.post;
 
                     state.data.find((item) =>
                         item.tweets.find((tweet) => {
-                            if (tweet._id === tweetId)
-                                return tweet.comments.unshift(payload);
+                            if (tweet._id === tweetId) {
+                                if (payload.parent) {
+                                    const comment: IComment | undefined =
+                                        getParentComment(
+                                            tweet.comments,
+                                            payload.parent,
+                                        );
+                                    if (comment) comment.comments.push(payload);
+                                } else tweet.comments.unshift(payload);
+
+                                return true;
+                            }
                             return false;
                         }),
                     );

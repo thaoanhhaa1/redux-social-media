@@ -105,6 +105,7 @@ module.exports = {
                     '0 2px 8px rgba(0, 0, 0, 0.1),0 0 0 1px rgba(0, 0, 0, 0.1)',
                 container: '0px 5px 45px #EBEBED',
                 box: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+                comment: '0 0 3px 2px rgba(0, 0, 0, 0.1)',
             },
             lineHeight: {
                 xs: '0.9375rem' /* 15px */,

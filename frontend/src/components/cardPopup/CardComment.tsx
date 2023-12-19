@@ -6,11 +6,18 @@ import { useCardContext } from '../../contexts/CardContext';
 import { postComment } from '../../features/followingTweets';
 import { useSearch } from '../../hooks';
 import { classNames } from '../../utils';
+import Avatar from '../Avatar';
 import { SendIcon } from '../Icons';
-import Image from '../Image';
 import ScrollbarCustomize from '../ScrollbarCustomize';
 
-const CardComment = () => {
+const CardComment = ({
+    level = 0,
+    commentParentId,
+}: {
+    level?: number;
+    commentParentId?: string;
+    name?: string;
+}) => {
     const owner = useAppSelector((state: RootState) => state.user);
     const { tweet } = useCardContext();
     const { value, handleChangeSearch, setValue } = useSearch();
@@ -26,6 +33,7 @@ const CardComment = () => {
                     user: owner,
                     content: value,
                     tweetId: tweet._id || '',
+                    parent: commentParentId,
                 }),
             ).unwrap();
 
@@ -38,18 +46,24 @@ const CardComment = () => {
     };
 
     return (
-        <div className='flex bg-white p-5 gap-2 xxs:gap-4 rounded-b-lg'>
-            <Image className='w-8 h-8' alt='' src={owner.avatar} rounded />
+        <div
+            className={classNames(
+                'flex bg-white rounded-b-lg gap-2 xxs:gap-4',
+                level ? 'pr-4 mt-[6px] pl-[70px]' : 'p-5 shadow-comment',
+            )}
+        >
+            <Avatar size={level ? 'xs' : 'sm'} src={owner.avatar} />
             <ScrollbarCustomize
                 containerClassName='flex-1'
-                className='max-h-[389px] flex gap-3 px-3 py-2 bg-[#F0F2F5] rounded-[18px] overflow-y-auto'
+                className='max-h-[389px] flex gap-3 bg-[#F0F2F5] rounded-[18px] overflow-y-auto'
             >
-                <form className='flex-1 flex h-full items-center'>
+                <form className='flex-1 flex h-full items-center pr-3'>
                     <TextareaAutosize
+                        autoFocus
                         value={value}
                         onChange={handleChangeSearch}
                         placeholder='Write a comment...'
-                        className='flex-1 text-sm leading-sm bg-[#F0F2F5] resize-none outline-none'
+                        className='px-3 py-2 flex-1 text-sm leading-sm bg-[#F0F2F5] resize-none outline-none'
                     />
                     {(loading && (
                         <div className='w-4 h-4 rounded-full border-2 border-[#2365FF] border-t-transparent animate-spin'></div>

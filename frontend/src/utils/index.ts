@@ -9,6 +9,7 @@ export { default as isAdult } from './isAdult';
 export { default as numberShow } from './numberShow';
 export { default as getUserName } from './getUserName';
 export { default as getTimeComment } from './getTimeComment';
+export { default as getParentComment } from './getParentComment';
 
 export const classNames = (
     ...classNameList: (string | boolean | undefined)[]

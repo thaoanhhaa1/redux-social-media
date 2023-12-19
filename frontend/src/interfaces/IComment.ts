@@ -11,6 +11,10 @@ interface IComment {
     likes: string[];
     parent?: string;
     createdAt: string;
+    level: number;
+    numberOfLikes: number;
+    numberOfComments: number;
+    comments: IComment[];
 }
 
 export default IComment;
