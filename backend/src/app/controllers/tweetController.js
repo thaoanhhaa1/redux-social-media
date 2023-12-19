@@ -119,6 +119,7 @@ module.exports = {
                 location,
                 tagPeople: tagPeople ?? [],
                 gif,
+                numberOfComments: 0,
             });
 
             const result = await tweet.save();

@@ -40,6 +40,14 @@ const CommentSchema = new Schema(
         parent: {
             type: String,
         },
+        numberOfLikes: {
+            type: Number,
+            default: 0,
+        },
+        numberOfComments: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,

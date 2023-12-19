@@ -47,6 +47,10 @@ const tweetModel = new Schema(
                 type: String,
             },
         },
+        numberOfComments: {
+            type: Number,
+            min: 0,
+        },
     },
     {
         timestamps: true,

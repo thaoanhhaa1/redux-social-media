@@ -12,11 +12,35 @@ module.exports = {
             const skip = req.params.skip ?? 0;
 
             const comments = await CommentModel.find({
-                post: new mongoose.Types.ObjectId(tweetId),
-                deleted: false,
+                $and: [
+                    {
+                        post: new mongoose.Types.ObjectId(tweetId),
+                    },
+                    {
+                        deleted: false,
+                    },
+                    {
+                        $or: [
+                            {
+                                parent: { $exists: false },
+                            },
+                            {
+                                parent: null,
+                            },
+                        ],
+                    },
+                    {
+                        post: tweetId,
+                    },
+                ],
             })
                 .skip(+skip)
-                .limit(+limit);
+                .limit(+limit)
+                .sort({
+                    numberOfComments: -1,
+                    numberOfLikes: -1,
+                    createdAt: -1,
+                });
 
             res.json(comments);
         } catch (error) {
@@ -49,6 +73,17 @@ module.exports = {
             });
 
             const result = await comment.save();
+
+            await TweetModel.updateOne(
+                {
+                    _id: new mongoose.Types.ObjectId(tweetId),
+                },
+                {
+                    [tweet.numberOfComments ? '$inc' : '$set']: {
+                        numberOfComments: 1,
+                    },
+                },
+            );
 
             req.status(201).json(result);
         } catch (error) {
