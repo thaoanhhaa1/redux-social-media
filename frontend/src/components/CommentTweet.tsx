@@ -1,13 +1,18 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
+import api from '../api';
+import axiosClient from '../api/axiosClient';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
-import { getChildrenComments } from '../features/followingTweets';
+import {
+    getChildrenComments,
+    toggleLikeComment,
+} from '../features/followingTweets';
 import { useOnClickOutside } from '../hooks';
 import IComment from '../interfaces/IComment';
 import { classNames, getTimeComment } from '../utils';
 import Avatar from './Avatar';
-import { MoreIcon } from './Icons';
+import { LikeFBIcon, MoreIcon } from './Icons';
 import CardComment from './cardPopup/CardComment';
 import Popup from './popup';
 
@@ -32,6 +37,9 @@ export default function CommentTweet({
     const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const moreRef = useRef(null);
+    const [liked, setLiked] = useState<boolean>(() =>
+        comment.likes.includes(user._id),
+    );
 
     const handleClickReply = () => {
         if (level >= 2) setShowParent(true);
@@ -56,6 +64,21 @@ export default function CommentTweet({
         showPopup || setScrolled(false);
     };
 
+    const handleClickLike = () => {
+        axiosClient.post(api.toggleLikeComment(comment._id), {
+            isLike: !liked,
+        });
+
+        setLiked(!liked);
+        dispatch(
+            toggleLikeComment({
+                liked: !liked,
+                commentId: comment._id,
+                tweetId: comment.post,
+            }),
+        );
+    };
+
     useOnClickOutside(moreRef, () => setShowPopup(false));
 
     useEffect(() => {
@@ -72,13 +95,23 @@ export default function CommentTweet({
                 />
                 <div>
                     <div className='flex gap-[6px] items-center'>
-                        <div className='rounded-[18px] pb-2 px-3 bg-[#F0F2F5]'>
+                        <div className='relative rounded-[18px] pb-2 px-3 bg-[#F0F2F5]'>
                             <span className='text-xs leading-none font-semibold'>
                                 {comment.user.name || comment.user.username}
                             </span>
                             <p className='text-sm leading-sm'>
                                 {comment.content}
                             </p>
+                            {comment.numberOfLikes > 0 && (
+                                <span className='flex gap-[2px] items-center shadow-[0_1px_3px_0_rgba(0,0,0,0.2)] absolute bottom-1 right-2 translate-x-full p-[2px] bg-white rounded-full'>
+                                    <LikeFBIcon />
+                                    {comment.numberOfLikes > 1 && (
+                                        <span className='pr-[2px] text-[#65676B] text-xs leading-none'>
+                                            {comment.numberOfLikes}
+                                        </span>
+                                    )}
+                                </span>
+                            )}
                         </div>
                         {user._id === comment.user._id && (
                             <div className='relative' ref={moreRef}>
@@ -101,7 +134,15 @@ export default function CommentTweet({
                         <span className='font-normal'>
                             {getTimeComment(comment.createdAt)}
                         </span>
-                        <span className='hover:underline'>Like</span>
+                        <span
+                            onClick={handleClickLike}
+                            className={classNames(
+                                'hover:underline',
+                                liked && 'text-blue',
+                            )}
+                        >
+                            Like
+                        </span>
                         <span
                             className='hover:underline'
                             onClick={handleClickReply}

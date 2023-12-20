@@ -232,4 +232,33 @@ module.exports = {
             next(error);
         }
     },
+
+    toggleLike: async (req, res, next) => {
+        const commentId = req.params.comment_id;
+        const isLike = req.body.isLike;
+        const _id = req.body._id;
+
+        try {
+            const update = {
+                [isLike ? '$addToSet' : '$pull']: {
+                    likes: _id,
+                },
+                $inc: {
+                    numberOfLikes: isLike ? 1 : -1,
+                },
+            };
+
+            const updateResult = await CommentModel.updateOne(
+                { _id: commentId },
+                update,
+            );
+
+            if (!updateResult.matchedCount)
+                return res.status(404).json(errors[404]("Comment was't found"));
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
 };
