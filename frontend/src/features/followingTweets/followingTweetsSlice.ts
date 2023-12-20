@@ -132,6 +132,45 @@ const followingTweetsSlice = createSlice({
                 }
             });
         },
+        deleteComment: (
+            state,
+            {
+                payload: { commentId, parentCommentId, tweetId },
+            }: {
+                payload: {
+                    commentId: string;
+                    parentCommentId?: string;
+                    tweetId: string;
+                };
+            },
+        ) => {
+            const tweet = getTweet(state, tweetId);
+
+            if (tweet) {
+                let comments: IComment[] = [];
+
+                if (parentCommentId) {
+                    const commentParent = getParentComment(
+                        tweet.comments,
+                        parentCommentId,
+                    );
+
+                    if (commentParent) {
+                        commentParent.numberOfComments -= 1;
+                        comments = commentParent.comments;
+                    }
+                } else {
+                    comments = tweet.comments;
+                    tweet.numberOfComments -= 1;
+                }
+
+                const index = comments.findIndex(
+                    (comment) => comment._id === commentId,
+                );
+
+                comments.splice(index, 1);
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -251,5 +290,5 @@ export {
     toggleLike,
     toggleList,
 };
-export const { toggleUserList, toggleUserFollow } =
+export const { toggleUserList, toggleUserFollow, deleteComment } =
     followingTweetsSlice.actions;

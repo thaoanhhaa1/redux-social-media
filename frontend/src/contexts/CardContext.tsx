@@ -13,6 +13,7 @@ const CardContext = createContext<ICardContext>({
     tweet: {
         comments: [],
         skip: 0,
+        numberOfComments: 0,
     },
     isPopup: false,
 });

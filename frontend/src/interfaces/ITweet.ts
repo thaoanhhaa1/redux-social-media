@@ -20,7 +20,7 @@ interface ITweet {
         title: string;
         url: string;
     };
-    numberOfComments?: number;
+    numberOfComments: number;
     comments: IComment[];
     skip: number;
 }

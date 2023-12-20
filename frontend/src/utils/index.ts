@@ -17,5 +17,7 @@ export { default as numberShow } from './numberShow';
 export const classNames = (
     ...classNameList: (string | boolean | undefined)[]
 ): string => {
-    return classNameList.filter((className) => !!className).join(' ');
+    return classNameList
+        .filter((className) => className && typeof className === 'string')
+        .join(' ');
 };

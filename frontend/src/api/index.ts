@@ -13,6 +13,8 @@ const api = {
     getChildComments: (commentId: String) =>
         `/private/comments/${commentId}/comments`,
     postComments: (tweetId: String) => `/private/tweets/${tweetId}/comments`,
+    deleteComment: (tweetId: String, commentId: String) =>
+        `/private/tweets/${tweetId}/comments/${commentId}`,
     getStories: () => '/private/stories/get-stories',
     createStory: () => '/private/stories',
     getUser: () => '/private/users/get-user',

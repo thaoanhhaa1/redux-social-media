@@ -1,8 +1,10 @@
 import {
     CSSProperties,
+    LegacyRef,
     MouseEvent,
     ReactNode,
     UIEvent,
+    forwardRef,
     useCallback,
     useEffect,
     useRef,
@@ -23,21 +25,24 @@ function getScroll(
     return { element, elementTrack, top, clientY };
 }
 
-const ScrollbarCustomize = ({
-    className = '',
-    containerClassName = '',
-    style = {},
-    children,
-    overflow,
-    onScroll = (e: UIEvent<HTMLDivElement>) => {},
-}: {
-    className?: string;
-    containerClassName?: string;
-    style?: CSSProperties;
-    children: ReactNode;
-    overflow?: 'visible' | 'auto';
-    onScroll?: (e: UIEvent<HTMLDivElement>) => void;
-}) => {
+const ScrollbarCustomize = (
+    {
+        className = '',
+        containerClassName = '',
+        style = {},
+        children,
+        overflow,
+        onScroll = (e: UIEvent<HTMLDivElement>) => {},
+    }: {
+        className?: string;
+        containerClassName?: string;
+        style?: CSSProperties;
+        children: ReactNode;
+        overflow?: 'visible' | 'auto';
+        onScroll?: (e: UIEvent<HTMLDivElement>) => void;
+    },
+    parentRef?: LegacyRef<HTMLDivElement>,
+) => {
     const ref = useRef(null);
     const [offsetHeight, setOffsetHeight] = useState(0);
     const [scrollHeight, setScrollHeight] = useState(0);
@@ -151,6 +156,7 @@ const ScrollbarCustomize = ({
 
     return (
         <div
+            ref={parentRef}
             className={classNames(
                 'relative group/scrollbar',
                 containerClassName,
@@ -201,4 +207,4 @@ const ScrollbarCustomize = ({
     );
 };
 
-export default ScrollbarCustomize;
+export default forwardRef(ScrollbarCustomize);

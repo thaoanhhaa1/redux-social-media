@@ -49,6 +49,7 @@ const Footer = ({
                 gif: myTweet.gif,
                 comments: [],
                 skip: 0,
+                numberOfComments: 0,
             }),
         ).unwrap();
 

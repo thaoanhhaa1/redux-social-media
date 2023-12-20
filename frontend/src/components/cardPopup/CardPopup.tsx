@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useEffectOnce } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
@@ -25,6 +25,8 @@ const CardPopup = ({
     const owner = useSelector((state: RootState) => state.user);
     const { tweet, user } = useCardContext();
     const dispatch = useAppDispatch();
+    const scrollRef = useRef(null);
+    const [scrollHeight, setScrollHeight] = useState<number>(0);
 
     useEffectOnce(() => {
         async function getCommentsData() {
@@ -49,13 +51,23 @@ const CardPopup = ({
         getCommentsData();
     });
 
+    useEffect(() => {
+        if (!scrollRef.current || !isShow) return;
+
+        const element: HTMLDivElement = scrollRef.current;
+
+        const { height } = element.getBoundingClientRect();
+
+        setScrollHeight(height);
+    }, [tweet, isShow]);
+
     return (
         <Modal isShowModal={isShow} handleCloseModal={() => setShow(false)}>
             <div className='mx-auto w-[min(calc(100vw-8px),700px)] rounded-lg overflow-y-hidden bg-white'>
                 <header className='flex items-center justify-center h-15 text-xl leading-xl border-b border-[#CED0D4] bg-white rounded-t-lg'>
                     <strong>{user.name || user.username}'s Tweet</strong>
                 </header>
-                <ScrollbarCustomize className='max-h-[50vh]'>
+                <ScrollbarCustomize className='max-h-[50vh]' ref={scrollRef}>
                     <Card
                         isPopup
                         className={className}
@@ -63,7 +75,11 @@ const CardPopup = ({
                         user={user}
                     />
                     {tweet.comments?.map((comment) => (
-                        <CommentTweet key={comment._id} comment={comment} />
+                        <CommentTweet
+                            parentHeight={scrollHeight}
+                            key={comment._id}
+                            comment={comment}
+                        />
                     ))}
                 </ScrollbarCustomize>
                 <CardComment />

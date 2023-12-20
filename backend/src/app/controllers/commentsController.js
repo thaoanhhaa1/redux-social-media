@@ -3,6 +3,18 @@ const CommentModel = require('../models/commentModel');
 const TweetModel = require('../models/tweetModel');
 const errors = require('../../utils/errors');
 
+const decNumberOfComments = (Model, _id) =>
+    Model.updateOne(
+        {
+            _id,
+        },
+        {
+            $inc: {
+                numberOfComments: -1,
+            },
+        },
+    );
+
 module.exports = {
     // ENDPOINT: /api/private/comments
     getAll: async (req, res, next) => {
@@ -197,6 +209,7 @@ module.exports = {
     delete: async (req, res, next) => {
         try {
             const commentId = req.params.comment_id;
+            const tweetId = req.params.tweet_id;
 
             const comment = await CommentModel.findOneAndUpdate(
                 {
@@ -208,6 +221,10 @@ module.exports = {
                     },
                 },
             );
+
+            if (comment.parent) {
+                await decNumberOfComments(CommentModel, comment.parent);
+            } else await decNumberOfComments(TweetModel, tweetId);
 
             if (comment) res.json(comment);
             else res.status(404).json(errors[404]("Comment wasn't found"));
