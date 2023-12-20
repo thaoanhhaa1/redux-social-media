@@ -48,6 +48,29 @@ module.exports = {
         }
     },
 
+    getAllByParent: async (req, res, next) => {
+        try {
+            const commentId = req.params.comment_id;
+
+            const comments = await CommentModel.find({
+                $and: [
+                    {
+                        parent: commentId,
+                    },
+                    {
+                        deleted: false,
+                    },
+                ],
+            }).sort({
+                createdAt: 1,
+            });
+
+            res.json(comments);
+        } catch (error) {
+            next(error);
+        }
+    },
+
     post: async (res, req, next) => {
         try {
             const tweetId = res.params.tweet_id;

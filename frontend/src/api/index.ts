@@ -10,6 +10,8 @@ const api = {
     toggleLike: () => '/private/tweets/toggle-like',
     getFollowingTweets: () => '/private/tweets/get-following-tweets',
     getComments: (tweetId: String) => `/private/tweets/${tweetId}/comments`,
+    getChildComments: (commentId: String) =>
+        `/private/comments/${commentId}/comments`,
     postComments: (tweetId: String) => `/private/tweets/${tweetId}/comments`,
     getStories: () => '/private/stories/get-stories',
     createStory: () => '/private/stories',

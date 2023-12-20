@@ -1,18 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
+import { comments } from '../../constants';
 import { IPerson, IPersonTweet, ITweet } from '../../interfaces';
 import IComment from '../../interfaces/IComment';
-import { comments } from '../../constants';
-import { getParentComment } from '../../utils';
+import {
+    getCommentDTO,
+    getCommentsDTO,
+    getNextLevelComment,
+    getParentComment,
+} from '../../utils';
 
-const initialState: {
+type FollowingTweet = {
     data: Array<{
         user: IPersonTweet;
         tweets: Array<ITweet>;
     }>;
     isLoading: boolean;
-} = {
+};
+
+const initialState: FollowingTweet = {
     data: [],
     isLoading: false,
 };
@@ -68,6 +75,15 @@ const getComments = createAsyncThunk(
                 limit: comments.LIMIT,
             },
         });
+
+        return res.data;
+    },
+);
+
+const getChildrenComments = createAsyncThunk(
+    'followingTweets/getChildrenComments',
+    async ({ commentId }: { commentId: String }): Promise<IComment[]> => {
+        const res = await axiosClient.get(api.getChildComments(commentId));
 
         return res.data;
     },
@@ -141,23 +157,10 @@ const followingTweetsSlice = createSlice({
                 (state, { payload }: { payload: IComment[] }) => {
                     if (payload.length) {
                         const tweetId = payload[0].post;
+                        const comments = getCommentsDTO(payload, 0);
+                        const tweet = getTweet(state, tweetId);
 
-                        const comments = payload.map((comment) => {
-                            comment.comments = [];
-                            comment.level = 0;
-
-                            return comment;
-                        });
-
-                        state.data.find((item) =>
-                            item.tweets.find((tweet) => {
-                                if (tweet._id === tweetId) {
-                                    tweet.skip += 1;
-                                    return tweet.comments.push(...comments);
-                                }
-                                return false;
-                            }),
-                        );
+                        tweet?.comments.push(...comments);
                     }
                 },
             )
@@ -166,30 +169,87 @@ const followingTweetsSlice = createSlice({
                 (state, { payload }: { payload: IComment }) => {
                     payload.comments = [];
                     const tweetId = payload.post;
+                    const tweet = getTweet(state, tweetId);
 
-                    state.data.find((item) =>
-                        item.tweets.find((tweet) => {
-                            if (tweet._id === tweetId) {
-                                if (payload.parent) {
-                                    const comment: IComment | undefined =
-                                        getParentComment(
-                                            tweet.comments,
-                                            payload.parent,
-                                        );
-                                    if (comment) comment.comments.push(payload);
-                                } else tweet.comments.unshift(payload);
+                    if (tweet) {
+                        const commentDTO = getCommentDTO(payload);
 
-                                return true;
+                        if (payload.parent) {
+                            const comment = getParentComment(
+                                tweet.comments,
+                                payload.parent,
+                            );
+                            comment?.comments.push(commentDTO);
+                        } else {
+                            tweet.comments.unshift(commentDTO);
+                        }
+                    }
+                },
+            )
+            .addCase(
+                getChildrenComments.fulfilled,
+                (state, { payload }: { payload: IComment[] }) => {
+                    if (payload.length) {
+                        const commentId = payload[0].parent || '';
+                        const tweetId = payload[0].post;
+                        const tweet = getTweet(state, tweetId);
+
+                        if (tweet && commentId) {
+                            const comment = getParentComment(
+                                tweet.comments,
+                                commentId,
+                            );
+
+                            if (comment) {
+                                const level = getNextLevelComment(
+                                    comment.level,
+                                );
+
+                                comment.comments.push(
+                                    ...getCommentsDTO(payload, level),
+                                );
+
+                                comment.comments.sort(
+                                    (a, b) =>
+                                        new Date(a.createdAt).getTime() -
+                                        new Date(b.createdAt).getTime(),
+                                );
                             }
-                            return false;
-                        }),
-                    );
+                        }
+                    }
                 },
             );
     },
 });
 
+function getTweet(
+    followingTweet: FollowingTweet,
+    tweetId: string,
+): ITweet | undefined {
+    const length = followingTweet.data.length;
+
+    for (let index = 0; index < length; index++) {
+        const element = followingTweet.data[index];
+        const length = element.tweets.length;
+
+        for (let i = 0; i < length; ++i) {
+            const tweet = element.tweets[i];
+
+            if (tweet._id === tweetId) return tweet;
+        }
+    }
+
+    return undefined;
+}
+
 export default followingTweetsSlice.reducer;
-export { getTweets, toggleLike, toggleList, getComments, postComment };
+export {
+    getChildrenComments,
+    getComments,
+    getTweets,
+    postComment,
+    toggleLike,
+    toggleList,
+};
 export const { toggleUserList, toggleUserFollow } =
     followingTweetsSlice.actions;

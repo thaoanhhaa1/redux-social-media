@@ -4,6 +4,8 @@ import { classNames, getTimeComment } from '../utils';
 import Avatar from './Avatar';
 import { MoreIcon } from './Icons';
 import CardComment from './cardPopup/CardComment';
+import { useAppDispatch } from '../app/hooks';
+import { getChildrenComments } from '../features/followingTweets';
 
 export interface ICommentTweetProps {
     comment: IComment;
@@ -17,10 +19,24 @@ export default function CommentTweet({
     setShowParent = () => {},
 }: ICommentTweetProps) {
     const [showCardComment, setShowCardComment] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
 
     const handleClickReply = () => {
-        if (level === 3) setShowParent(true);
+        if (level >= 2) setShowParent(true);
         else setShowCardComment(true);
+    };
+
+    const handleClickViewAllComments = async () => {
+        setLoading(true);
+
+        await dispatch(
+            getChildrenComments({
+                commentId: comment._id,
+            }),
+        );
+
+        setLoading(false);
     };
 
     return (
@@ -60,10 +76,22 @@ export default function CommentTweet({
                             Reply
                         </span>
                     </div>
-                    {comment.numberOfComments > 0 && (
-                        <span className='pl-4 text-[#65676B] text-sm leading-sm font-semibold hover:underline'>
-                            View all {comment.numberOfComments} replies
-                        </span>
+                    {!comment.comments.length && (
+                        <div className='flex items-center gap-1'>
+                            {comment.numberOfComments > 0 && (
+                                <span
+                                    onClick={handleClickViewAllComments}
+                                    className='pl-4 text-[#65676B] text-sm leading-sm font-semibold hover:underline'
+                                >
+                                    {comment.numberOfComments === 1
+                                        ? 'View 1 reply'
+                                        : `View all ${comment.numberOfComments} replies`}
+                                </span>
+                            )}
+                            {loading && (
+                                <div className='w-3 h-3 border-2 border-[#65676B] border-opacity-60 border-t-transparent animate-spin rounded-full' />
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
@@ -73,6 +101,7 @@ export default function CommentTweet({
                     comment={comment}
                     level={Math.min(3, level + 1)}
                     key={comment._id}
+                    setShowParent={setShowCardComment}
                 />
             ))}
 

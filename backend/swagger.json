@@ -2457,6 +2457,94 @@
                 }
             }
         },
+        "/private/comments/{comment_id}/comments": {
+            "get": {
+                "summary": "Get comments of parent comment by id",
+                "description": "Get comments of parent comment by id",
+                "tags": ["Comment"],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "comment_id",
+                        "in": "path",
+                        "description": "ID of parent comment",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "6581b5f9686a756615ae4871"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                    {
+                                        "_id": "64ab69a49ba42e9d39d28d8d",
+                                        "post": "64a435d7e4658701a763e1a2",
+                                        "user": {
+                                            "_id": "64a435d7e4658701a763e1a2",
+                                            "name": "Anh Thảo",
+                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                            "username": "anhthaodev"
+                                        },
+                                        "content": "This is my comment",
+                                        "likes": ["64ab69a49ba42e9d39d28d8d"],
+                                        "parent": "6581b5f9686a756615ae4871",
+                                        "numberOfLikes": 0,
+                                        "numberOfComments": 0,
+                                        "deleted": false,
+                                        "createdAt": "2023-12-19T07:47:47.975Z",
+                                        "updatedAt": "2023-12-19T07:47:47.975Z",
+                                        "__v": 0
+                                    }
+                                ],
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/auth/sign-up": {
             "post": {
                 "tags": ["Auth"],

@@ -29,7 +29,7 @@ function getTimeComment(date: string): string {
 
     if (minus < 29030400) {
         const months = Math.ceil(minus / 2419200);
-        return `${months}m`;
+        return `${months}mo`;
     }
 
     const years = Math.ceil(minus / 29030400);
