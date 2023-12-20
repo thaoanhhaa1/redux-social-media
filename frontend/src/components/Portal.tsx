@@ -1,4 +1,4 @@
-import { ReactElement, useLayoutEffect } from 'react';
+import { ReactElement } from 'react';
 import { createPortal } from 'react-dom';
 
 const createPortalWrapper = () => {
@@ -9,11 +9,9 @@ const createPortalWrapper = () => {
 };
 
 const portalWrapper = createPortalWrapper();
-const Portal = ({ children }: { children: ReactElement }) => {
-    useLayoutEffect(() => {
-        document.body.appendChild(portalWrapper);
-    }, []);
+document.body.appendChild(portalWrapper);
 
+const Portal = ({ children }: { children: ReactElement }) => {
     return createPortal(children, portalWrapper);
 };
 

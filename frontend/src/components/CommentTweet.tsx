@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
@@ -13,15 +13,17 @@ import Popup from './popup';
 
 export interface ICommentTweetProps {
     comment: IComment;
-    parentHeight: number;
     level?: number;
+    scrolled: boolean;
+    setScrolled: Dispatch<SetStateAction<boolean>>;
     setShowParent?: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function CommentTweet({
     comment,
-    parentHeight,
     level = 0,
+    scrolled,
+    setScrolled,
     setShowParent = () => {},
 }: ICommentTweetProps) {
     const user = useAppSelector((state: RootState) => state.user);
@@ -48,7 +50,17 @@ export default function CommentTweet({
         setLoading(false);
     };
 
+    const handleClickMoreBtn = () => {
+        toggleShowPopup();
+
+        showPopup || setScrolled(false);
+    };
+
     useOnClickOutside(moreRef, () => setShowPopup(false));
+
+    useEffect(() => {
+        if (scrolled) setShowPopup(false);
+    }, [scrolled, setShowPopup]);
 
     return (
         <div className={classNames(!level || level === 3 || 'pl-[54px]')}>
@@ -72,13 +84,12 @@ export default function CommentTweet({
                             <div className='relative' ref={moreRef}>
                                 <button
                                     className='flex-shrink-0 text-white group-hover/more:text-[#65676B] self-center flex justify-center items-center w-8 h-8 rounded-full ease-linear hover:bg-[rgba(0,_0,_0,_0.05)]'
-                                    onClick={toggleShowPopup}
+                                    onClick={handleClickMoreBtn}
                                 >
                                     <MoreIcon />
                                 </button>
                                 {showPopup && (
                                     <Popup
-                                        parentHeight={parentHeight}
                                         commentId={comment._id}
                                         parentCommentId={comment.parent}
                                     />
@@ -120,7 +131,8 @@ export default function CommentTweet({
 
             {comment.comments.map((comment) => (
                 <CommentTweet
-                    parentHeight={parentHeight}
+                    scrolled={scrolled}
+                    setScrolled={setScrolled}
                     comment={comment}
                     level={Math.min(3, level + 1)}
                     key={comment._id}
