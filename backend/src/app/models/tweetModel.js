@@ -1,25 +1,41 @@
 const mongoose = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
 
 const Schema = mongoose.Schema;
 
 const tweetModel = new Schema(
     {
         user: {
-            type: String,
-            required: true,
+            _id: {
+                type: String,
+                required: true,
+            },
+            name: {
+                type: String,
+            },
+            avatar: {
+                type: String,
+            },
+            username: {
+                type: String,
+                required: true,
+            },
         },
         content: {
             type: String,
         },
         images: {
             type: Array,
+            default: [],
         },
         videos: {
             type: Array,
+            default: [],
         },
         likes: {
             type: Array,
             required: true,
+            default: [],
         },
         group: {
             type: String,
@@ -38,6 +54,7 @@ const tweetModel = new Schema(
         tagPeople: {
             type: Array,
             required: true,
+            default: [],
         },
         gif: {
             title: {
@@ -50,11 +67,21 @@ const tweetModel = new Schema(
         numberOfComments: {
             type: Number,
             min: 0,
+            default: 0,
+        },
+        viewed: {
+            type: [String],
+            default: [],
         },
     },
     {
         timestamps: true,
     },
 );
+
+tweetModel.plugin(mongooseDelete, {
+    overrideMethods: 'all',
+    deletedAt: true,
+});
 
 module.exports = mongoose.model('tweet', tweetModel);

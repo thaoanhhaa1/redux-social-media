@@ -1,5 +1,7 @@
+const { location, user } = require('../../utils');
 const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
+const ListsModel = require('../models/listsModel');
 
 module.exports = {
     count: async (req, res, next) => {
@@ -7,7 +9,7 @@ module.exports = {
 
         try {
             const result = await TweetModel.find({
-                user: _id,
+                'user._id': _id,
             }).count();
 
             res.json(result);
@@ -23,60 +25,16 @@ module.exports = {
 
         try {
             const myTweets = await TweetModel.aggregate([
-                { $match: { user: _id } },
+                { $match: { 'user._id': _id } },
                 { $sort: { createdAt: -1 } },
                 { $skip: skip },
                 { $limit: limit },
-                {
-                    $lookup: {
-                        from: 'locations',
-                        as: 'location',
-                        let: { location: '$location' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $eq: [
-                                            { $toString: '$_id' },
-                                            '$$location',
-                                        ],
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
+                ...location.lookup,
+                user.tagPeople,
                 {
                     $addFields: {
-                        location: {
-                            $ifNull: [{ $arrayElemAt: ['$location', 0] }, null],
-                        },
-                    },
-                },
-                {
-                    $lookup: {
-                        from: 'users',
-                        as: 'tagPeople',
-                        let: { tagPeople: '$tagPeople' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $in: [
-                                            { $toString: '$_id' },
-                                            { $ifNull: ['$$tagPeople', []] },
-                                        ],
-                                    },
-                                },
-                            },
-                            {
-                                $project: {
-                                    name: 1,
-                                    username: 1,
-                                    avatar: 1,
-                                },
-                            },
-                        ],
+                        'user.isInList': false,
+                        'user.follow': false,
                     },
                 },
             ]);
@@ -89,7 +47,7 @@ module.exports = {
 
     createTweet: async (req, res, next) => {
         const {
-            _id,
+            user,
             content,
             images,
             videos,
@@ -100,6 +58,8 @@ module.exports = {
             gif,
         } = req.body;
 
+        if (!user || !user._id || !user.username) return next(new Error());
+
         if (
             ![content, images, videos, feeling, location, tagPeople, gif].some(
                 Boolean,
@@ -107,19 +67,20 @@ module.exports = {
         )
             return next(new Error());
 
+        const { _id, username, name, avatar } = user;
+
         try {
             const tweet = new TweetModel({
                 content,
                 images,
                 likes: [],
-                user: _id,
+                user: { _id, username, name, avatar },
                 videos,
                 group,
                 feeling,
                 location,
                 tagPeople: tagPeople ?? [],
                 gif,
-                numberOfComments: 0,
             });
 
             const result = await tweet.save();
@@ -134,69 +95,40 @@ module.exports = {
         const { _id } = req.body;
 
         try {
-            const tweets = await FollowModel.aggregate([
-                { $match: { user: _id } },
-                { $unwind: '$following' },
-                { $project: { _id: 0, user: 0, followers: 0, __v: 0 } },
+            const follows = await FollowModel.findOne({
+                user: _id,
+            });
+
+            const following = follows.following;
+
+            const tweets = await TweetModel.aggregate([
                 {
-                    $lookup: {
-                        from: 'users',
-                        as: 'user',
-                        let: { id: '$following' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $eq: [{ $toString: '$_id' }, '$$id'],
-                                    },
-                                },
-                            },
-                            { $project: { username: 1, name: 1, avatar: 1 } },
-                        ],
+                    $match: {
+                        $expr: {
+                            $in: ['$user._id', following],
+                        },
                     },
                 },
-                { $unwind: '$user' },
-                { $project: { following: 0 } },
-                {
-                    $lookup: {
-                        from: 'tweets',
-                        as: 'tweets',
-                        let: { userId: { $toString: '$user._id' } },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: { $eq: ['$user', '$$userId'] },
-                                },
-                            },
-                        ],
-                    },
-                },
-                { $match: { $expr: { $gt: [{ $size: '$tweets' }, 0] } } },
+                ...location.lookup,
+                user.tagPeople,
                 {
                     $lookup: {
                         from: 'lists',
-                        as: 'user.isInList',
-                        let: {
-                            userId: { $toString: '$user._id' },
-                        },
+                        as: 'lists',
+                        let: { id: '$user._id' },
                         pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $and: [
-                                            { $eq: ['$_id', _id] },
-                                            { $in: ['$$userId', '$list'] },
-                                        ],
-                                    },
-                                },
-                            },
+                            { $match: { $expr: { $in: ['$$id', '$list'] } } },
                         ],
                     },
                 },
                 {
                     $addFields: {
                         'user.isInList': {
-                            $gt: [{ $size: '$user.isInList' }, 0],
+                            $cond: [
+                                { $gt: [{ $size: '$lists' }, 0] },
+                                true,
+                                false,
+                            ],
                         },
                         'user.follow': true,
                     },

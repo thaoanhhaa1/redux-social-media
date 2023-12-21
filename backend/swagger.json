@@ -1239,7 +1239,14 @@
                                 "example": [
                                     {
                                         "_id": "64cb712f8428263795605d7b",
-                                        "user": "64a435d7e4658701a763e1a2",
+                                        "user": {
+                                            "_id": "64a435d7e4658701a763e1a2",
+                                            "name": "Anh Thảo",
+                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                            "username": "anhthaodev",
+                                            "isInList": false,
+                                            "follow": false
+                                        },
                                         "content": "This is my tweet",
                                         "images": [
                                             "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F1691054370559.jpeg?alt=media&token=d0b36c20-667f-4fe2-8940-e70860d81394"
@@ -1266,109 +1273,80 @@
                                         ],
                                         "createdAt": "2023-08-03T09:19:43.738Z",
                                         "updatedAt": "2023-08-03T09:19:43.738Z",
+                                        "numberOfComments": 0,
+                                        "viewed": [],
+                                        "deleted": false,
                                         "__v": 0
                                     }
                                 ],
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "title": "Tweet",
-                                        "type": "object",
-                                        "properties": {
-                                            "_id": {
-                                                "type": "string",
-                                                "format": "ObjectId"
+                                        "allOf": [
+                                            {
+                                                "$ref": "#/components/schemas/Tweet"
                                             },
-                                            "user": {
-                                                "type": "string",
-                                                "format": "ObjectId"
-                                            },
-                                            "content": {
-                                                "type": "string"
-                                            },
-                                            "images": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "string",
-                                                    "format": "uri"
-                                                }
-                                            },
-                                            "videos": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "string",
-                                                    "format": "uri"
-                                                }
-                                            },
-                                            "likes": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "string",
-                                                    "format": "ObjectId"
-                                                }
-                                            },
-                                            "feeling": {
+                                            {
                                                 "type": "object",
                                                 "properties": {
-                                                    "title": {
-                                                        "type": "string"
+                                                    "location": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "_id": {
+                                                                "type": "string",
+                                                                "description": "ID"
+                                                            },
+                                                            "title": {
+                                                                "type": "string",
+                                                                "description": "Title"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "description": "Description"
+                                                            },
+                                                            "image": {
+                                                                "type": "string",
+                                                                "format": "url",
+                                                                "description": "URL image"
+                                                            }
+                                                        }
                                                     },
-                                                    "image": {
-                                                        "type": "string",
-                                                        "format": "base64"
-                                                    }
-                                                }
-                                            },
-                                            "location": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "_id": {
-                                                        "type": "string",
-                                                        "format": "ObjectId"
-                                                    },
-                                                    "title": {
-                                                        "type": "string"
-                                                    },
-                                                    "description": {
-                                                        "type": "string"
-                                                    },
-                                                    "image": {
-                                                        "type": "string",
-                                                        "format": "uri"
-                                                    }
-                                                }
-                                            },
-                                            "tagPeople": {
-                                                "type": "array",
-                                                "items": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "name": {
-                                                            "type": "string"
+                                                    "tagPeople": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "_id": {
+                                                                    "type": "string",
+                                                                    "format": "ObjectId"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string"
+                                                                },
+                                                                "username": {
+                                                                    "type": "string"
+                                                                },
+                                                                "avatar": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
                                                         },
-                                                        "username": {
-                                                            "type": "string"
-                                                        },
-                                                        "avatar": {
-                                                            "type": "string",
-                                                            "format": "uri"
+                                                        "description": "An array of information's users mentioned or tagged in the tweet"
+                                                    },
+                                                    "user": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "isInList": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "follow": {
+                                                                "type": "boolean"
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            },
-                                            "createdAt": {
-                                                "type": "string",
-                                                "format": "date-time"
-                                            },
-                                            "updatedAt": {
-                                                "type": "string",
-                                                "format": "date-time"
-                                            },
-                                            "__v": {
-                                                "type": "integer",
-                                                "format": "int32"
                                             }
-                                        }
+                                        ]
                                     }
                                 }
                             }
@@ -1422,114 +1400,115 @@
                             "application/json": {
                                 "example": [
                                     {
+                                        "_id": "64cb712f8428263795605d7b",
                                         "user": {
-                                            "_id": "64a4365be4658701a763e1d8",
-                                            "username": "thaoanhhaa1",
-                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a4365be4658701a763e1d8_avatar_1688483502143.png?alt=media&token=7eaf6328-263d-4945-b6cb-95d18ba4b670",
-                                            "name": "Hà Anh Thảo",
-                                            "isInList": true,
-                                            "follow": true
+                                            "_id": "64a435d7e4658701a763e1a2",
+                                            "name": "Anh Thảo",
+                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                            "username": "anhthaodev",
+                                            "isInList": false,
+                                            "follow": false
                                         },
-                                        "tweets": [
+                                        "content": "This is my tweet",
+                                        "images": [
+                                            "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F1691054370559.jpeg?alt=media&token=d0b36c20-667f-4fe2-8940-e70860d81394"
+                                        ],
+                                        "videos": [],
+                                        "likes": [],
+                                        "feeling": {
+                                            "title": "feeling happy",
+                                            "image": "base64"
+                                        },
+                                        "location": {
+                                            "_id": "64bb3d6aa5d2e2a346eb7516",
+                                            "title": "Ho Chi Minh City",
+                                            "description": "Ho Chi Minh City, Vietnam",
+                                            "image": "/5AmCdexsMi-.png"
+                                        },
+                                        "tagPeople": [
                                             {
-                                                "_id": "64b1f08dd7b0205def0f0cec",
-                                                "user": "64a4365be4658701a763e1d8",
-                                                "content": "What's on your mind",
-                                                "images": [],
-                                                "videos": [],
-                                                "likes": [
-                                                    "64a435d7e4658701a763e1a2"
-                                                ],
-                                                "createdAt": "2023-07-15T01:04:13.202Z",
-                                                "updatedAt": "2023-07-15T14:51:29.867Z",
-                                                "__v": 0
+                                                "name": "Anh Thảo",
+                                                "username": "anhthaodev",
+                                                "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                                "_id": "64cb712f8428263795605d7b"
                                             }
-                                        ]
+                                        ],
+                                        "createdAt": "2023-08-03T09:19:43.738Z",
+                                        "updatedAt": "2023-08-03T09:19:43.738Z",
+                                        "numberOfComments": 0,
+                                        "viewed": [],
+                                        "deleted": false,
+                                        "__v": 0
                                     }
                                 ],
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "properties": {
-                                            "User": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "_id": {
-                                                        "type": "string",
-                                                        "example": "64a4365be4658701a763e1d8"
-                                                    },
-                                                    "username": {
-                                                        "type": "string",
-                                                        "example": "thaoanhhaa1"
-                                                    },
-                                                    "avatar": {
-                                                        "type": "string",
-                                                        "example": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a4365be4658701a763e1d8_avatar_1688483502143.png?alt=media&token=7eaf6328-263d-4945-b6cb-95d18ba4b670"
-                                                    },
-                                                    "name": {
-                                                        "type": "string",
-                                                        "example": "Hà Anh Thảo"
-                                                    },
-                                                    "isInList": {
-                                                        "type": "boolean",
-                                                        "example": true
-                                                    },
-                                                    "follow": {
-                                                        "type": "boolean",
-                                                        "example": true
-                                                    }
-                                                }
+                                        "allOf": [
+                                            {
+                                                "$ref": "#/components/schemas/Tweet"
                                             },
-                                            "Tweet": {
+                                            {
                                                 "type": "object",
                                                 "properties": {
-                                                    "_id": {
-                                                        "type": "string",
-                                                        "example": "64b1f08dd7b0205def0f0cec"
+                                                    "location": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "_id": {
+                                                                "type": "string",
+                                                                "description": "ID"
+                                                            },
+                                                            "title": {
+                                                                "type": "string",
+                                                                "description": "Title"
+                                                            },
+                                                            "description": {
+                                                                "type": "string",
+                                                                "description": "Description"
+                                                            },
+                                                            "image": {
+                                                                "type": "string",
+                                                                "format": "url",
+                                                                "description": "URL image"
+                                                            }
+                                                        }
+                                                    },
+                                                    "tagPeople": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "_id": {
+                                                                    "type": "string",
+                                                                    "format": "ObjectId"
+                                                                },
+                                                                "name": {
+                                                                    "type": "string"
+                                                                },
+                                                                "username": {
+                                                                    "type": "string"
+                                                                },
+                                                                "avatar": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        },
+                                                        "description": "An array of information's users mentioned or tagged in the tweet"
                                                     },
                                                     "user": {
-                                                        "type": "string",
-                                                        "example": "64a4365be4658701a763e1d8"
-                                                    },
-                                                    "content": {
-                                                        "type": "string",
-                                                        "example": "What's on your mind"
-                                                    },
-                                                    "images": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "string"
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "isInList": {
+                                                                "type": "boolean"
+                                                            },
+                                                            "follow": {
+                                                                "type": "boolean"
+                                                            }
                                                         }
-                                                    },
-                                                    "videos": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "string"
-                                                        }
-                                                    },
-                                                    "likes": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "type": "string"
-                                                        }
-                                                    },
-                                                    "createdAt": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-07-15T01:04:13.202Z"
-                                                    },
-                                                    "updatedAt": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2023-07-15T14:51:29.867Z"
-                                                    },
-                                                    "__v": {
-                                                        "type": "integer",
-                                                        "example": 0
                                                     }
                                                 }
                                             }
-                                        }
+                                        ]
                                     }
                                 }
                             }
@@ -1645,12 +1624,17 @@
                     "content": {
                         "application/json": {
                             "example": {
+                                "user": {
+                                    "_id": "64a435d7e4658701a763e1a2",
+                                    "name": "Anh Thảo",
+                                    "username": "anhthaodev",
+                                    "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7"
+                                },
                                 "content": "What's on your mind?",
                                 "images": [
                                     "https://plus.unsplash.com/premium_photo-1669833450296-1c9948e72f87?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                                 ],
                                 "videos": [],
-                                "group": null,
                                 "feeling": {
                                     "title": "feeling happy",
                                     "image": "base64"
@@ -1664,6 +1648,26 @@
                             },
                             "schema": {
                                 "properties": {
+                                    "user": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "format": "ObjectId"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "username": {
+                                                "type": "string"
+                                            },
+                                            "avatar": {
+                                                "type": "string",
+                                                "format": "url"
+                                            }
+                                        },
+                                        "required": ["_id", "username"]
+                                    },
                                     "content": {
                                         "type": "string"
                                     },
@@ -1715,7 +1719,8 @@
                                             }
                                         }
                                     }
-                                }
+                                },
+                                "required": ["user"]
                             }
                         }
                     }
@@ -1726,63 +1731,46 @@
                         "content": {
                             "application/json": {
                                 "example": {
-                                    "user": "64a435d7e4658701a763e1a2",
+                                    "_id": "64cb712f8428263795605d7b",
+                                    "user": {
+                                        "_id": "64a435d7e4658701a763e1a2",
+                                        "name": "Anh Thảo",
+                                        "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                        "username": "anhthaodev"
+                                    },
                                     "content": "This is my tweet",
-                                    "images": [],
+                                    "images": [
+                                        "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F1691054370559.jpeg?alt=media&token=d0b36c20-667f-4fe2-8940-e70860d81394"
+                                    ],
                                     "videos": [],
                                     "likes": [],
-                                    "tagPeople": [],
-                                    "_id": "657d041c79dd2b7594849ac9",
-                                    "createdAt": "2023-12-16T01:57:48.742Z",
-                                    "updatedAt": "2023-12-16T01:57:48.742Z",
+                                    "feeling": {
+                                        "title": "feeling happy",
+                                        "image": "base64"
+                                    },
+                                    "location": {
+                                        "_id": "64bb3d6aa5d2e2a346eb7516",
+                                        "title": "Ho Chi Minh City",
+                                        "description": "Ho Chi Minh City, Vietnam",
+                                        "image": "/5AmCdexsMi-.png"
+                                    },
+                                    "tagPeople": [
+                                        {
+                                            "name": "Anh Thảo",
+                                            "username": "anhthaodev",
+                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                            "_id": "64cb712f8428263795605d7b"
+                                        }
+                                    ],
+                                    "createdAt": "2023-08-03T09:19:43.738Z",
+                                    "updatedAt": "2023-08-03T09:19:43.738Z",
+                                    "numberOfComments": 0,
+                                    "viewed": [],
+                                    "deleted": false,
                                     "__v": 0
                                 },
                                 "schema": {
-                                    "properties": {
-                                        "user": {
-                                            "type": "string",
-                                            "format": "ObjectId"
-                                        },
-                                        "content": {
-                                            "type": "string"
-                                        },
-                                        "images": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "videos": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "likes": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "tagPeople": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "_id": {
-                                            "type": "string"
-                                        },
-                                        "createdAt": {
-                                            "type": "string"
-                                        },
-                                        "updatedAt": {
-                                            "type": "string"
-                                        },
-                                        "__v": {
-                                            "type": "integer"
-                                        }
-                                    }
+                                    "$ref": "#/components/schemas/Tweet"
                                 }
                             }
                         }
@@ -2993,12 +2981,37 @@
                     "_id": {
                         "type": "string",
                         "format": "ObjectId",
-                        "example": "64d9fcbcff8aa99c0854a62a"
+                        "example": "64d9fcbcff8aa99c0854a62a",
+                        "description": "Id of tweet"
                     },
                     "user": {
-                        "type": "string",
-                        "description": "id of user",
-                        "example": "64d9fcbcff8aa99c0854a62a"
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string",
+                                "format": "ObjectId",
+                                "example": "64a435d7e4658701a763e1a2",
+                                "description": "Id"
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "Anh Thảo",
+                                "description": "Name"
+                            },
+                            "avatar": {
+                                "type": "string",
+                                "format": "url",
+                                "example": "https://example.com/image.jpg",
+                                "description": "Avatar"
+                            },
+                            "username": {
+                                "type": "string",
+                                "example": "username",
+                                "description": "Username"
+                            }
+                        },
+                        "required": ["_id", "username"],
+                        "description": "User's information"
                     },
                     "content": {
                         "type": "string",
@@ -3037,6 +3050,7 @@
                     },
                     "group": {
                         "type": "string",
+                        "format": "ObjectId",
                         "description": "The _id of  group of the tweet",
                         "example": "64d9fcbcff8aa99c0854a62a"
                     },
@@ -3065,10 +3079,11 @@
                     "tagPeople": {
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "ObjectId"
                         },
                         "description": "An array of _id's users mentioned or tagged in the tweet",
-                        "example": ["64d9fcbcff8aa99c0854a62a"]
+                        "example": ["64a43612e4658701a763e1ab"]
                     },
                     "gif": {
                         "type": "object",
@@ -3080,11 +3095,42 @@
                             },
                             "url": {
                                 "type": "string",
+                                "format": "url",
                                 "description": "The URL of the GIF",
                                 "example": "https://example.com/funny.gif"
                             }
                         },
                         "description": "A GIF attached to the tweet"
+                    },
+                    "numberOfComments": {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "Number of comments of the tweet"
+                    },
+                    "viewed": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Ids of users who have viewed this tweet",
+                        "example": ["64a435d7e4658701a763e1a2"]
+                    },
+                    "deleted": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "If tweet was deleted, deleted is true"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Time of tweet creation",
+                        "example": "2023-12-21T14:36:30.844Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Tweet update time",
+                        "example": "2023-12-21T14:36:30.844Z"
                     }
                 },
                 "required": ["_id", "user", "likes", "tagPeople"],
