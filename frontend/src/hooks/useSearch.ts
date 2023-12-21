@@ -1,13 +1,11 @@
 import { ChangeEvent, useState } from 'react';
 
-function useSearch() {
-    const [value, setValue] = useState('');
+function useSearch(search: string = '') {
+    const [value, setValue] = useState(search);
 
     const handleChangeSearch = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        setValue(e.target.value);
-    };
+    ) => setValue(e.target.value);
 
     return {
         value,

@@ -191,6 +191,26 @@ const followingTweetsSlice = createSlice({
                 if (comment) comment.numberOfLikes += liked ? 1 : -1;
             }
         },
+        editComment: (
+            state,
+            {
+                payload: { commentId, content, tweetId },
+            }: {
+                payload: {
+                    content: string;
+                    commentId: string;
+                    tweetId: string;
+                };
+            },
+        ) => {
+            const tweet = getTweet(state, tweetId);
+
+            if (tweet) {
+                const comment = getParentComment(tweet.comments, commentId);
+
+                if (comment) comment.content = content;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -315,4 +335,5 @@ export const {
     toggleUserFollow,
     deleteComment,
     toggleLikeComment,
+    editComment,
 } = followingTweetsSlice.actions;

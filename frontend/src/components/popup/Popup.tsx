@@ -3,6 +3,7 @@ import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { useAppDispatch } from '../../app/hooks';
 import { useCardContext } from '../../contexts/CardContext';
+import useCommentTweet from '../../contexts/CommentTweet';
 import { deleteComment } from '../../features/followingTweets';
 import { ArrowPopupIcon } from '../Icons';
 import Portal from '../Portal';
@@ -15,6 +16,7 @@ function Popup({
     commentId: string;
     parentCommentId?: string;
 }) {
+    const { setEdit } = useCommentTweet();
     const { tweet } = useCardContext();
     const dispatch = useAppDispatch();
     const ref = useRef(null);
@@ -34,6 +36,8 @@ function Popup({
         );
     };
 
+    const handleClickEdit = () => setEdit(commentId);
+
     useEffect(() => {
         if (!ref.current) return;
 
@@ -45,7 +49,7 @@ function Popup({
             <div
                 ref={ref}
                 className='z-1 w-[300px] absolute top-[calc(100%+6px)] left-2/4 -translate-x-2/4'
-            ></div>
+            />
             {rect && (
                 <Portal>
                     <div
@@ -56,7 +60,9 @@ function Popup({
                         className='z-50 w-[300px] absolute p-2 bg-white rounded-lg shadow-popup drop-shadow-[0_0_6px_rgba(0,_0,_0,_0.2)]'
                     >
                         <div>
-                            <PopupItem>Edit</PopupItem>
+                            <PopupItem onClick={handleClickEdit}>
+                                Edit
+                            </PopupItem>
                             <PopupItem onClick={handleDelete}>Delete</PopupItem>
                         </div>
                         <div className='absolute top-[2px] -translate-y-full left-[calc(50%-4px)]'>

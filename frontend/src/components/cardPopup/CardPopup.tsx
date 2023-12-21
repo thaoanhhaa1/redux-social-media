@@ -7,10 +7,10 @@ import { comments } from '../../constants';
 import { useCardContext } from '../../contexts/CardContext';
 import { getComments } from '../../features/followingTweets';
 import { setComments } from '../../features/myTweet';
-import CommentTweet from '../CommentTweet';
 import Modal from '../Modal';
 import ScrollbarCustomize from '../ScrollbarCustomize';
 import Card from '../card/Card';
+import CommentTweet from '../commentTweet/CommentTweet';
 import CardComment from './CardComment';
 
 // TODO More comment popup when scroll
@@ -27,6 +27,7 @@ const CardPopup = ({
     const { tweet, user } = useCardContext();
     const dispatch = useAppDispatch();
     const [scrolled, setScrolled] = useState<boolean>(false);
+    const [edit, setEdit] = useState<string>('');
 
     const handleScroll = () => setScrolled(true);
 
@@ -71,6 +72,8 @@ const CardPopup = ({
                     />
                     {tweet.comments?.map((comment) => (
                         <CommentTweet
+                            edit={edit}
+                            setEdit={setEdit}
                             scrolled={scrolled}
                             setScrolled={setScrolled}
                             key={comment._id}

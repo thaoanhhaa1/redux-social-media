@@ -15,6 +15,8 @@ const api = {
     postComments: (tweetId: String) => `/private/tweets/${tweetId}/comments`,
     deleteComment: (tweetId: String, commentId: String) =>
         `/private/tweets/${tweetId}/comments/${commentId}`,
+    editComment: (tweetId: String, commentId: String) =>
+        `/private/tweets/${tweetId}/comments/${commentId}`,
     toggleLikeComment: (commentId: string) =>
         `/private/comments/${commentId}/toggle-like`,
     getStories: () => '/private/stories/get-stories',
