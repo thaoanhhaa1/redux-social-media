@@ -25,7 +25,7 @@ const Page = ({
                     minHeight: scrollHeight,
                     top: '95px',
                 }}
-                containerClassName='hidden xl:block'
+                containerClassName='hidden xl:block sticky max-h-0 top-[95px]'
                 className='flex flex-col gap-5 max-h-0 sticky pb-5'
             >
                 {scrollChildren}

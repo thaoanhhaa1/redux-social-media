@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { comments } from '../../constants';
-import { IPerson, IPersonTweet, ITweet } from '../../interfaces';
+import { IPerson, ITweet } from '../../interfaces';
 import IComment from '../../interfaces/IComment';
 import {
     getCommentDTO,
@@ -351,11 +351,11 @@ export default followingTweetsSlice.reducer;
 export {
     getChildrenComments,
     getComments,
+    getMyTweets,
     getTweets,
     postComment,
     toggleLike,
     toggleList,
-    getMyTweets,
 };
 export const {
     toggleUserList,

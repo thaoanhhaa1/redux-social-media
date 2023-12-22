@@ -3,6 +3,8 @@ import { classNames, getTime } from '../utils';
 import { ClockIcon } from './Icons';
 import Image from './Image';
 
+const ONE_DAY_MILLISECONDS = 86400000;
+
 const Contact = ({
     contact,
     className = '',
@@ -10,6 +12,13 @@ const Contact = ({
     contact: IContact;
     className?: string;
 }) => {
+    const timeString = contact.offline
+        ? new Date().getTime() - new Date(contact.offline).getTime() >=
+          ONE_DAY_MILLISECONDS
+            ? ''
+            : getTime(new Date(contact.offline))
+        : 'online';
+
     return (
         <div
             className={classNames(
@@ -28,15 +37,14 @@ const Contact = ({
                     {contact.name || contact.username}
                 </p>
                 <div className='flex gap-2 items-center'>
-                    {(contact.offline && (
+                    {timeString && contact.offline && (
                         <ClockIcon className='fill-white-45 dark:fill-white-9' />
-                    )) || (
+                    )}
+                    {!contact.offline && (
                         <span className='inline-block w-2.5 h-2.5 bg-blue-black-2 rounded-full'></span>
                     )}
                     <span className='font-semibold text-sm leading-sm text-black-8 dark:text-white-9'>
-                        {contact.offline
-                            ? getTime(new Date(contact.offline))
-                            : 'online'}
+                        {timeString}
                     </span>
                 </div>
             </div>
