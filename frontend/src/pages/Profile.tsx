@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { useEffectOnce } from 'usehooks-ts';
@@ -20,17 +20,22 @@ import {
     WhatHappen,
     Wrapper,
 } from '../components';
-import { getMyTweets } from '../features/myTweet';
 import { setLoading } from '../features/page';
 import { dec, getProfile, inc } from '../features/profile';
 import { getMonthYear } from '../utils';
+import { getMyTweets } from '../features/followingTweets';
 
 const Profile = () => {
     const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
-    const { user, socket, myTweet, profile } = useSelector(
+    const { user, socket, profile, followingTweets } = useSelector(
         (state: RootState) => state,
     );
     const dispatch = useAppDispatch();
+    const myTweets = useMemo(
+        () =>
+            followingTweets.tweets.filter((item) => item.user._id === user._id),
+        [followingTweets.tweets, user._id],
+    );
 
     const handleShowModal = useCallback(
         () => setShowModalEditProfile((isShowModal) => !isShowModal),
@@ -67,7 +72,6 @@ const Profile = () => {
     });
 
     if (!user._id) return <Loading />;
-    console.log('🚀 ~ Profile ~ user:', user);
 
     return (
         <div className='relative px-5'>
@@ -139,12 +143,9 @@ const Profile = () => {
                 <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
                     <Stories all={false} />
                     <WhatHappen />
-                    {myTweet.newTweets.map((tweet) => (
-                        <Card tweet={tweet} user={user} key={tweet._id || ''} />
-                    ))}
-                    {(myTweet.tweets.length > 0 &&
-                        myTweet.tweets.map((tweet) => (
-                            <Card key={tweet._id} user={user} tweet={tweet} />
+                    {(myTweets.length > 0 &&
+                        myTweets.map((tweet) => (
+                            <Card key={tweet._id} tweet={tweet} />
                         ))) || (
                         <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
                             No posts available

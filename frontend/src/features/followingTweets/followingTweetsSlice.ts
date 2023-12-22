@@ -9,20 +9,27 @@ import {
     getCommentsDTO,
     getNextLevelComment,
     getParentComment,
+    getTweetsDTO,
 } from '../../utils';
 
 type FollowingTweet = {
-    data: Array<{
-        user: IPersonTweet;
-        tweets: Array<ITweet>;
-    }>;
+    tweets: ITweet[];
     isLoading: boolean;
 };
 
 const initialState: FollowingTweet = {
-    data: [],
+    tweets: [],
     isLoading: false,
 };
+
+const getMyTweets = createAsyncThunk(
+    'followingTweets/getMyTweets',
+    async () => {
+        const res = await axiosClient.get(api.getMyTweets());
+
+        return res.data;
+    },
+);
 
 const getTweets = createAsyncThunk('followingTweets/getTweets', async () => {
     try {
@@ -117,17 +124,17 @@ const followingTweetsSlice = createSlice({
     initialState,
     reducers: {
         toggleUserList: (state, { payload }: { payload: string }) => {
-            state.data.forEach((item) => {
-                if (item.user._id === payload) {
-                    item.user.isInList = !item.user.isInList;
+            state.tweets.forEach((tweet) => {
+                if (tweet.user._id === payload) {
+                    tweet.user.isInList = !tweet.user.isInList;
                     return;
                 }
             });
         },
         toggleUserFollow: (state, { payload }: { payload: string }) => {
-            state.data.forEach((item) => {
-                if (item.user._id === payload) {
-                    item.user.follow = !item.user.follow;
+            state.tweets.forEach((tweet) => {
+                if (tweet.user._id === payload) {
+                    tweet.user.follow = !tweet.user.follow;
                     return;
                 }
             });
@@ -144,7 +151,7 @@ const followingTweetsSlice = createSlice({
                 };
             },
         ) => {
-            const tweet = getTweet(state, tweetId);
+            const tweet = getTweet(state.tweets, tweetId);
 
             if (tweet) {
                 let comments: IComment[] = [];
@@ -183,7 +190,7 @@ const followingTweetsSlice = createSlice({
                 };
             },
         ) => {
-            const tweet = getTweet(state, tweetId);
+            const tweet = getTweet(state.tweets, tweetId);
 
             if (tweet) {
                 const comment = getParentComment(tweet.comments, commentId);
@@ -203,7 +210,7 @@ const followingTweetsSlice = createSlice({
                 };
             },
         ) => {
-            const tweet = getTweet(state, tweetId);
+            const tweet = getTweet(state.tweets, tweetId);
 
             if (tweet) {
                 const comment = getParentComment(tweet.comments, commentId);
@@ -220,24 +227,29 @@ const followingTweetsSlice = createSlice({
             .addCase(getTweets.rejected, (state) => {
                 state.isLoading = false;
             })
-            .addCase(getTweets.fulfilled, (state, { payload }) => {
-                state.isLoading = false;
-                state.data = payload;
+            .addCase(
+                getTweets.fulfilled,
+                (
+                    state,
+                    {
+                        payload,
+                    }: {
+                        payload: ITweet[];
+                    },
+                ) => {
+                    const data = getTweetsDTO(payload);
 
-                state.data.forEach((item) => {
-                    item.tweets.forEach((tweet) => {
-                        tweet.skip = 0;
-                        tweet.comments = [];
-                    });
-                });
-            })
+                    state.isLoading = false;
+                    state.tweets.push(...data);
+                },
+            )
             .addCase(
                 getComments.fulfilled,
                 (state, { payload }: { payload: IComment[] }) => {
                     if (payload.length) {
                         const tweetId = payload[0].post;
                         const comments = getCommentsDTO(payload, 0);
-                        const tweet = getTweet(state, tweetId);
+                        const tweet = getTweet(state.tweets, tweetId);
 
                         tweet?.comments.push(...comments);
                     }
@@ -248,21 +260,28 @@ const followingTweetsSlice = createSlice({
                 (state, { payload }: { payload: IComment }) => {
                     payload.comments = [];
                     const tweetId = payload.post;
-                    const tweet = getTweet(state, tweetId);
+                    const tweet = getTweet(state.tweets, tweetId);
 
-                    if (tweet) {
-                        const commentDTO = getCommentDTO(payload);
+                    if (!tweet) return state;
 
-                        if (payload.parent) {
-                            const comment = getParentComment(
-                                tweet.comments,
-                                payload.parent,
-                            );
-                            comment?.comments.push(commentDTO);
-                        } else {
-                            tweet.comments.unshift(commentDTO);
+                    const commentDTO = getCommentDTO(payload);
+
+                    if (payload.parent) {
+                        const comment = getParentComment(
+                            tweet.comments,
+                            payload.parent,
+                        );
+
+                        if (comment) {
+                            comment.comments.push(commentDTO);
+                            comment.numberOfComments += 1;
                         }
+
+                        return state;
                     }
+
+                    tweet.comments.unshift(commentDTO);
+                    tweet.numberOfComments += 1;
                 },
             )
             .addCase(
@@ -271,7 +290,7 @@ const followingTweetsSlice = createSlice({
                     if (payload.length) {
                         const commentId = payload[0].parent || '';
                         const tweetId = payload[0].post;
-                        const tweet = getTweet(state, tweetId);
+                        const tweet = getTweet(state.tweets, tweetId);
 
                         if (tweet && commentId) {
                             const comment = getParentComment(
@@ -297,25 +316,32 @@ const followingTweetsSlice = createSlice({
                         }
                     }
                 },
+            )
+            .addCase(getMyTweets.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getMyTweets.rejected, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(
+                getMyTweets.fulfilled,
+                (state, { payload }: { payload: ITweet[] }) => {
+                    if (payload.length) {
+                        state.tweets.push(...getTweetsDTO(payload));
+                        state.isLoading = false;
+                    }
+                },
             );
     },
 });
 
-function getTweet(
-    followingTweet: FollowingTweet,
-    tweetId: string,
-): ITweet | undefined {
-    const length = followingTweet.data.length;
+function getTweet(tweets: ITweet[], tweetId: string): ITweet | undefined {
+    const length = tweets.length;
 
     for (let index = 0; index < length; index++) {
-        const element = followingTweet.data[index];
-        const length = element.tweets.length;
+        const tweet = tweets[index];
 
-        for (let i = 0; i < length; ++i) {
-            const tweet = element.tweets[i];
-
-            if (tweet._id === tweetId) return tweet;
-        }
+        if (tweet._id === tweetId) return tweet;
     }
 
     return undefined;
@@ -329,6 +355,7 @@ export {
     postComment,
     toggleLike,
     toggleList,
+    getMyTweets,
 };
 export const {
     toggleUserList,

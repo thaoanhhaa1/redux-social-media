@@ -1,19 +1,17 @@
 import { Ref, memo, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 import CardProvider from '../../contexts/CardContext';
-import { IPersonTweet, ITweet } from '../../interfaces';
+import { ITweet } from '../../interfaces';
 import { classNames } from '../../utils';
 import Wrapper from '../wrapper/Wrapper';
 import CardInformation from './CardInformation';
 import CardProfile from './CardProfile';
 
 const Card = ({
-    user,
     tweet,
     className = '',
     isPopup = false,
 }: {
-    user: IPersonTweet;
     tweet: ITweet;
     className?: string;
     isPopup?: boolean;
@@ -41,7 +39,7 @@ const Card = ({
     });
 
     return (
-        <CardProvider value={{ user, tweet, isPopup }}>
+        <CardProvider value={{ ...tweet, isPopup }}>
             <Wrapper
                 ref={ref as Ref<HTMLDivElement> | undefined}
                 className={classNames('card p-2 xxs:p-5', className)}

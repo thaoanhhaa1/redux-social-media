@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { useAppDispatch } from '../app/hooks';
@@ -18,18 +18,22 @@ import { getContacts, setOffline, setOnline } from '../features/contacts';
 import { getTweets } from '../features/followingTweets';
 import { setLoading } from '../features/page';
 import { getStories } from '../features/stories';
+import getNewTweets from '../utils/getNewTweets';
 
 const Home = () => {
     const { pageCount, contacts } = useSelector(
         (state: RootState) => state.contacts,
     );
     const socket = useSelector((state: RootState) => state.socket);
-    const myTweet = useSelector((state: RootState) => state.myTweet);
     const followingTweets = useSelector(
         (state: RootState) => state.followingTweets,
     );
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
+    const newTweets = useMemo(
+        () => getNewTweets(followingTweets.tweets),
+        [followingTweets.tweets],
+    );
 
     useEffect(() => {
         if (!user._id) return;
@@ -39,8 +43,7 @@ const Home = () => {
 
             if (contacts.length === 0)
                 queries.push(dispatch(getContacts(pageCount)).unwrap());
-            if (followingTweets.data.length === 0)
-                queries.push(dispatch(getTweets()).unwrap());
+            queries.push(dispatch(getTweets()).unwrap());
 
             await Promise.all(queries);
             dispatch(setLoading(false));
@@ -140,17 +143,14 @@ const Home = () => {
         >
             <Stories />
             <WhatHappen />
-            {myTweet.newTweets.map((tweet) => (
-                <Card tweet={tweet} user={user} key={tweet._id || ''} />
+            {newTweets.map((tweet) => (
+                <Card tweet={tweet} key={tweet._id || ''} />
             ))}
-            {followingTweets.data.map((item) =>
-                item.tweets.map((tweet) => (
-                    <Card
-                        tweet={tweet}
-                        user={item.user}
-                        key={tweet._id || ''}
-                    />
-                )),
+            {followingTweets.tweets.map(
+                (tweet) =>
+                    tweet.user._id === user._id || (
+                        <Card tweet={tweet} key={tweet._id || ''} />
+                    ),
             )}
         </Page>
     );

@@ -4,12 +4,17 @@ import axiosClient from '../../api/axiosClient';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import useCommentTweet from '../../contexts/CommentTweet';
-import { toggleLikeComment } from '../../features/followingTweets';
+import {
+    deleteComment,
+    toggleLikeComment,
+} from '../../features/followingTweets';
 import { useOnClickOutside } from '../../hooks';
 import IComment from '../../interfaces/IComment';
 import { classNames, getTimeComment } from '../../utils';
 import { LikeFBIcon, MoreIcon } from '../Icons';
 import Popup from '../popup';
+import { useCardContext } from '../../contexts/CardContext';
+import { IPopupItem } from '../../interfaces';
 
 const CommentContentTweet = ({ comment }: { comment: IComment }) => {
     const {
@@ -20,6 +25,8 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
         setShowParent,
         setShowCardComment,
     } = useCommentTweet();
+    const tweet = useCardContext();
+    const { setEdit } = useCommentTweet();
     const user = useAppSelector((state: RootState) => state.user);
     const moreRef = useRef(null);
     const [liked, setLiked] = useState<boolean>(() =>
@@ -53,6 +60,32 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
         );
     };
 
+    const handleDelete = () => {
+        const tweetId = tweet._id;
+
+        axiosClient.delete(api.deleteComment(tweetId, comment._id));
+
+        dispatch(
+            deleteComment({
+                commentId: comment._id,
+                parentCommentId: comment.parent,
+                tweetId: tweetId,
+            }),
+        );
+    };
+
+    const handleClickEdit = () => setEdit(comment._id);
+    const popup: IPopupItem[] = [
+        {
+            title: 'Edit',
+            onClick: handleClickEdit,
+        },
+        {
+            title: 'Delete',
+            onClick: handleDelete,
+        },
+    ];
+
     useOnClickOutside(moreRef, () => setShowPopup(false));
 
     return (
@@ -82,12 +115,7 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
                         >
                             <MoreIcon />
                         </button>
-                        {showPopup && (
-                            <Popup
-                                commentId={comment._id}
-                                parentCommentId={comment.parent}
-                            />
-                        )}
+                        {showPopup && <Popup popup={popup} />}
                     </div>
                 )}
             </div>

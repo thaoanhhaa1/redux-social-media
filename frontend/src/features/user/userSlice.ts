@@ -60,13 +60,9 @@ const signIn = createAsyncThunk('user/signIn', async (data: SignInType) => {
 });
 
 const fetchUser = createAsyncThunk('user/fetchUser', async () => {
-    try {
-        const res = await axiosClient.get(api.getUser());
+    const res = await axiosClient.get(api.getUser());
 
-        return res.data;
-    } catch (error) {
-        throw error;
-    }
+    return res.data;
 });
 
 const editProfile = createAsyncThunk(

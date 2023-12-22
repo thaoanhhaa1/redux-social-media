@@ -13,6 +13,8 @@ export { default as getTimeTweet } from './getTimeTweet';
 export { default as getUserName } from './getUserName';
 export { default as isAdult } from './isAdult';
 export { default as numberShow } from './numberShow';
+export { default as getTweetDTO } from './getTweetDTO';
+export { default as getTweetsDTO } from './getTweetsDTO';
 
 export const classNames = (
     ...classNameList: (string | boolean | undefined)[]

@@ -6,7 +6,8 @@ import TagPeople from '../TagPeople';
 import CardMore from './CardMore';
 
 const CardProfile = () => {
-    const { user, tweet } = useCardContext();
+    const tweet = useCardContext();
+    const user = tweet.user;
 
     return (
         <div className='flex gap-2 xxs:gap-4 overflow-y-visible'>

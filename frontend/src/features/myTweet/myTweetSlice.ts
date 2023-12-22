@@ -1,13 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { IGif, ILocation, IPerson, ITweet } from '../../interfaces';
-import IComment from '../../interfaces/IComment';
+import { IGif, ILocation, IPerson, ITweet, ITweetPost } from '../../interfaces';
 import SubProps from '../../types/SubProps';
 
 const initialState: {
-    tweets: ITweet[];
-    newTweets: ITweet[];
     isLoading: boolean;
     tag: string;
     feeling: string;
@@ -20,8 +17,6 @@ const initialState: {
     value: string;
     sub?: SubProps;
 } = {
-    tweets: [],
-    newTweets: [],
     isLoading: false,
     tag: '',
     feeling: '',
@@ -30,7 +25,7 @@ const initialState: {
 
 const createTweet = createAsyncThunk(
     'myTweet/createTweet',
-    async (tweet: ITweet) => {
+    async (tweet: ITweetPost) => {
         try {
             await axiosClient.post(api.createTweet(), {
                 content: tweet.content,
@@ -51,21 +46,12 @@ const createTweet = createAsyncThunk(
     },
 );
 
-const getMyTweets = createAsyncThunk('myTweet/getMyTweets', async () => {
-    const res = await axiosClient.get(api.getMyTweets());
-
-    return res.data;
-});
-
 const myTweetSlice = createSlice({
     name: 'myTweet',
     initialState,
     reducers: {
         init: (state) => {
             Object.assign(state, initialState);
-        },
-        addTweets: (state, { payload }) => {
-            state.tweets.push(...payload);
         },
         setTag: (state, { payload }) => {
             state.tag = payload;
@@ -111,53 +97,12 @@ const myTweetSlice = createSlice({
         setSub: (state, { payload }: { payload: SubProps | undefined }) => {
             state.sub = payload;
         },
-        setComments: (
-            state,
-            {
-                payload: { tweetId, comments },
-            }: { payload: { tweetId: string; comments: IComment[] } },
-        ) => {
-            state.tweets.find((tweet) => {
-                if (tweet._id === tweetId)
-                    return tweet.comments.push(...comments);
-                return false;
-            });
-        },
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(createTweet.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(createTweet.rejected, (state) => {
-                state.isLoading = false;
-            })
-            .addCase(createTweet.fulfilled, (state, { payload }) => {
-                state.newTweets.unshift(payload);
-                state.isLoading = false;
-                state.tag = '';
-                state.feeling = '';
-                state.image = '';
-            })
-            .addCase(
-                getMyTweets.fulfilled,
-                (state, { payload }: { payload: ITweet[] }) => {
-                    state.tweets.push(
-                        ...payload.map((tweet) => {
-                            tweet.skip = 0;
-                            tweet.comments = [];
-
-                            return tweet;
-                        }),
-                    );
-                },
-            );
-    },
+    extraReducers: (builder) => {},
 });
 
 export default myTweetSlice.reducer;
 export const {
-    addTweets,
     setFeeling,
     setTag,
     init,
@@ -169,6 +114,5 @@ export const {
     setImage,
     setValue,
     setSub,
-    setComments,
 } = myTweetSlice.actions;
-export { createTweet, getMyTweets };
+export { createTweet };

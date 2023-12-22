@@ -1,9 +1,6 @@
-import IPersonTweet from './IPersonTweet';
 import ITweet from './ITweet';
 
-interface ICardContext {
-    user: IPersonTweet;
-    tweet: ITweet;
+interface ICardContext extends ITweet {
     isPopup: boolean;
 }
 

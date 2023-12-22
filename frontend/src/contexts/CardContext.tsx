@@ -2,19 +2,19 @@ import { ReactElement, createContext, useContext } from 'react';
 import { ICardContext } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
+    comments: [],
+    skip: 0,
+    numberOfComments: 0,
+    _id: '',
     user: {
         _id: '',
         avatar: '',
-        name: '',
-        username: '',
         follow: false,
         isInList: false,
+        name: '',
+        username: '',
     },
-    tweet: {
-        comments: [],
-        skip: 0,
-        numberOfComments: 0,
-    },
+    createdAt: '',
     isPopup: false,
 });
 

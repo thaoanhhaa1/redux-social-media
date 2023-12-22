@@ -1,42 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import api from '../../api';
-import axiosClient from '../../api/axiosClient';
-import { useAppDispatch } from '../../app/hooks';
-import { useCardContext } from '../../contexts/CardContext';
-import useCommentTweet from '../../contexts/CommentTweet';
-import { deleteComment } from '../../features/followingTweets';
+import { v4 } from 'uuid';
+import { IPopupItem } from '../../interfaces';
 import { ArrowPopupIcon } from '../Icons';
 import Portal from '../Portal';
 import PopupItem from './PopupItem';
 
-function Popup({
-    commentId,
-    parentCommentId,
-}: {
-    commentId: string;
-    parentCommentId?: string;
-}) {
-    const { setEdit } = useCommentTweet();
-    const { tweet } = useCardContext();
-    const dispatch = useAppDispatch();
+function Popup({ popup }: { popup: IPopupItem[] }) {
     const ref = useRef(null);
     const [rect, setRect] = useState<DOMRect>();
-
-    const handleDelete = () => {
-        const tweetId = tweet._id || '';
-
-        axiosClient.delete(api.deleteComment(tweetId, commentId));
-
-        dispatch(
-            deleteComment({
-                commentId,
-                parentCommentId,
-                tweetId: tweetId,
-            }),
-        );
-    };
-
-    const handleClickEdit = () => setEdit(commentId);
 
     useEffect(() => {
         if (!ref.current) return;
@@ -60,10 +31,11 @@ function Popup({
                         className='z-50 w-[300px] absolute p-2 bg-white rounded-lg shadow-popup drop-shadow-[0_0_6px_rgba(0,_0,_0,_0.2)]'
                     >
                         <div>
-                            <PopupItem onClick={handleClickEdit}>
-                                Edit
-                            </PopupItem>
-                            <PopupItem onClick={handleDelete}>Delete</PopupItem>
+                            {popup.map((item) => (
+                                <PopupItem key={v4()} onClick={item.onClick}>
+                                    {item.title}
+                                </PopupItem>
+                            ))}
                         </div>
                         <div className='absolute top-[2px] -translate-y-full left-[calc(50%-4px)]'>
                             <ArrowPopupIcon

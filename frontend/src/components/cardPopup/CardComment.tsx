@@ -19,7 +19,7 @@ const CardComment = ({
     name?: string;
 }) => {
     const owner = useAppSelector((state: RootState) => state.user);
-    const { tweet } = useCardContext();
+    const tweet = useCardContext();
     const { value, handleChangeSearch, setValue } = useSearch();
     const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ const CardComment = ({
                 postComment({
                     user: owner,
                     content: value,
-                    tweetId: tweet._id || '',
+                    tweetId: tweet._id,
                     parent: commentParentId,
                 }),
             ).unwrap();

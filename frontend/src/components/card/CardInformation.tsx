@@ -20,7 +20,7 @@ const CardInformation = () => {
     const user = useSelector((state: RootState) => state.user);
     const card = useCardContext();
     const [isShowCardPopup, setShowCardPopup] = useState(false);
-    const { tweet } = useCardContext();
+    const tweet = useCardContext();
     const dispatch = useAppDispatch();
     const [isLike, setLike] = useState(() =>
         (tweet.likes || []).includes(user._id),

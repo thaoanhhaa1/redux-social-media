@@ -1,12 +1,9 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useEffectOnce } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
-import { RootState } from '../../app/store';
 import { comments } from '../../constants';
 import { useCardContext } from '../../contexts/CardContext';
 import { getComments } from '../../features/followingTweets';
-import { setComments } from '../../features/myTweet';
 import Modal from '../Modal';
 import ScrollbarCustomize from '../ScrollbarCustomize';
 import Card from '../card/Card';
@@ -23,11 +20,11 @@ const CardPopup = ({
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const owner = useSelector((state: RootState) => state.user);
-    const { tweet, user } = useCardContext();
+    const tweet = useCardContext();
     const dispatch = useAppDispatch();
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [edit, setEdit] = useState<string>('');
+    const user = tweet.user;
 
     const handleScroll = () => setScrolled(true);
 
@@ -35,20 +32,12 @@ const CardPopup = ({
         async function getCommentsData() {
             if (!tweet._id) return;
 
-            const result = await dispatch(
+            await dispatch(
                 getComments({
                     tweetId: tweet._id,
                     skip: tweet.skip * comments.LIMIT,
                 }),
             );
-
-            if (owner._id === user._id)
-                dispatch(
-                    setComments({
-                        tweetId: tweet._id || '',
-                        comments: result.payload,
-                    }),
-                );
         }
 
         getCommentsData();
@@ -64,12 +53,7 @@ const CardPopup = ({
                     onScroll={handleScroll}
                     className='max-h-[50vh]'
                 >
-                    <Card
-                        isPopup
-                        className={className}
-                        tweet={tweet}
-                        user={user}
-                    />
+                    <Card isPopup className={className} tweet={tweet} />
                     {tweet.comments?.map((comment) => (
                         <CommentTweet
                             edit={edit}

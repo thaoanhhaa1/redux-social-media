@@ -1,28 +1,14 @@
 import IComment from './IComment';
-import ILocation from './ILocation';
-import IUserTweet from './IPerson';
+import ITweetPost from './ITweetPost';
 
-interface ITweet {
-    _id?: string;
-    content?: string;
-    images?: string[];
-    videos?: string[];
-    createdAt?: string;
+interface ITweet extends ITweetPost {
+    _id: string;
     likes?: string[];
-    group?: string;
-    feeling?: {
-        title: string;
-        image: string;
-    };
-    location?: ILocation;
-    tagPeople?: IUserTweet[];
-    gif?: {
-        title: string;
-        url: string;
-    };
     numberOfComments: number;
     comments: IComment[];
     skip: number;
+    isNewTweet?: boolean;
+    createdAt: string;
 }
 
 export default ITweet;

@@ -14,6 +14,7 @@ const Footer = ({
     setShowModal: Dispatch<SetStateAction<boolean>>;
 }) => {
     const myTweet = useSelector((state: RootState) => state.myTweet);
+    const user = useSelector((state: RootState) => state.user);
     const disabled = useMemo(
         () =>
             !myTweet.value &&
@@ -36,6 +37,11 @@ const Footer = ({
     const handleSubmit = async () => {
         await dispatch(
             createTweet({
+                user: {
+                    ...user,
+                    isInList: false,
+                    follow: false,
+                },
                 content: myTweet.value,
                 images: myTweet.images,
                 feeling: myTweet.image
@@ -47,9 +53,6 @@ const Footer = ({
                 location: myTweet.location,
                 tagPeople: myTweet.tagPeople,
                 gif: myTweet.gif,
-                comments: [],
-                skip: 0,
-                numberOfComments: 0,
             }),
         ).unwrap();
 
