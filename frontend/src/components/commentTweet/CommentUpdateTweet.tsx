@@ -53,7 +53,7 @@ const CommentUpdateTweet = ({
 
     return (
         <div className='flex-1'>
-            <div className='max-h-[389px] flex gap-3 bg-[#F0F2F5] rounded-[18px] overflow-y-auto mr-4'>
+            <div className='max-h-[389px] flex gap-3 bg-[#F0F2F5] dark:bg-dark-black-3 rounded-[18px] overflow-y-auto mr-4'>
                 <form className='flex-1 flex h-full items-center pr-3'>
                     <ReactTextareaAutosize
                         ref={ref}
@@ -62,7 +62,7 @@ const CommentUpdateTweet = ({
                         value={value}
                         onChange={handleChangeSearch}
                         placeholder='Write a comment...'
-                        className='px-3 py-2 flex-1 text-sm leading-sm bg-[#F0F2F5] resize-none outline-none'
+                        className='px-3 py-2 flex-1 text-sm leading-sm bg-[#F0F2F5] dark:bg-dark-black-3 resize-none outline-none'
                     />
                     <button
                         type='button'
@@ -78,7 +78,7 @@ const CommentUpdateTweet = ({
                     </button>
                 </form>
             </div>
-            <div className='py-1 text-xs leading-xs text-[#65676B]'>
+            <div className='py-1 text-xs leading-xs text-[#65676B] dark:text-white-9'>
                 Press Esc to{' '}
                 <span
                     onClick={handleClickCancel}

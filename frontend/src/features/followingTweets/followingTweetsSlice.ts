@@ -9,6 +9,7 @@ import {
     getCommentsDTO,
     getNextLevelComment,
     getParentComment,
+    getTweetDTO,
     getTweetsDTO,
 } from '../../utils';
 
@@ -218,6 +219,10 @@ const followingTweetsSlice = createSlice({
                 if (comment) comment.content = content;
             }
         },
+        addNewTweet: (state, { payload }: { payload: ITweet }) => {
+            payload.isNewTweet = true;
+            state.tweets.unshift(getTweetDTO(payload));
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -327,7 +332,7 @@ const followingTweetsSlice = createSlice({
                 getMyTweets.fulfilled,
                 (state, { payload }: { payload: ITweet[] }) => {
                     if (payload.length) {
-                        state.tweets.push(...getTweetsDTO(payload));
+                        state.tweets = getTweetsDTO(payload);
                         state.isLoading = false;
                     }
                 },
@@ -363,4 +368,5 @@ export const {
     deleteComment,
     toggleLikeComment,
     editComment,
+    addNewTweet,
 } = followingTweetsSlice.actions;

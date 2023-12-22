@@ -165,9 +165,7 @@ const ScrollbarCustomize = ({
                 )}
                 style={style}
             >
-                <div className={classNames(className, 'scrollbar')}>
-                    {children}
-                </div>
+                <div className={className}>{children}</div>
             </div>
             {offsetHeight && scrollHeight > offsetHeight && (
                 <>

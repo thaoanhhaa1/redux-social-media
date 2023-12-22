@@ -42,12 +42,7 @@ const storiesSlice = createSlice({
             })
             .addCase(createStory.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
-                state.stories.unshift({
-                    _id: v4(),
-                    createdAt: '',
-                    story: payload,
-                    user: '',
-                });
+                state.stories.unshift(payload);
             })
             .addCase(getStories.pending, (state) => {
                 state.isLoading = true;

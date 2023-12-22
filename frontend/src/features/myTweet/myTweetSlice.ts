@@ -26,23 +26,23 @@ const initialState: {
 const createTweet = createAsyncThunk(
     'myTweet/createTweet',
     async (tweet: ITweetPost) => {
-        try {
-            await axiosClient.post(api.createTweet(), {
-                content: tweet.content,
-                images: tweet.images,
-                videos: tweet.videos,
-                group: tweet.group,
-                feeling: tweet.feeling,
-                location: tweet.location,
-                tagPeople: tweet.tagPeople?.map((tag) => tag._id),
-                gif: tweet.gif,
-            });
+        const result = await axiosClient.post(api.createTweet(), {
+            user: tweet.user,
+            content: tweet.content,
+            images: tweet.images,
+            videos: tweet.videos,
+            group: tweet.group,
+            feeling: tweet.feeling,
+            location: tweet.location,
+            tagPeople: tweet.tagPeople?.map((tag) => tag._id),
+            gif: tweet.gif,
+        });
 
-            return tweet;
-        } catch (error) {
-            console.error('🚀 ~ error:', error);
-            throw error;
-        }
+        return {
+            ...result.data,
+            location: tweet.location,
+            tagPeople: tweet.tagPeople,
+        };
     },
 );
 

@@ -18,4 +18,39 @@ const StoryModel = new Schema(
     },
 );
 
+StoryModel.statics.getStories = function (_id, following) {
+    return this.aggregate([
+        {
+            $match: {
+                $expr: {
+                    $and: [
+                        {
+                            $gte: [
+                                '$createdAt',
+                                {
+                                    $dateSubtract: {
+                                        startDate: '$$NOW',
+                                        unit: 'day',
+                                        amount: 1,
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            $or: [
+                                {
+                                    $eq: ['$user', _id],
+                                },
+                                {
+                                    $in: ['$user', following],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        },
+    ]);
+};
+
 module.exports = mongoose.model('story', StoryModel);

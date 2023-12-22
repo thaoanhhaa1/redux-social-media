@@ -91,16 +91,16 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
     return (
         <div>
             <div className='flex gap-[6px] items-center'>
-                <div className='relative rounded-[18px] pb-2 px-3 bg-[#F0F2F5]'>
+                <div className='relative rounded-[18px] pb-2 px-3 bg-[#F0F2F5] dark:bg-dark-black-3'>
                     <span className='text-xs leading-none font-semibold'>
                         {comment.user.name || comment.user.username}
                     </span>
                     <p className='text-sm leading-sm'>{comment.content}</p>
                     {comment.numberOfLikes > 0 && (
-                        <span className='flex gap-[2px] items-center shadow-[0_1px_3px_0_rgba(0,0,0,0.2)] absolute bottom-1 right-2 translate-x-full p-[2px] bg-white rounded-full'>
+                        <span className='flex gap-[2px] items-center shadow-[0_1px_3px_0_rgba(0,0,0,0.2)] absolute bottom-1 right-2 translate-x-full p-[2px] bg-white dark:bg-dark-black-3 rounded-full'>
                             <LikeFBIcon />
                             {comment.numberOfLikes > 1 && (
-                                <span className='pr-[2px] text-[#65676B] text-xs leading-none'>
+                                <span className='pr-[2px] text-[#65676B] dark:text-white-9 text-xs leading-none'>
                                     {comment.numberOfLikes}
                                 </span>
                             )}
@@ -110,7 +110,7 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
                 {user._id === comment.user._id && (
                     <div className='relative' ref={moreRef}>
                         <button
-                            className='flex-shrink-0 text-white group-hover/more:text-[#65676B] self-center flex justify-center items-center w-8 h-8 rounded-full ease-linear hover:bg-[rgba(0,_0,_0,_0.05)]'
+                            className='flex-shrink-0 text-transparent group-hover/more:text-[#65676B] dark:group-hover/more:text-white-9 self-center flex justify-center items-center w-8 h-8 rounded-full ease-linear hover:bg-[rgba(0,_0,_0,_0.05)] dark:hover:bg-white-opacity-10'
                             onClick={handleClickMoreBtn}
                         >
                             <MoreIcon />
@@ -119,7 +119,7 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
                     </div>
                 )}
             </div>
-            <div className='mt-1 flex gap-4 px-2 text-[#65676B] text-xs leading-xs font-bold'>
+            <div className='mt-1 flex gap-4 px-2 text-[#65676B] dark:text-white-9 text-xs leading-xs font-bold'>
                 <span className='font-normal'>
                     {getTimeComment(comment.createdAt)}
                 </span>

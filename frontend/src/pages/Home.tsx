@@ -29,21 +29,32 @@ const Home = () => {
         (state: RootState) => state.followingTweets,
     );
     const user = useSelector((state: RootState) => state.user);
+    const stories = useSelector((state: RootState) => state.stories);
     const dispatch = useAppDispatch();
     const newTweets = useMemo(
         () => getNewTweets(followingTweets.tweets),
         [followingTweets.tweets],
+    );
+    const otherTweet = useMemo(
+        () =>
+            followingTweets.tweets.filter(
+                (tweet) => tweet.user._id !== user._id,
+            ),
+        [followingTweets.tweets, user._id],
     );
 
     useEffect(() => {
         if (!user._id) return;
 
         (async () => {
-            const queries = [dispatch(getStories()).unwrap()];
+            const queries = [];
 
-            if (contacts.length === 0)
+            if (!stories.stories.length)
+                queries.push(dispatch(getStories()).unwrap());
+            if (!contacts.length)
                 queries.push(dispatch(getContacts(pageCount)).unwrap());
-            queries.push(dispatch(getTweets()).unwrap());
+            if (!otherTweet.length)
+                queries.push(dispatch(getTweets()).unwrap());
 
             await Promise.all(queries);
             dispatch(setLoading(false));
@@ -144,14 +155,11 @@ const Home = () => {
             <Stories />
             <WhatHappen />
             {newTweets.map((tweet) => (
-                <Card tweet={tweet} key={tweet._id || ''} />
+                <Card tweet={tweet} key={tweet._id} />
             ))}
-            {followingTweets.tweets.map(
-                (tweet) =>
-                    tweet.user._id === user._id || (
-                        <Card tweet={tweet} key={tweet._id || ''} />
-                    ),
-            )}
+            {otherTweet.map((tweet) => (
+                <Card tweet={tweet} key={tweet._id} />
+            ))}
         </Page>
     );
 };

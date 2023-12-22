@@ -1,16 +1,13 @@
 const { location, user } = require('../../utils');
 const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
-const ListsModel = require('../models/listsModel');
 
 module.exports = {
     count: async (req, res, next) => {
         const _id = req.body._id;
 
         try {
-            const result = await TweetModel.find({
-                'user._id': _id,
-            }).count();
+            const result = await TweetModel.countTweetsByUserId(_id);
 
             res.json(result);
         } catch (error) {
@@ -24,20 +21,7 @@ module.exports = {
         const skip = +req.query.skip || 0;
 
         try {
-            const myTweets = await TweetModel.aggregate([
-                { $match: { 'user._id': _id } },
-                { $sort: { createdAt: -1 } },
-                { $skip: skip },
-                { $limit: limit },
-                ...location.lookup,
-                user.tagPeople,
-                {
-                    $addFields: {
-                        'user.isInList': false,
-                        'user.follow': false,
-                    },
-                },
-            ]);
+            const myTweets = await TweetModel.getMyTweets(_id, skip, limit);
 
             res.json(myTweets);
         } catch (error) {
@@ -57,6 +41,7 @@ module.exports = {
             tagPeople,
             gif,
         } = req.body;
+        console.log('🚀 ~ createTweet: ~ user:', user);
 
         if (!user || !user._id || !user.username) return next(new Error());
 
@@ -101,39 +86,7 @@ module.exports = {
 
             const following = follows.following;
 
-            const tweets = await TweetModel.aggregate([
-                {
-                    $match: {
-                        $expr: {
-                            $in: ['$user._id', following],
-                        },
-                    },
-                },
-                ...location.lookup,
-                user.tagPeople,
-                {
-                    $lookup: {
-                        from: 'lists',
-                        as: 'lists',
-                        let: { id: '$user._id' },
-                        pipeline: [
-                            { $match: { $expr: { $in: ['$$id', '$list'] } } },
-                        ],
-                    },
-                },
-                {
-                    $addFields: {
-                        'user.isInList': {
-                            $cond: [
-                                { $gt: [{ $size: '$lists' }, 0] },
-                                true,
-                                false,
-                            ],
-                        },
-                        'user.follow': true,
-                    },
-                },
-            ]);
+            const tweets = await TweetModel.getFollowingTweets(_id, following);
 
             res.json(tweets);
         } catch (error) {
@@ -143,19 +96,9 @@ module.exports = {
 
     toggleLike: async (req, res, next) => {
         const { _id, tweetId, isLike } = req.body;
-        const update = {
-            [isLike ? '$addToSet' : '$pull']: {
-                likes: _id,
-            },
-        };
 
         try {
-            const result = await TweetModel.updateOne(
-                {
-                    _id: tweetId,
-                },
-                update,
-            );
+            const result = await TweetModel.toggleLike(_id, tweetId, isLike);
 
             if (result.modifiedCount > 0) return res.sendStatus(200);
         } catch (error) {

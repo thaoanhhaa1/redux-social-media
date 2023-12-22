@@ -6,57 +6,8 @@ module.exports = {
         const _id = req.body._id;
 
         try {
-            const stories = await FollowModel.aggregate([
-                { $match: { user: _id } },
-                { $project: { followers: 0, _id: 0, __v: 0 } },
-                {
-                    $lookup: {
-                        from: 'stories',
-                        as: 'stories',
-                        let: { user: '$user', following: '$following' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $expr: {
-                                        $and: [
-                                            {
-                                                $gte: [
-                                                    '$createdAt',
-                                                    {
-                                                        $dateSubtract: {
-                                                            startDate: '$$NOW',
-                                                            unit: 'day',
-                                                            amount: 1,
-                                                        },
-                                                    },
-                                                ],
-                                            },
-                                            {
-                                                $or: [
-                                                    {
-                                                        $eq: [
-                                                            '$user',
-                                                            '$$user',
-                                                        ],
-                                                    },
-                                                    {
-                                                        $in: [
-                                                            '$user',
-                                                            '$$following',
-                                                        ],
-                                                    },
-                                                ],
-                                            },
-                                        ],
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                { $unwind: '$stories' },
-                { $replaceWith: '$stories' },
-            ]);
+            const following = await FollowModel.getFollowing(_id);
+            const stories = await StoryModel.getStories(_id, following);
 
             res.json(stories);
         } catch (error) {
@@ -75,8 +26,8 @@ module.exports = {
                 story: url,
             });
 
-            await story.save();
-            res.json(url);
+            const storyCreated = await story.save();
+            res.json(storyCreated);
         } catch (error) {
             next(error);
         }

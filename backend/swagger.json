@@ -1036,8 +1036,7 @@
                                         "user": "64a435d7e4658701a763e1a2",
                                         "story": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64b3f8080e3ed0c01f5ebcac_story_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
                                         "createdAt": "2023-07-16T14:00:40.249+00:00",
-                                        "updatedAt": "2023-07-16T14:00:40.249+00:00",
-                                        "__v": 0
+                                        "updatedAt": "2023-07-16T14:00:40.249+00:00"
                                     }
                                 ],
                                 "schema": {
@@ -1112,9 +1111,15 @@
                         "description": "OK",
                         "content": {
                             "application/json": {
-                                "example": "https://unsplash.com/photos/a-bride-holding-a-bouquet-of-flowers-in-her-hands-jSiDGsUBH5o",
+                                "example": {
+                                    "_id": "64b3f8080e3ed0c01f5ebcac",
+                                    "user": "64a435d7e4658701a763e1a2",
+                                    "story": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_1689516020764.png?alt=media&token=2d8aa02d-5853-411e-a686-56525144e6b2",
+                                    "createdAt": "2023-07-16T14:00:40.249Z",
+                                    "updatedAt": "2023-07-16T14:00:40.249Z"
+                                },
                                 "schema": {
-                                    "type": "string"
+                                    "$ref": "#/components/schemas/Story"
                                 }
                             }
                         }

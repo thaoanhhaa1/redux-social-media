@@ -7,6 +7,7 @@ import { createTweet, setValue } from '../../features/myTweet';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Dispatch, SetStateAction, useMemo } from 'react';
+import { addNewTweet } from '../../features/followingTweets';
 
 const Footer = ({
     setShowModal,
@@ -35,7 +36,7 @@ const Footer = ({
     const dispatch = useAppDispatch();
 
     const handleSubmit = async () => {
-        await dispatch(
+        const res = await dispatch(
             createTweet({
                 user: {
                     ...user,
@@ -57,6 +58,7 @@ const Footer = ({
         ).unwrap();
 
         dispatch(setValue(''));
+        dispatch(addNewTweet(res));
         setShowModal(false);
     };
 

@@ -11,3 +11,7 @@
 # Front-end
 
 -   [Production](https://redux-social-media-front-end.vercel.app/)
+
+# Design
+
+-   [Figma](https://www.figma.com/file/GFoBtlzbaHBHHHDwGgqNy1/Social-Media-Web-App-UI-Kit?type=design&node-id=705%3A68&mode=design&t=Oza1OOfIBjdyGHn5-1)

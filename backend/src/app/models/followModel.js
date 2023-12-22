@@ -1,20 +1,27 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const followModel = new Schema({
+const FollowModel = new Schema({
     user: {
         type: String,
-        required: true
+        required: true,
     },
     followers: {
         type: Array,
-        required: true
+        required: true,
     },
     following: {
         type: Array,
-        required: true
-    }
-})
+        required: true,
+    },
+});
 
-module.exports = mongoose.model('follow', followModel)
+FollowModel.statics.getFollowing = function (_id) {
+    return this.aggregate([
+        { $match: { user: _id } },
+        { $project: { followers: 0, _id: 0, __v: 0 } },
+    ]);
+};
+
+module.exports = mongoose.model('follow', FollowModel);

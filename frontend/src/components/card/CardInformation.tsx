@@ -74,39 +74,21 @@ const CardInformation = () => {
             {/* Action Btn */}
             <div className='flex justify-between'>
                 <div className='flex gap-2 xxs:gap-5'>
-                    <div className='flex items-center gap-[6px]'>
-                        <CardButton icon={<ShareIcon />} />
-                        <span className='text-xs leading-3.75 text-black-8'>
-                            0
-                        </span>
-                    </div>
-                    <div className='flex items-center gap-[6px]'>
-                        <CardButton icon={<RetweetIcon />} />
-                        <span className='text-xs leading-3.75 text-black-8'>
-                            0
-                        </span>
-                    </div>
-                    <div className='flex items-center gap-[6px]'>
-                        <CardButton
-                            onClick={handleComment}
-                            icon={<MessagesIcon />}
-                        />
-                        <span className='text-xs leading-3.75 text-black-8'>
-                            {tweet.numberOfComments ?? 0}
-                        </span>
-                    </div>
-                </div>
-                <div className='flex items-center gap-[6px]'>
+                    <CardButton number={0} icon={<ShareIcon />} />
+                    <CardButton number={0} icon={<RetweetIcon />} />
                     <CardButton
-                        active={isLike}
-                        className='text-black-8 dark:text-white'
-                        onClick={handleLike}
-                        icon={(isLike && <LikeActiveIcon />) || <LikeIcon />}
+                        number={tweet.numberOfComments ?? 0}
+                        onClick={handleComment}
+                        icon={<MessagesIcon />}
                     />
-                    <span className='text-xs leading-3.75 text-black-8'>
-                        {numberLike}
-                    </span>
                 </div>
+                <CardButton
+                    number={numberLike}
+                    active={isLike}
+                    className='text-black-8 dark:text-white'
+                    onClick={handleLike}
+                    icon={(isLike && <LikeActiveIcon />) || <LikeIcon />}
+                />
             </div>
 
             {/* Card Popup */}

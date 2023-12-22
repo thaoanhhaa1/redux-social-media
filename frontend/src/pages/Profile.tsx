@@ -20,16 +20,18 @@ import {
     WhatHappen,
     Wrapper,
 } from '../components';
+import { getMyTweets } from '../features/followingTweets';
 import { setLoading } from '../features/page';
 import { dec, getProfile, inc } from '../features/profile';
+import { getStories } from '../features/stories';
 import { getMonthYear } from '../utils';
-import { getMyTweets } from '../features/followingTweets';
 
 const Profile = () => {
     const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
     const { user, socket, profile, followingTweets } = useSelector(
         (state: RootState) => state,
     );
+    const stories = useSelector((state: RootState) => state.stories);
     const dispatch = useAppDispatch();
     const myTweets = useMemo(
         () =>
@@ -61,11 +63,16 @@ const Profile = () => {
 
     useEffectOnce(() => {
         (async function () {
-            if (!profile.isLoading)
-                await Promise.all([
-                    dispatch(getProfile()),
-                    dispatch(getMyTweets()),
-                ]);
+            const queries = [];
+
+            if (!profile.isLoading) {
+                queries.push(dispatch(getProfile()));
+                queries.push(dispatch(getMyTweets()));
+            }
+            if (!stories.stories.length)
+                queries.push(dispatch(getStories()).unwrap());
+
+            await Promise.all(queries);
 
             dispatch(setLoading(false));
         })();
