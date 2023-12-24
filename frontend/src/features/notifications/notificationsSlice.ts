@@ -22,7 +22,7 @@ const getNotifications = createAsyncThunk(
         pages = 1,
     }: {
         page: number;
-        pages: number;
+        pages?: number;
     }): Promise<{
         notifications: INotification[];
         numberOfPages: number;
@@ -67,6 +67,7 @@ const notificationsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getNotifications.pending, (state) => {
+                // if (!state.page)
                 state.loading = true;
             })
             .addCase(getNotifications.rejected, (state) => {

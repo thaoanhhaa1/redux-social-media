@@ -141,13 +141,13 @@ NotificationSchema.statics.getMyNotifications = function (_id, page) {
 
     return this.aggregate([
         { $match: { user: regex } },
-        { $sort: { updatedAt: -1 } },
-        { $skip: page - 1 },
-        { $limit: 1 },
+        { $sort: { createdAt: -1, updatedAt: -1 } },
         { $unwind: '$notifications' },
         { $replaceRoot: { newRoot: '$notifications' } },
         { $match: { deleted: false } },
         { $sort: { createdAt: -1 } },
+        { $skip: (page - 1) * 10 },
+        { $limit: 10 },
     ]);
 };
 
