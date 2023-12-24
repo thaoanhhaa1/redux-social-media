@@ -31,6 +31,9 @@ const api = {
         `/private/lists/${isAdd ? 'add' : 'remove'}`,
     signUp: () => '/auth/sign-up',
     signIn: () => '/auth/sign-in',
+    getNotifications: () => '/private/notifications',
+    deleteNotification: (notificationId: number) =>
+        `/private/notifications/${notificationId}`,
 };
 
 export default api;

@@ -1,5 +1,7 @@
 const StoryModel = require('../models/storyModel');
 const FollowModel = require('../models/followModel');
+const NotificationModel = require('../models/notificationModel');
+const { notificationType } = require('../../constants');
 
 module.exports = {
     getStories: async (req, res, next) => {
@@ -27,6 +29,12 @@ module.exports = {
             });
 
             const storyCreated = await story.save();
+
+            NotificationModel.insertToFollowers(_id, {
+                document: storyCreated._id,
+                type: notificationType.ADD_STORY,
+            }).then(() => console.log('~~~ insertToFollowers ok'));
+
             res.json(storyCreated);
         } catch (error) {
             next(error);

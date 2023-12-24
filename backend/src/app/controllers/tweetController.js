@@ -1,6 +1,7 @@
-const { location, user } = require('../../utils');
 const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
+const NotificationModel = require('../models/notificationModel');
+const { notificationType } = require('../../constants');
 
 module.exports = {
     count: async (req, res, next) => {
@@ -41,7 +42,6 @@ module.exports = {
             tagPeople,
             gif,
         } = req.body;
-        console.log('🚀 ~ createTweet: ~ user:', user);
 
         if (!user || !user._id || !user.username) return next(new Error());
 
@@ -69,6 +69,12 @@ module.exports = {
             });
 
             const result = await tweet.save();
+
+            NotificationModel.insertToFollowers(_id, {
+                document: result._id,
+                type: notificationType.POST_TWEET,
+            }).then(() => console.log('~~~ insertToFollowers ok'));
+
             res.json(result);
         } catch (error) {
             next(error);
@@ -98,11 +104,30 @@ module.exports = {
         const { _id, tweetId, isLike } = req.body;
 
         try {
-            const result = await TweetModel.toggleLike(_id, tweetId, isLike);
+            const [result, tweet] = await Promise.all([
+                TweetModel.toggleLike(_id, tweetId, isLike),
+                TweetModel.findOne({ _id: tweetId }),
+            ]);
 
-            if (result.modifiedCount > 0) return res.sendStatus(200);
+            if (result.modifiedCount > 0) {
+                if (isLike)
+                    NotificationModel.insertToFollowers(_id, {
+                        document: tweetId,
+                        type: notificationType.LIKE_TWEET,
+                        description: tweet?.content,
+                    }).then(() => console.log('~~~ insertToFollowers ok'));
+                else
+                    NotificationModel.dislikeTweet(_id, tweetId).then(() =>
+                        console.log('~~~ dislikeTweet ok'),
+                    );
+
+                return res.sendStatus(200);
+            }
         } catch (error) {
             next(error);
+            return;
         }
+
+        next(new Error());
     },
 };

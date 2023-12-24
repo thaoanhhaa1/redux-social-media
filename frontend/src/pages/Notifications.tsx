@@ -1,13 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { RootState } from '../app/store';
 import { Live, Page, Trend, Wrapper } from '../components';
+import TabButton from '../components/TabButton';
 import {
     NotificationAll,
     NotificationMention,
 } from '../components/notification';
-import { classNames } from '../utils';
+import { getNotifications } from '../features/notifications';
+import { setLoading } from '../features/page';
 
 const Notifications = () => {
     const [isAllActive, setAllActive] = useState(true);
+    const user = useAppSelector((state: RootState) => state.user);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (user._id) dispatch(setLoading(false));
+    }, [dispatch, user._id]);
+
+    useEffect(() => {
+        if (!user._id) return;
+
+        dispatch(
+            getNotifications({
+                page: 1,
+                pages: 0,
+            }),
+        );
+    }, [dispatch, user._id]);
 
     return (
         <Page
@@ -21,32 +42,22 @@ const Notifications = () => {
             scrollWidth='335px'
         >
             <Wrapper className='p-5'>
-                <div className='font-semibold text-blue-black-2'>
+                <div className='font-semibold text-blue-black-2 dark:text-white'>
                     Notifications
                 </div>
                 <div className='flex'>
-                    <button
+                    <TabButton
+                        active={isAllActive}
                         onClick={() => setAllActive(true)}
-                        className={classNames(
-                            'flex-1 font-bold border-b pb-2',
-                            isAllActive
-                                ? 'text-blue dark:text-blue-black-1 border-blue-white-1'
-                                : 'text-black-5 dark:text-white border-base-black dark:border-dark-black-1',
-                        )}
                     >
                         ALL
-                    </button>
-                    <button
+                    </TabButton>
+                    <TabButton
+                        active={!isAllActive}
                         onClick={() => setAllActive(false)}
-                        className={classNames(
-                            'flex-1 font-bold border-b pb-2',
-                            !isAllActive
-                                ? 'text-blue dark:text-blue-black-1 border-blue-white-1'
-                                : 'text-black-5 dark:text-white border-base-black dark:border-dark-black-1',
-                        )}
                     >
                         Mentions
-                    </button>
+                    </TabButton>
                 </div>
                 {(isAllActive && <NotificationAll />) || (
                     <NotificationMention />

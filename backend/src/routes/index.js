@@ -9,6 +9,7 @@ function Router(app) {
     const locations = require('./locations');
     const lists = require('./lists');
     const comments = require('./comments');
+    const notifications = require('./notifications');
 
     app.use('/api/private/users', users);
     app.use('/api/private/tweets', tweets);
@@ -18,6 +19,7 @@ function Router(app) {
     app.use('/api/private/locations', locations);
     app.use('/api/private/lists', lists);
     app.use('/api/private/comments', comments);
+    app.use('/api/private/notifications', notifications);
     app.use('/api/private', sites);
     app.use('/api/auth', auth);
 }

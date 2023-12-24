@@ -24,4 +24,13 @@ FollowModel.statics.getFollowing = function (_id) {
     ]);
 };
 
+FollowModel.statics.getFollower = function (_id) {
+    return this.findOne(
+        {
+            user: _id,
+        },
+        { following: 0, _id: 0, __v: 0 },
+    );
+};
+
 module.exports = mongoose.model('follow', FollowModel);

@@ -49,4 +49,13 @@ UserModel.plugin(mongooseDelete, {
     overrideMethods: 'all',
 });
 
+// Queries
+UserModel.statics.getUserDTO = function (_id) {
+    return this.findById(_id, {
+        name: 1,
+        username: 1,
+        avatar: 1,
+    });
+};
+
 module.exports = mongoose.model('user', UserModel);

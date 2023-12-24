@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useEffectOnce } from 'usehooks-ts';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { comments } from '../../constants';
 import { useCardContext } from '../../contexts/CardContext';
@@ -11,6 +10,7 @@ import CommentTweet from '../commentTweet/CommentTweet';
 import CardComment from './CardComment';
 
 // TODO More comment popup when scroll
+// TODO Loading when loading comments
 const CardPopup = ({
     className = '',
     isShow,
@@ -28,9 +28,9 @@ const CardPopup = ({
 
     const handleScroll = () => setScrolled(true);
 
-    useEffectOnce(() => {
+    useEffect(() => {
         async function getCommentsData() {
-            if (!tweet._id) return;
+            if (!tweet._id || tweet.comments.length || !isShow) return;
 
             await dispatch(
                 getComments({
@@ -41,7 +41,7 @@ const CardPopup = ({
         }
 
         getCommentsData();
-    });
+    }, [dispatch, isShow, tweet._id, tweet.comments.length, tweet.skip]);
 
     return (
         <Modal isShowModal={isShow} handleCloseModal={() => setShow(false)}>

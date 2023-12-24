@@ -12,6 +12,7 @@ const authMiddleware = require('./app/middlewares/authMiddleware');
 const handleErrorMiddleware = require('./app/middlewares/handleErrorMiddleware');
 const OnlineStatusModel = require('./app/models/onlineStatusModel');
 const swaggerDocument = require('../swagger.json');
+const dailyTaskController = require('./app/controllers/dailyTaskController');
 
 const app = express();
 const PORT = process.env.PORT || 7890;
@@ -53,6 +54,9 @@ db.connect();
 
 // Router init
 Router(app);
+
+//
+dailyTaskController.birthdayTaskNotify();
 
 // Middleware handle error
 app.use(handleErrorMiddleware);

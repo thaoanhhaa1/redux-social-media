@@ -101,3 +101,19 @@ input::-ms-clear {
 .dark .invert-icon {
     filter: invert(89%) sepia(6%) hue-rotate(185deg);
 }
+
+// Skeleton
+span[aria-live='polite'] {
+    display: flex;
+}
+
+.dark span.react-loading-skeleton {
+    --base-color: #4c4c4c;
+    --highlight-color: #333333;
+}
+
+span.react-loading-skeleton {
+    & ~ br {
+        display: none;
+    }
+}

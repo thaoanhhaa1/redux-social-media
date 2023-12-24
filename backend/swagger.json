@@ -2625,6 +2625,391 @@
                 }
             }
         },
+        "/private/notifications": {
+            "get": {
+                "summary": "Get notifications",
+                "description": "Get notifications",
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": ["Notification"],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Default 1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "_id": {
+                                                "type": "integer",
+                                                "description": "Auto-incrementing ID",
+                                                "example": 1
+                                            },
+                                            "user": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "format": "ObjectId",
+                                                        "description": "Id of notification",
+                                                        "example": "6584e947df2eac8ac03efa85"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "description": "Name",
+                                                        "example": "Anh Thảo"
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "description": "Name",
+                                                        "example": "anhthaodev"
+                                                    },
+                                                    "avatar": {
+                                                        "type": "string",
+                                                        "format": "url",
+                                                        "description": "URL of avatar",
+                                                        "example": "https://example.com/avatar"
+                                                    }
+                                                },
+                                                "required": ["_id", "username"]
+                                            },
+                                            "document": {
+                                                "type": "string",
+                                                "format": "ObjectId",
+                                                "description": "Id of notification",
+                                                "example": "65844d6e15b1df93d99cf022"
+                                            },
+                                            "group": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string",
+                                                        "format": "ObjectId",
+                                                        "description": "Id of notification",
+                                                        "example": "6584e947df2eac8ac03efa85"
+                                                    }
+                                                }
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ADD_STORY",
+                                                    "BIRTHDAY",
+                                                    "POST_TWEET",
+                                                    "LIKE_TWEET",
+                                                    "POST_COMMENT",
+                                                    "LIKE_COMMENT"
+                                                ]
+                                            },
+                                            "description": {
+                                                "type": "string"
+                                            },
+                                            "createdAt": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2023-07-04T15:08:07.599Z"
+                                            },
+                                            "deleted": {
+                                                "type": "boolean",
+                                                "description": "If true, the notification has been deleted",
+                                                "default": false
+                                            }
+                                        },
+                                        "required": [
+                                            "user",
+                                            "type",
+                                            "createdAt"
+                                        ]
+                                    }
+                                },
+                                "example": [
+                                    {
+                                        "_id": 1,
+                                        "user": {
+                                            "_id": "6584e947df2eac8ac03efa85",
+                                            "name": "Anh Thảo",
+                                            "username": "anhthaodev",
+                                            "avatar": "https://example.com/avatar"
+                                        },
+                                        "document": "65844d6e15b1df93d99cf022",
+                                        "group": {
+                                            "_id": "6584e947df2eac8ac03efa85"
+                                        },
+                                        "type": "ADD_STORY",
+                                        "description": "string",
+                                        "createdAt": "2023-07-04T15:08:07.599+00:00",
+                                        "deleted": false
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Post new notification",
+                "description": "Post new notification",
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": ["Notification"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "example": {
+                                "user": {
+                                    "_id": "6584e947df2eac8ac03efa85",
+                                    "name": "Anh Thảo",
+                                    "username": "anhthaodev",
+                                    "avatar": "https://example.com/avatar"
+                                },
+                                "group": {
+                                    "_id": "6584e947df2eac8ac03efa85"
+                                },
+                                "type": "ADD_STORY",
+                                "description": "string"
+                            },
+                            "schema": {
+                                "properties": {
+                                    "user": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "format": "ObjectId",
+                                                "description": "Id of notification",
+                                                "example": "6584e947df2eac8ac03efa85"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Name",
+                                                "example": "Anh Thảo"
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "description": "Name",
+                                                "example": "anhthaodev"
+                                            },
+                                            "avatar": {
+                                                "type": "string",
+                                                "format": "url",
+                                                "description": "URL of avatar",
+                                                "example": "https://example.com/avatar"
+                                            }
+                                        },
+                                        "required": ["_id", "username"]
+                                    },
+                                    "group": {
+                                        "type": "object",
+                                        "properties": {
+                                            "_id": {
+                                                "type": "string",
+                                                "format": "ObjectId",
+                                                "description": "Id of notification",
+                                                "example": "6584e947df2eac8ac03efa85"
+                                            }
+                                        }
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "ADD_STORY",
+                                            "BIRTHDAY",
+                                            "POST_TWEET",
+                                            "LIKE_TWEET",
+                                            "POST_COMMENT",
+                                            "LIKE_COMMENT"
+                                        ]
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Notification"
+                                },
+                                "example": {
+                                    "_id": "6584e947df2eac8ac03efa85",
+                                    "user": "6584e947df2eac8ac03efa85",
+                                    "count": 1,
+                                    "notifications": [
+                                        {
+                                            "_id": 1,
+                                            "user": {
+                                                "_id": "6584e947df2eac8ac03efa85",
+                                                "name": "Anh Thảo",
+                                                "username": "anhthaodev",
+                                                "avatar": "https://example.com/avatar"
+                                            },
+                                            "group": {
+                                                "_id": "6584e947df2eac8ac03efa85"
+                                            },
+                                            "type": "ADD_STORY",
+                                            "description": "string",
+                                            "createdAt": "2023-07-04T15:08:07.599Z",
+                                            "deleted": false
+                                        }
+                                    ],
+                                    "createdAt": "2023-07-04T15:08:07.599+00:00"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/private/notifications/{notification_id}": {
+            "delete": {
+                "summary": "Delete notification of user",
+                "description": "Delete notification of user",
+                "tags": ["Notification"],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "notification_id",
+                        "in": "path",
+                        "description": "Id of the notification to be deleted",
+                        "example": 1,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 404,
+                                    "message": "Comment was't found"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/auth/sign-up": {
             "post": {
                 "tags": ["Auth"],
@@ -3179,6 +3564,125 @@
                         "type": "string"
                     }
                 }
+            },
+            "Notification": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "format": "ObjectId",
+                        "description": "Id of notification",
+                        "example": "6584e947df2eac8ac03efa85"
+                    },
+                    "user": {
+                        "type": "string",
+                        "format": "ObjectId",
+                        "description": "Id of the user, the notification recipient",
+                        "example": "6584e947df2eac8ac03efa85"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "description": "Number of notifications per bucket",
+                        "default": 0,
+                        "maximum": 10
+                    },
+                    "notifications": {
+                        "type": "array",
+                        "default": [],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "_id": {
+                                    "type": "integer",
+                                    "description": "Auto-incrementing ID",
+                                    "example": 1
+                                },
+                                "user": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "format": "ObjectId",
+                                            "description": "Id of notification",
+                                            "example": "6584e947df2eac8ac03efa85"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Name",
+                                            "example": "Anh Thảo"
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "description": "Name",
+                                            "example": "anhthaodev"
+                                        },
+                                        "avatar": {
+                                            "type": "string",
+                                            "format": "url",
+                                            "description": "URL of avatar",
+                                            "example": "https://example.com/avatar"
+                                        }
+                                    },
+                                    "required": ["_id", "username"]
+                                },
+                                "document": {
+                                    "type": "string",
+                                    "format": "ObjectId",
+                                    "description": "Id of tweet, comment, user or story",
+                                    "example": "65844d6e15b1df93d99cf022"
+                                },
+                                "group": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "format": "ObjectId",
+                                            "description": "Id of notification",
+                                            "example": "6584e947df2eac8ac03efa85"
+                                        }
+                                    }
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "ADD_STORY",
+                                        "BIRTHDAY",
+                                        "POST_TWEET",
+                                        "LIKE_TWEET",
+                                        "POST_COMMENT",
+                                        "LIKE_COMMENT"
+                                    ]
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "createdAt": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2023-07-04T15:08:07.599Z"
+                                },
+                                "deleted": {
+                                    "type": "boolean",
+                                    "description": "If true, the notification has been deleted",
+                                    "default": false
+                                }
+                            },
+                            "required": [
+                                "user",
+                                "type",
+                                "createdAt",
+                                "document"
+                            ]
+                        }
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-07-04T15:08:07.599Z",
+                        "readOnly": true
+                    }
+                },
+                "required": ["user"]
             }
         }
     },
@@ -3218,6 +3722,10 @@
         {
             "name": "Auth",
             "description": "Authentication user"
+        },
+        {
+            "name": "Notification",
+            "description": "Notification"
         }
     ]
 }

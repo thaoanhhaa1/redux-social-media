@@ -31,7 +31,7 @@ const CardInformation = () => {
         dispatch(
             toggleLike({
                 isLike: !isLike,
-                tweetId: tweet._id || '',
+                tweetId: tweet._id,
                 userId: user._id,
             }),
         ).unwrap();
