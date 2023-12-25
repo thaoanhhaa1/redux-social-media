@@ -1,7 +1,7 @@
-import IContact from '../interfaces/IContact';
-import { classNames, getTime } from '../utils';
-import { ClockIcon } from './Icons';
-import Image from './Image';
+import IContact from '../../interfaces/IContact';
+import { classNames, getTime } from '../../utils';
+import { ClockIcon } from '../Icons';
+import Image from '../Image';
 
 const ONE_DAY_MILLISECONDS = 86400000;
 

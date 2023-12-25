@@ -3,7 +3,7 @@ const cron = require('node-cron');
 const { notificationType } = require('../../constants');
 const notificationModel = require('../models/notificationModel');
 const UserModel = require('../models/userModel');
-const { userService } = require('../services');
+const { userService, notificationService } = require('../services');
 
 module.exports = {
     birthdayTaskNotify: () => {
@@ -14,7 +14,7 @@ module.exports = {
                     const users = await userService.findUserIdTodayBirthday();
 
                     const queries = users.map((user) =>
-                        notificationModel.insertToFollowers(user._id, {
+                        notificationService.insertToFollowers(user._id, {
                             document: user._id,
                             type: notificationType.BIRTHDAY,
                         }),

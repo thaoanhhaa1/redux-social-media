@@ -4,22 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { Loading, Sidebar, TopBar } from '../../components';
 import config from '../../config';
+import { setLoading } from '../../features/page';
 import { fetchUser } from '../../features/user';
 
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const { isLoading } = useSelector((state: RootState) => state.page);
+    const user = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
         (async () => {
             try {
+                if (user._id) return dispatch(setLoading(false));
                 await dispatch(fetchUser()).unwrap();
             } catch (error) {
                 navigate(config.routes.signIn);
             }
         })();
-    }, [dispatch, navigate]);
+    }, [dispatch, navigate, user._id]);
 
     return (
         <div className='flex'>

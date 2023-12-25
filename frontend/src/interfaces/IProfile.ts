@@ -6,6 +6,8 @@ interface IProfile {
     followingCount: number;
     whoToFollow: IUser[];
     isLoading: boolean;
+    whoToFollowPages: number;
+    whoToFollowPage: number;
 }
 
 export default IProfile;

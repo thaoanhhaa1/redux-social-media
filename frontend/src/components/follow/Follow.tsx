@@ -1,10 +1,10 @@
 import { memo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IUser } from '../interfaces';
-import { toggleFollow } from '../services';
-import { classNames } from '../utils';
-import Button from './Button';
-import Image from './Image';
+import { IUser } from '../../interfaces';
+import { toggleFollow } from '../../services';
+import { classNames } from '../../utils';
+import Avatar from '../Avatar';
+import Button from '../Button';
 
 const Follow = ({ user }: { user: IUser }) => {
     const [isFollow, setFollow] = useState(false);
@@ -25,7 +25,7 @@ const Follow = ({ user }: { user: IUser }) => {
 
     return (
         <div className='flex gap-5 cursor-pointer'>
-            <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
+            <Avatar src={user.avatar} size='lg' />
             <div className='flex-1 flex justify-between items-center gap-2'>
                 <div className='flex-1'>
                     <div className='font-semibold text-sm leading-sm text-black dark:text-white'>

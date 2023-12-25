@@ -15,6 +15,7 @@ export { default as isAdult } from './isAdult';
 export { default as numberShow } from './numberShow';
 export { default as getTweetDTO } from './getTweetDTO';
 export { default as getTweetsDTO } from './getTweetsDTO';
+export { default as getArray } from './getArray';
 
 export const classNames = (
     ...classNameList: (string | boolean | undefined)[]

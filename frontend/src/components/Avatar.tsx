@@ -1,4 +1,5 @@
 import { classNames } from '../utils';
+import Image from './Image';
 
 // 24 32 36 40 60
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'ex';
@@ -34,7 +35,7 @@ export default function Avatar({
     const width = getWidth(size);
 
     return (
-        <img
+        <Image
             src={src}
             alt={alt}
             style={{

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IStories } from '../../interfaces';
-import { v4 } from 'uuid';
 
 const initialState: IStories = {
     stories: [],

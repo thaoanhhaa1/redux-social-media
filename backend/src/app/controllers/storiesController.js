@@ -1,15 +1,15 @@
 const StoryModel = require('../models/storyModel');
-const FollowModel = require('../models/followModel');
-const NotificationModel = require('../models/notificationModel');
 const { notificationType } = require('../../constants');
+const followService = require('../services/followService');
+const { notificationService, storyService } = require('../services');
 
 module.exports = {
     getStories: async (req, res, next) => {
         const _id = req.body._id;
 
         try {
-            const following = await FollowModel.getFollowing(_id);
-            const stories = await StoryModel.getStories(_id, following);
+            const following = await followService.getFollowing(_id);
+            const stories = await storyService.getStories(_id, following);
 
             res.json(stories);
         } catch (error) {
@@ -30,10 +30,12 @@ module.exports = {
 
             const storyCreated = await story.save();
 
-            NotificationModel.insertToFollowers(_id, {
-                document: storyCreated._id,
-                type: notificationType.ADD_STORY,
-            }).then(() => console.log('~~~ insertToFollowers ok'));
+            notificationService
+                .insertToFollowers(_id, {
+                    document: storyCreated._id,
+                    type: notificationType.ADD_STORY,
+                })
+                .then(() => console.log('~~~ insertToFollowers ok'));
 
             res.json(storyCreated);
         } catch (error) {

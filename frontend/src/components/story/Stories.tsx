@@ -9,8 +9,16 @@ import Wrapper from '../wrapper/Wrapper';
 import WrapperHeader from '../wrapper/WrapperHeader';
 import NewStory from './NewStory';
 import Story from './Story';
+import StorySkeleton from './StorySkeleton';
+import { v4 } from 'uuid';
 
-const Stories = ({ all = true }: { all?: boolean }) => {
+const Stories = ({
+    all = true,
+    loading,
+}: {
+    all?: boolean;
+    loading: boolean;
+}) => {
     const container = useRef<HTMLDivElement>(null);
     const [storyLength, setStoryLength] = useState(0);
     const [storyIndex, setStoryIndex] = useState(0);
@@ -62,11 +70,15 @@ const Stories = ({ all = true }: { all?: boolean }) => {
                     }}
                 >
                     <NewStory onClick={() => setShowModal(true)} />
-                    {stories.stories
-                        .filter((story) => all || story.user === user._id)
-                        .map((story) => (
-                            <Story url={story.story} key={story._id} />
-                        ))}
+                    {(loading &&
+                        new Array(3)
+                            .fill(null)
+                            .map(() => <StorySkeleton key={v4()} />)) ||
+                        stories.stories
+                            .filter((story) => all || story.user === user._id)
+                            .map((story) => (
+                                <Story url={story.story} key={story._id} />
+                            ))}
                     {storyIndex !== storyLength - storyShowCount + 1 &&
                         storyLength + 1 > storyShowCount && (
                             <Button

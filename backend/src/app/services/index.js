@@ -3,4 +3,6 @@ module.exports = {
     tweetService: require('./tweetService'),
     notificationService: require('./notificationService'),
     userService: require('./userService'),
+    followService: require('./followService'),
+    storyService: require('./storyService'),
 };

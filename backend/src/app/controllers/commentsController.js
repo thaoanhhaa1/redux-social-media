@@ -97,7 +97,7 @@ module.exports = {
                     .then(
                         (comment) =>
                             comment.user._id === _id ||
-                            notificationModel.insertNotification(
+                            notificationService.insertNotification(
                                 comment.user._id,
                                 notification,
                             ),
@@ -216,7 +216,7 @@ module.exports = {
                     .then(
                         ([comment, user]) =>
                             comment.user._id === _id ||
-                            notificationModel.insertNotification(
+                            notificationService.insertNotification(
                                 comment.user._id,
                                 {
                                     user: user,

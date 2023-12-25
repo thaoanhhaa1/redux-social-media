@@ -1,14 +1,14 @@
 const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
-const NotificationModel = require('../models/notificationModel');
 const { notificationType } = require('../../constants');
+const { tweetService, notificationService } = require('../services');
 
 module.exports = {
     count: async (req, res, next) => {
         const _id = req.body._id;
 
         try {
-            const result = await TweetModel.countTweetsByUserId(_id);
+            const result = await tweetService.countTweetsByUserId(_id);
 
             res.json(result);
         } catch (error) {
@@ -22,7 +22,7 @@ module.exports = {
         const skip = +req.query.skip || 0;
 
         try {
-            const myTweets = await TweetModel.getMyTweets(_id, skip, limit);
+            const myTweets = await tweetService.getMyTweets(_id, skip, limit);
 
             res.json(myTweets);
         } catch (error) {
@@ -70,10 +70,12 @@ module.exports = {
 
             const result = await tweet.save();
 
-            NotificationModel.insertToFollowers(_id, {
-                document: result._id,
-                type: notificationType.POST_TWEET,
-            }).then(() => console.log('~~~ insertToFollowers ok'));
+            notificationService
+                .insertToFollowers(_id, {
+                    document: result._id,
+                    type: notificationType.POST_TWEET,
+                })
+                .then(() => console.log('~~~ insertToFollowers ok'));
 
             res.json(result);
         } catch (error) {
@@ -92,7 +94,10 @@ module.exports = {
 
             const following = follows.following;
 
-            const tweets = await TweetModel.getFollowingTweets(_id, following);
+            const tweets = await tweetService.getFollowingTweets(
+                _id,
+                following,
+            );
 
             res.json(tweets);
         } catch (error) {
@@ -105,21 +110,23 @@ module.exports = {
 
         try {
             const [result, tweet] = await Promise.all([
-                TweetModel.toggleLike(_id, tweetId, isLike),
+                tweetService.toggleLike(_id, tweetId, isLike),
                 TweetModel.findOne({ _id: tweetId }),
             ]);
 
             if (result.modifiedCount > 0) {
                 if (isLike)
-                    NotificationModel.insertToFollowers(_id, {
-                        document: tweetId,
-                        type: notificationType.LIKE_TWEET,
-                        description: tweet?.content,
-                    }).then(() => console.log('~~~ insertToFollowers ok'));
+                    notificationService
+                        .insertToFollowers(_id, {
+                            document: tweetId,
+                            type: notificationType.LIKE_TWEET,
+                            description: tweet?.content,
+                        })
+                        .then(() => console.log('~~~ insertToFollowers ok'));
                 else
-                    NotificationModel.dislikeTweet(_id, tweetId).then(() =>
-                        console.log('~~~ dislikeTweet ok'),
-                    );
+                    notificationService
+                        .dislikeTweet(_id, tweetId)
+                        .then(() => console.log('~~~ dislikeTweet ok'));
 
                 return res.sendStatus(200);
             }

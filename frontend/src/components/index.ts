@@ -1,8 +1,6 @@
 export { default as BookmarkItem } from './BookmarkItem';
 export { default as Button } from './Button';
-export { default as Contact } from './Contact';
 export { default as EditProfile } from './EditProfile';
-export { default as Follow } from './Follow';
 export * from './Icons';
 export { default as Image } from './Image';
 export { default as List } from './List';
@@ -14,7 +12,9 @@ export { default as ProfileItem } from './ProfileItem';
 export { default as StickyBottom } from './StickyBottom';
 export { default as TopBar } from './TopBar';
 export { default as Card } from './card';
+export { default as Contact } from './contact';
 export { default as Criket } from './criket';
+export { default as Follow } from './follow';
 export * from './scrollbar';
 export * from './setting';
 export { default as Sidebar } from './sidebar';

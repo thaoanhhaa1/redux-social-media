@@ -1,4 +1,4 @@
-const notificationModel = require('../models/notificationModel');
+const notificationService = require('../services/notificationService');
 
 module.exports = {
     getMyNotifications: async (req, res, next) => {
@@ -7,9 +7,11 @@ module.exports = {
         const pages = +(req.query.pages ?? 1);
 
         try {
-            const queries = [notificationModel.getMyNotifications(_id, +page)];
+            const queries = [
+                notificationService.getMyNotifications(_id, +page),
+            ];
 
-            if (!pages) queries.push(notificationModel.countPages(_id));
+            if (!pages) queries.push(notificationService.countPages(_id));
 
             const [data, numberOfPages] = await Promise.all(queries);
 
@@ -27,7 +29,7 @@ module.exports = {
         const userId = req.body._id;
 
         try {
-            const update = await notificationModel.deleteNotificationItem(
+            const update = await notificationService.deleteNotificationItem(
                 userId,
                 notificationId,
             );

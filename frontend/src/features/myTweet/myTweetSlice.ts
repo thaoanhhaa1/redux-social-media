@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { IGif, ILocation, IPerson, ITweet, ITweetPost } from '../../interfaces';
+import { IGif, ILocation, IPerson, ITweetPost } from '../../interfaces';
 import SubProps from '../../types/SubProps';
 
 const initialState: {

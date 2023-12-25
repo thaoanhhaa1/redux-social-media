@@ -595,6 +595,59 @@
                 }
             }
         },
+        "/private/follow/count-who-to-follow": {
+            "get": {
+                "summary": "Count the number of people who can follow",
+                "description": "Count the number of people who can follow",
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "tags": ["Follow"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": 10,
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/private/lists/add": {
             "post": {
                 "summary": "Add user to list",

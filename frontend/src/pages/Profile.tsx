@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
-import { useEffectOnce } from 'usehooks-ts';
+import { v4 } from 'uuid';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
@@ -20,32 +20,48 @@ import {
     WhatHappen,
     Wrapper,
 } from '../components';
+import { CardSkeleton } from '../components/card';
+import { FollowSkeleton } from '../components/follow';
 import { getMyTweets } from '../features/followingTweets';
-import { setLoading } from '../features/page';
-import { dec, getProfile, inc } from '../features/profile';
+import {
+    dec,
+    getProfile,
+    getWhoToFollow,
+    getWhoToFollowPages,
+    inc,
+} from '../features/profile';
 import { getStories } from '../features/stories';
-import { getMonthYear } from '../utils';
+import { getArray, getMonthYear } from '../utils';
 
 const Profile = () => {
+    const {
+        user,
+        socket,
+        profile,
+        followingTweets: { tweets },
+    } = useSelector((state: RootState) => state);
     const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
-    const { user, socket, profile, followingTweets } = useSelector(
-        (state: RootState) => state,
-    );
-    const stories = useSelector((state: RootState) => state.stories);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [loadingFollow, setLoadingFollow] = useState<boolean>(false);
     const dispatch = useAppDispatch();
     const myTweets = useMemo(
-        () =>
-            followingTweets.tweets.filter((item) => item.user._id === user._id),
-        [followingTweets.tweets, user._id],
+        () => tweets.filter((item) => item.user._id === user._id),
+        [tweets, user._id],
     );
 
-    const handleShowModal = useCallback(
-        () => setShowModalEditProfile((isShowModal) => !isShowModal),
-        [],
-    );
+    const handleShowModal = () =>
+        setShowModalEditProfile((isShowModal) => !isShowModal);
+
+    const handleLoadMoreWhoToFollow = async () => {
+        setLoadingFollow(true);
+
+        await dispatch(getWhoToFollow(profile.whoToFollowPage + 1));
+
+        setLoadingFollow(false);
+    };
 
     useEffect(() => {
-        if (!socket.socket) return;
+        if (!socket.socket || !user._id) return;
         const socketIo = socket.socket as Socket;
 
         socketIo.on('follower', () => dispatch(inc('follower')));
@@ -61,22 +77,23 @@ const Profile = () => {
         };
     }, [dispatch, socket.socket, user._id]);
 
-    useEffectOnce(() => {
-        (async function () {
+    useEffect(() => {
+        async function getData() {
+            setLoading(true);
             const queries = [];
 
-            if (!profile.isLoading) {
-                queries.push(dispatch(getProfile()));
-                queries.push(dispatch(getMyTweets()));
-            }
-            if (!stories.stories.length)
-                queries.push(dispatch(getStories()).unwrap());
+            queries.push(dispatch(getWhoToFollowPages()));
+            queries.push(dispatch(getProfile()));
+            queries.push(dispatch(getMyTweets()));
+            queries.push(dispatch(getWhoToFollow(1)));
+            queries.push(dispatch(getStories()));
 
             await Promise.all(queries);
+            setLoading(false);
+        }
 
-            dispatch(setLoading(false));
-        })();
-    });
+        if (user._id) getData();
+    }, [dispatch, user._id]);
 
     if (!user._id) return <Loading />;
 
@@ -148,16 +165,19 @@ const Profile = () => {
             </Wrapper>
             <div className='flex gap-5 mt-5 pb-5'>
                 <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
-                    <Stories all={false} />
+                    <Stories all={false} loading={loading} />
                     <WhatHappen />
-                    {(myTweets.length > 0 &&
-                        myTweets.map((tweet) => (
-                            <Card key={tweet._id} tweet={tweet} />
-                        ))) || (
-                        <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
-                            No posts available
-                        </div>
-                    )}
+                    {loading ||
+                        (myTweets.length > 0 &&
+                            myTweets.map((tweet) => (
+                                <Card key={tweet._id} tweet={tweet} />
+                            ))) || (
+                            <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
+                                No posts available
+                            </div>
+                        )}
+                    {loading &&
+                        getArray().map(() => <CardSkeleton key={v4()} />)}
                 </div>
                 <StickyBottom>
                     <Wrapper className='w-[337px] p-5 mb-5'>
@@ -167,9 +187,17 @@ const Profile = () => {
                         {profile.whoToFollow.map((user) => (
                             <Follow key={user._id} user={user} />
                         ))}
-                        <button className='w-fit font-medium text-xs leading-xs text-blue-white-2 dark:text-blue'>
-                            SHOW more
-                        </button>
+                        {(loading || loadingFollow) &&
+                            getArray().map(() => <FollowSkeleton key={v4()} />)}
+                        {profile.whoToFollowPage < profile.whoToFollowPages &&
+                            !loading && (
+                                <button
+                                    onClick={handleLoadMoreWhoToFollow}
+                                    className='w-fit font-medium text-xs leading-xs text-blue-white-2 dark:text-blue'
+                                >
+                                    SHOW more
+                                </button>
+                            )}
                     </Wrapper>
                 </StickyBottom>
             </div>
