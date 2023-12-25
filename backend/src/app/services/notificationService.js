@@ -139,7 +139,7 @@ module.exports = {
     deleteNotificationItem: function (userId, notificationId) {
         const regex = new RegExp(`^${userId}_`);
 
-        return this.updateMany(
+        return notificationModel.updateMany(
             { user: regex },
             { $set: { 'notifications.$[element].deleted': true } },
             { arrayFilters: [{ 'element._id': notificationId }] },
@@ -158,7 +158,7 @@ module.exports = {
             const follower = followers[index];
 
             queries.push(
-                this.updateMany(
+                notificationModel.updateMany(
                     {
                         user: new RegExp(`^${follower}_`),
                     },

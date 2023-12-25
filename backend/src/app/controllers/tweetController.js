@@ -86,6 +86,7 @@ module.exports = {
     // [GET] /api/private/tweets/get-following-tweets
     getFollowingTweets: async (req, res, next) => {
         const { _id } = req.body;
+        const page = +req.query.page || 1;
 
         try {
             const follows = await FollowModel.findOne({
@@ -97,9 +98,22 @@ module.exports = {
             const tweets = await tweetService.getFollowingTweets(
                 _id,
                 following,
+                page,
             );
 
             res.json(tweets);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    countFollowingTweets: async (req, res, next) => {
+        const { _id } = req.body;
+
+        try {
+            const count = await tweetService.countFollowingTweets(_id);
+
+            res.json(count ?? 0);
         } catch (error) {
             next(error);
         }

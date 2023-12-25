@@ -10,6 +10,7 @@ const api = {
     getMyTweets: () => '/private/tweets/get-my-tweets',
     toggleLike: () => '/private/tweets/toggle-like',
     getFollowingTweets: () => '/private/tweets/get-following-tweets',
+    countFollowingTweets: () => '/private/tweets/count-following-tweets',
     getComments: (tweetId: String) => `/private/tweets/${tweetId}/comments`,
     getChildComments: (commentId: String) =>
         `/private/comments/${commentId}/comments`,

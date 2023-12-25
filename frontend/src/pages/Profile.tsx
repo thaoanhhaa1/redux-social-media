@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
@@ -22,7 +23,7 @@ import {
 } from '../components';
 import { CardSkeleton } from '../components/card';
 import { FollowSkeleton } from '../components/follow';
-import { getMyTweets } from '../features/followingTweets';
+import { countMyTweets, getMyTweets } from '../features/followingTweets';
 import {
     dec,
     getProfile,
@@ -38,7 +39,7 @@ const Profile = () => {
         user,
         socket,
         profile,
-        followingTweets: { tweets },
+        followingTweets: { tweets, myTweetPage, myTweetPages },
     } = useSelector((state: RootState) => state);
     const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -59,6 +60,9 @@ const Profile = () => {
 
         setLoadingFollow(false);
     };
+
+    const loadMoreCard = async () =>
+        await dispatch(getMyTweets(myTweetPage + 1));
 
     useEffect(() => {
         if (!socket.socket || !user._id) return;
@@ -84,9 +88,10 @@ const Profile = () => {
 
             queries.push(dispatch(getWhoToFollowPages()));
             queries.push(dispatch(getProfile()));
-            queries.push(dispatch(getMyTweets()));
+            queries.push(dispatch(getMyTweets(1)));
             queries.push(dispatch(getWhoToFollow(1)));
             queries.push(dispatch(getStories()));
+            queries.push(dispatch(countMyTweets()));
 
             await Promise.all(queries);
             setLoading(false);
@@ -167,15 +172,30 @@ const Profile = () => {
                 <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
                     <Stories all={false} loading={loading} />
                     <WhatHappen />
-                    {loading ||
-                        (myTweets.length > 0 &&
-                            myTweets.map((tweet) => (
-                                <Card key={tweet._id} tweet={tweet} />
-                            ))) || (
-                            <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
-                                No posts available
-                            </div>
-                        )}
+                    {!loading && !profile.tweetCount && (
+                        <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
+                            No tweets available
+                        </div>
+                    )}
+                    {loading || (
+                        <InfiniteScroll
+                            dataLength={myTweets.length}
+                            hasMore={myTweetPage < myTweetPages}
+                            loader={
+                                <>
+                                    {getArray(3).map(() => (
+                                        <CardSkeleton key={v4()} />
+                                    ))}
+                                </>
+                            }
+                            next={loadMoreCard}
+                            className='scrollbar flex flex-col gap-2 xxs:gap-5'
+                        >
+                            {myTweets.map((tweet) => (
+                                <Card tweet={tweet} key={tweet._id} />
+                            ))}
+                        </InfiniteScroll>
+                    )}
                     {loading &&
                         getArray().map(() => <CardSkeleton key={v4()} />)}
                 </div>

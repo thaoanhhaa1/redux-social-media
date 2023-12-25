@@ -15,6 +15,7 @@ router.delete('/:tweet_id/comments/:comment_id', commentsController.delete);
 router.get('/count', tweetController.count);
 router.get('/get-my-tweets', tweetController.getMyTweets);
 router.get('/get-following-tweets', tweetController.getFollowingTweets);
+router.get('/count-following-tweets', tweetController.countFollowingTweets);
 router.post('/toggle-like', tweetController.toggleLike);
 router.post('/', tweetController.createTweet);
 

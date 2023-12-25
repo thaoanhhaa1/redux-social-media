@@ -1,4 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
@@ -16,20 +17,20 @@ import Advertisement, {
     AdvertisementSkeleton,
 } from '../components/advertisement';
 import CardSkeleton from '../components/card/CardSkeleton';
+import ContactSkeleton from '../components/contact/ContactSkeleton';
 import Group from '../components/group';
 import { WrapperHeader } from '../components/wrapper';
 import { getContacts, setOffline, setOnline } from '../features/contacts';
-import { getTweets } from '../features/followingTweets';
+import { countFollowingTweets, getTweets } from '../features/followingTweets';
 import { getStories } from '../features/stories';
-import getNewTweets from '../utils/getNewTweets';
-import ContactSkeleton from '../components/contact/ContactSkeleton';
 import { getArray } from '../utils';
+import getNewTweets from '../utils/getNewTweets';
 
 const Home = () => {
     const {
         contacts: { pageCount, contacts },
         socket,
-        followingTweets: { tweets },
+        followingTweets: { tweets, followingPages, followingPage },
         user,
         stories,
     } = useSelector((state: RootState) => state);
@@ -40,6 +41,10 @@ const Home = () => {
         [tweets, user._id],
     );
     const [loading, setLoading] = useState<boolean>(false);
+    console.log('🚀 ~ Home ~ followingPage:', followingPage);
+
+    const loadMoreCard = async () =>
+        await dispatch(getTweets(followingPage + 1));
 
     useEffect(() => {
         if (!user._id) return;
@@ -53,7 +58,9 @@ const Home = () => {
             if (!contacts.length)
                 queries.push(dispatch(getContacts(pageCount)).unwrap());
             if (!otherTweet.length)
-                queries.push(dispatch(getTweets()).unwrap());
+                queries.push(dispatch(getTweets(1)).unwrap());
+            if (followingPages === -1)
+                queries.push(dispatch(countFollowingTweets()));
 
             await Promise.all(queries);
             setLoading(false);
@@ -128,9 +135,25 @@ const Home = () => {
             {newTweets.map((tweet) => (
                 <Card tweet={tweet} key={tweet._id} />
             ))}
-            {otherTweet.map((tweet) => (
-                <Card tweet={tweet} key={tweet._id} />
-            ))}
+            {loading || (
+                <InfiniteScroll
+                    dataLength={otherTweet.length}
+                    hasMore={followingPage < followingPages}
+                    loader={
+                        <>
+                            {getArray(3).map(() => (
+                                <CardSkeleton key={v4()} />
+                            ))}
+                        </>
+                    }
+                    next={loadMoreCard}
+                    className='scrollbar flex flex-col gap-2 xxs:gap-5'
+                >
+                    {otherTweet.map((tweet) => (
+                        <Card tweet={tweet} key={tweet._id} />
+                    ))}
+                </InfiniteScroll>
+            )}
             {loading && getArray(3).map(() => <CardSkeleton key={v4()} />)}
         </Page>
     );

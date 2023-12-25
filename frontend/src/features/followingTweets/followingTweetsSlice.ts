@@ -16,31 +16,69 @@ import {
 type FollowingTweet = {
     tweets: ITweet[];
     isLoading: boolean;
+    followingPage: number;
+    followingPages: number;
+    myTweetPage: number;
+    myTweetPages: number;
 };
+
+const NUMBER_MY_TWEET_OF_PAGE = 8;
 
 const initialState: FollowingTweet = {
     tweets: [],
     isLoading: false,
+    followingPage: 0,
+    followingPages: -1,
+    myTweetPage: 0,
+    myTweetPages: -1,
 };
 
 const getMyTweets = createAsyncThunk(
     'followingTweets/getMyTweets',
-    async () => {
-        const res = await axiosClient.get(api.getMyTweets());
+    async (page: number) => {
+        const skip = (page - 1) * NUMBER_MY_TWEET_OF_PAGE;
+        const limit = NUMBER_MY_TWEET_OF_PAGE;
+
+        const res = await axiosClient.get(api.getMyTweets(), {
+            params: { skip, limit },
+        });
 
         return res.data;
     },
 );
 
-const getTweets = createAsyncThunk('followingTweets/getTweets', async () => {
-    try {
-        const res = await axiosClient.get(api.getFollowingTweets());
+const getTweets = createAsyncThunk(
+    'followingTweets/getTweets',
+    async (page: number) => {
+        try {
+            const res = await axiosClient.get(api.getFollowingTweets(), {
+                params: { page },
+            });
+
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+);
+
+const countFollowingTweets = createAsyncThunk(
+    'followingTweets/countFollowingTweets',
+    async (): Promise<number> => {
+        const res = await axiosClient.get(api.countFollowingTweets());
 
         return res.data;
-    } catch (error) {
-        throw error;
-    }
-});
+    },
+);
+
+const countMyTweets = createAsyncThunk(
+    'followingTweets/countMyTweets',
+    async (): Promise<number> => {
+        const res = await axiosClient.get(api.countTweet());
+
+        return res.data;
+    },
+);
 
 const toggleLike = createAsyncThunk(
     'followingTweets/toggleLike',
@@ -246,6 +284,7 @@ const followingTweetsSlice = createSlice({
 
                     state.isLoading = false;
                     state.tweets.push(...data);
+                    state.followingPage += 1;
                 },
             )
             .addCase(
@@ -332,11 +371,20 @@ const followingTweetsSlice = createSlice({
                 getMyTweets.fulfilled,
                 (state, { payload }: { payload: ITweet[] }) => {
                     if (payload.length) {
-                        state.tweets = getTweetsDTO(payload);
+                        state.tweets.push(...getTweetsDTO(payload));
                         state.isLoading = false;
+                        state.myTweetPage += 1;
                     }
                 },
-            );
+            )
+            .addCase(countFollowingTweets.fulfilled, (state, { payload }) => {
+                state.followingPages = Math.ceil(payload / 10);
+            })
+            .addCase(countMyTweets.fulfilled, (state, { payload }) => {
+                state.myTweetPages = Math.ceil(
+                    payload / NUMBER_MY_TWEET_OF_PAGE,
+                );
+            });
     },
 });
 
@@ -361,6 +409,8 @@ export {
     postComment,
     toggleLike,
     toggleList,
+    countFollowingTweets,
+    countMyTweets,
 };
 export const {
     toggleUserList,

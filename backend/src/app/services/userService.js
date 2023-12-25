@@ -46,7 +46,7 @@ module.exports = {
     countUsers: () => userModel.find({}).count(),
 
     getUserDTO: function (_id) {
-        return this.findById(_id, {
+        return userModel.findById(_id, {
             name: 1,
             username: 1,
             avatar: 1,

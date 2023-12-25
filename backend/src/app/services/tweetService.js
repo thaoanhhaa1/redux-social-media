@@ -1,5 +1,8 @@
+const followService = require('./followService');
 const { location, user } = require('../../utils');
 const tweetModel = require('../models/tweetModel');
+
+const NUMBER_OF_PAGE = 10;
 
 module.exports = {
     incNumberOfComments: (_id) =>
@@ -50,7 +53,9 @@ module.exports = {
         ]);
     },
 
-    getFollowingTweets: function (_id, following) {
+    getFollowingTweets: function (_id, following, page) {
+        const skip = (page - 1) * NUMBER_OF_PAGE;
+
         return tweetModel.aggregate([
             {
                 $match: {
@@ -94,11 +99,45 @@ module.exports = {
                     createdAt: -1,
                 },
             },
+            {
+                $skip: skip,
+            },
+            {
+                $limit: NUMBER_OF_PAGE,
+            },
         ]);
     },
 
+    countFollowingTweets: async (_id) => {
+        const follow = await followService.getFollowing(_id);
+
+        const following = follow[0].following;
+
+        const count = await tweetModel.aggregate([
+            {
+                $match: {
+                    $expr: {
+                        $and: [
+                            {
+                                $in: ['$user._id', following],
+                            },
+                            {
+                                $not: [{ $in: [_id, '$viewed'] }],
+                            },
+                        ],
+                    },
+                },
+            },
+            {
+                $count: 'count',
+            },
+        ]);
+
+        return count[0].count;
+    },
+
     toggleLike: function (_id, tweetId, isLike) {
-        return this.updateOne(
+        return tweetModel.updateOne(
             {
                 _id: tweetId,
             },
