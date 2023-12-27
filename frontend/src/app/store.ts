@@ -1,6 +1,7 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import contactsReducer from '../features/contacts';
 import followingTweetsReducer from '../features/followingTweets';
+import gifsReducer from '../features/gifs';
 import myTweetReducer from '../features/myTweet';
 import notificationsReducer from '../features/notifications';
 import pageReducer from '../features/page';
@@ -22,6 +23,7 @@ export const store = configureStore({
         profile: profileReducer,
         page: pageReducer,
         notifications: notificationsReducer,
+        gifs: gifsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

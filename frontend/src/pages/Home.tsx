@@ -28,11 +28,10 @@ import getNewTweets from '../utils/getNewTweets';
 
 const Home = () => {
     const {
-        contacts: { pageCount, contacts },
+        contacts: { contacts },
         socket,
         followingTweets: { tweets, followingPages, followingPage },
         user,
-        stories,
     } = useSelector((state: RootState) => state);
     const dispatch = useAppDispatch();
     const newTweets = useMemo(() => getNewTweets(tweets), [tweets]);
@@ -41,32 +40,26 @@ const Home = () => {
         [tweets, user._id],
     );
     const [loading, setLoading] = useState<boolean>(false);
-    console.log('🚀 ~ Home ~ followingPage:', followingPage);
 
     const loadMoreCard = async () =>
         await dispatch(getTweets(followingPage + 1));
 
     useEffect(() => {
-        if (!user._id) return;
-
-        (async () => {
+        async function getData() {
             setLoading(true);
             const queries = [];
 
-            if (!stories.stories.length)
-                queries.push(dispatch(getStories()).unwrap());
-            if (!contacts.length)
-                queries.push(dispatch(getContacts(pageCount)).unwrap());
-            if (!otherTweet.length)
-                queries.push(dispatch(getTweets(1)).unwrap());
-            if (followingPages === -1)
-                queries.push(dispatch(countFollowingTweets()));
+            queries.push(dispatch(getStories()).unwrap());
+            queries.push(dispatch(getContacts(1)).unwrap());
+            queries.push(dispatch(getTweets(1)).unwrap());
+            queries.push(dispatch(countFollowingTweets()));
 
             await Promise.all(queries);
             setLoading(false);
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, user]);
+        }
+
+        if (user._id && followingPages < 0) getData();
+    }, [dispatch, followingPages, user]);
 
     useEffect(() => {
         if (!socket.socket) return;

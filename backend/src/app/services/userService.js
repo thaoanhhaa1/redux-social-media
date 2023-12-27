@@ -1,3 +1,4 @@
+const followModel = require('../models/followModel');
 const userModel = require('../models/userModel');
 
 module.exports = {
@@ -64,7 +65,7 @@ module.exports = {
         ),
 
     getContactUsers: (_id) =>
-        userModel.aggregate([
+        followModel.aggregate([
             { $match: { user: _id } },
             { $project: { _id: 0, following: 1 } },
             { $unwind: '$following' },

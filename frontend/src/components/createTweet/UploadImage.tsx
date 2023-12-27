@@ -25,6 +25,7 @@ const UploadImage = () => {
     return (
         <div className='relative mt-8 min-h-[166px] h-[25vh] max-h-[221px] p-2 rounded-lg border border-[#CED0D4] dark:border-[#3E4042]'>
             <ImageUpload
+                fallback=''
                 image={image}
                 src=''
                 cameraClassName='inset-0 flex justify-center items-center'

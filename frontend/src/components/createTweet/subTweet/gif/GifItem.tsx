@@ -12,7 +12,7 @@ const GifItem = ({ gif }: { gif: IGif }) => {
     };
 
     return (
-        <div onClick={handleClick} className='cursor-pointer'>
+        <div onClick={handleClick} className='w-full cursor-pointer'>
             <Image
                 fallback={gif.title}
                 className='w-full aspect-square'

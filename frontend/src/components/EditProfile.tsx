@@ -142,14 +142,14 @@ const EditProfile = ({
                         src={user.background}
                         image={background}
                     >
-                        <CameraIcon stroke='white' />
+                        <CameraIcon className='stroke-black dark:stroke-white' />
                     </ImageUpload>
                     <ImageUpload
                         wrapperClassName='mx-[18px] -mt-12 w-[100px] h-[100px] rounded-full'
                         image={avatar}
                         src={user.avatar}
                     >
-                        <CameraIcon stroke='white' />
+                        <CameraIcon className='stroke-black dark:stroke-white' />
                     </ImageUpload>
                     <div className='flex flex-col gap-5 mt-4 px-5'>
                         <FormGroup>

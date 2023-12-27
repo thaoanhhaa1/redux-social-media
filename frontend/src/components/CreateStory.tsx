@@ -81,6 +81,7 @@ const CreateStory = ({
                         image={story}
                         src=''
                         wrapperClassName='w-full h-full'
+                        fallback=''
                     >
                         <ImageVideoUploadIcon className='text-stroke-icon' />
                     </ImageUpload>

@@ -19,6 +19,10 @@
         {
             "url": "http://localhost:8080/api",
             "description": "Local server"
+        },
+        {
+            "url": "https://redux-social-media-backend.vercel.app/api",
+            "description": "Production server"
         }
     ],
     "paths": {
@@ -1034,6 +1038,90 @@
                                         }
                                     }
                                 }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/private/gifs/search": {
+            "get": {
+                "summary": "Search gifs",
+                "description": "Search gifs",
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "default": ""
+                        }
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 5
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Gif"
+                                },
+                                "example": [
+                                    {
+                                        "_id": "8RQrMNR4SFytfAEiBX",
+                                        "title": "Happy Fun GIF",
+                                        "url": "https://media3.giphy.com/media/8RQrMNR4SFytfAEiBX/giphy.gif?cid=270d654apdps4s69o2rqcoil1v0a290zr60k3opo3mapn8ag&ep=v1_gifs_trending&rid=giphy.gif&ct=g"
+                                    }
+                                ]
                             }
                         }
                     },
@@ -3669,6 +3757,28 @@
                     }
                 },
                 "required": ["_id", "user", "followers", "following"]
+            },
+            "Gif": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "description": "Id of gif",
+                        "example": "8RQrMNR4SFytfAEiBX"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "Title",
+                        "example": "Happy Fun GIF"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "url",
+                        "description": "URL",
+                        "example": "https://media3.giphy.com/media/8RQrMNR4SFytfAEiBX/giphy.gif?cid=270d654apdps4s69o2rqcoil1v0a290zr60k3opo3mapn8ag&ep=v1_gifs_trending&rid=giphy.gif&ct=g"
+                    }
+                },
+                "required": ["_id", "title", "url"]
             },
             "ErrorResponse": {
                 "type": "object",

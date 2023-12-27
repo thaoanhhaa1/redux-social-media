@@ -1,5 +1,5 @@
 interface IGif {
-    id: string;
+    _id: string;
     title: string;
     url: string;
 }

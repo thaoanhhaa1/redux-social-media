@@ -1,13 +1,11 @@
 const jwt = require('jsonwebtoken');
+const { errors } = require('../../utils');
 
 async function authMiddleware(req, res, next) {
     const token = req.headers.authorization;
 
     if (!token) {
-        res.status(401).json({
-            status: 401,
-            message: 'Unauthorized',
-        });
+        res.status(401).json(errors[401]());
         return;
     }
 
@@ -16,12 +14,10 @@ async function authMiddleware(req, res, next) {
 
         req.body.username = username;
         req.body._id = _id;
+
         next();
     } catch (error) {
-        res.status(401).json({
-            status: 401,
-            message: 'Unauthorized',
-        });
+        res.status(401).json(errors[401]());
     }
 }
 

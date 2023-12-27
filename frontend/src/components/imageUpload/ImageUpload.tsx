@@ -42,7 +42,9 @@ const ImageUpload = ({
                 className={classNames(
                     className,
                     image.isLoading ? 'invisible' : '',
-                    image.image || src ? 'opacity-100' : 'opacity-0',
+                    image.image || src || fallback
+                        ? 'opacity-100'
+                        : 'opacity-0',
                 )}
             />
             {(image.isLoading && <ImageLoading src={image.tempImage} />) || (

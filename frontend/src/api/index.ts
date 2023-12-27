@@ -36,6 +36,7 @@ const api = {
     getNotifications: () => '/private/notifications',
     deleteNotification: (notificationId: number) =>
         `/private/notifications/${notificationId}`,
+    getGifs: () => `/private/gifs/search`,
 };
 
 export default api;

@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { setShowUploadImage, setSub } from '../../features/myTweet';
+import Avatar from '../Avatar';
 import { ActivityIcon, GalleryIcon, TagFriendIcon } from '../Icons';
-import Image from '../Image';
 import CreateTweet from '../createTweet';
 import { Feeling, More, TagPeople } from '../createTweet/subTweet';
 import Wrapper from '../wrapper';
@@ -19,7 +19,7 @@ const WhatHappen = () => {
     return (
         <Wrapper className='p-2 xxs:p-5'>
             <div className='flex items-center gap-2 xxs:gap-[14px]'>
-                <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
+                <Avatar src={user.avatar} size='lg' />
                 <div
                     onClick={() => setShowModal(true)}
                     className='cursor-pointer dark:bg-dark-black-2 flex-1 rounded-2.5 border border-[#969395] px-3 py-[12.5px] font-medium text-xs leading-xs text-base-black dark:text-white'

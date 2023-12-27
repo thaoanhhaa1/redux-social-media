@@ -1,3 +1,4 @@
+const followService = require('./followService');
 const { notificationType } = require('../../constants');
 const commentModel = require('../models/commentModel');
 const notificationModel = require('../models/notificationModel');
@@ -89,7 +90,7 @@ module.exports = {
 
     insertToFollowers: async function (_id, notification) {
         const [follow, user] = await Promise.all([
-            followModel.getFollower(_id),
+            followService.getFollower(_id),
             userService.getUserDTO(_id),
         ]);
 
@@ -133,7 +134,7 @@ module.exports = {
             { $count: 'count' },
         ]);
 
-        return Math.ceil(count[0].count / 10);
+        return Math.ceil(count[0]?.count || 0 / 10);
     },
 
     deleteNotificationItem: function (userId, notificationId) {
@@ -147,7 +148,7 @@ module.exports = {
     },
 
     dislikeTweet: async function (userId, tweetId) {
-        const follow = await followModel.getFollower(userId);
+        const follow = await followService.getFollower(userId);
 
         const followers = follow.followers;
 

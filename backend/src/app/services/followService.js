@@ -124,7 +124,7 @@ module.exports = {
         ]),
 
     searchFriends: (_id, value, tagged) =>
-        followModelFollowModel.aggregate([
+        followModel.aggregate([
             { $match: { user: _id } },
             {
                 $project: {

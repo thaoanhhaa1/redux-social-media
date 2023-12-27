@@ -86,7 +86,7 @@ module.exports = {
 
             // - Tweet
             if (_id !== tweet.user._id)
-                notificationModel
+                notificationService
                     .insertNotification(tweet.user._id, notification)
                     .then();
 

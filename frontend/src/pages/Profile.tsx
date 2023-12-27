@@ -97,8 +97,8 @@ const Profile = () => {
             setLoading(false);
         }
 
-        if (user._id) getData();
-    }, [dispatch, user._id]);
+        if (user._id && myTweetPages === -1) getData();
+    }, [dispatch, myTweetPages, user._id]);
 
     if (!user._id) return <Loading />;
 
@@ -129,7 +129,8 @@ const Profile = () => {
                 <div className='relative w-[200px] h-[200px] flex-shrink-0'>
                     <Image alt='' src={user.avatar} rounded />
                     <Button
-                        className='absolute right-3 bottom-[14px] bg-white'
+                        onClick={handleShowModal}
+                        className='absolute right-3 bottom-[14px] bg-white text-black'
                         icon={<CameraIcon />}
                         rounded
                     />
@@ -172,7 +173,7 @@ const Profile = () => {
                 <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
                     <Stories all={false} loading={loading} />
                     <WhatHappen />
-                    {!loading && !profile.tweetCount && (
+                    {!loading && !profile.tweetCount && !myTweets.length && (
                         <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
                             No tweets available
                         </div>
@@ -204,9 +205,10 @@ const Profile = () => {
                         <div className='font-semibold text-xl leading-xl text-black dark:text-white'>
                             Who to follow
                         </div>
-                        {profile.whoToFollow.map((user) => (
-                            <Follow key={user._id} user={user} />
-                        ))}
+                        {loading ||
+                            profile.whoToFollow.map((user) => (
+                                <Follow key={user._id} user={user} />
+                            ))}
                         {(loading || loadingFollow) &&
                             getArray().map(() => <FollowSkeleton key={v4()} />)}
                         {profile.whoToFollowPage < profile.whoToFollowPages &&

@@ -104,14 +104,12 @@ module.exports = {
                     },
                 );
 
-                res.json(token);
-                return;
+                return res.json(token);
             }
-        } catch (error) {}
+        } catch (error) {
+            console.error(error);
+        }
 
-        res.status(400).json({
-            status: 400,
-            message: 'Bad request',
-        });
+        next(new Error());
     },
 };

@@ -133,7 +133,7 @@ module.exports = {
             },
         ]);
 
-        return count[0].count;
+        return count[0]?.count || 0;
     },
 
     toggleLike: function (_id, tweetId, isLike) {
