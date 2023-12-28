@@ -1,4 +1,10 @@
-import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
+import {
+    Action,
+    CombinedState,
+    ThunkAction,
+    combineReducers,
+    configureStore,
+} from '@reduxjs/toolkit';
 import contactsReducer from '../features/contacts';
 import followingTweetsReducer from '../features/followingTweets';
 import gifsReducer from '../features/gifs';
@@ -12,21 +18,30 @@ import socketReducer from '../features/socket';
 import storiesReducer from '../features/stories';
 import userReducer from '../features/user';
 
+const combinedReducer = combineReducers({
+    user: userReducer,
+    search: searchReducer,
+    socket: socketReducer,
+    contacts: contactsReducer,
+    myTweet: myTweetReducer,
+    followingTweets: followingTweetsReducer,
+    stories: storiesReducer,
+    profile: profileReducer,
+    page: pageReducer,
+    notifications: notificationsReducer,
+    gifs: gifsReducer,
+    popupMultiLevel: popupMultiLevelReducer,
+});
+
+const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {
+    if (action.type === 'LOGOUT') {
+        state = undefined;
+    }
+    return combinedReducer(state, action);
+};
+
 export const store = configureStore({
-    reducer: {
-        user: userReducer,
-        search: searchReducer,
-        socket: socketReducer,
-        contacts: contactsReducer,
-        myTweet: myTweetReducer,
-        followingTweets: followingTweetsReducer,
-        stories: storiesReducer,
-        profile: profileReducer,
-        page: pageReducer,
-        notifications: notificationsReducer,
-        gifs: gifsReducer,
-        popupMultiLevel: popupMultiLevelReducer,
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: false,

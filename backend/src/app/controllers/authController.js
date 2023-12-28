@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const UserModel = require('../models/userModel');
 const FollowModel = require('../models/followModel');
 const OnlineStatusModel = require('../models/onlineStatusModel');
+const TokenModel = require('../models/tokenModel');
 
 module.exports = {
     signUp: async (req, res, next) => {
@@ -73,11 +74,7 @@ module.exports = {
 
             res.status(201).json(token);
         } catch (error) {
-            res.status(500).json({
-                status: 500,
-                message: 'Server is down',
-            });
-            console.error(error);
+            next(error);
         }
     },
 
@@ -107,9 +104,23 @@ module.exports = {
                 return res.json(token);
             }
         } catch (error) {
-            console.error(error);
+            next(error);
         }
+    },
 
-        next(new Error());
+    signOut: (req, res, next) => {
+        const token = req.headers.authorization;
+
+        try {
+            const tokenModel = new TokenModel({
+                token,
+            });
+
+            tokenModel.save().then();
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
     },
 };

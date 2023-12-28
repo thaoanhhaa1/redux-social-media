@@ -93,7 +93,6 @@ const myTweetSlice = createSlice({
             state.value = payload;
         },
     },
-    extraReducers: (builder) => {},
 });
 
 export default myTweetSlice.reducer;

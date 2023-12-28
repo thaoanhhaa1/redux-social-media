@@ -1,12 +1,15 @@
 function handleErrorMiddleware(err, _, res, _) {
-    console.log(err);
+    if (process.env.NODE_ENV === 'development') console.error(err.stack);
 
-    if (process.env.NODE_ENV === 'development')
-        console.log('🚀 ~ handleErrorMiddleware ~ err:', err);
+    if (err.status)
+        return res.status(err.status).json({
+            status: err.status,
+            message: err.message,
+        });
 
-    return res.status(400).json({
-        status: 400,
-        message: 'Bad request',
+    return res.status(500).json({
+        status: 500,
+        message: 'Internal Server Error',
     });
 }
 

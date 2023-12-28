@@ -33,6 +33,7 @@ const api = {
         `/private/lists/${isAdd ? 'add' : 'remove'}`,
     signUp: () => '/auth/sign-up',
     signIn: () => '/auth/sign-in',
+    signOut: () => '/auth/sign-out',
     getNotifications: () => '/private/notifications',
     deleteNotification: (notificationId: number) =>
         `/private/notifications/${notificationId}`,

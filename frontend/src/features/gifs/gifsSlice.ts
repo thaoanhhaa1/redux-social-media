@@ -43,10 +43,7 @@ const gifsSlice = createSlice({
     name: 'gifs',
     initialState,
     reducers: {
-        reset: (state) => {
-            state.data = [];
-            state.page = 0;
-        },
+        reset: () => initialState,
     },
     extraReducers: (builder) => {
         builder

@@ -1,9 +1,8 @@
 const cron = require('node-cron');
 
 const { notificationType } = require('../../constants');
-const notificationModel = require('../models/notificationModel');
-const UserModel = require('../models/userModel');
 const { userService, notificationService } = require('../services');
+const tokenModel = require('../models/tokenModel');
 
 module.exports = {
     birthdayTaskNotify: () => {
@@ -34,6 +33,27 @@ module.exports = {
                 timezone: 'Asia/Ho_Chi_Minh', // Chọn múi giờ phù hợp
             },
         );
+
+        dailyTask.start();
+    },
+
+    deleteToken: () => {
+        const dailyTask = cron.schedule('0 3 * * *', () => {
+            try {
+                tokenModel
+                    .deleteMany({
+                        $expr: {
+                            $gt: [
+                                { $subtract: [new Date(), '$createdAt'] },
+                                24 * 60 * 60 * 1000,
+                            ],
+                        },
+                    })
+                    .then();
+            } catch (error) {
+                console.error('Error during delete token daily task:', error);
+            }
+        });
 
         dailyTask.start();
     },

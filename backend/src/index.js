@@ -57,6 +57,7 @@ Router(app);
 
 //
 dailyTaskController.birthdayTaskNotify();
+dailyTaskController.deleteToken();
 
 // Middleware handle error
 app.use(handleErrorMiddleware);
