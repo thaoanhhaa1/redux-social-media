@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
-import { setLocation, setSub } from '../../../../features/myTweet';
+import { setLocation } from '../../../../features/myTweet';
+import { resetSubs } from '../../../../features/popupMultiLevel';
 import { ILocation } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
@@ -16,7 +17,8 @@ const Location = ({ location }: { location: ILocation }) => {
     const handleClick = () => {
         if (isActive) dispatch(setLocation(undefined));
         else dispatch(setLocation(location));
-        dispatch(setSub(undefined));
+
+        dispatch(resetSubs());
     };
 
     return (

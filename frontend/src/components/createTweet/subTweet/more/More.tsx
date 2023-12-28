@@ -1,18 +1,13 @@
 import { memo } from 'react';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import Header from '../../Header';
-import config from '../../../../config';
-import MoreItem from './MoreItem';
 import { v4 } from 'uuid';
+import config from '../../../../config';
+import Header from '../../Header';
+import MoreItem from './MoreItem';
 
 const More = () => {
-    const { handleHiddenSub } = useCreateTweet();
-
     return (
         <>
-            <Header onClick={handleHiddenSub} isSub>
-                Add to your post
-            </Header>
+            <Header isSub>Add to your post</Header>
             <div className='grid grid-cols-2 p-2 gap-2'>
                 {config.createTweetActions.map((item, index) => {
                     if (index === config.CREATE_TWEET_ACTION_NUMBER)

@@ -1,7 +1,8 @@
 import { useLocalStorage } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
 import config from '../../config';
-import { setShowUploadImage, setSub } from '../../features/myTweet';
+import { setShowUploadImage } from '../../features/myTweet';
+import { addSub } from '../../features/popupMultiLevel';
 import { useActionCreateTweetBtn } from '../../hooks';
 import { IActionCreateTweet } from '../../interfaces';
 import { classNames } from '../../utils';
@@ -18,7 +19,7 @@ const ActionButton = ({ action }: { action: IActionCreateTweet }) => {
     const handleClick = () => {
         if (action.tooltip === 'Photo/Video')
             dispatch(setShowUploadImage(true));
-        else dispatch(setSub(action.sub));
+        else action.sub && dispatch(addSub(action.sub));
     };
 
     if (active)

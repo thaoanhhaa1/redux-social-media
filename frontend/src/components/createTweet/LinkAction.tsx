@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../../app/hooks';
-import { setSub } from '../../features/myTweet';
+import { addSub } from '../../features/popupMultiLevel';
 import SubProps from '../../types/SubProps';
 import Image from '../Image';
 
@@ -15,10 +15,7 @@ const LinkAction = ({
     sub: SubProps;
 }) => {
     const dispatch = useAppDispatch();
-
-    const handleClick = () => {
-        dispatch(setSub(sub));
-    };
+    const handleAddSub = () => dispatch(addSub(sub));
 
     return (
         <>
@@ -26,7 +23,7 @@ const LinkAction = ({
             &nbsp;
             {tag}
             <span
-                onClick={handleClick}
+                onClick={handleAddSub}
                 className='ml-1 cursor-pointer hover:underline'
             >
                 {title}

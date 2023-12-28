@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { v4 } from 'uuid';
 import { images } from '../../../../assets';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import Image from '../../../Image';
 import ScrollbarCustomize from '../../../ScrollbarCustomize';
 import Header from '../../Header';
@@ -32,13 +31,9 @@ const lifeEvents: ILifeEvent[] = [
 ];
 
 const LifeEvent = () => {
-    const { handleHiddenSub } = useCreateTweet();
-
     return (
         <>
-            <Header onClick={handleHiddenSub} isSub>
-                Create life event
-            </Header>
+            <Header isSub>Create life event</Header>
             <ScrollbarCustomize>
                 <Image
                     src={images.backgroundLifeEvent}

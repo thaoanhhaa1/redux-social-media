@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
-import { setShowUploadImage, setSub } from '../../features/myTweet';
+import { setShowUploadImage } from '../../features/myTweet';
+import { addSub } from '../../features/popupMultiLevel';
 import Avatar from '../Avatar';
 import { ActivityIcon, GalleryIcon, TagFriendIcon } from '../Icons';
 import CreateTweet from '../createTweet';
@@ -43,7 +44,7 @@ const WhatHappen = () => {
                 <WhatHappenButton
                     onClick={() => {
                         setShowModal(true);
-                        dispatch(setSub(TagPeople));
+                        dispatch(addSub(TagPeople));
                     }}
                     backgroundColor='bg-red-white-3 dark:bg-red-black-3'
                     backgroundColorIcon='bg-red'
@@ -55,7 +56,7 @@ const WhatHappen = () => {
                 <WhatHappenButton
                     onClick={() => {
                         setShowModal(true);
-                        dispatch(setSub(Feeling));
+                        dispatch(addSub(Feeling));
                     }}
                     backgroundColor='bg-yellow-white-3 dark:bg-yellow-black-3'
                     backgroundColorIcon='bg-yellow'
@@ -67,7 +68,7 @@ const WhatHappen = () => {
                 <button
                     onClick={() => {
                         setShowModal(true);
-                        dispatch(setSub(More));
+                        dispatch(addSub(More));
                     }}
                     className='-mx-2 px-2 h-full text-base-black dark:text-white'
                 >

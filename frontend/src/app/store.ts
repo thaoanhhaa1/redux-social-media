@@ -5,6 +5,7 @@ import gifsReducer from '../features/gifs';
 import myTweetReducer from '../features/myTweet';
 import notificationsReducer from '../features/notifications';
 import pageReducer from '../features/page';
+import popupMultiLevelReducer from '../features/popupMultiLevel';
 import profileReducer from '../features/profile';
 import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
@@ -24,6 +25,7 @@ export const store = configureStore({
         page: pageReducer,
         notifications: notificationsReducer,
         gifs: gifsReducer,
+        popupMultiLevel: popupMultiLevelReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
