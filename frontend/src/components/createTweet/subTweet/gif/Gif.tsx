@@ -1,9 +1,8 @@
 import { UIEvent, memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDebounce, useIsFirstRender } from 'usehooks-ts';
-import { useAppDispatch } from '../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
 import { getGifs, reset } from '../../../../features/gifs';
 import { useSearch } from '../../../../hooks';
 import ScrollbarCustomize from '../../../ScrollbarCustomize';
@@ -15,10 +14,12 @@ const Gif = () => {
     const { data, loading, page } = useSelector(
         (state: RootState) => state.gifs,
     );
+    const { updateHeightPopup } = useAppSelector(
+        (state: RootState) => state.popupMultiLevel,
+    );
     const { value, handleChangeSearch } = useSearch();
     const debounceValue = useDebounce(value, 700);
     const firstRender = useIsFirstRender();
-    const { handleHeightModal, handleHiddenSub } = useCreateTweet();
     const dispatch = useAppDispatch();
 
     const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -53,14 +54,12 @@ const Gif = () => {
     }, [debounceValue, dispatch]);
 
     useEffect(() => {
-        handleHeightModal();
-    }, [handleHeightModal, loading]);
+        updateHeightPopup();
+    }, [updateHeightPopup, loading]);
 
     return (
         <>
-            <Header onClick={handleHiddenSub} isSub>
-                Choose a GIF
-            </Header>
+            <Header isSub>Choose a GIF</Header>
 
             {firstRender || (
                 <div className='px-4 py-2'>

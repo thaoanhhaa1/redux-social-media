@@ -1,5 +1,6 @@
 import { useAppDispatch } from '../../../../app/hooks';
-import { setGif, setSub } from '../../../../features/myTweet';
+import { setGif } from '../../../../features/myTweet';
+import { resetSubs } from '../../../../features/popupMultiLevel';
 import { IGif } from '../../../../interfaces';
 import Image from '../../../Image';
 
@@ -8,7 +9,7 @@ const GifItem = ({ gif }: { gif: IGif }) => {
 
     const handleClick = () => {
         dispatch(setGif(gif));
-        dispatch(setSub(undefined));
+        dispatch(resetSubs());
     };
 
     return (

@@ -1,5 +1,5 @@
 import { MemoExoticComponent } from 'react';
 
-type SubProps = MemoExoticComponent<() => JSX.Element> | undefined;
+type SubProps = MemoExoticComponent<() => JSX.Element>;
 
 export default SubProps;

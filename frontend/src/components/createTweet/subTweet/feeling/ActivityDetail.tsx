@@ -1,15 +1,17 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
-import { setFeeling, setSub, setTag } from '../../../../features/myTweet';
+import { setFeeling, setTag } from '../../../../features/myTweet';
 import { IFeeling } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
+import { resetSubs } from '../../../../features/popupMultiLevel';
 
 const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
-    const { handleHeightModal } = useCreateTweet();
     const myTweet = useSelector((state: RootState) => state.myTweet);
+    const { updateHeightPopup } = useSelector(
+        (state: RootState) => state.popupMultiLevel,
+    );
     const dispatch = useAppDispatch();
     const isActive = myTweet.feeling === feeling.title;
 
@@ -24,8 +26,9 @@ const ActivityDetail = ({ feeling }: { feeling: IFeeling }) => {
                 }),
             );
         }
-        dispatch(setSub(undefined));
-        handleHeightModal();
+
+        dispatch(resetSubs());
+        updateHeightPopup();
     };
 
     return (

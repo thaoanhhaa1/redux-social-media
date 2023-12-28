@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../../../app/hooks';
-import { setShowUploadImage, setSub } from '../../../../features/myTweet';
+import { setShowUploadImage } from '../../../../features/myTweet';
+import { addSub, resetSubs } from '../../../../features/popupMultiLevel';
 import { useActionCreateTweetBtn } from '../../../../hooks';
 import { IActionCreateTweet } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
@@ -18,8 +19,8 @@ const MoreItem = ({ item }: { item: IActionCreateTweet }) => {
         if (item.link) navigate(item.link);
         else if (item.tooltip === 'Photo/Video') {
             dispatch(setShowUploadImage(true));
-            dispatch(setSub(undefined));
-        } else dispatch(setSub(item.sub));
+            dispatch(resetSubs());
+        } else item.sub && dispatch(addSub(item.sub));
     };
 
     return (

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IGif, ILocation, IPerson, ITweetPost } from '../../interfaces';
-import SubProps from '../../types/SubProps';
 
 const initialState: {
     isLoading: boolean;
@@ -15,7 +14,6 @@ const initialState: {
     gif?: IGif;
     isShowUploadImage?: boolean;
     value: string;
-    sub?: SubProps;
 } = {
     isLoading: false,
     tag: '',
@@ -94,9 +92,6 @@ const myTweetSlice = createSlice({
         setValue: (state, { payload }: { payload: string }) => {
             state.value = payload;
         },
-        setSub: (state, { payload }: { payload: SubProps | undefined }) => {
-            state.sub = payload;
-        },
     },
     extraReducers: (builder) => {},
 });
@@ -113,6 +108,5 @@ export const {
     setShowUploadImage,
     setImage,
     setValue,
-    setSub,
 } = myTweetSlice.actions;
 export { createTweet };

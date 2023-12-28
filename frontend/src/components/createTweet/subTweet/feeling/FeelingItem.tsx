@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
-import { setFeeling, setSub, setTag } from '../../../../features/myTweet';
+import { setFeeling, setTag } from '../../../../features/myTweet';
+import { resetSubs } from '../../../../features/popupMultiLevel';
 import { IFeeling } from '../../../../interfaces';
 import { classNames } from '../../../../utils';
 import Image from '../../../Image';
@@ -22,7 +23,8 @@ const FeelingItem = ({ feeling }: { feeling: IFeeling }) => {
                 }),
             );
         }
-        dispatch(setSub(undefined));
+
+        dispatch(resetSubs());
     };
 
     return (

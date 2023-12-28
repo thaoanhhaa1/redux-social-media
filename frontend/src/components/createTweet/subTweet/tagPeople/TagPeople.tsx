@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 import slugify from 'slugify';
 import api from '../../../../api';
 import axiosClient from '../../../../api/axiosClient';
+import { useAppDispatch } from '../../../../app/hooks';
 import { RootState } from '../../../../app/store';
-import useCreateTweet from '../../../../contexts/CreateTweetContext';
+import { resetSubs } from '../../../../features/popupMultiLevel';
 import { useSearch } from '../../../../hooks';
 import { IPerson } from '../../../../interfaces';
 import Button from '../../../Button';
@@ -16,10 +17,14 @@ import TaggedItem from './TaggedItem';
 
 const TagPeople = () => {
     const { value, setValue, handleChangeSearch } = useSearch();
-    const { handleHeightModal, handleHiddenSub } = useCreateTweet();
     const [users, setUsers] = useState<Array<IPerson>>([]);
     const [isLoading, setLoading] = useState<boolean>(true);
     const myTweet = useSelector((state: RootState) => state.myTweet);
+    const { updateHeightPopup } = useSelector(
+        (state: RootState) => state.popupMultiLevel,
+    );
+    const dispatch = useAppDispatch();
+
     const filterUsers = useMemo(
         () =>
             users.filter(
@@ -70,14 +75,12 @@ const TagPeople = () => {
     }, [myTweet.tagPeople, setValue]);
 
     useEffect(() => {
-        handleHeightModal();
-    }, [handleHeightModal, value, isLoading, myTweet.tagPeople]);
+        updateHeightPopup();
+    }, [updateHeightPopup, value, isLoading, myTweet.tagPeople]);
 
     return (
         <>
-            <Header isSub onClick={handleHiddenSub}>
-                Tag people
-            </Header>
+            <Header isSub>Tag people</Header>
             <div className='flex items-center px-4 py-2'>
                 <Search
                     value={value}
@@ -87,7 +90,7 @@ const TagPeople = () => {
                 <Button
                     small
                     className='pl-5 pr-2 font-semibold text-sm leading-sm text-blue'
-                    onClick={handleHiddenSub}
+                    onClick={() => dispatch(resetSubs())}
                 >
                     Done
                 </Button>
