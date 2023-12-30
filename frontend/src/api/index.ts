@@ -22,6 +22,7 @@ const api = {
     toggleLikeComment: (commentId: string) =>
         `/private/comments/${commentId}/toggle-like`,
     getStories: () => '/private/stories/get-stories',
+    getStoriesDetail: () => '/private/stories/get-stories-group-user',
     createStory: () => '/private/stories',
     getUser: () => '/private/users/get-user',
     getUsersOnline: () => '/private/users/get-users-online',

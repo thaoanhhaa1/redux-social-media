@@ -2095,4 +2095,100 @@ export const LogOutIcon = ({ className = '' }: { className?: string }) => (
     </svg>
 );
 
+export const PublicIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        viewBox='0 0 12 13'
+        width={12}
+        height={12}
+        fill='currentColor'
+        className={className}
+    >
+        <g fillRule='evenodd' transform='translate(-450 -1073)'>
+            <g>
+                <path
+                    d='M107.5 936a5.497 5.497 0 0 1-3.595 5.16l.051-.026c.856-.734 1.277-2.19 1.467-2.812.224-.73.3-.95-.367-1.437-.236-.173-.496-.144-.762-.35-.18-.139-.262-.433-.445-.535-.435-.247-.664-.13-1.285-.047-.29.037-.621.055-.89-.031-.005 0-.005 0-.01-.003l-.061-.021c-.12-.062-.056-.152.005-.264h-.005c.063-.125.063-.277-.037-.39a.834.834 0 0 0-.564-.247c-.078-.002-.154 0-.23.003l-.003-.003-.09.003h-.027c-.237.005-.254.006-.42-.199-.194-.259-.339-.139-.055-.4.206-.19.399-.618 1.09-.192.443.27.856.324 1.223.202.242-.08.352-.222.068-.638a.825.825 0 0 1-.156-.535c.048-.57.504-.617.853-.88.342-.262.499-.692.4-1.068-.078-.303-.373-.641-.938-.741a5.492 5.492 0 0 1 4.784 5.451'
+                    transform='translate(354 143.5)'
+                />
+                <path
+                    d='M103.546 941.277A5.5 5.5 0 0 1 99 931.392a4.015 4.015 0 0 0-1.213 1.71c-.553 1.627-.061 2.96 1.777 2.96.612 0 .924.452.875 1.782-.01.296.35 1.372 1.766 1.453.513.03.903.695 1.01 1.198.045.213.094.477.19.711a.128.128 0 0 0 .14.071'
+                    transform='translate(354 143.5)'
+                />
+                <path
+                    fillRule='nonzero'
+                    d='M108 936a6 6 0 1 1-12 0 6 6 0 0 1 12 0zm-1 0a5 5 0 1 0-10 0 5 5 0 0 0 10 0z'
+                    transform='translate(354 143.5)'
+                />
+            </g>
+        </g>
+    </svg>
+);
+
+export const PlayIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 24 24'
+        fill='currentColor'
+        className={className}
+        width={24}
+        height={24}
+    >
+        <path
+            fillRule='evenodd'
+            d='M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z'
+            clipRule='evenodd'
+        />
+    </svg>
+);
+
+export const MoreSolidIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        viewBox='0 0 24 24'
+        width={24}
+        height={24}
+        fill='currentColor'
+        className={className}
+    >
+        <circle cx={12} cy={12} r='2.5' />
+        <circle cx='19.5' cy={12} r='2.5' />
+        <circle cx='4.5' cy={12} r='2.5' />
+    </svg>
+);
+
+export const PauseIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        viewBox='0 0 24 24'
+        width={24}
+        height={24}
+        fill='currentColor'
+        className={className}
+    >
+        <rect x={7} y={5} width={4} height={14} rx='1.167' />
+        <rect x={13} y={5} width={4} height={14} rx='1.167' />
+    </svg>
+);
+
+export const NextIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        viewBox='0 0 24 24'
+        width={24}
+        height={24}
+        fill='currentColor'
+        className={className}
+    >
+        <path d='M9.209 5.207 16 12l-6.791 6.793a1 1 0 1 0 1.415 1.414l7.5-7.5a1 1 0 0 0 0-1.414l-7.5-7.5a1 1 0 1 0-1.415 1.414z' />
+    </svg>
+);
+
+export const PrevIcon = ({ className = '' }: { className?: string }) => (
+    <svg
+        viewBox='0 0 24 24'
+        width={24}
+        height={24}
+        fill='currentColor'
+        className={className}
+    >
+        <path d='M14.791 5.207 8 12l6.793 6.793a1 1 0 1 1-1.415 1.414l-7.5-7.5a1 1 0 0 1 0-1.414l7.5-7.5a1 1 0 1 1 1.415 1.414z' />
+    </svg>
+);
+
 // export const  = () => ()

@@ -8,10 +8,25 @@ module.exports = {
         const _id = req.body._id;
 
         try {
-            const following = await followService.getFollowing(_id);
-            const stories = await storyService.getStories(_id, following);
+            const follow = await followService.getFollowing(_id);
+            const stories = await storyService.getStories(
+                _id,
+                follow[0].following,
+            );
 
             res.json(stories);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    getStoriesGroupByUsers: async (req, res, next) => {
+        const _id = req.body._id;
+
+        try {
+            const result = await storyService.getStoriesGroupByUsers(_id);
+
+            res.json(result);
         } catch (error) {
             next(error);
         }

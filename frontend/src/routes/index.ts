@@ -5,12 +5,13 @@ import Explore from '../pages/Explore';
 import Home from '../pages/Home';
 import Lists from '../pages/Lists';
 import Message from '../pages/Message';
+import NotFound from '../pages/NotFound';
 import Notifications from '../pages/Notifications';
 import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
-import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
-import NotFound from '../pages/NotFound';
+import SignUp from '../pages/SignUp';
+import Stories from '../pages/Stories';
 
 const publicRoutes: IRoute[] = [
     {
@@ -54,6 +55,10 @@ const publicRoutes: IRoute[] = [
         path: config.routes.signIn,
         element: SignIn,
         layout: null,
+    },
+    {
+        path: config.routes.stories,
+        element: Stories,
     },
     {
         path: config.routes.notFound,

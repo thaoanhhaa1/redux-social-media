@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { toggleLike } from '../../features/followingTweets';
+import { toggleLike, toggleLikeTweet } from '../../features/followingTweets';
 import { classNames } from '../../utils';
 import {
     LikeActiveIcon,
@@ -22,10 +22,8 @@ const CardInformation = () => {
     const [isShowCardPopup, setShowCardPopup] = useState(false);
     const tweet = useCardContext();
     const dispatch = useAppDispatch();
-    const [isLike, setLike] = useState(() =>
-        (tweet.likes || []).includes(user._id),
-    );
-    const [numberLike, setNumberLike] = useState(tweet?.likes?.length || 0);
+    const isLike = tweet.likes?.includes(user._id);
+    const numberLike = tweet.likes?.length || 0;
 
     const handleLike = () => {
         dispatch(
@@ -35,8 +33,12 @@ const CardInformation = () => {
                 userId: user._id,
             }),
         ).unwrap();
-        setNumberLike(numberLike + (isLike ? -1 : 1));
-        setLike(!isLike);
+        dispatch(
+            toggleLikeTweet({
+                tweetId: tweet._id,
+                userId: user._id,
+            }),
+        );
     };
 
     const handleComment = () => {

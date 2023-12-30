@@ -1,4 +1,8 @@
 function handleErrorMiddleware(err, _, res, _) {
+    console.error(err.stack);
+    console.error(err);
+    console.error(process.env.NODE_ENV);
+
     if (process.env.NODE_ENV === 'development') console.error(err.stack);
 
     if (err.status)

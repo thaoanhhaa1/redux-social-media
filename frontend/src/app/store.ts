@@ -16,6 +16,7 @@ import profileReducer from '../features/profile';
 import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
 import storiesReducer from '../features/stories';
+import storiesDetailReducer from '../features/storiesDetail';
 import userReducer from '../features/user';
 
 const combinedReducer = combineReducers({
@@ -31,6 +32,7 @@ const combinedReducer = combineReducers({
     notifications: notificationsReducer,
     gifs: gifsReducer,
     popupMultiLevel: popupMultiLevelReducer,
+    storiesDetail: storiesDetailReducer,
 });
 
 const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {

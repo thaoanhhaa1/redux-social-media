@@ -61,7 +61,7 @@ const Stories = ({
 
     return (
         <Wrapper className='bg-white px-2 xxs:px-[18px] py-2 xxs:py-[16.5px] overflow-hidden'>
-            <WrapperHeader title='Stories' titleLink='See All' to='/' />
+            <WrapperHeader title='Stories' titleLink='See All' to='/stories' />
             <div ref={container} className='relative'>
                 <div
                     className='flex gap-2.5 overflow-x-auto snap-x hidden-scrollbar transition-all'

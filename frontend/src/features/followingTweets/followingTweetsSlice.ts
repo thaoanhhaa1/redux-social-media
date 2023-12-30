@@ -261,6 +261,30 @@ const followingTweetsSlice = createSlice({
             payload.isNewTweet = true;
             state.tweets.unshift(getTweetDTO(payload));
         },
+        toggleLikeTweet: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    userId: string;
+                };
+            },
+        ) => {
+            const tweet = state.tweets.find(
+                (tweet) => tweet._id === payload.tweetId,
+            );
+
+            if (tweet && tweet.likes) {
+                const index = tweet.likes.findIndex(
+                    (userId) => userId === payload.userId,
+                );
+
+                if (index === -1) tweet.likes.push(payload.userId);
+                else tweet.likes.splice(index, 1);
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -419,4 +443,5 @@ export const {
     toggleLikeComment,
     editComment,
     addNewTweet,
+    toggleLikeTweet,
 } = followingTweetsSlice.actions;

@@ -223,12 +223,21 @@ module.exports = {
                         transform: 'rotate(-360deg)',
                     },
                 },
+                width: {
+                    '0%': {
+                        width: '0%',
+                    },
+                    '100%': {
+                        width: '100%',
+                    },
+                },
             },
             animation: {
                 spin1: 'spin1 3s linear infinite',
                 spin2: 'spin2 3s linear 0.2s infinite',
                 spin3: 'spin3 3s linear 0.3s infinite',
                 spin4: 'spin4 3s linear 0.4s infinite',
+                width: 'width 10s linear forwards',
             },
             zIndex: {
                 1: 1,
@@ -248,6 +257,7 @@ module.exports = {
             dl: '896px',
             gx: '1152px',
             xl: '1160px',
+            'sc-100': '400px',
         },
     },
     plugins: [require('@tailwindcss/line-clamp')],

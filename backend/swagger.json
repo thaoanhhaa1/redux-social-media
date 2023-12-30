@@ -1220,6 +1220,114 @@
                 }
             }
         },
+        "/private/stories/get-stories-group-user": {
+            "get": {
+                "summary": "Get stories",
+                "description": "Get all my and following's stories within 1 day and stories are grouped by user",
+                "tags": ["Stories"],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                    {
+                                        "stories": [
+                                            {
+                                                "_id": "658d90f216b8f3d755accf81",
+                                                "url": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_1703776494124.jpeg?alt=media&token=66fcb790-b635-41c8-be21-e2a809279300",
+                                                "createdAt": "2023-12-29T02:35:10.709Z"
+                                            }
+                                        ],
+                                        "user": {
+                                            "_id": "64a435d7e4658701a763e1a2",
+                                            "username": "anhthaodev",
+                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                            "name": "Anh Thảo"
+                                        }
+                                    }
+                                ],
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "stories": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "_id": {
+                                                            "type": "string"
+                                                        },
+                                                        "url": {
+                                                            "type": "string"
+                                                        },
+                                                        "createdAt": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "user": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "_id": {
+                                                        "type": "string"
+                                                    },
+                                                    "username": {
+                                                        "type": "string"
+                                                    },
+                                                    "avatar": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/private/stories": {
             "post": {
                 "summary": "Add new story",

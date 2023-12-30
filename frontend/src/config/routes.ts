@@ -11,6 +11,7 @@ const routes = {
     signIn: '/sign-in',
     search: '/search',
     liveVideo: '/live-video',
+    stories: '/stories',
     notFound: '*',
 };
 
