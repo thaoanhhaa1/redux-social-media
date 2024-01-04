@@ -43,6 +43,7 @@ const api = {
         `/private/tweets/${tweetId}/not-interested`,
     interestedTweet: (tweetId: string) =>
         `/private/tweets/${tweetId}/interested`,
+    getTweet: (tweetId: string) => `/private/tweets/${tweetId}`,
 };
 
 export default api;

@@ -100,7 +100,7 @@ export default function CommentTweet({
                                 {comment.numberOfComments > 0 && (
                                     <span
                                         onClick={handleClickViewAllComments}
-                                        className='pl-4 text-[#65676B] dark:text-white-9 text-sm leading-sm font-semibold hover:underline'
+                                        className='cursor-pointer pl-4 text-[#65676B] dark:text-white-9 text-sm leading-sm font-semibold hover:underline'
                                     >
                                         {comment.numberOfComments === 1
                                             ? 'View 1 reply'

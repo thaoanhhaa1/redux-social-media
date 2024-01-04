@@ -16,7 +16,7 @@ const Sidebar = () => {
                     <Button
                         small
                         to={config.routes.home}
-                        icon={<Image src='Vector.svg' alt='' />}
+                        icon={<Image src='/Vector.svg' alt='' />}
                     />
                     <span className='hidden xl:inline-block font-medium text-sm text-dark-black-1 dark:text-white leading-sm'>
                         Hoque

@@ -184,4 +184,6 @@ module.exports = {
             { _id: tweetId },
             { $pull: { notInterested: userId } },
         ),
+
+    getTweet: (tweetId) => tweetModel.findById(tweetId),
 };

@@ -12,6 +12,7 @@ import Settings from '../pages/Settings';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import Stories from '../pages/Stories';
+import TweetDetail from '../pages/TweetDetail';
 
 const publicRoutes: IRoute[] = [
     {
@@ -63,6 +64,10 @@ const publicRoutes: IRoute[] = [
     {
         path: config.routes.notFound,
         element: NotFound,
+    },
+    {
+        path: config.routes.tweetDetail,
+        element: TweetDetail,
     },
 ];
 

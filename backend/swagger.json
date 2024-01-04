@@ -1530,7 +1530,8 @@
                                         "numberOfComments": 0,
                                         "viewed": [],
                                         "deleted": false,
-                                        "__v": 0
+                                        "__v": 0,
+                                        "notInterested": false
                                     }
                                 ],
                                 "schema": {
@@ -1627,6 +1628,188 @@
                                 "example": {
                                     "status": 401,
                                     "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/private/tweets/{tweet_id}": {
+            "get": {
+                "summary": "Get tweet by id",
+                "description": "Get tweet by id",
+                "tags": ["Tweet"],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tweet_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "example": "65844d6e15b1df93d99cf022"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/Tweet"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "location": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "_id": {
+                                                            "type": "string",
+                                                            "description": "ID"
+                                                        },
+                                                        "title": {
+                                                            "type": "string",
+                                                            "description": "Title"
+                                                        },
+                                                        "description": {
+                                                            "type": "string",
+                                                            "description": "Description"
+                                                        },
+                                                        "image": {
+                                                            "type": "string",
+                                                            "format": "url",
+                                                            "description": "URL image"
+                                                        }
+                                                    }
+                                                },
+                                                "tagPeople": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "_id": {
+                                                                "type": "string",
+                                                                "format": "ObjectId"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "username": {
+                                                                "type": "string"
+                                                            },
+                                                            "avatar": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "description": "An array of information's users mentioned or tagged in the tweet"
+                                                },
+                                                "user": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "isInList": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "follow": {
+                                                            "type": "boolean"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "example": {
+                                    "_id": "64cb712f8428263795605d7b",
+                                    "user": {
+                                        "_id": "64a435d7e4658701a763e1a2",
+                                        "name": "Anh Thảo",
+                                        "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                        "username": "anhthaodev",
+                                        "isInList": false,
+                                        "follow": false
+                                    },
+                                    "content": "This is my tweet",
+                                    "images": [
+                                        "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F1691054370559.jpeg?alt=media&token=d0b36c20-667f-4fe2-8940-e70860d81394"
+                                    ],
+                                    "videos": [],
+                                    "likes": [],
+                                    "feeling": {
+                                        "title": "feeling happy",
+                                        "image": "base64"
+                                    },
+                                    "location": {
+                                        "_id": "64bb3d6aa5d2e2a346eb7516",
+                                        "title": "Ho Chi Minh City",
+                                        "description": "Ho Chi Minh City, Vietnam",
+                                        "image": "/5AmCdexsMi-.png"
+                                    },
+                                    "tagPeople": [
+                                        {
+                                            "name": "Anh Thảo",
+                                            "username": "anhthaodev",
+                                            "avatar": "https://firebasestorage.googleapis.com/v0/b/social-network-1d288.appspot.com/o/images%2F64a435d7e4658701a763e1a2_avatar_1691285402983.jpeg?alt=media&token=20c3a0ff-4705-49ad-829e-b11200944df7",
+                                            "_id": "64cb712f8428263795605d7b"
+                                        }
+                                    ],
+                                    "createdAt": "2023-08-03T09:19:43.738Z",
+                                    "updatedAt": "2023-08-03T09:19:43.738Z",
+                                    "numberOfComments": 0,
+                                    "viewed": [],
+                                    "deleted": false,
+                                    "__v": 0
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 404,
+                                    "message": "Tweet was't found"
                                 },
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"

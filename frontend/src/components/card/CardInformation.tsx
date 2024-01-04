@@ -74,7 +74,7 @@ const CardInformation = () => {
             )}
 
             {/* Action Btn */}
-            <div className='flex justify-between'>
+            <div className='flex justify-between -m-1 p-1 border-y border-[#CED0D4] dark:border-dark-black-3'>
                 <div className='flex gap-2 xxs:gap-5'>
                     <CardButton number={0} icon={<ShareIcon />} />
                     <CardButton number={0} icon={<RetweetIcon />} />

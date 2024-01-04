@@ -12,6 +12,7 @@ const routes = {
     search: '/search',
     liveVideo: '/live-video',
     stories: '/stories',
+    tweetDetail: '/users/:user_id/tweets/:tweet_id',
     notFound: '*',
 };
 

@@ -71,6 +71,15 @@ const countFollowingTweets = createAsyncThunk(
     },
 );
 
+const getTweet = createAsyncThunk(
+    'followingTweets/getTweet',
+    async ({ tweetId }: { tweetId: string }): Promise<ITweet> => {
+        const res = await axiosClient.get(api.getTweet(tweetId));
+
+        return res.data;
+    },
+);
+
 const countMyTweets = createAsyncThunk(
     'followingTweets/countMyTweets',
     async (): Promise<number> => {
@@ -190,7 +199,7 @@ const followingTweetsSlice = createSlice({
                 };
             },
         ) => {
-            const tweet = getTweet(state.tweets, tweetId);
+            const tweet = findTweet(state.tweets, tweetId);
 
             if (tweet) {
                 let comments: IComment[] = [];
@@ -229,7 +238,7 @@ const followingTweetsSlice = createSlice({
                 };
             },
         ) => {
-            const tweet = getTweet(state.tweets, tweetId);
+            const tweet = findTweet(state.tweets, tweetId);
 
             if (tweet) {
                 const comment = getParentComment(tweet.comments, commentId);
@@ -249,7 +258,7 @@ const followingTweetsSlice = createSlice({
                 };
             },
         ) => {
-            const tweet = getTweet(state.tweets, tweetId);
+            const tweet = findTweet(state.tweets, tweetId);
 
             if (tweet) {
                 const comment = getParentComment(tweet.comments, commentId);
@@ -323,9 +332,12 @@ const followingTweetsSlice = createSlice({
                     if (payload.length) {
                         const tweetId = payload[0].post;
                         const comments = getCommentsDTO(payload, 0);
-                        const tweet = getTweet(state.tweets, tweetId);
+                        const tweet = findTweet(state.tweets, tweetId);
 
-                        tweet?.comments.push(...comments);
+                        if (tweet) {
+                            tweet.skip += 1;
+                            tweet.comments.push(...comments);
+                        }
                     }
                 },
             )
@@ -334,7 +346,7 @@ const followingTweetsSlice = createSlice({
                 (state, { payload }: { payload: IComment }) => {
                     payload.comments = [];
                     const tweetId = payload.post;
-                    const tweet = getTweet(state.tweets, tweetId);
+                    const tweet = findTweet(state.tweets, tweetId);
 
                     if (!tweet) return state;
 
@@ -364,7 +376,7 @@ const followingTweetsSlice = createSlice({
                     if (payload.length) {
                         const commentId = payload[0].parent || '';
                         const tweetId = payload[0].post;
-                        const tweet = getTweet(state.tweets, tweetId);
+                        const tweet = findTweet(state.tweets, tweetId);
 
                         if (tweet && commentId) {
                             const comment = getParentComment(
@@ -414,11 +426,14 @@ const followingTweetsSlice = createSlice({
                 state.myTweetPages = Math.ceil(
                     payload / NUMBER_MY_TWEET_OF_PAGE,
                 );
+            })
+            .addCase(getTweet.fulfilled, (state, { payload }) => {
+                state.tweets.push(getTweetDTO(payload));
             });
     },
 });
 
-function getTweet(tweets: ITweet[], tweetId: string): ITweet | undefined {
+function findTweet(tweets: ITweet[], tweetId: string): ITweet | undefined {
     const length = tweets.length;
 
     for (let index = 0; index < length; index++) {
@@ -441,6 +456,7 @@ export {
     toggleList,
     countFollowingTweets,
     countMyTweets,
+    getTweet,
 };
 export const {
     toggleUserList,

@@ -126,13 +126,16 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
                 <span
                     onClick={handleClickLike}
                     className={classNames(
-                        'hover:underline',
+                        'hover:underline cursor-pointer',
                         liked && 'text-blue',
                     )}
                 >
                     Like
                 </span>
-                <span className='hover:underline' onClick={handleClickReply}>
+                <span
+                    className='hover:underline cursor-pointer'
+                    onClick={handleClickReply}
+                >
                     Reply
                 </span>
             </div>

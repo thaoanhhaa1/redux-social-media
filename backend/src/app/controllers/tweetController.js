@@ -2,6 +2,7 @@ const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
 const { notificationType } = require('../../constants');
 const { tweetService, notificationService } = require('../services');
+const { errors } = require('../../utils');
 
 module.exports = {
     count: async (req, res, next) => {
@@ -78,6 +79,20 @@ module.exports = {
                 .then(() => console.log('~~~ insertToFollowers ok'));
 
             res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    getTweet: async (req, res, next) => {
+        const tweetId = req.params.tweet_id;
+
+        try {
+            const tweet = await tweetService.getTweet(tweetId);
+
+            if (tweet) return res.json(tweet);
+
+            res.status(404).json(errors[404]("Tweet wasn't found"));
         } catch (error) {
             next(error);
         }

@@ -14,10 +14,12 @@ import ScrollbarCustomize from '../ScrollbarCustomize';
 const CardComment = ({
     level = 0,
     commentParentId,
+    isParent,
 }: {
     level?: number;
     commentParentId?: string;
     name?: string;
+    isParent?: boolean;
 }) => {
     const owner = useAppSelector((state: RootState) => state.user);
     const tweet = useCardContext();
@@ -49,8 +51,9 @@ const CardComment = ({
     return (
         <div
             className={classNames(
-                'flex rounded-b-lg gap-2 xxs:gap-4',
-                level ? 'pr-4 mt-[6px] pl-[70px]' : 'p-5 shadow-comment',
+                'flex rounded-b-lg gap-2 xxs:gap-4 bg-white dark:bg-dark-black-2',
+                level ? 'pr-4 mt-[6px] pl-[70px]' : 'p-5',
+                isParent && !level && 'shadow-comment',
             )}
         >
             <Avatar size={level ? 'xs' : 'sm'} src={owner.avatar} />

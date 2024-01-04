@@ -1,12 +1,13 @@
 import { useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useToggle } from 'usehooks-ts';
 import api from '../api';
 import axiosClient from '../api/axiosClient';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import config from '../config';
+import routes from '../config/routes';
 import { useOnClickOutside } from '../hooks';
 import { DropdownIcon, LogOutIcon } from './Icons';
 import Image from './Image';
@@ -40,9 +41,12 @@ const TopBar = () => {
                     <span className='text-dark-black-1 dark:text-white font-semibold'>
                         {user.name || user.username}
                     </span>
-                    <span className='font-semibold text-black-8 dark:text-white text-sm leading-sm'>
+                    <Link
+                        to={routes.profile}
+                        className='font-semibold text-black-8 dark:text-white text-sm leading-sm'
+                    >
                         Profile
-                    </span>
+                    </Link>
                 </div>
                 <div
                     ref={ref}
