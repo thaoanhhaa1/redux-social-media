@@ -74,6 +74,10 @@ const tweetModel = new Schema(
             type: [String],
             default: [],
         },
+        notInterested: {
+            type: [String],
+            default: [],
+        },
     },
     {
         timestamps: true,

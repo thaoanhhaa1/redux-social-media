@@ -8,7 +8,6 @@ const {
     notificationService,
     userService,
 } = require('../services');
-const notificationModel = require('../models/notificationModel');
 const { notificationType } = require('../../constants');
 
 module.exports = {
@@ -84,25 +83,46 @@ module.exports = {
                 description: content,
             };
 
-            // - Tweet
-            if (_id !== tweet.user._id)
-                notificationService
-                    .insertNotification(tweet.user._id, notification)
-                    .then();
+            tweetService
+                .getNotInterestedById(tweet._id)
+                .then((notInterested) => {
+                    const queries = [];
 
-            // - Comment
-            if (comment.parent)
-                commentService
-                    .findById(comment.parent)
-                    .then(
-                        (comment) =>
-                            comment.user._id === _id ||
+                    // - Tweet
+                    if (
+                        _id !== tweet.user._id &&
+                        !notInterested.includes(tweet.user._id)
+                    )
+                        queries.push(
                             notificationService.insertNotification(
-                                comment.user._id,
+                                tweet.user._id,
                                 notification,
                             ),
-                    )
-                    .then();
+                        );
+
+                    // - Comment
+                    if (comment.parent)
+                        queries.push(
+                            commentService
+                                .findById(comment.parent)
+                                .then(
+                                    (comment) =>
+                                        comment.user._id === _id ||
+                                        notInterested.includes(
+                                            comment.user._id,
+                                        ) ||
+                                        notificationService.insertNotification(
+                                            comment.user._id,
+                                            notification,
+                                        ),
+                                ),
+                        );
+
+                    return Promise.all(queries);
+                })
+                .then(() =>
+                    console.log('~~~ NOTIFICATION - POST COMMENT ==> OK'),
+                );
 
             req.status(201).json(result);
         } catch (error) {
@@ -209,13 +229,19 @@ module.exports = {
 
             // Notification
             if (isLike) {
-                Promise.all([
-                    commentService.findById(commentId),
-                    userService.findDTOById(_id),
-                ])
+                commentService
+                    .findById(commentId)
+                    .then((comment) =>
+                        Promise.all([
+                            commentService.findById(commentId),
+                            userService.findDTOById(_id),
+                            tweetService.getNotInterestedById(comment.post),
+                        ]),
+                    )
                     .then(
-                        ([comment, user]) =>
+                        ([comment, user, notInterested]) =>
                             comment.user._id === _id ||
+                            notInterested.includes(comment.user._id) ||
                             notificationService.insertNotification(
                                 comment.user._id,
                                 {

@@ -129,15 +129,18 @@ module.exports = {
             ]);
 
             if (result.modifiedCount > 0) {
-                if (isLike)
-                    notificationService
-                        .insertToFollowers(_id, {
-                            document: tweetId,
-                            type: notificationType.LIKE_TWEET,
-                            description: tweet?.content,
-                        })
-                        .then(() => console.log('~~~ insertToFollowers ok'));
-                else
+                if (isLike) {
+                    if (tweet && !tweet.notInterested.includes(tweet.user._id))
+                        notificationService
+                            .insertToFollowers(_id, {
+                                document: tweetId,
+                                type: notificationType.LIKE_TWEET,
+                                description: tweet?.content,
+                            })
+                            .then(() =>
+                                console.log('~~~ insertToFollowers ok'),
+                            );
+                } else
                     notificationService
                         .dislikeTweet(_id, tweetId)
                         .then(() => console.log('~~~ dislikeTweet ok'));
@@ -145,10 +148,41 @@ module.exports = {
                 return res.sendStatus(200);
             }
         } catch (error) {
-            next(error);
-            return;
+            return next(error);
         }
 
         next(new Error());
+    },
+
+    notInterested: async (req, res, next) => {
+        const _id = req.body._id;
+        const tweetId = req.params.tweet_id;
+
+        try {
+            await Promise.all([
+                notificationService.deleteTweetAndRelationByUserId(
+                    _id,
+                    tweetId,
+                ),
+                tweetService.addNotInterested(_id, tweetId),
+            ]);
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    interested: async (req, res, next) => {
+        const _id = req.body._id;
+        const tweetId = req.params.tweet_id;
+
+        try {
+            await Promise.all([tweetService.removeNotInterested(_id, tweetId)]);
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
     },
 };

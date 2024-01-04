@@ -1,12 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useEffectOnce } from 'usehooks-ts';
 import { v4 } from 'uuid';
+import api from '../../api';
+import axiosClient from '../../api/axiosClient';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import {
     toggleList,
+    toggleNotInterested,
     toggleUserFollow,
     toggleUserList,
 } from '../../features/followingTweets';
@@ -24,17 +28,28 @@ import {
 } from '../Icons';
 import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
-import { useEffectOnce } from 'usehooks-ts';
 
 const CardMore = () => {
-    const { user } = useCardContext();
+    const { user, _id, notInterested } = useCardContext();
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
     const actions = useMemo(() => {
         const temp: ICardMoreBtn[] = [
             {
                 icon: NotInterestedIcon,
-                title: 'Not interested in this tweet',
+                title: `${
+                    notInterested ? 'I' : 'Not i'
+                }nterested in this tweet`,
+                onClick: () => {
+                    axiosClient
+                        .post(
+                            api[
+                                `${notInterested ? 'i' : 'notI'}nterestedTweet`
+                            ](_id),
+                        )
+                        .then();
+                    dispatch(toggleNotInterested(_id));
+                },
             },
             {
                 icon: EmbedIcon,
@@ -87,7 +102,7 @@ const CardMore = () => {
                         dispatch(toggleUserList(user._id));
 
                         toast.success(
-                            `${user.follow ? 'Remove' : 'Add'} @${
+                            `${user.isInList ? 'Remove' : 'Add'} @${
                                 user.username
                             } from lists successfully!`,
                         );
@@ -97,7 +112,9 @@ const CardMore = () => {
 
         return temp;
     }, [
+        _id,
         dispatch,
+        notInterested,
         owner._id,
         user._id,
         user.follow,

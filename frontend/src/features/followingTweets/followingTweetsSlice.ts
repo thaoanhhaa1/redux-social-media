@@ -285,6 +285,12 @@ const followingTweetsSlice = createSlice({
                 else tweet.likes.splice(index, 1);
             }
         },
+        toggleNotInterested: (state, { payload }: { payload: string }) => {
+            state.tweets.forEach((tweet) => {
+                if (tweet._id === payload)
+                    tweet.notInterested = !tweet.notInterested;
+            });
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -444,4 +450,5 @@ export const {
     editComment,
     addNewTweet,
     toggleLikeTweet,
+    toggleNotInterested,
 } = followingTweetsSlice.actions;

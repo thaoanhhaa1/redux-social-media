@@ -16,6 +16,7 @@ const CardContext = createContext<ICardContext>({
     },
     createdAt: '',
     isPopup: false,
+    notInterested: false,
 });
 
 const CardProvider = ({

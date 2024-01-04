@@ -48,6 +48,9 @@ module.exports = {
                 $addFields: {
                     'user.isInList': false,
                     'user.follow': false,
+                    notInterested: {
+                        $in: [_id, '$notInterested'],
+                    },
                 },
             },
         ]);
@@ -66,6 +69,9 @@ module.exports = {
                             },
                             {
                                 $not: [{ $in: [_id, '$viewed'] }],
+                            },
+                            {
+                                $not: [{ $in: [_id, '$notInterested'] }],
                             },
                         ],
                     },
@@ -104,6 +110,13 @@ module.exports = {
             },
             {
                 $limit: NUMBER_OF_PAGE,
+            },
+            {
+                $addFields: {
+                    notInterested: {
+                        $in: [_id, '$notInterested'],
+                    },
+                },
             },
         ]);
     },
@@ -148,4 +161,27 @@ module.exports = {
             },
         );
     },
+
+    getNotInterestedById: async (_id) => {
+        const tweet = await tweetModel.findOne(
+            { _id },
+            {
+                notInterested: 1,
+            },
+        );
+
+        return tweet.notInterested;
+    },
+
+    addNotInterested: (userId, tweetId) =>
+        tweetModel.updateOne(
+            { _id: tweetId },
+            { $addToSet: { notInterested: userId } },
+        ),
+
+    removeNotInterested: (userId, tweetId) =>
+        tweetModel.updateOne(
+            { _id: tweetId },
+            { $pull: { notInterested: userId } },
+        ),
 };

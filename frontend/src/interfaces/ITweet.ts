@@ -9,6 +9,7 @@ interface ITweet extends ITweetPost {
     skip: number;
     isNewTweet?: boolean;
     createdAt: string;
+    notInterested: boolean;
 }
 
 export default ITweet;

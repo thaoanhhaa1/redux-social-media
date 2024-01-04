@@ -185,4 +185,54 @@ module.exports = {
 
         return Promise.all(queries);
     },
+
+    deleteTweetAndRelationByUserId: async (userId, tweetId) => {
+        const queries = [];
+        const regex = new RegExp(`^${userId}_`);
+
+        // Tweet: post
+        queries.push(
+            notificationModel.updateMany(
+                { user: regex },
+                { $set: { 'notifications.$[element].deleted': true } },
+                {
+                    arrayFilters: [
+                        {
+                            $and: [
+                                { 'element.document': tweetId },
+                                { 'element.deleted': false },
+                            ],
+                        },
+                    ],
+                },
+            ),
+        );
+
+        // Comments
+        const comments = await commentModel.find(
+            { post: tweetId, deleted: false },
+            { _id: 1 },
+        );
+
+        const commentIds = comments.map((comment) => comment._id);
+
+        queries.push(
+            notificationModel.updateMany(
+                { user: regex },
+                { $set: { 'notifications.$[element].deleted': true } },
+                {
+                    arrayFilters: [
+                        {
+                            $and: [
+                                { 'element.document': { $in: commentIds } },
+                                { 'element.deleted': false },
+                            ],
+                        },
+                    ],
+                },
+            ),
+        );
+
+        return Promise.all(queries);
+    },
 };

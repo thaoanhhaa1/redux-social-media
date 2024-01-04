@@ -140,7 +140,7 @@ const Home = () => {
                         </>
                     }
                     next={loadMoreCard}
-                    className='scrollbar flex flex-col gap-2 xxs:gap-5'
+                    className='scrollbar flex flex-col gap-2 xxs:gap-5 !overflow-visible'
                 >
                     {otherTweet.map((tweet) => (
                         <Card tweet={tweet} key={tweet._id} />

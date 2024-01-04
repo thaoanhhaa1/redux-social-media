@@ -1862,6 +1862,120 @@
                 }
             }
         },
+        "/private/tweets/{tweet_id}/interested": {
+            "post": {
+                "summary": "Interested this tweet",
+                "description": "Interested this tweet",
+                "tags": ["Tweet"],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tweet_id",
+                        "in": "path",
+                        "description": "Id of tweet",
+                        "schema": {
+                            "type": "string",
+                            "example": "65844d6e15b1df93d99cf022"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/private/tweets/{tweet_id}/not-interested": {
+            "post": {
+                "summary": "Not interested this tweet",
+                "description": "Not interested this tweet",
+                "tags": ["Tweet"],
+                "security": [
+                    {
+                        "JWTAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "tweet_id",
+                        "in": "path",
+                        "description": "Id of tweet",
+                        "schema": {
+                            "type": "string",
+                            "example": "65844d6e15b1df93d99cf022"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 400,
+                                    "message": "Bad request"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "message": "Unauthorized"
+                                },
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/private/tweets/toggle-like": {
             "post": {
                 "summary": "Like or unlike a tweet",
@@ -3861,6 +3975,13 @@
                         },
                         "description": "Ids of users who have viewed this tweet",
                         "example": ["64a435d7e4658701a763e1a2"]
+                    },
+                    "notInterested": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Array of ids of users not interested in this tweet"
                     },
                     "deleted": {
                         "type": "boolean",

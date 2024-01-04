@@ -67,7 +67,6 @@ const notificationsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getNotifications.pending, (state) => {
-                // if (!state.page)
                 state.loading = true;
             })
             .addCase(getNotifications.rejected, (state) => {
@@ -79,7 +78,7 @@ const notificationsSlice = createSlice({
                 state.page += 1;
 
                 if (!state.numberOfPages)
-                    state.numberOfPages = payload.numberOfPages;
+                    state.numberOfPages = Math.ceil(payload.numberOfPages / 10);
             });
     },
 });

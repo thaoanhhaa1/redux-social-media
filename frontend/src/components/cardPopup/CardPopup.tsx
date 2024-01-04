@@ -43,6 +43,10 @@ const CardPopup = ({
         getCommentsData();
     }, [dispatch, isShow, tweet._id, tweet.comments.length, tweet.skip]);
 
+    useEffect(() => {
+        tweet.notInterested && setShow(false);
+    }, [setShow, tweet.notInterested]);
+
     return (
         <Modal isShowModal={isShow} handleCloseModal={() => setShow(false)}>
             <div className='mx-auto w-[min(calc(100vw-8px),700px)] rounded-lg overflow-y-hidden bg-white dark:bg-dark-black-2'>

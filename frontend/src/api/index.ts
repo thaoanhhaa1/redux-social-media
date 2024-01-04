@@ -39,6 +39,10 @@ const api = {
     deleteNotification: (notificationId: number) =>
         `/private/notifications/${notificationId}`,
     getGifs: () => `/private/gifs/search`,
+    notInterestedTweet: (tweetId: string) =>
+        `/private/tweets/${tweetId}/not-interested`,
+    interestedTweet: (tweetId: string) =>
+        `/private/tweets/${tweetId}/interested`,
 };
 
 export default api;

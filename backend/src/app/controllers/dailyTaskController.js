@@ -38,22 +38,32 @@ module.exports = {
     },
 
     deleteToken: () => {
-        const dailyTask = cron.schedule('0 3 * * *', () => {
-            try {
-                tokenModel
-                    .deleteMany({
-                        $expr: {
-                            $gt: [
-                                { $subtract: [new Date(), '$createdAt'] },
-                                24 * 60 * 60 * 1000,
-                            ],
-                        },
-                    })
-                    .then();
-            } catch (error) {
-                console.error('Error during delete token daily task:', error);
-            }
-        });
+        const dailyTask = cron.schedule(
+            '0 3 * * *',
+            () => {
+                try {
+                    tokenModel
+                        .deleteMany({
+                            $expr: {
+                                $gt: [
+                                    { $subtract: [new Date(), '$createdAt'] },
+                                    24 * 60 * 60 * 1000,
+                                ],
+                            },
+                        })
+                        .then(() => console.log('~~~ OK'));
+                } catch (error) {
+                    console.error(
+                        'Error during delete token daily task:',
+                        error,
+                    );
+                }
+            },
+            {
+                scheduled: true,
+                timezone: 'Asia/Ho_Chi_Minh', // Chọn múi giờ phù hợp
+            },
+        );
 
         dailyTask.start();
     },

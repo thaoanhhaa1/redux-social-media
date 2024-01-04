@@ -24,6 +24,7 @@ const images = {
     public: require('./KV7QFf-Yspp.png'),
     backgroundLifeEvent: require('./st43MlfQdGP.png'),
     work: require('./tv-E-vHm5BI.png'),
+    closeBorder: require('./A_NcMeki4UO.png'),
 };
 
 export default images;
