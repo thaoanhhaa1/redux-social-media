@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { RootState } from '../../app/store';
 import { comments } from '../../constants';
-import { useCardContext } from '../../contexts/CardContext';
-import { getComments } from '../../features/followingTweets';
+import { getComments } from '../../features/tweet';
+import { ITweet } from '../../interfaces';
 import Button from '../Button';
 import CardDetail from '../CardDetail';
 import { CloseIcon } from '../Icons';
@@ -14,20 +15,19 @@ const CardPopup = ({
     className = '',
     isShow,
     setShow,
+    updateTweet,
 }: {
     className?: string;
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
+    updateTweet: (tweet: ITweet) => void;
 }) => {
-    const tweet = useCardContext();
+    const tweet = useAppSelector((state: RootState) => state.tweet.tweet);
     const dispatch = useAppDispatch();
-    const user = tweet.user;
-
-    const handleClose = () => setShow(false);
 
     useEffect(() => {
         async function getCommentsData() {
-            if (!tweet._id || tweet.comments.length || !isShow) return;
+            if (!tweet?._id || tweet?.comments.length || !isShow) return;
 
             await dispatch(
                 getComments({
@@ -38,11 +38,21 @@ const CardPopup = ({
         }
 
         getCommentsData();
-    }, [dispatch, isShow, tweet._id, tweet.comments.length, tweet.skip]);
+    }, [dispatch, isShow, tweet]);
 
     useEffect(() => {
-        tweet.notInterested && setShow(false);
-    }, [setShow, tweet.notInterested]);
+        tweet?.notInterested && setShow(false);
+    }, [setShow, tweet]);
+
+    useEffect(() => {
+        tweet && updateTweet(tweet);
+    }, [tweet, updateTweet]);
+
+    if (!tweet) return null;
+
+    const user = tweet.user;
+
+    const handleClose = () => setShow(false);
 
     return (
         <Modal isShowModal={isShow} handleCloseModal={handleClose}>

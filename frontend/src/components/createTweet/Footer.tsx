@@ -7,7 +7,7 @@ import { createTweet, setValue } from '../../features/myTweet';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { Dispatch, SetStateAction, useMemo } from 'react';
-import { addNewTweet } from '../../features/followingTweets';
+import { addNewTweet } from '../../features/tweets';
 
 const Footer = ({
     setShowModal,

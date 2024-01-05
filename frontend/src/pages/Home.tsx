@@ -6,31 +6,33 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
+    Advertisement,
+    AdvertisementSkeleton,
     Card,
+    CardSkeleton,
     Contact,
+    ContactSkeleton,
+    Group,
     Page,
     Stories,
     WhatHappen,
     Wrapper,
 } from '../components';
-import Advertisement, {
-    AdvertisementSkeleton,
-} from '../components/advertisement';
-import CardSkeleton from '../components/card/CardSkeleton';
-import ContactSkeleton from '../components/contact/ContactSkeleton';
-import Group from '../components/group';
 import { WrapperHeader } from '../components/wrapper';
 import { getContacts, setOffline, setOnline } from '../features/contacts';
-import { countFollowingTweets, getTweets } from '../features/followingTweets';
 import { getStories } from '../features/stories';
-import { getArray } from '../utils';
-import getNewTweets from '../utils/getNewTweets';
+import {
+    countFollowingTweets,
+    getTweets,
+    updateTweet,
+} from '../features/tweets';
+import { getArray, getNewTweets } from '../utils';
 
 const Home = () => {
     const {
         contacts: { contacts },
         socket,
-        followingTweets: { tweets, followingPages, followingPage },
+        tweets: { tweets, followingPages, followingPage },
         user,
     } = useSelector((state: RootState) => state);
     const dispatch = useAppDispatch();
@@ -126,24 +128,30 @@ const Home = () => {
             <Stories loading={loading} />
             <WhatHappen />
             {newTweets.map((tweet) => (
-                <Card tweet={tweet} key={tweet._id} />
+                <Card
+                    updateTweet={(tweet) => dispatch(updateTweet(tweet))}
+                    tweet={tweet}
+                    key={tweet._id}
+                />
             ))}
             {loading || (
                 <InfiniteScroll
                     dataLength={otherTweet.length}
                     hasMore={followingPage < followingPages}
-                    loader={
-                        <>
-                            {getArray(3).map(() => (
-                                <CardSkeleton key={v4()} />
-                            ))}
-                        </>
-                    }
+                    loader={getArray(3).map(() => (
+                        <CardSkeleton key={v4()} />
+                    ))}
                     next={loadMoreCard}
                     className='scrollbar flex flex-col gap-2 xxs:gap-5 !overflow-visible'
                 >
                     {otherTweet.map((tweet) => (
-                        <Card tweet={tweet} key={tweet._id} />
+                        <Card
+                            updateTweet={(tweet) =>
+                                dispatch(updateTweet(tweet))
+                            }
+                            tweet={tweet}
+                            key={tweet._id}
+                        />
                     ))}
                 </InfiniteScroll>
             )}

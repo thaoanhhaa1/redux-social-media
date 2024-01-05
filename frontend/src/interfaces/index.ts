@@ -1,4 +1,5 @@
 export type { default as IActionCreateTweet } from './IActionCreateTweet';
+export type { default as IBookmark } from './IBookmark';
 export type { default as ICardContext } from './ICardContext';
 export type { default as ICardMoreBtn } from './ICardMoreBtn';
 export type { default as IChat } from './IChat';

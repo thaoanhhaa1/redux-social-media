@@ -44,6 +44,8 @@ const api = {
     interestedTweet: (tweetId: string) =>
         `/private/tweets/${tweetId}/interested`,
     getTweet: (tweetId: string) => `/private/tweets/${tweetId}`,
+    getBookmarks: () => `/private/bookmarks`,
+    getTweetsByUserId: (userId: string) => `/private/users/${userId}/tweets`,
 };
 
 export default api;

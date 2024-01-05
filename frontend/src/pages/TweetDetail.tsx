@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
@@ -6,15 +6,13 @@ import { Loading } from '../components';
 import CardDetail from '../components/CardDetail';
 import { comments } from '../constants';
 import CardProvider from '../contexts/CardContext';
-import { getComments, getTweet } from '../features/followingTweets';
-import { ITweet } from '../interfaces';
+import { getComments, setTweet } from '../features/tweet';
+import { getTweet } from '../features/tweets';
 
 const TweetDetail = () => {
     const { tweet_id: tweetId = '' } = useParams();
-    const { tweets } = useAppSelector(
-        (state: RootState) => state.followingTweets,
-    );
-    const [tweet, setTweet] = useState<ITweet | undefined>();
+    const { tweets } = useAppSelector((state: RootState) => state.tweets);
+    const tweet = useAppSelector((state: RootState) => state.tweet.tweet);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -31,7 +29,7 @@ const TweetDetail = () => {
                     }),
                 );
 
-            setTweet(tweet);
+            dispatch(setTweet(tweet));
         }
 
         getData();
@@ -40,7 +38,9 @@ const TweetDetail = () => {
     if (!tweet) return <Loading />;
 
     return (
-        <CardProvider value={{ ...tweet, isPopup: false }}>
+        <CardProvider
+            value={{ ...tweet, isPopup: false, updateTweet: (tweet) => {} }}
+        >
             <div className='mx-auto max-w-[700px] px-2'>
                 <CardDetail tweet={tweet} />
             </div>

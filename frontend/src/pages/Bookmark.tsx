@@ -1,6 +1,42 @@
-import { BookmarkItem, ScrollbarFixTop } from '../components';
+import { useCallback, useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { v4 } from 'uuid';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { RootState } from '../app/store';
+import { BookmarkItem, Card, Loading, ScrollbarFixTop } from '../components';
+import { CardSkeleton } from '../components/card';
+import { getBookmarks, getTweets, updateTweet } from '../features/bookmarks';
+import { getArray } from '../utils';
 
 const Bookmark = () => {
+    const { bookmarks, loading } = useAppSelector(
+        (state: RootState) => state.bookmarks,
+    );
+    const dispatch = useAppDispatch();
+    const [index, setIndex] = useState<number>(-1);
+    const bookmark = bookmarks[index];
+
+    const loadMoreCard = useCallback(async () => {
+        if (index > -1)
+            await dispatch(
+                getTweets({
+                    userId: bookmarks[index]._id,
+                    page: bookmarks[index].page + 1,
+                }),
+            );
+    }, [bookmarks, dispatch, index]);
+
+    useEffect(() => {
+        if (!bookmarks.length) dispatch(getBookmarks());
+        else if (index === -1) setIndex(0);
+    }, [bookmarks, bookmarks.length, dispatch, index]);
+
+    useEffect(() => {
+        if (bookmark && !bookmark.tweets.length) loadMoreCard();
+    }, [bookmark, dispatch, loadMoreCard]);
+
+    if (loading || index === -1 || !bookmark.tweets.length) return <Loading />;
+
     return (
         <div className='flex gap-5 px-5'>
             <ScrollbarFixTop
@@ -12,22 +48,37 @@ const Bookmark = () => {
                     </div>
                 }
             >
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
-                <BookmarkItem />
+                {bookmarks.map((bm, index) => (
+                    <BookmarkItem
+                        active={bm._id === bookmark?._id}
+                        bookmark={bm}
+                        key={bm._id}
+                        onClick={() => setIndex(index)}
+                    />
+                ))}
             </ScrollbarFixTop>
-            <div className='flex flex-col gap-5'>
-                {/* <Card />
-                <Card />
-                <Card />
-                <Card />
-                <Card /> */}
+            <div className='flex-1 pb-5'>
+                <div className='max-w-[700px] mx-auto flex flex-col gap-5'>
+                    <InfiniteScroll
+                        dataLength={bookmark.tweets.length}
+                        hasMore={bookmark.page < bookmark.pages}
+                        loader={getArray(3).map(() => (
+                            <CardSkeleton key={v4()} />
+                        ))}
+                        next={loadMoreCard}
+                        className='scrollbar flex flex-col gap-2 xxs:gap-5'
+                    >
+                        {bookmark.tweets.map((tweet) => (
+                            <Card
+                                updateTweet={(tweet) =>
+                                    dispatch(updateTweet(tweet))
+                                }
+                                key={tweet._id}
+                                tweet={tweet}
+                            />
+                        ))}
+                    </InfiniteScroll>
+                </div>
             </div>
         </div>
     );

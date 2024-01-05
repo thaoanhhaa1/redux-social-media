@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { toggleLike, toggleLikeTweet } from '../../features/followingTweets';
+import { setTweet, toggleLike, toggleLikeTweet } from '../../features/tweet';
 import { classNames } from '../../utils';
 import {
     LikeActiveIcon,
@@ -18,7 +18,6 @@ import CardButton from './CardButton';
 
 const CardInformation = () => {
     const user = useSelector((state: RootState) => state.user);
-    const card = useCardContext();
     const [isShowCardPopup, setShowCardPopup] = useState(false);
     const tweet = useCardContext();
     const dispatch = useAppDispatch();
@@ -42,7 +41,9 @@ const CardInformation = () => {
     };
 
     const handleComment = () => {
-        if (card.isPopup) return;
+        if (tweet.isPopup) return;
+
+        dispatch(setTweet(tweet));
         setShowCardPopup(true);
     };
 
@@ -50,7 +51,7 @@ const CardInformation = () => {
         <div
             className={classNames(
                 'flex flex-col gap-2 xxs:gap-5',
-                card.isPopup || 'ml-12 xxs:ml-[56px]',
+                tweet.isPopup || 'ml-12 xxs:ml-[56px]',
             )}
         >
             {tweet.content && (
@@ -94,8 +95,9 @@ const CardInformation = () => {
             </div>
 
             {/* Card Popup */}
-            {card.isPopup || (
+            {tweet.isPopup || (
                 <CardPopup
+                    updateTweet={tweet.updateTweet}
                     isShow={isShowCardPopup}
                     setShow={setShowCardPopup}
                 />

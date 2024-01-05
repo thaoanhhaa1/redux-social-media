@@ -186,4 +186,66 @@ module.exports = {
         ),
 
     getTweet: (tweetId) => tweetModel.findById(tweetId),
+
+    getTweetsByUserId: (_id, userId, page) => {
+        const skip = (page - 1) * NUMBER_OF_PAGE;
+
+        return tweetModel.aggregate([
+            {
+                $match: {
+                    $expr: {
+                        $and: [
+                            {
+                                $eq: ['$user._id', userId],
+                            },
+                            {
+                                $not: [{ $in: [_id, '$notInterested'] }],
+                            },
+                        ],
+                    },
+                },
+            },
+            ...location.lookup,
+            user.tagPeople,
+            {
+                $lookup: {
+                    from: 'lists',
+                    as: 'lists',
+                    let: { id: '$user._id' },
+                    pipeline: [
+                        { $match: { $expr: { $in: ['$$id', '$list'] } } },
+                    ],
+                },
+            },
+            {
+                $addFields: {
+                    'user.isInList': {
+                        $cond: [{ $gt: [{ $size: '$lists' }, 0] }, true, false],
+                    },
+                    'user.follow': true,
+                    numberOfLikes: { $size: '$likes' },
+                },
+            },
+            {
+                $sort: {
+                    numberOfComments: -1,
+                    numberOfLikes: -1,
+                    createdAt: -1,
+                },
+            },
+            {
+                $skip: skip,
+            },
+            {
+                $limit: NUMBER_OF_PAGE,
+            },
+            {
+                $addFields: {
+                    notInterested: {
+                        $in: [_id, '$notInterested'],
+                    },
+                },
+            },
+        ]);
+    },
 };

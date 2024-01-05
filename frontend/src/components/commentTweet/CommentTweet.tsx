@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
 import { CommentTweetProvider } from '../../contexts/CommentTweet';
-import { getChildrenComments } from '../../features/followingTweets';
+import { getChildrenComments } from '../../features/tweet';
 import IComment from '../../interfaces/IComment';
 import { classNames } from '../../utils';
 import Avatar from '../Avatar';

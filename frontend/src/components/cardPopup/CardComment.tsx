@@ -3,7 +3,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { postComment } from '../../features/followingTweets';
+import { postComment } from '../../features/tweet';
 import { useSearch } from '../../hooks';
 import { classNames } from '../../utils';
 import Avatar from '../Avatar';

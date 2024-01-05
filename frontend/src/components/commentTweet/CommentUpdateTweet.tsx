@@ -4,7 +4,7 @@ import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { useAppDispatch } from '../../app/hooks';
 import useCommentTweet from '../../contexts/CommentTweet';
-import { editComment } from '../../features/followingTweets';
+import { editComment } from '../../features/tweet';
 import { useSearch } from '../../hooks';
 import { classNames } from '../../utils';
 import { SendIcon } from '../Icons';
@@ -36,7 +36,6 @@ const CommentUpdateTweet = ({
             editComment({
                 commentId,
                 content: value,
-                tweetId,
             }),
         );
 

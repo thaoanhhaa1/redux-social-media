@@ -23,7 +23,6 @@ import {
 } from '../components';
 import { CardSkeleton } from '../components/card';
 import { FollowSkeleton } from '../components/follow';
-import { countMyTweets, getMyTweets } from '../features/followingTweets';
 import {
     dec,
     getProfile,
@@ -32,6 +31,7 @@ import {
     inc,
 } from '../features/profile';
 import { getStories } from '../features/stories';
+import { countMyTweets, getMyTweets, updateTweet } from '../features/tweets';
 import { getArray, getMonthYear } from '../utils';
 
 const Profile = () => {
@@ -39,7 +39,7 @@ const Profile = () => {
         user,
         socket,
         profile,
-        followingTweets: { tweets, myTweetPage, myTweetPages },
+        tweets: { tweets, myTweetPage, myTweetPages },
     } = useSelector((state: RootState) => state);
     const [isShowModalEditProfile, setShowModalEditProfile] = useState(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -193,7 +193,13 @@ const Profile = () => {
                             className='scrollbar flex flex-col gap-2 xxs:gap-5'
                         >
                             {myTweets.map((tweet) => (
-                                <Card tweet={tweet} key={tweet._id} />
+                                <Card
+                                    updateTweet={(tweet) =>
+                                        dispatch(updateTweet(tweet))
+                                    }
+                                    tweet={tweet}
+                                    key={tweet._id}
+                                />
                             ))}
                         </InfiniteScroll>
                     )}
