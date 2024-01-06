@@ -5,8 +5,8 @@ import {
     combineReducers,
     configureStore,
 } from '@reduxjs/toolkit';
+import bookmarksReducer from '../features/bookmarks';
 import contactsReducer from '../features/contacts';
-import followingTweetsReducer from '../features/followingTweets';
 import gifsReducer from '../features/gifs';
 import myTweetReducer from '../features/myTweet';
 import notificationsReducer from '../features/notifications';
@@ -17,6 +17,8 @@ import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
 import storiesReducer from '../features/stories';
 import storiesDetailReducer from '../features/storiesDetail';
+import tweetReducer from '../features/tweet';
+import tweetsReducer from '../features/tweets';
 import userReducer from '../features/user';
 
 const combinedReducer = combineReducers({
@@ -25,7 +27,7 @@ const combinedReducer = combineReducers({
     socket: socketReducer,
     contacts: contactsReducer,
     myTweet: myTweetReducer,
-    followingTweets: followingTweetsReducer,
+    tweets: tweetsReducer,
     stories: storiesReducer,
     profile: profileReducer,
     page: pageReducer,
@@ -33,12 +35,13 @@ const combinedReducer = combineReducers({
     gifs: gifsReducer,
     popupMultiLevel: popupMultiLevelReducer,
     storiesDetail: storiesDetailReducer,
+    bookmarks: bookmarksReducer,
+    tweet: tweetReducer,
 });
 
 const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {
-    if (action.type === 'LOGOUT') {
-        state = undefined;
-    }
+    if (action.type === 'LOGOUT') state = undefined;
+
     return combinedReducer(state, action);
 };
 

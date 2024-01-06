@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useCardContext } from '../contexts/CardContext';
 import { ITweet } from '../interfaces';
 import { classNames } from '../utils';
 import ScrollbarCustomize from './ScrollbarCustomize';
@@ -15,6 +16,7 @@ type Props = {
 const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [edit, setEdit] = useState<string>('');
+    const { updateTweet } = useCardContext();
 
     const handleScroll = () => setScrolled(true);
 
@@ -24,7 +26,12 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
                 onScroll={handleScroll}
                 className={classNames(isPopup && 'max-h-[50vh]')}
             >
-                <Card isPopup className={className} tweet={tweet} />
+                <Card
+                    updateTweet={updateTweet}
+                    isPopup
+                    className={className}
+                    tweet={tweet}
+                />
                 {tweet.comments?.map((comment) => (
                     <CommentTweet
                         edit={edit}

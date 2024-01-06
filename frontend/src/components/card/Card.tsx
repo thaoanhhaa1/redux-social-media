@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { images } from '../../assets';
 import CardProvider from '../../contexts/CardContext';
-import { toggleNotInterested } from '../../features/followingTweets';
+import { toggleNotInterested } from '../../features/tweet';
 import { ITweet } from '../../interfaces';
 import { classNames } from '../../utils';
 import Button from '../Button';
@@ -19,19 +19,16 @@ const Card = ({
     tweet,
     className = '',
     isPopup = false,
+    updateTweet,
 }: {
     tweet: ITweet;
     className?: string;
     isPopup?: boolean;
+    updateTweet: (tweet: ITweet) => void;
 }) => {
     const ref = useRef<HTMLDivElement | undefined>();
     const user = useAppSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
-
-    const handleInterestedTweet = () => {
-        axiosClient.post(api.interestedTweet(tweet._id)).then();
-        dispatch(toggleNotInterested(tweet._id));
-    };
 
     useEffectOnce(() => {
         const cardElement = ref.current;
@@ -53,8 +50,15 @@ const Card = ({
         }
     });
 
+    if (!tweet) return null;
+
+    const handleInterestedTweet = () => {
+        axiosClient.post(api.interestedTweet(tweet._id)).then();
+        dispatch(toggleNotInterested());
+    };
+
     return (
-        <CardProvider value={{ ...tweet, isPopup }}>
+        <CardProvider value={{ ...tweet, isPopup, updateTweet }}>
             <div>
                 <Wrapper
                     ref={ref as Ref<HTMLDivElement> | undefined}

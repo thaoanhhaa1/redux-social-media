@@ -1,5 +1,5 @@
 import { ReactElement, createContext, useContext } from 'react';
-import { ICardContext } from '../interfaces';
+import { ICardContext, ITweet } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
     comments: [],
@@ -17,6 +17,7 @@ const CardContext = createContext<ICardContext>({
     createdAt: '',
     isPopup: false,
     notInterested: false,
+    updateTweet: (tweet: ITweet) => {},
 });
 
 const CardProvider = ({

@@ -13,7 +13,7 @@ import {
     toggleNotInterested,
     toggleUserFollow,
     toggleUserList,
-} from '../../features/followingTweets';
+} from '../../features/tweet';
 import { ICardMoreBtn } from '../../interfaces';
 import { toggleFollow } from '../../services';
 import {
@@ -48,7 +48,7 @@ const CardMore = () => {
                             ](_id),
                         )
                         .then();
-                    dispatch(toggleNotInterested(_id));
+                    dispatch(toggleNotInterested());
                 },
             },
             {
@@ -68,7 +68,7 @@ const CardMore = () => {
                     activeIcon: UnFollowIcon,
                     onClick: async () => {
                         await toggleFollow(user._id, user.follow);
-                        dispatch(toggleUserFollow(user._id));
+                        dispatch(toggleUserFollow());
 
                         toast.success(
                             `${user.follow ? 'Unfollow' : 'Follow'} @${
@@ -99,7 +99,7 @@ const CardMore = () => {
                                 isAdd: !user.isInList,
                             }),
                         ).unwrap();
-                        dispatch(toggleUserList(user._id));
+                        dispatch(toggleUserList());
 
                         toast.success(
                             `${user.isInList ? 'Remove' : 'Add'} @${

@@ -3,18 +3,15 @@ import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
+import { useCardContext } from '../../contexts/CardContext';
 import useCommentTweet from '../../contexts/CommentTweet';
-import {
-    deleteComment,
-    toggleLikeComment,
-} from '../../features/followingTweets';
+import { deleteComment, toggleLikeComment } from '../../features/tweet';
 import { useOnClickOutside } from '../../hooks';
+import { IPopupItem } from '../../interfaces';
 import IComment from '../../interfaces/IComment';
 import { classNames, getTimeComment } from '../../utils';
 import { LikeFBIcon, MoreIcon } from '../Icons';
 import Popup from '../popup';
-import { useCardContext } from '../../contexts/CardContext';
-import { IPopupItem } from '../../interfaces';
 
 const CommentContentTweet = ({ comment }: { comment: IComment }) => {
     const {
@@ -55,7 +52,6 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
             toggleLikeComment({
                 liked: !liked,
                 commentId: comment._id,
-                tweetId: comment.post,
             }),
         );
     };
@@ -69,7 +65,6 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
             deleteComment({
                 commentId: comment._id,
                 parentCommentId: comment.parent,
-                tweetId: tweetId,
             }),
         );
     };

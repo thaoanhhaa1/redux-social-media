@@ -1,6 +1,6 @@
-const FollowModel = require('../models/followModel');
+const { errors } = require('../../utils');
 const UserModel = require('../models/userModel');
-const { userService } = require('../services');
+const { userService, tweetService } = require('../services');
 
 module.exports = {
     getUser: async (req, res, next) => {
@@ -48,6 +48,29 @@ module.exports = {
             const result = await userService.getContactUsers(_id);
 
             res.send(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    getTweetsByUser: async (req, res, next) => {
+        const userId = req.params.user_id;
+        const _id = req.body._id;
+        const page = +(req.query.page ?? 1);
+
+        try {
+            const user = await userService.findById(userId);
+
+            if (!user)
+                return res.status(404).json(errors[404]("User wasn't found"));
+
+            const tweets = await tweetService.getTweetsByUserId(
+                _id,
+                userId,
+                page,
+            );
+
+            res.json(tweets);
         } catch (error) {
             next(error);
         }

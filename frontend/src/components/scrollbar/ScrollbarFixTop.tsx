@@ -1,7 +1,7 @@
 import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { classNames } from '../../utils';
+import ScrollbarCustomize from '../ScrollbarCustomize';
 import Wrapper from '../wrapper/Wrapper';
-import Scrollbar from './ScrollbarThumb';
 
 const ScrollbarFixTop = ({
     className = '',
@@ -35,16 +35,14 @@ const ScrollbarFixTop = ({
             style={{ marginBottom }}
         >
             {header}
-            <div className='overflow-y-hidden' ref={ref}>
-                <div
-                    className='overflow-y-auto scrollbar hidden-scrollbar relative'
+            <div ref={ref}>
+                <ScrollbarCustomize
                     style={{
                         maxHeight: `calc(100vh - var(--top-bar-height) - ${bodyHeight}px - 40px - ${marginBottom} )`,
                     }}
                 >
                     {children}
-                    <Scrollbar />
-                </div>
+                </ScrollbarCustomize>
             </div>
         </Wrapper>
     );
