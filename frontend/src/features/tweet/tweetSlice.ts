@@ -271,19 +271,18 @@ const tweetSlice = createSlice({
 
 export default tweetSlice.reducer;
 export const {
-    toggleUserList,
-    toggleUserFollow,
-    deleteComment,
-    toggleLikeComment,
-    editComment,
-    toggleLikeTweet,
-    toggleNotInterested,
-    setTweet,
+    // toggleUserList,
+    // toggleUserFollow,
+    // deleteComment,
+    // toggleLikeComment,
+    // editComment,
+    // toggleLikeTweet,
+    // toggleNotInterested,
+    // setTweet,
 } = tweetSlice.actions;
-export {
-    getChildrenComments,
-    getComments,
-    postComment,
-    toggleLike,
-    toggleList,
-};
+export // toggleLike,
+// toggleList,
+// getComments,
+// getChildrenComments,
+// postComment,
+ {};

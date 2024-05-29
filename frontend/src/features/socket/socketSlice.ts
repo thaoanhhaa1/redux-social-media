@@ -14,7 +14,7 @@ const socketSlice = createSlice({
     initialState,
     reducers: {
         connect: (state, { payload }) => {
-            state.socket = io('http://localhost:8080', {
+            state.socket = io(process.env.REACT_APP_SOCKET_ENDPOINTS!, {
                 auth: {
                     _id: payload,
                 },

@@ -21,12 +21,9 @@ import {
 import { WrapperHeader } from '../components/wrapper';
 import { getContacts, setOffline, setOnline } from '../features/contacts';
 import { getStories } from '../features/stories';
-import {
-    countFollowingTweets,
-    getTweets,
-    updateTweet,
-} from '../features/tweets';
+import { countFollowingTweets, getTweets } from '../features/tweets';
 import { getArray, getNewTweets } from '../utils';
+import CardWrapper from '../components/card/CardWrapper';
 
 const Home = () => {
     const {
@@ -128,11 +125,13 @@ const Home = () => {
             <Stories loading={loading} />
             <WhatHappen />
             {newTweets.map((tweet) => (
-                <Card
-                    updateTweet={(tweet) => dispatch(updateTweet(tweet))}
-                    tweet={tweet}
+                <CardWrapper
                     key={tweet._id}
-                />
+                    tweet={tweet}
+                    updateTweet={(tweet) => {}}
+                >
+                    <Card />
+                </CardWrapper>
             ))}
             {loading || (
                 <InfiniteScroll
@@ -145,13 +144,13 @@ const Home = () => {
                     className='scrollbar flex flex-col gap-2 xxs:gap-5 !overflow-visible'
                 >
                     {otherTweet.map((tweet) => (
-                        <Card
-                            updateTweet={(tweet) =>
-                                dispatch(updateTweet(tweet))
-                            }
-                            tweet={tweet}
+                        <CardWrapper
                             key={tweet._id}
-                        />
+                            tweet={tweet}
+                            updateTweet={(tweet) => {}}
+                        >
+                            <Card />
+                        </CardWrapper>
                     ))}
                 </InfiniteScroll>
             )}

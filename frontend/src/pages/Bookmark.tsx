@@ -5,7 +5,8 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
 import { BookmarkItem, Card, Loading, ScrollbarFixTop } from '../components';
 import { CardSkeleton } from '../components/card';
-import { getBookmarks, getTweets, updateTweet } from '../features/bookmarks';
+import CardWrapper from '../components/card/CardWrapper';
+import { getBookmarks, getTweets } from '../features/bookmarks';
 import { getArray } from '../utils';
 
 const Bookmark = () => {
@@ -69,13 +70,12 @@ const Bookmark = () => {
                         className='scrollbar flex flex-col gap-2 xxs:gap-5'
                     >
                         {bookmark.tweets.map((tweet) => (
-                            <Card
-                                updateTweet={(tweet) =>
-                                    dispatch(updateTweet(tweet))
-                                }
-                                key={tweet._id}
+                            <CardWrapper
                                 tweet={tweet}
-                            />
+                                updateTweet={(tweet) => {}}
+                            >
+                                <Card key={tweet._id} />
+                            </CardWrapper>
                         ))}
                     </InfiniteScroll>
                 </div>

@@ -3,7 +3,7 @@ import ITweetPost from './ITweetPost';
 
 interface ITweet extends ITweetPost {
     _id: string;
-    likes?: string[];
+    likes: string[];
     numberOfComments: number;
     comments: IComment[];
     skip: number;

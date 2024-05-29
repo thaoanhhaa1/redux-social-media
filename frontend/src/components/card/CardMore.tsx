@@ -1,21 +1,15 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { useEffectOnce } from 'usehooks-ts';
 import { v4 } from 'uuid';
-import api from '../../api';
-import axiosClient from '../../api/axiosClient';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import {
+    toggleFollow,
+    toggleInterested,
     toggleList,
-    toggleNotInterested,
-    toggleUserFollow,
-    toggleUserList,
-} from '../../features/tweet';
+} from '../../features/tweets';
 import { ICardMoreBtn } from '../../interfaces';
-import { toggleFollow } from '../../services';
 import {
     AddListIcon,
     BlockIcon,
@@ -30,7 +24,9 @@ import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
 
 const CardMore = () => {
-    const { user, _id, notInterested } = useCardContext();
+    const {
+        tweet: { user, _id, notInterested },
+    } = useCardContext();
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
     const actions = useMemo(() => {
@@ -41,14 +37,12 @@ const CardMore = () => {
                     notInterested ? 'I' : 'Not i'
                 }nterested in this tweet`,
                 onClick: () => {
-                    axiosClient
-                        .post(
-                            api[
-                                `${notInterested ? 'i' : 'notI'}nterestedTweet`
-                            ](_id),
-                        )
-                        .then();
-                    dispatch(toggleNotInterested());
+                    dispatch(
+                        toggleInterested({
+                            interested: notInterested,
+                            tweetId: _id,
+                        }),
+                    );
                 },
             },
             {
@@ -66,14 +60,12 @@ const CardMore = () => {
                     }`,
                     active: user.follow,
                     activeIcon: UnFollowIcon,
-                    onClick: async () => {
-                        await toggleFollow(user._id, user.follow);
-                        dispatch(toggleUserFollow());
-
-                        toast.success(
-                            `${user.follow ? 'Unfollow' : 'Follow'} @${
-                                user.username
-                            } successfully!`,
+                    onClick: () => {
+                        dispatch(
+                            toggleFollow({
+                                userId: user._id,
+                                follow: !user.follow,
+                            }),
                         );
                     },
                 },
@@ -92,19 +84,12 @@ const CardMore = () => {
                         user.username
                     } from Lists`,
                     activeIcon: RemoveListIcon,
-                    onClick: async () => {
-                        await dispatch(
+                    onClick: () => {
+                        dispatch(
                             toggleList({
-                                userId: user._id,
                                 isAdd: !user.isInList,
+                                userId: user._id,
                             }),
-                        ).unwrap();
-                        dispatch(toggleUserList());
-
-                        toast.success(
-                            `${user.isInList ? 'Remove' : 'Add'} @${
-                                user.username
-                            } from lists successfully!`,
                         );
                     },
                 },
@@ -121,12 +106,12 @@ const CardMore = () => {
         user.isInList,
         user.username,
     ]);
-    const { isPopup } = useCardContext();
-    const [show, setShow] = useState<boolean>(!isPopup);
+    // const { isPopup } = useCardContext();
+    // const [show, setShow] = useState<boolean>(!isPopup);
 
-    useEffectOnce(() => setShow(true));
+    // useEffectOnce(() => setShow(true));
 
-    if (!show) return null;
+    // if (!show) return null;
 
     return (
         <Wrapper

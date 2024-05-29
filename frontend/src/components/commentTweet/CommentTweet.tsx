@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
 import { CommentTweetProvider } from '../../contexts/CommentTweet';
-import { getChildrenComments } from '../../features/tweet';
 import IComment from '../../interfaces/IComment';
-import { classNames } from '../../utils';
+import { classNames, getNextLevelComment } from '../../utils';
 import Avatar from '../Avatar';
 import CardComment from '../cardPopup/CardComment';
 import CommentContentTweet from './CommentContentTweet';
 import CommentUpdateTweet from './CommentUpdateTweet';
+import { getChildrenComments } from '../../features/tweets';
 
 export interface ICommentTweetProps {
     comment: IComment;
@@ -120,7 +120,7 @@ export default function CommentTweet({
                         scrolled={scrolled}
                         setScrolled={setScrolled}
                         comment={comment}
-                        level={Math.min(3, level + 1)}
+                        level={getNextLevelComment(level)}
                         key={comment._id}
                         setShowParent={setShowCardComment}
                         edit={edit}
@@ -130,7 +130,7 @@ export default function CommentTweet({
 
                 {showCardComment && level < 2 && (
                     <CardComment
-                        level={Math.min(3, level + 1)}
+                        level={getNextLevelComment(level)}
                         commentParentId={comment._id}
                     />
                 )}

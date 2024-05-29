@@ -3,13 +3,13 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { postComment } from '../../features/tweet';
 import { useSearch } from '../../hooks';
 import { classNames } from '../../utils';
 import Avatar from '../Avatar';
 import { SendIcon } from '../Icons';
 import LoadingSpin from '../LoadingSpin';
 import ScrollbarCustomize from '../ScrollbarCustomize';
+import { postComment } from '../../features/tweets';
 
 const CardComment = ({
     level = 0,
@@ -22,7 +22,7 @@ const CardComment = ({
     isParent?: boolean;
 }) => {
     const owner = useAppSelector((state: RootState) => state.user);
-    const tweet = useCardContext();
+    const { tweet } = useCardContext();
     const { value, handleChangeSearch, setValue } = useSearch();
     const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useAppDispatch();

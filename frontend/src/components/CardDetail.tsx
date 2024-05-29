@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useCardContext } from '../contexts/CardContext';
+import { useAppDispatch } from '../app/hooks';
+import { getComments } from '../features/tweets';
 import { ITweet } from '../interfaces';
 import { classNames } from '../utils';
 import ScrollbarCustomize from './ScrollbarCustomize';
@@ -16,9 +17,13 @@ type Props = {
 const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [edit, setEdit] = useState<string>('');
-    const { updateTweet } = useCardContext();
+    const dispatch = useAppDispatch();
 
     const handleScroll = () => setScrolled(true);
+
+    const loadMoreComment = () => {
+        dispatch(getComments({ tweetId: tweet._id, skip: tweet.skip + 1 }));
+    };
 
     return (
         <div className='bg-white dark:bg-dark-black-2 rounded-lg'>
@@ -26,12 +31,7 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
                 onScroll={handleScroll}
                 className={classNames(isPopup && 'max-h-[50vh]')}
             >
-                <Card
-                    updateTweet={updateTweet}
-                    isPopup
-                    className={className}
-                    tweet={tweet}
-                />
+                <Card isPopup className={className} />
                 {tweet.comments?.map((comment) => (
                     <CommentTweet
                         edit={edit}
@@ -42,6 +42,14 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
                         comment={comment}
                     />
                 ))}
+                {tweet.skip * 8 < tweet.numberOfComments && (
+                    <div
+                        onClick={loadMoreComment}
+                        className='cursor-pointer hover:underline p-4 text-xs leading-xs text-[#65676B] font-semibold'
+                    >
+                        View more comments
+                    </div>
+                )}
             </ScrollbarCustomize>
             <CardComment isParent={isPopup} />
         </div>

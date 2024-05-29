@@ -22,6 +22,7 @@ import {
     Wrapper,
 } from '../components';
 import { CardSkeleton } from '../components/card';
+import CardWrapper from '../components/card/CardWrapper';
 import { FollowSkeleton } from '../components/follow';
 import {
     dec,
@@ -31,7 +32,7 @@ import {
     inc,
 } from '../features/profile';
 import { getStories } from '../features/stories';
-import { countMyTweets, getMyTweets, updateTweet } from '../features/tweets';
+import { countMyTweets, getMyTweets } from '../features/tweets';
 import { getArray, getMonthYear } from '../utils';
 
 const Profile = () => {
@@ -193,13 +194,13 @@ const Profile = () => {
                             className='scrollbar flex flex-col gap-2 xxs:gap-5'
                         >
                             {myTweets.map((tweet) => (
-                                <Card
-                                    updateTweet={(tweet) =>
-                                        dispatch(updateTweet(tweet))
-                                    }
+                                <CardWrapper
                                     tweet={tweet}
+                                    updateTweet={(tweet) => {}}
                                     key={tweet._id}
-                                />
+                                >
+                                    <Card />
+                                </CardWrapper>
                             ))}
                         </InfiniteScroll>
                     )}

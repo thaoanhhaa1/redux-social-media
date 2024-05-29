@@ -6,7 +6,7 @@ import TagPeople from '../TagPeople';
 import CardMore from './CardMore';
 
 const CardProfile = () => {
-    const tweet = useCardContext();
+    const { tweet } = useCardContext();
     const user = tweet.user;
 
     return (

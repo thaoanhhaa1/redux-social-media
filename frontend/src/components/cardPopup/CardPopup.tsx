@@ -2,12 +2,11 @@ import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { comments } from '../../constants';
-import { getComments } from '../../features/tweet';
-import { ITweet } from '../../interfaces';
 import Button from '../Button';
 import CardDetail from '../CardDetail';
 import { CloseIcon } from '../Icons';
 import Modal from '../Modal';
+import { getComments } from '../../features/tweets';
 
 // TODO More comment popup when scroll
 // TODO Loading when loading comments
@@ -15,12 +14,10 @@ const CardPopup = ({
     className = '',
     isShow,
     setShow,
-    updateTweet,
 }: {
     className?: string;
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
-    updateTweet: (tweet: ITweet) => void;
 }) => {
     const tweet = useAppSelector((state: RootState) => state.tweet.tweet);
     const dispatch = useAppDispatch();
@@ -43,10 +40,6 @@ const CardPopup = ({
     useEffect(() => {
         tweet?.notInterested && setShow(false);
     }, [setShow, tweet]);
-
-    useEffect(() => {
-        tweet && updateTweet(tweet);
-    }, [tweet, updateTweet]);
 
     if (!tweet) return null;
 

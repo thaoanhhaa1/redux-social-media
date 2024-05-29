@@ -1,11 +1,9 @@
-import { useRef, useState } from 'react';
-import api from '../../api';
-import axiosClient from '../../api/axiosClient';
+import { useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import useCommentTweet from '../../contexts/CommentTweet';
-import { deleteComment, toggleLikeComment } from '../../features/tweet';
+import { deleteComment, toggleLikeComment } from '../../features/tweets';
 import { useOnClickOutside } from '../../hooks';
 import { IPopupItem } from '../../interfaces';
 import IComment from '../../interfaces/IComment';
@@ -22,13 +20,11 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
         setShowParent,
         setShowCardComment,
     } = useCommentTweet();
-    const tweet = useCardContext();
+    const { tweet } = useCardContext();
     const { setEdit } = useCommentTweet();
     const user = useAppSelector((state: RootState) => state.user);
     const moreRef = useRef(null);
-    const [liked, setLiked] = useState<boolean>(() =>
-        comment.likes.includes(user._id),
-    );
+    const liked = comment.likes.includes(user._id);
     const dispatch = useAppDispatch();
 
     const handleClickReply = () => {
@@ -43,28 +39,22 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
     };
 
     const handleClickLike = () => {
-        axiosClient.post(api.toggleLikeComment(comment._id), {
-            isLike: !liked,
-        });
-
-        setLiked(!liked);
         dispatch(
             toggleLikeComment({
-                liked: !liked,
+                userId: user._id,
                 commentId: comment._id,
+                isLike: !liked,
+                tweetId: tweet._id,
             }),
         );
     };
 
     const handleDelete = () => {
-        const tweetId = tweet._id;
-
-        axiosClient.delete(api.deleteComment(tweetId, comment._id));
-
         dispatch(
             deleteComment({
                 commentId: comment._id,
-                parentCommentId: comment.parent,
+                tweetId: tweet._id,
+                index: tweet.comments.findIndex((c) => c._id === comment._id),
             }),
         );
     };

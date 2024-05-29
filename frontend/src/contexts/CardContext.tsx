@@ -1,23 +1,35 @@
 import { ReactElement, createContext, useContext } from 'react';
-import { ICardContext, ITweet } from '../interfaces';
+import { ICardContext, IComment, ITweet } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
-    comments: [],
-    skip: 0,
-    numberOfComments: 0,
-    _id: '',
-    user: {
+    tweet: {
+        comments: [],
+        skip: 0,
+        numberOfComments: 0,
         _id: '',
-        avatar: '',
-        follow: false,
-        isInList: false,
-        name: '',
-        username: '',
+        user: {
+            _id: '',
+            avatar: '',
+            follow: false,
+            isInList: false,
+            name: '',
+            username: '',
+        },
+        createdAt: '',
+        notInterested: false,
+        likes: [],
     },
-    createdAt: '',
-    isPopup: false,
-    notInterested: false,
-    updateTweet: (tweet: ITweet) => {},
+    setTweet: (value: React.SetStateAction<ITweet>) => {},
+    toggleUserList: () => {},
+    toggleUserFollow: () => {},
+    deleteComment: (commentId: string, parentCommentId?: string) => {},
+    toggleLikeComment: (liked: boolean, commentId: string) => {},
+    editComment: (content: string, commentId: string) => {},
+    toggleLikeTweet: () => {},
+    toggleNotInterested: () => {},
+    addComments: (comments: IComment[]) => {},
+    postComment: (Comment: IComment) => {},
+    addChildrenComments: (comments: IComment[]) => {},
 });
 
 const CardProvider = ({

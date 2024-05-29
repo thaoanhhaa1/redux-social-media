@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { setTweet, toggleLike, toggleLikeTweet } from '../../features/tweet';
 import { classNames } from '../../utils';
 import {
     LikeActiveIcon,
@@ -15,35 +14,20 @@ import {
 import Image from '../Image';
 import CardPopup from '../cardPopup/CardPopup';
 import CardButton from './CardButton';
+import { setTweetActiveId } from '../../features/tweets';
 
-const CardInformation = () => {
+const CardInformation = ({ isPopup }: { isPopup: boolean }) => {
     const user = useSelector((state: RootState) => state.user);
     const [isShowCardPopup, setShowCardPopup] = useState(false);
-    const tweet = useCardContext();
+    const { tweet, toggleLikeTweet } = useCardContext();
     const dispatch = useAppDispatch();
     const isLike = tweet.likes?.includes(user._id);
     const numberLike = tweet.likes?.length || 0;
 
-    const handleLike = () => {
-        dispatch(
-            toggleLike({
-                isLike: !isLike,
-                tweetId: tweet._id,
-                userId: user._id,
-            }),
-        ).unwrap();
-        dispatch(
-            toggleLikeTweet({
-                tweetId: tweet._id,
-                userId: user._id,
-            }),
-        );
-    };
-
     const handleComment = () => {
-        if (tweet.isPopup) return;
+        if (isPopup) return;
 
-        dispatch(setTweet(tweet));
+        dispatch(setTweetActiveId(tweet._id));
         setShowCardPopup(true);
     };
 
@@ -51,7 +35,7 @@ const CardInformation = () => {
         <div
             className={classNames(
                 'flex flex-col gap-2 xxs:gap-5',
-                tweet.isPopup || 'ml-12 xxs:ml-[56px]',
+                isPopup || 'ml-12 xxs:ml-[56px]',
             )}
         >
             {tweet.content && (
@@ -89,15 +73,14 @@ const CardInformation = () => {
                     number={numberLike}
                     active={isLike}
                     className='text-black-8 dark:text-white'
-                    onClick={handleLike}
+                    onClick={toggleLikeTweet}
                     icon={(isLike && <LikeActiveIcon />) || <LikeIcon />}
                 />
             </div>
 
             {/* Card Popup */}
-            {tweet.isPopup || (
+            {isPopup || (
                 <CardPopup
-                    updateTweet={tweet.updateTweet}
                     isShow={isShowCardPopup}
                     setShow={setShowCardPopup}
                 />

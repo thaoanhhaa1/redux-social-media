@@ -1,13 +1,13 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import ReactTextareaAutosize from 'react-textarea-autosize';
-import api from '../../api';
-import axiosClient from '../../api/axiosClient';
+import { toast } from 'react-toastify';
 import { useAppDispatch } from '../../app/hooks';
 import useCommentTweet from '../../contexts/CommentTweet';
-import { editComment } from '../../features/tweet';
+import { editComment } from '../../features/tweets';
 import { useSearch } from '../../hooks';
 import { classNames } from '../../utils';
 import { SendIcon } from '../Icons';
+import LoadingSpin from '../LoadingSpin';
 
 type Props = {
     content: string;
@@ -23,23 +23,29 @@ const CommentUpdateTweet = ({
     handleClickCancel,
 }: Props) => {
     const { value, handleChangeSearch } = useSearch(content);
+    const [loading, setLoading] = useState<boolean>(false);
     const { setEdit } = useCommentTweet();
     const dispatch = useAppDispatch();
     const ref = useRef(null);
 
-    const handleUpdateComment = () => {
-        axiosClient.patch(api.editComment(tweetId, commentId), {
-            content: value,
-        });
+    const handleUpdateComment = async () => {
+        setLoading(true);
 
-        dispatch(
-            editComment({
-                commentId,
-                content: value,
-            }),
-        );
+        try {
+            await dispatch(
+                editComment({
+                    content: value,
+                    commentId,
+                    tweetId,
+                }),
+            ).unwrap();
 
-        setEdit('');
+            setEdit('');
+            setLoading(false);
+        } catch (error) {
+            toast.error('Update comment failed');
+            setLoading(false);
+        }
     };
 
     const handleSelect = () => {
@@ -63,18 +69,20 @@ const CommentUpdateTweet = ({
                         placeholder='Write a comment...'
                         className='px-3 py-2 flex-1 text-sm leading-sm bg-[#F0F2F5] dark:bg-dark-black-3 resize-none outline-none'
                     />
-                    <button
-                        type='button'
-                        onClick={handleUpdateComment}
-                        disabled={!value}
-                        className={classNames(
-                            '-mx-2 p-2 self-end',
-                            (value && 'text-blue') ||
-                                'cursor-not-allowed opacity-40',
-                        )}
-                    >
-                        <SendIcon />
-                    </button>
+                    {(loading && <LoadingSpin size={16} />) || (
+                        <button
+                            type='button'
+                            onClick={handleUpdateComment}
+                            disabled={!value}
+                            className={classNames(
+                                '-mx-2 p-2 self-end',
+                                (value && 'text-blue') ||
+                                    'cursor-not-allowed opacity-40',
+                            )}
+                        >
+                            <SendIcon />
+                        </button>
+                    )}
                 </form>
             </div>
             <div className='py-1 text-xs leading-xs text-[#65676B] dark:text-white-9'>
