@@ -70,11 +70,8 @@ const Bookmark = () => {
                         className='scrollbar flex flex-col gap-2 xxs:gap-5'
                     >
                         {bookmark.tweets.map((tweet) => (
-                            <CardWrapper
-                                tweet={tweet}
-                                updateTweet={(tweet) => {}}
-                            >
-                                <Card key={tweet._id} />
+                            <CardWrapper key={tweet._id} tweet={tweet}>
+                                <Card />
                             </CardWrapper>
                         ))}
                     </InfiniteScroll>

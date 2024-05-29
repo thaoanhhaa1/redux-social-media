@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { Loading, Sidebar, TopBar } from '../../components';
+import SocketListener from '../../components/SocketListener';
 import config from '../../config';
 import { setLoading } from '../../features/page';
 import { fetchUser } from '../../features/user';
@@ -35,7 +36,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
             <div className='flex-1 w-[calc(100vw_-_var(--home-sidebar-width))]'>
                 <TopBar />
                 <div className='w-full min-h-[calc(100vh_-_var(--top-bar-height))] pt-2 xxs:pt-5 bg-white-1 dark:bg-dark-black-1'>
-                    {children}
+                    <SocketListener>{children}</SocketListener>
                 </div>
             </div>
         </div>

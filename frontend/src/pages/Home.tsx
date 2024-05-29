@@ -1,7 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
-import { Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
@@ -18,17 +17,16 @@ import {
     WhatHappen,
     Wrapper,
 } from '../components';
+import CardWrapper from '../components/card/CardWrapper';
 import { WrapperHeader } from '../components/wrapper';
-import { getContacts, setOffline, setOnline } from '../features/contacts';
+import { getContacts } from '../features/contacts';
 import { getStories } from '../features/stories';
 import { countFollowingTweets, getTweets } from '../features/tweets';
 import { getArray, getNewTweets } from '../utils';
-import CardWrapper from '../components/card/CardWrapper';
 
 const Home = () => {
     const {
         contacts: { contacts },
-        socket,
         tweets: { tweets, followingPages, followingPage },
         user,
     } = useSelector((state: RootState) => state);
@@ -59,29 +57,6 @@ const Home = () => {
 
         if (user._id && followingPages < 0) getData();
     }, [dispatch, followingPages, user]);
-
-    useEffect(() => {
-        if (!socket.socket) return;
-        const socketIo = socket.socket as Socket;
-
-        socketIo.on('online', (userId) => dispatch(setOnline(userId)));
-
-        socketIo.on('offline', (data: { userId: string; date: string }) => {
-            const date = new Date(data.date);
-
-            dispatch(
-                setOffline({
-                    userId: data.userId,
-                    date,
-                }),
-            );
-        });
-
-        return () => {
-            socketIo.removeListener('offline');
-            socketIo.removeListener('online');
-        };
-    }, [dispatch, socket.socket]);
 
     return (
         <Page
@@ -125,11 +100,7 @@ const Home = () => {
             <Stories loading={loading} />
             <WhatHappen />
             {newTweets.map((tweet) => (
-                <CardWrapper
-                    key={tweet._id}
-                    tweet={tweet}
-                    updateTweet={(tweet) => {}}
-                >
+                <CardWrapper key={tweet._id} tweet={tweet}>
                     <Card />
                 </CardWrapper>
             ))}
@@ -144,11 +115,7 @@ const Home = () => {
                     className='scrollbar flex flex-col gap-2 xxs:gap-5 !overflow-visible'
                 >
                     {otherTweet.map((tweet) => (
-                        <CardWrapper
-                            key={tweet._id}
-                            tweet={tweet}
-                            updateTweet={(tweet) => {}}
-                        >
+                        <CardWrapper key={tweet._id} tweet={tweet}>
                             <Card />
                         </CardWrapper>
                     ))}

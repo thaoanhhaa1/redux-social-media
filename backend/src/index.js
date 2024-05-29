@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 require('swagger-ui-dist').absolutePath();
 
 const db = require('./config/db');
+const socket = require('./socket');
 const Router = require('./routes');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 const handleErrorMiddleware = require('./app/middlewares/handleErrorMiddleware');
@@ -63,47 +64,9 @@ dailyTaskController.deleteToken();
 app.use(handleErrorMiddleware);
 
 mongoose.connection.once('open', () => {
-    const serverWithSocket = app.listen(PORT, () =>
-        console.log('Server running on port: ' + PORT),
+    const server = app.listen(PORT, () =>
+        console.log(`Server running on port: ${PORT}`),
     );
 
-    const io = require('socket.io')(serverWithSocket, {
-        cors: {
-            origin: 'http://localhost:3000',
-            methods: ['GET', 'POST'],
-        },
-    }); //? invoking the func also something like func()
-
-    global.sockets = [];
-    io.on('connection', (socket) => {
-        const userId = socket.handshake?.auth?._id;
-
-        console.log(`Socket.io connection ${socket.id}`);
-        io.emit('online', userId);
-
-        global.sockets.push(socket);
-        global.socketIo = io;
-
-        socket.on('disconnect', async function () {
-            global.sockets = global.sockets.filter((s) => socket.id !== s.id);
-            const date = new Date();
-
-            io.emit('offline', {
-                userId,
-                date,
-            });
-
-            if (userId)
-                await OnlineStatusModel.updateOne(
-                    {
-                        _id: new mongoose.Types.ObjectId(userId),
-                    },
-                    {
-                        $set: {
-                            offline: date,
-                        },
-                    },
-                );
-        });
-    });
+    socket.connect(server);
 });

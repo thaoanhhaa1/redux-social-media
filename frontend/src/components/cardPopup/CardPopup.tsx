@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { comments } from '../../constants';
@@ -19,7 +19,14 @@ const CardPopup = ({
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const tweet = useAppSelector((state: RootState) => state.tweet.tweet);
+    const { tweetActiveId, tweets } = useAppSelector(
+        (state: RootState) => state.tweets,
+    );
+    const tweet = useMemo(
+        () => tweets.find((tweet) => tweet._id === tweetActiveId),
+        [tweetActiveId, tweets],
+    );
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {

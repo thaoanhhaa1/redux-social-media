@@ -42,7 +42,7 @@ const TweetDetail = () => {
     if (!tweet) return <Loading />;
 
     return (
-        <CardWrapper tweet={tweet} updateTweet={(tweet) => {}}>
+        <CardWrapper tweet={tweet}>
             <div className='mx-auto max-w-[700px] px-2'>
                 <CardDetail tweet={tweet} />
             </div>

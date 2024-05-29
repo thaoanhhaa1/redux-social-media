@@ -144,6 +144,36 @@ const getChildrenComments = createAsyncThunk(
     },
 );
 
+const toggleLikeTweet = createAsyncThunk<
+    any,
+    {
+        tweetId: string;
+        isLike: boolean;
+        userId: string;
+    },
+    {
+        rejectValue: {
+            tweetId: string;
+            isLike: boolean;
+            userId: string;
+        };
+    }
+>(
+    'tweets/toggleLikeTweet',
+    async ({ tweetId, isLike, userId }, { rejectWithValue }) => {
+        try {
+            const res = await axiosClient.post(api.toggleLike(), {
+                isLike,
+                tweetId,
+            });
+
+            return res.data;
+        } catch (error) {
+            return rejectWithValue({ tweetId, isLike, userId });
+        }
+    },
+);
+
 const toggleInterested = createAsyncThunk<
     any,
     {
@@ -387,6 +417,24 @@ const tweetsSlice = createSlice({
                 tweet.comments.unshift(commentDTO);
                 tweet.numberOfComments += 1;
             })
+            .addCase(toggleLikeTweet.pending, (state, { meta }) => {
+                const { tweetId, isLike, userId } = meta.arg;
+
+                const tweet = findById(state.tweets, tweetId);
+                if (!tweet) return state;
+
+                if (isLike) tweet.likes.push(userId);
+                else tweet.likes.pop();
+            })
+            .addCase(toggleLikeTweet.rejected, (state, { payload }) => {
+                if (!payload) return state;
+
+                const tweet = findById(state.tweets, payload.tweetId);
+                if (!tweet) return state;
+
+                if (payload.isLike) tweet.likes.pop();
+                else tweet.likes.push(payload.userId);
+            })
             .addCase(toggleInterested.pending, (state, { meta }) => {
                 const { interested, tweetId } = meta.arg;
 
@@ -569,6 +617,7 @@ export {
     deleteComment,
     getChildrenComments,
     editComment,
+    toggleLikeTweet,
 };
 export const { addNewTweet, updateTweet, setTweetActiveId } =
     tweetsSlice.actions;

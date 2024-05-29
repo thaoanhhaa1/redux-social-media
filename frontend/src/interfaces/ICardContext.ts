@@ -3,7 +3,6 @@ import ITweet from './ITweet';
 
 interface ICardContext {
     tweet: ITweet;
-    setTweet: React.Dispatch<React.SetStateAction<ITweet>>;
     toggleUserList: () => void;
     toggleUserFollow: () => void;
     deleteComment: (commentId: string, parentCommentId?: string) => void;

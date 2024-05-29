@@ -1,5 +1,5 @@
 import { ReactElement, createContext, useContext } from 'react';
-import { ICardContext, IComment, ITweet } from '../interfaces';
+import { ICardContext, IComment } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
     tweet: {
@@ -19,7 +19,6 @@ const CardContext = createContext<ICardContext>({
         notInterested: false,
         likes: [],
     },
-    setTweet: (value: React.SetStateAction<ITweet>) => {},
     toggleUserList: () => {},
     toggleUserFollow: () => {},
     deleteComment: (commentId: string, parentCommentId?: string) => {},

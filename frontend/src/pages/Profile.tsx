@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
-import { Socket } from 'socket.io-client';
 import { v4 } from 'uuid';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
@@ -25,11 +24,9 @@ import { CardSkeleton } from '../components/card';
 import CardWrapper from '../components/card/CardWrapper';
 import { FollowSkeleton } from '../components/follow';
 import {
-    dec,
     getProfile,
     getWhoToFollow,
     getWhoToFollowPages,
-    inc,
 } from '../features/profile';
 import { getStories } from '../features/stories';
 import { countMyTweets, getMyTweets } from '../features/tweets';
@@ -38,7 +35,6 @@ import { getArray, getMonthYear } from '../utils';
 const Profile = () => {
     const {
         user,
-        socket,
         profile,
         tweets: { tweets, myTweetPage, myTweetPages },
     } = useSelector((state: RootState) => state);
@@ -62,25 +58,7 @@ const Profile = () => {
         setLoadingFollow(false);
     };
 
-    const loadMoreCard = async () =>
-        await dispatch(getMyTweets(myTweetPage + 1));
-
-    useEffect(() => {
-        if (!socket.socket || !user._id) return;
-        const socketIo = socket.socket as Socket;
-
-        socketIo.on('follower', () => dispatch(inc('follower')));
-        socketIo.on('following', () => dispatch(inc('following')));
-        socketIo.on('un-follower', () => dispatch(dec('follower')));
-        socketIo.on('un-following', () => dispatch(dec('following')));
-
-        return () => {
-            socketIo.removeListener('follower');
-            socketIo.removeListener('following');
-            socketIo.removeListener('un-follower');
-            socketIo.removeListener('un-following');
-        };
-    }, [dispatch, socket.socket, user._id]);
+    const loadMoreCard = () => dispatch(getMyTweets(myTweetPage + 1));
 
     useEffect(() => {
         async function getData() {
@@ -194,11 +172,7 @@ const Profile = () => {
                             className='scrollbar flex flex-col gap-2 xxs:gap-5'
                         >
                             {myTweets.map((tweet) => (
-                                <CardWrapper
-                                    tweet={tweet}
-                                    updateTweet={(tweet) => {}}
-                                    key={tweet._id}
-                                >
+                                <CardWrapper tweet={tweet} key={tweet._id}>
                                     <Card />
                                 </CardWrapper>
                             ))}
