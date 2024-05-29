@@ -9,5 +9,7 @@ router.get('/count-who-to-follow', followController.countWhoToFollow);
 router.get('/friends', followController.friends);
 router.post('/follow', followController.follow);
 router.post('/unfollow', followController.unfollow);
+router.post('/block', followController.block);
+router.post('/unblock', followController.unblock);
 
 module.exports = router;

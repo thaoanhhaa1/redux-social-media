@@ -15,6 +15,10 @@ const FollowModel = new Schema({
         type: Array,
         required: true,
     },
+    blocks: {
+        type: [String],
+        default: [],
+    },
 });
 
 module.exports = mongoose.model('follow', FollowModel);

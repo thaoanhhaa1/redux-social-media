@@ -296,4 +296,24 @@ module.exports = {
             },
             { following: 0, _id: 0, __v: 0 },
         ),
+
+    block: (_id, userId) =>
+        followModel.updateOne(
+            { user: _id },
+            {
+                $addToSet: {
+                    blocks: userId,
+                },
+            },
+        ),
+
+    unblock: (_id, userId) =>
+        followModel.updateOne(
+            { user: _id },
+            {
+                $pull: {
+                    blocks: userId,
+                },
+            },
+        ),
 };

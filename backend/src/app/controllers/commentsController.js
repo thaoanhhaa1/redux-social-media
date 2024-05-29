@@ -15,8 +15,8 @@ module.exports = {
     getAll: async (req, res, next) => {
         try {
             const tweetId = req.params.tweet_id;
-            const limit = req.params.limit ?? 10;
-            const skip = req.params.skip ?? 0;
+            const limit = +(req.query.limit ?? 10);
+            const skip = +(req.query.skip ?? 0);
 
             const comments = await commentService.getAll(tweetId, skip, limit);
 

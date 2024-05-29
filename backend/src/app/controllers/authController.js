@@ -4,6 +4,7 @@ const UserModel = require('../models/userModel');
 const FollowModel = require('../models/followModel');
 const OnlineStatusModel = require('../models/onlineStatusModel');
 const TokenModel = require('../models/tokenModel');
+const { createError } = require('../../utils');
 
 module.exports = {
     signUp: async (req, res, next) => {
@@ -103,6 +104,8 @@ module.exports = {
 
                 return res.json(token);
             }
+
+            throw createError(401, 'Email or password is incorrect');
         } catch (error) {
             next(error);
         }

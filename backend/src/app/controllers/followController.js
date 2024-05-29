@@ -1,6 +1,7 @@
 const UserModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const followService = require('../services/followService');
+const { createError } = require('../../utils');
 
 module.exports = {
     countFollow: async (req, res, next) => {
@@ -84,12 +85,12 @@ module.exports = {
 
             const user = await UserModel.findById(userId);
 
-            if (!user) throw new Error('User not found!');
+            if (!user) throw createError(404, "User wasn't found!");
 
             const result = await followService.unfollow(_id, userId);
 
             if (result[0].modifiedCount === 0 || result[1].modifiedCount === 0)
-                throw new Error('Update fail!');
+                throw createError(400);
 
             session.commitTransaction();
 
@@ -137,6 +138,34 @@ module.exports = {
 
         try {
             res.json(await followService.countWhoToFollow(_id));
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    block: async (req, res, next) => {
+        const { _id, userId } = req.body;
+
+        try {
+            if (!userId) throw createError(400);
+
+            await followService.block(_id, userId);
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    unblock: async (req, res, next) => {
+        const { _id, userId } = req.body;
+
+        try {
+            if (!userId) throw createError(400);
+
+            await followService.unblock(_id, userId);
+
+            res.sendStatus(200);
         } catch (error) {
             next(error);
         }
