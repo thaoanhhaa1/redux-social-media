@@ -2,7 +2,11 @@ import { ReactElement } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import CardProvider from '../../contexts/CardContext';
-import { toggleLikeTweet } from '../../features/tweets';
+import {
+    toggleFollow,
+    toggleInterested,
+    toggleLikeTweet,
+} from '../../features/tweets';
 import { IComment, ITweet } from '../../interfaces';
 import { getParentComment } from '../../utils';
 
@@ -19,9 +23,13 @@ const CardWrapper = ({ tweet, children }: Props) => {
         tweet.user.isInList = !tweet.user.isInList;
     };
 
-    const toggleUserFollow = () => {
-        tweet.user.follow = !tweet.user.follow;
-    };
+    const toggleUserFollow = () =>
+        dispatch(
+            toggleFollow({
+                follow: !tweet.user.follow,
+                userId: tweet.user._id,
+            }),
+        );
 
     const deleteComment = (commentId: string, parentCommentId?: string) => {
         let comments: IComment[] = [];
@@ -70,9 +78,13 @@ const CardWrapper = ({ tweet, children }: Props) => {
         );
     };
 
-    const toggleNotInterested = () => {
-        tweet.notInterested = !tweet.notInterested;
-    };
+    const toggleNotInterested = () =>
+        dispatch(
+            toggleInterested({
+                tweetId: tweet._id,
+                interested: tweet.notInterested,
+            }),
+        );
 
     const addComments = (comments: IComment[]) => {};
     const postComment = (comment: IComment) => {};

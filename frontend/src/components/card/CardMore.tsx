@@ -173,7 +173,7 @@ const CardMore = ({
                         <Wrapper
                             ref={moreRef}
                             gap='0'
-                            className='card__more z-1 dark:!bg-dark-black-3 fixed px-[6px] py-3 shadow-container dark:shadow-none'
+                            className='card__more z-50 dark:!bg-dark-black-3 fixed px-[6px] py-3 shadow-container dark:shadow-none'
                         >
                             {actions.map((action) => (
                                 <CardMoreBtn key={v4()} cardMore={action} />

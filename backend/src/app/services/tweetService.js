@@ -32,11 +32,39 @@ const getDetailTweets = (query, userId, page = 1) => {
             },
         },
         {
+            $lookup: {
+                from: 'follows',
+                as: 'user.follow',
+                let: { id: '$user._id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: { $eq: ['$user', userId] },
+                        },
+                    },
+                    {
+                        $project: {
+                            following: 1,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: '$user.follow',
+        },
+        {
             $addFields: {
                 'user.isInList': {
                     $cond: [{ $gt: [{ $size: '$lists' }, 0] }, true, false],
                 },
-                'user.follow': true,
+                'user.follow': {
+                    $cond: [
+                        { $in: ['$user._id', '$user.follow.following'] },
+                        true,
+                        false,
+                    ],
+                },
                 numberOfLikes: { $size: '$likes' },
             },
         },
@@ -233,9 +261,12 @@ module.exports = {
         ),
 
     getTweet: async ({ tweetId, userId }) => {
-        const tweets = await getDetailTweets({
-            _id: new mongoose.Types.ObjectId(tweetId),
-        });
+        const tweets = await getDetailTweets(
+            {
+                _id: new mongoose.Types.ObjectId(tweetId),
+            },
+            userId,
+        );
 
         return tweets[0];
     },

@@ -219,7 +219,7 @@ const toggleFollow = createAsyncThunk<
 >('tweets/toggleFollow', async ({ userId, follow }, { rejectWithValue }) => {
     try {
         const res = await axiosClient.post(
-            follow ? api.unfollow() : api.follow(),
+            follow ? api.follow() : api.unfollow(),
             {
                 userId,
             },
