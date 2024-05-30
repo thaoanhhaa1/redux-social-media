@@ -6,6 +6,9 @@ const on = {
 const emit = {
     ONLINE: 'online',
     OFFLINE: 'offline',
+    NOTIFICATION: 'notification',
+    LIKE_TWEET: 'like-tweet',
+    DISLIKE_TWEET: 'dislike-tweet',
 };
 
 module.exports = {

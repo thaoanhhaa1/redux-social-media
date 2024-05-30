@@ -27,7 +27,7 @@ const Notifications = () => {
 
         dispatch(
             getNotifications({
-                page: 1,
+                skip: 0,
                 pages: 0,
             }),
         );

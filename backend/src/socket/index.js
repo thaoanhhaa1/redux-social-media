@@ -17,6 +17,8 @@ function connect(server) {
     io.on(socketEvents.on.CONNECTION, (socket) => {
         const userId = socket.handshake?.auth?._id;
 
+        socket.join(userId);
+
         // ! DELETE in production
         console.log(`Socket.io connection ${socket.id}`);
 

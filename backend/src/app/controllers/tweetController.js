@@ -1,6 +1,6 @@
 const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
-const { notificationType } = require('../../constants');
+const { notificationType, socketEvents } = require('../../constants');
 const { tweetService, notificationService } = require('../services');
 const { errors } = require('../../utils');
 
@@ -144,30 +144,63 @@ module.exports = {
                 TweetModel.findOne({ _id: tweetId }),
             ]);
 
-            if (result.modifiedCount > 0) {
-                if (isLike) {
-                    if (tweet && !tweet.notInterested.includes(tweet.user._id))
-                        notificationService
-                            .insertToFollowers(_id, {
-                                document: tweetId,
-                                type: notificationType.LIKE_TWEET,
-                                description: tweet?.content,
-                            })
-                            .then(() =>
-                                console.log('~~~ insertToFollowers ok'),
-                            );
-                } else
+            if (result.modifiedCount <= 0) throw new Error();
+
+            if (isLike) {
+                const tweetOwner = tweet.user._id;
+
+                if (
+                    tweet &&
+                    !tweet.notInterested.includes(tweetOwner) &&
+                    tweetOwner !== _id
+                ) {
+                    const date = new Date();
+
                     notificationService
-                        .dislikeTweet(_id, tweetId)
-                        .then(() => console.log('~~~ dislikeTweet ok'));
+                        .likeTweet(_id, tweetOwner, {
+                            document: tweetId,
+                            type: notificationType.LIKE_TWEET,
+                            description: tweet?.content,
+                            createdAt: date,
+                            _id: date.getTime(),
+                        })
+                        .then((data) => {
+                            const notification = data.notifications.find(
+                                (notification) =>
+                                    notification._id === date.getTime(),
+                            );
 
-                return res.sendStatus(200);
-            }
+                            global.socketIo
+                                .in(tweetOwner)
+                                .emit(
+                                    socketEvents.emit.NOTIFICATION,
+                                    notification,
+                                );
+                            global.socketIo
+                                .in(tweetOwner)
+                                .emit(socketEvents.emit.LIKE_TWEET, {
+                                    tweetId,
+                                    userId: _id,
+                                });
+                        })
+                        .catch((error) => {
+                            console.log('🚀 ~ .catch ~ error:', error);
+                        });
+                }
+            } else
+                notificationService.dislikeTweet(_id, tweetId).then(() => {
+                    global.socketIo
+                        .in(tweet.user._id)
+                        .emit(socketEvents.emit.DISLIKE_TWEET, {
+                            tweetId,
+                            userId: _id,
+                        });
+                });
+
+            return res.sendStatus(200);
         } catch (error) {
-            return next(error);
+            next(error);
         }
-
-        next(new Error());
     },
 
     notInterested: async (req, res, next) => {

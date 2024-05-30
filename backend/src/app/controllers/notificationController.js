@@ -3,12 +3,12 @@ const notificationService = require('../services/notificationService');
 module.exports = {
     getMyNotifications: async (req, res, next) => {
         const _id = req.body._id;
-        const page = req.query.page ?? 1;
+        const skip = req.query.skip ?? 0;
         const pages = +(req.query.pages ?? 1);
 
         try {
             const queries = [
-                notificationService.getMyNotifications(_id, +page),
+                notificationService.getMyNotifications(_id, +skip),
             ];
 
             if (!pages) queries.push(notificationService.countPages(_id));

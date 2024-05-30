@@ -11,9 +11,8 @@ const NotificationAll = () => {
     );
     const dispatch = useAppDispatch();
 
-    const handleLoadMore = () => {
-        dispatch(getNotifications({ page: page + 1 }));
-    };
+    const handleLoadMore = () =>
+        dispatch(getNotifications({ skip: notifications.length }));
 
     return (
         <div className='flex flex-col gap-2.5'>

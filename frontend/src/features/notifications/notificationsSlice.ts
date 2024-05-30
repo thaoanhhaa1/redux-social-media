@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { INotification } from '../../interfaces';
+import { NotificationType } from '../../types';
 
 const initialState: {
     notifications: INotification[];
@@ -18,10 +19,10 @@ const initialState: {
 const getNotifications = createAsyncThunk(
     'notificationsSlice/getNotifications',
     async ({
-        page,
+        skip,
         pages = 1,
     }: {
-        page: number;
+        skip: number;
         pages?: number;
     }): Promise<{
         notifications: INotification[];
@@ -29,7 +30,7 @@ const getNotifications = createAsyncThunk(
     }> => {
         const result = await axiosClient.get(api.getNotifications(), {
             params: {
-                page,
+                skip,
                 pages,
             },
         });
@@ -63,6 +64,35 @@ const notificationsSlice = createSlice({
 
             state.notifications.splice(index, 1);
         },
+        addNotificationSocket: (
+            state,
+            { payload }: { payload: INotification },
+        ) => {
+            state.notifications.unshift(payload);
+        },
+        deleteNotificationSocket: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    userId: string;
+                    document: string;
+                    type: NotificationType;
+                };
+            },
+        ) => {
+            const { userId, document, type } = payload;
+
+            const index = state.notifications.findIndex(
+                (item) =>
+                    item.user._id === userId &&
+                    item.document === document &&
+                    item.type === type,
+            );
+
+            state.notifications.splice(index, 1);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -84,5 +114,9 @@ const notificationsSlice = createSlice({
 });
 
 export default notificationsSlice.reducer;
-export const { removeNotification } = notificationsSlice.actions;
+export const {
+    removeNotification,
+    addNotificationSocket,
+    deleteNotificationSocket,
+} = notificationsSlice.actions;
 export { deleteNotification, getNotifications };

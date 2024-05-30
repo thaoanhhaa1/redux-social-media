@@ -3,7 +3,12 @@ import { Socket } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
 import { setOffline, setOnline } from '../features/contacts';
+import {
+    addNotificationSocket,
+    deleteNotificationSocket,
+} from '../features/notifications';
 import { dec, inc } from '../features/profile';
+import { toggleLikeTweetSocket } from '../features/tweets';
 
 const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
     const user = useAppSelector((state: RootState) => state.user);
@@ -33,6 +38,34 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
         socketIo.on('following', () => dispatch(inc('following')));
         socketIo.on('un-follower', () => dispatch(dec('follower')));
         socketIo.on('un-following', () => dispatch(dec('following')));
+        socketIo.on('like-tweet', (data) =>
+            dispatch(
+                toggleLikeTweetSocket({
+                    tweetId: data.tweetId,
+                    userId: data.userId,
+                    isLike: true,
+                }),
+            ),
+        );
+        socketIo.on('dislike-tweet', (data) => {
+            dispatch(
+                toggleLikeTweetSocket({
+                    tweetId: data.tweetId,
+                    userId: data.userId,
+                    isLike: false,
+                }),
+            );
+            dispatch(
+                deleteNotificationSocket({
+                    userId: data.userId,
+                    document: data.tweetId,
+                    type: 'LIKE_TWEET',
+                }),
+            );
+        });
+        socketIo.on('notification', (data) => {
+            dispatch(addNotificationSocket(data));
+        });
 
         return () => {
             socketIo.removeListener('offline');
@@ -41,6 +74,8 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
             socketIo.removeListener('following');
             socketIo.removeListener('un-follower');
             socketIo.removeListener('un-following');
+            socketIo.removeListener('like-tweet');
+            socketIo.removeListener('dislike-tweet');
         };
     }, [dispatch, socket, user._id]);
 

@@ -108,7 +108,7 @@ module.exports = {
         return Promise.all(notifications);
     },
 
-    getMyNotifications: function (_id, page) {
+    getMyNotifications: function (_id, skip = 0) {
         const regex = new RegExp(`^${_id}_`);
 
         return notificationModel.aggregate([
@@ -118,8 +118,19 @@ module.exports = {
             { $replaceRoot: { newRoot: '$notifications' } },
             { $match: { deleted: false } },
             { $sort: { createdAt: -1 } },
-            { $skip: (page - 1) * 10 },
+            { $skip: skip },
             { $limit: 10 },
+        ]);
+    },
+
+    findById: function (_id, notificationId) {
+        const regex = new RegExp(`^${_id}_`);
+
+        return notificationModel.aggregate([
+            { $match: { user: regex } },
+            { $unwind: '$notifications' },
+            { $replaceRoot: { newRoot: '$notifications' } },
+            { $match: { _id: notificationId } },
         ]);
     },
 
@@ -145,6 +156,15 @@ module.exports = {
             { $set: { 'notifications.$[element].deleted': true } },
             { arrayFilters: [{ 'element._id': notificationId }] },
         );
+    },
+
+    likeTweet: async function (_id, tweetOwnerId, notification) {
+        const user = await userService.getUserDTO(_id);
+
+        return this.insertNotification(tweetOwnerId, {
+            user,
+            ...notification,
+        });
     },
 
     dislikeTweet: async function (userId, tweetId) {
