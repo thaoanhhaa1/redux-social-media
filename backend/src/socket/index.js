@@ -1,51 +1,46 @@
-const { default: mongoose } = require('mongoose');
-const onlineStatusModel = require('../app/models/onlineStatusModel');
+const socketIoLib = require('socket.io');
+const tweetSocket = require('./tweetSocket');
+const { socketEvents } = require('../constants');
+const { setOffline } = require('../app/services/onlineStatusService');
 
 function connect(server) {
-    const io = require('socket.io')(server, {
+    const io = socketIoLib(server, {
         cors: {
-            origin: 'http://localhost:3000',
+            origin: process.env.FE_URL,
             methods: ['GET', 'POST'],
         },
-    }); //? invoking the func also something like func()
+    });
 
+    global.socketIo = io;
     global.sockets = [];
-    io.on('connection', (socket) => {
+
+    io.on(socketEvents.on.CONNECTION, (socket) => {
         const userId = socket.handshake?.auth?._id;
 
+        // ! DELETE in production
         console.log(`Socket.io connection ${socket.id}`);
 
-        // FIXME emit online/offline event
-        io.emit('online', userId);
+        io.emit(socketEvents.emit.ONLINE, userId);
 
         global.sockets.push(socket);
-        global.socketIo = io;
 
-        socket.on('online', ({ userId }) => {
-            io.emit('online', userId);
+        socket.on(socketEvents.on.ONLINE, ({ userId }) => {
+            io.emit(socketEvents.emit.ONLINE, userId);
         });
 
-        socket.on('disconnect', async function () {
+        socket.on(socketEvents.on.DISCONNECT, async function () {
             global.sockets = global.sockets.filter((s) => socket.id !== s.id);
             const date = new Date();
-
-            io.emit('offline', {
+            const data = {
                 userId,
                 date,
-            });
+            };
 
-            if (userId)
-                await onlineStatusModel.updateOne(
-                    {
-                        _id: new mongoose.Types.ObjectId(userId),
-                    },
-                    {
-                        $set: {
-                            offline: date,
-                        },
-                    },
-                );
+            io.emit(socketEvents.emit.OFFLINE, data);
+            if (userId) setOffline(data).then();
         });
+
+        tweetSocket.join(socket, io);
     });
 }
 

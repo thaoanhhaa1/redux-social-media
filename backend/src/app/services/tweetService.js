@@ -1,5 +1,4 @@
 const followService = require('./followService');
-const { location, user } = require('../../utils');
 const tweetModel = require('../models/tweetModel');
 const { default: mongoose } = require('mongoose');
 const { locationQueries, userQueries } = require('../queries');
