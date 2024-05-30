@@ -1,4 +1,6 @@
+import { useCallback, useRef, useState } from 'react';
 import { useCardContext } from '../../contexts/CardContext';
+import { useOnClickOutside } from '../../hooks';
 import { getTimeTweet } from '../../utils';
 import { BottomIcon } from '../Icons';
 import Image from '../Image';
@@ -6,11 +8,18 @@ import TagPeople from '../TagPeople';
 import CardMore from './CardMore';
 
 const CardProfile = () => {
+    const [open, setOpen] = useState<boolean>(false);
     const { tweet } = useCardContext();
     const user = tweet.user;
+    const menuBtnRef = useRef(null);
+
+    const openMenu = useCallback(() => setOpen(true), []);
+    const closeMenu = useCallback(() => setOpen(false), []);
+
+    useOnClickOutside(menuBtnRef, closeMenu);
 
     return (
-        <div className='flex gap-2 xxs:gap-4 overflow-y-visible'>
+        <div className='flex gap-2 xxs:gap-4 overflow-hidden'>
             <Image alt='' src={user.avatar} className='w-10 h-10' rounded />
             <div className='flex justify-between items-center flex-1 gap-2'>
                 <div>
@@ -55,9 +64,11 @@ const CardProfile = () => {
                     <span className='whitespace-nowrap'>
                         {getTimeTweet(tweet.createdAt)}
                     </span>
-                    <div className='relative group/more'>
-                        <BottomIcon className='cursor-pointer w-4 h-4 fill-black dark:fill-white group-hover/more:fill-blue dark:group-hover/more:fill-blue-white-2 transition' />
-                        <CardMore />
+                    <div className='relative flex' ref={menuBtnRef}>
+                        <button onClick={openMenu}>
+                            <BottomIcon className='cursor-pointer w-4 h-4 fill-black dark:fill-white group-hover/more:fill-blue dark:group-hover/more:fill-blue-white-2 transition' />
+                        </button>
+                        <CardMore open={open} onClose={closeMenu} />
                     </div>
                 </div>
             </div>

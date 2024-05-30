@@ -14,7 +14,7 @@ const CardMoreBtn = ({ cardMore }: { cardMore: ICardMoreBtn }) => {
             onClick={onClick}
             align='left'
             gap='4'
-            className='p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-white-opacity-10 transition-all'
+            className='p-2 h-auto text-black dark:text-white hover:bg-gray-100 dark:hover:bg-white-opacity-10 transition-all text-xs'
             icon={<Icon className='fill-black dark:fill-white-1' />}
         >
             {title}

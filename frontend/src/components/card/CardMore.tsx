@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useLayoutEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useWindowSize } from 'usehooks-ts';
 import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
@@ -20,15 +21,23 @@ import {
     ReportIcon,
     UnFollowIcon,
 } from '../Icons';
+import Portal from '../Portal';
 import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
 
-const CardMore = () => {
+const CardMore = ({
+    open,
+    onClose,
+}: {
+    open: boolean;
+    onClose: () => void;
+}) => {
     const {
         tweet: { user, _id, notInterested },
     } = useCardContext();
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
+    const { height, width } = useWindowSize();
     const actions = useMemo(() => {
         const temp: ICardMoreBtn[] = [
             {
@@ -67,6 +76,7 @@ const CardMore = () => {
                                 follow: !user.follow,
                             }),
                         );
+                        onClose();
                     },
                 },
                 {
@@ -91,6 +101,7 @@ const CardMore = () => {
                                 userId: user._id,
                             }),
                         );
+                        onClose();
                     },
                 },
             );
@@ -100,28 +111,78 @@ const CardMore = () => {
         _id,
         dispatch,
         notInterested,
+        onClose,
         owner._id,
         user._id,
         user.follow,
         user.isInList,
         user.username,
     ]);
-    // const { isPopup } = useCardContext();
-    // const [show, setShow] = useState<boolean>(!isPopup);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const moreRef = useRef<HTMLDivElement>(null);
 
-    // useEffectOnce(() => setShow(true));
+    useLayoutEffect(() => {
+        if (!open) return;
 
-    // if (!show) return null;
+        const handleScroll = () => {
+            const cardElement = wrapperRef.current;
+
+            if (!cardElement) return;
+
+            const { x, y } = cardElement.getBoundingClientRect();
+
+            if (!moreRef.current) return;
+
+            const moreElement = moreRef.current;
+
+            const { height: moreHeight } = moreElement.getBoundingClientRect();
+
+            if (y + moreHeight < height) {
+                moreElement.classList.remove('-translate-y-full');
+                moreElement.style.top = `${y}px`;
+            } else {
+                moreElement.classList.add('-translate-y-full');
+                moreElement.style.top = `${y - 16}px`;
+            }
+
+            moreElement.style.left = `${x}px`;
+        };
+
+        handleScroll();
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [open, height, width]);
 
     return (
-        <Wrapper
-            gap='0'
-            className='card__more z-1 dark:!bg-dark-black-3 transition-all duration-300 invisible group-hover/more:visible opacity-0 group-hover/more:opacity-100 absolute -right-1 top-full px-[6px] py-3 shadow-container dark:shadow-none'
+        <div
+            ref={wrapperRef}
+            className='absolute -right-1 top-full opacity-0 invisible'
         >
-            {actions.map((action) => (
-                <CardMoreBtn key={v4()} cardMore={action} />
-            ))}
-        </Wrapper>
+            <div className='opacity-0 invisible'>
+                {actions.map((action) => (
+                    <CardMoreBtn key={v4()} cardMore={action} />
+                ))}
+            </div>
+            {open && (
+                <Portal>
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <Wrapper
+                            ref={moreRef}
+                            gap='0'
+                            className='card__more z-1 dark:!bg-dark-black-3 fixed px-[6px] py-3 shadow-container dark:shadow-none'
+                        >
+                            {actions.map((action) => (
+                                <CardMoreBtn key={v4()} cardMore={action} />
+                            ))}
+                        </Wrapper>
+                    </div>
+                </Portal>
+            )}
+        </div>
     );
 };
 

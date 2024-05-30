@@ -18,7 +18,7 @@ const Card = ({
     className?: string;
     isPopup?: boolean;
 }) => {
-    const { tweet } = useCardContext();
+    const { tweet, toggleNotInterested } = useCardContext();
     const ref = useRef<HTMLDivElement | undefined>();
     const user = useAppSelector((state: RootState) => state.user);
 
@@ -28,24 +28,16 @@ const Card = ({
         if (!cardElement) return;
 
         const moreElement = cardElement.getElementsByClassName('card__more')[0];
-        const containerElement = cardElement.parentElement;
 
-        if (!moreElement || !containerElement) return;
+        if (!moreElement) return;
 
-        const { top: topMore, height: heightMore } =
-            moreElement.getBoundingClientRect();
-        const { top: topContainer, height: heightContainer } =
-            containerElement.getBoundingClientRect();
+        const { top, height } = moreElement.getBoundingClientRect();
 
-        if (topMore + heightMore > topContainer + heightContainer) {
+        if (top > height)
             moreElement.classList.add('!top-0', '-translate-y-full');
-        }
     });
 
     if (!tweet) return null;
-
-    // TODO
-    const handleInterestedTweet = () => {};
 
     return (
         <div>
@@ -69,7 +61,7 @@ const Card = ({
                             </p>
                         </div>
                         <Button
-                            onClick={handleInterestedTweet}
+                            onClick={toggleNotInterested}
                             className='bg-[#E4E6EB] text-sm leading-sm font-semibold'
                         >
                             Undo
