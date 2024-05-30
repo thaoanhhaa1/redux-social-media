@@ -1,8 +1,56 @@
 const followService = require('./followService');
 const { location, user } = require('../../utils');
 const tweetModel = require('../models/tweetModel');
+const { default: mongoose } = require('mongoose');
+const { locationQueries, userQueries } = require('../queries');
 
 const NUMBER_OF_PAGE = 10;
+
+const getDetailTweets = (query, userId, page = 1) => {
+    const skip = (page - 1) * NUMBER_OF_PAGE;
+
+    const pageQuery = [
+        {
+            $skip: skip,
+        },
+        {
+            $limit: NUMBER_OF_PAGE,
+        },
+    ];
+
+    return tweetModel.aggregate([
+        {
+            $match: query,
+        },
+        ...locationQueries.lookupLocation,
+        userQueries.lookupTagUser,
+        {
+            $lookup: {
+                from: 'lists',
+                as: 'lists',
+                let: { id: '$user._id' },
+                pipeline: [{ $match: { $expr: { $in: ['$$id', '$list'] } } }],
+            },
+        },
+        {
+            $addFields: {
+                'user.isInList': {
+                    $cond: [{ $gt: [{ $size: '$lists' }, 0] }, true, false],
+                },
+                'user.follow': true,
+                numberOfLikes: { $size: '$likes' },
+            },
+        },
+        ...pageQuery,
+        {
+            $addFields: {
+                notInterested: {
+                    $in: [userId, '$notInterested'],
+                },
+            },
+        },
+    ]);
+};
 
 module.exports = {
     incNumberOfComments: (_id) =>
@@ -42,8 +90,8 @@ module.exports = {
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: limit },
-            ...location.lookup,
-            user.tagPeople,
+            ...locationQueries.lookupLocation,
+            userQueries.lookupTagUser,
             {
                 $addFields: {
                     'user.isInList': false,
@@ -77,8 +125,8 @@ module.exports = {
                     },
                 },
             },
-            ...location.lookup,
-            user.tagPeople,
+            ...locationQueries.lookupLocation,
+            userQueries.lookupTagUser,
             {
                 $lookup: {
                     from: 'lists',
@@ -185,67 +233,30 @@ module.exports = {
             { $pull: { notInterested: userId } },
         ),
 
-    getTweet: (tweetId) => tweetModel.findById(tweetId),
+    getTweet: async ({ tweetId, userId }) => {
+        const tweets = await getDetailTweets({
+            _id: new mongoose.Types.ObjectId(tweetId),
+        });
+
+        return tweets[0];
+    },
 
     getTweetsByUserId: (_id, userId, page) => {
-        const skip = (page - 1) * NUMBER_OF_PAGE;
-
-        return tweetModel.aggregate([
+        return getDetailTweets(
             {
-                $match: {
-                    $expr: {
-                        $and: [
-                            {
-                                $eq: ['$user._id', userId],
-                            },
-                            {
-                                $not: [{ $in: [_id, '$notInterested'] }],
-                            },
-                        ],
-                    },
-                },
-            },
-            ...location.lookup,
-            user.tagPeople,
-            {
-                $lookup: {
-                    from: 'lists',
-                    as: 'lists',
-                    let: { id: '$user._id' },
-                    pipeline: [
-                        { $match: { $expr: { $in: ['$$id', '$list'] } } },
+                $expr: {
+                    $and: [
+                        {
+                            $eq: ['$user._id', userId],
+                        },
+                        {
+                            $not: [{ $in: [_id, '$notInterested'] }],
+                        },
                     ],
                 },
             },
-            {
-                $addFields: {
-                    'user.isInList': {
-                        $cond: [{ $gt: [{ $size: '$lists' }, 0] }, true, false],
-                    },
-                    'user.follow': true,
-                    numberOfLikes: { $size: '$likes' },
-                },
-            },
-            {
-                $sort: {
-                    numberOfComments: -1,
-                    numberOfLikes: -1,
-                    createdAt: -1,
-                },
-            },
-            {
-                $skip: skip,
-            },
-            {
-                $limit: NUMBER_OF_PAGE,
-            },
-            {
-                $addFields: {
-                    notInterested: {
-                        $in: [_id, '$notInterested'],
-                    },
-                },
-            },
-        ]);
+            userId,
+            page,
+        );
     },
 };

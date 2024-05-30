@@ -86,9 +86,10 @@ module.exports = {
 
     getTweet: async (req, res, next) => {
         const tweetId = req.params.tweet_id;
+        const { _id } = req.body;
 
         try {
-            const tweet = await tweetService.getTweet(tweetId);
+            const tweet = await tweetService.getTweet({ tweetId, userId: _id });
 
             if (tweet) return res.json(tweet);
 
