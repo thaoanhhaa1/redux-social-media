@@ -25,6 +25,21 @@ import Portal from '../Portal';
 import Wrapper from '../wrapper';
 import CardMoreBtn from './CardMoreBtn';
 
+// TODO Report tweet
+/**
+ * Click report
+ * ==> Send a request to the server ==> Undo report
+ * ==> Open a modal
+ */
+
+// TODO Block user
+/**
+ * Bạn đã chặn trang cá nhân của Duc Dung ==> 15px 600
+ * Các bạn sẽ không thể nhìn thấy hoặc liên hệ với nhau. ==> 12px 400
+ * Separate the two sentences with a new line
+ * Button: Quản lý Bảng feed ==> 15px 500
+ */
+
 const CardMore = ({
     open,
     onClose,

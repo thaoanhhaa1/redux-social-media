@@ -6,6 +6,7 @@ import {
     toggleFollow,
     toggleInterested,
     toggleLikeTweet,
+    toggleList,
 } from '../../features/tweets';
 import { IComment, ITweet } from '../../interfaces';
 import { getParentComment } from '../../utils';
@@ -19,9 +20,13 @@ const CardWrapper = ({ tweet, children }: Props) => {
     const user = useAppSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
 
-    const toggleUserList = () => {
-        tweet.user.isInList = !tweet.user.isInList;
-    };
+    const toggleUserList = () =>
+        dispatch(
+            toggleList({
+                userId: tweet.user._id,
+                isAdd: !tweet.user.isInList,
+            }),
+        );
 
     const toggleUserFollow = () =>
         dispatch(

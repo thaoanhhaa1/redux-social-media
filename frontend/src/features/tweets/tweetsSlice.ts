@@ -98,7 +98,7 @@ const getComments = createAsyncThunk(
         tweetId,
         skip,
     }: {
-        tweetId: String;
+        tweetId: string;
         skip: number;
     }): Promise<Array<IComment>> => {
         const res = await axiosClient.get(api.getComments(tweetId), {
@@ -410,10 +410,9 @@ const tweetsSlice = createSlice({
             .addCase(getTweet.fulfilled, (state, { payload }) => {
                 state.tweets.push(getTweetDTO(payload));
             })
-            .addCase(getComments.fulfilled, (state, { payload }) => {
-                if (!payload.length) return state;
+            .addCase(getComments.fulfilled, (state, { payload, meta }) => {
+                const { tweetId } = meta.arg;
 
-                const tweetId = payload[0].post;
                 const tweet = findById(state.tweets, tweetId);
                 if (!tweet) return state;
 
