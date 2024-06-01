@@ -42,6 +42,12 @@ const NotificationSchema = new Schema(
                     document: {
                         type: String,
                     },
+                    tweetId: {
+                        type: String,
+                    },
+                    tweetUsername: {
+                        type: String,
+                    },
                     group: {
                         type: {
                             _id: {

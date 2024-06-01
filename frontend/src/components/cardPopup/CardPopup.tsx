@@ -31,7 +31,8 @@ const CardPopup = ({
 
     useEffect(() => {
         async function getCommentsData() {
-            if (!tweet?._id || tweet?.comments.length || !isShow) return;
+            if (!tweet?._id || tweet.skip || tweet?.comments.length || !isShow)
+                return;
 
             await dispatch(
                 getComments({

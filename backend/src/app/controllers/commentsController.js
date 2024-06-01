@@ -81,6 +81,8 @@ module.exports = {
                 document: result._id,
                 type: notificationType.POST_COMMENT,
                 description: content,
+                tweetUsername: tweet.user.username,
+                tweetId: tweet._id,
             };
 
             tweetService
@@ -249,6 +251,8 @@ module.exports = {
                                     document: commentId,
                                     type: notificationType.LIKE_COMMENT,
                                     description: comment.content,
+                                    tweetUsername: tweet.user.username,
+                                    tweetId: comment.post,
                                 },
                             ),
                     )

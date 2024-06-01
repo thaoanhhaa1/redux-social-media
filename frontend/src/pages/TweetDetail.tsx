@@ -43,7 +43,7 @@ const TweetDetail = () => {
 
     return (
         <CardWrapper tweet={tweet}>
-            <div className='mx-auto max-w-[700px] px-2'>
+            <div className='mx-auto max-w-[700px] px-2 pb-5'>
                 <CardDetail tweet={tweet} />
             </div>
         </CardWrapper>

@@ -75,6 +75,8 @@ module.exports = {
                 .insertToFollowers(_id, {
                     document: result._id,
                     type: notificationType.POST_TWEET,
+                    tweetUsername: username,
+                    tweetId: tweet._id,
                 })
                 .then(() => console.log('~~~ insertToFollowers ok'));
 
@@ -163,6 +165,8 @@ module.exports = {
                             description: tweet?.content,
                             createdAt: date,
                             _id: date.getTime(),
+                            tweetUsername: tweet.user.username,
+                            tweetId: tweet._id,
                         })
                         .then((data) => {
                             const notification = data.notifications.find(

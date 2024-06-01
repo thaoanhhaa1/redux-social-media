@@ -1,14 +1,13 @@
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
 import App from './App';
 import { store } from './app/store';
 import GlobalStyle from './components/GlobalStyle';
 import reportWebVitals from './reportWebVitals';
 
-import './index.css';
-import 'react-toastify/dist/ReactToastify.css';
 import 'react-loading-skeleton/dist/skeleton.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -18,7 +17,6 @@ root.render(
     <Provider store={store}>
         <GlobalStyle>
             <App />
-            <ToastContainer />
         </GlobalStyle>
     </Provider>,
     // </React.StrictMode>,

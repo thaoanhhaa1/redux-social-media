@@ -6,6 +6,8 @@ interface INotification {
     user: IPerson;
     type: NotificationType;
     document: string;
+    tweetId?: string;
+    tweetUsername?: string;
     description?: string;
     createdAt: string;
 }

@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from 'react';
+import { ToastContentProps, toast } from 'react-toastify';
 import { Socket } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
@@ -9,6 +10,8 @@ import {
 } from '../features/notifications';
 import { dec, inc } from '../features/profile';
 import { toggleLikeTweetSocket } from '../features/tweets';
+import { INotification } from '../interfaces';
+import NotificationAllItem from './notification/NotificationAllItem';
 
 const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
     const user = useAppSelector((state: RootState) => state.user);
@@ -63,8 +66,21 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 }),
             );
         });
-        socketIo.on('notification', (data) => {
+        socketIo.on('notification', (data: INotification) => {
             dispatch(addNotificationSocket(data));
+
+            toast(
+                (props: ToastContentProps<unknown>) => (
+                    <NotificationAllItem {...props} data={data} />
+                ),
+                {
+                    className: 'p-0 max-w-[500px]',
+                    bodyClassName: 'p-0',
+                    toastId: data._id,
+                    autoClose: false,
+                    closeButton: false,
+                },
+            );
         });
 
         return () => {

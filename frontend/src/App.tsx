@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import { useLocalStorage } from 'usehooks-ts';
 import api from './api';
 import axiosClient from './api/axiosClient';
@@ -31,6 +32,8 @@ function App() {
 
     return (
         <Router>
+            <ToastContainer />
+
             <Routes>
                 {publicRoutes.map((route, index) => {
                     let Layout = route?.layout || DefaultLayout;

@@ -13,7 +13,7 @@ import { setLoading } from '../features/page';
 const Notifications = () => {
     const [isAllActive, setAllActive] = useState(true);
     const user = useAppSelector((state: RootState) => state.user);
-    const notifications = useAppSelector(
+    const { notifications, page } = useAppSelector(
         (state: RootState) => state.notifications,
     );
     const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ const Notifications = () => {
     }, [dispatch, user._id]);
 
     useEffect(() => {
-        if (!user._id || notifications.notifications.length) return;
+        if (!user._id || notifications.length || page) return;
 
         dispatch(
             getNotifications({
@@ -31,7 +31,7 @@ const Notifications = () => {
                 pages: 0,
             }),
         );
-    }, [dispatch, notifications.notifications.length, user._id]);
+    }, [dispatch, notifications.length, page, user._id]);
 
     return (
         <Page
