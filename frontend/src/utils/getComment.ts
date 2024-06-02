@@ -1,17 +1,20 @@
-import { IComment, ITweet } from '../interfaces';
-import getParentComment from './getParentComment';
+import { IComment } from '../interfaces';
 
-const getComment = (tweet: ITweet, commentId: string): IComment | undefined => {
-    const parentComment = getParentComment(tweet.comments, commentId);
+const getComment = (
+    comments: IComment[],
+    commentId: string,
+): IComment | undefined => {
+    const length = comments.length;
 
-    if (parentComment)
-        return parentComment.comments.find(
-            (comment) => comment._id === commentId,
-        );
+    for (let i = 0; i < length; i++) {
+        const comment = comments[i];
 
-    const comment = tweet.comments.find((comment) => comment._id === commentId);
+        if (comment._id === commentId) return comment;
 
-    if (comment) return comment;
+        const commentInChild = getComment(comment.comments, commentId);
+
+        if (commentInChild) return commentInChild;
+    }
 
     return undefined;
 };

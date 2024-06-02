@@ -235,30 +235,25 @@ module.exports = {
         const { _id, isLike } = req.body;
 
         try {
-            const updateResult = await commentService.toggleLike(
-                commentId,
-                isLike,
-                _id,
-            );
+            const [updateResult, comment] = await Promise.all([
+                commentService.toggleLike(commentId, isLike, _id),
+                commentService.findById(commentId),
+            ]);
 
-            if (!updateResult.matchedCount)
+            if (!updateResult.matchedCount || !comment)
                 return res.status(404).json(errors[404]("Comment was't found"));
 
             // Notification
             if (isLike) {
-                commentService
-                    .findById(commentId)
-                    .then((comment) =>
-                        Promise.all([
-                            commentService.findById(commentId),
-                            userService.findDTOById(_id),
-                            tweetService.getNotInterestedById(comment.post),
-                        ]),
-                    )
+                Promise.all([
+                    commentService.findById(commentId),
+                    userService.findDTOById(_id),
+                    tweetService.findById(comment.post),
+                ])
                     .then(
-                        ([comment, user, notInterested]) =>
+                        ([comment, user, tweet]) =>
                             comment.user._id === _id ||
-                            notInterested.includes(comment.user._id) ||
+                            tweet.notInterested.includes(comment.user._id) ||
                             notificationService.insertNotification(
                                 comment.user._id,
                                 {
@@ -271,9 +266,19 @@ module.exports = {
                                 },
                             ),
                     )
-                    .then(() =>
-                        console.log('~~~ NOTIFY - LIKE COMMENT --> OK'),
-                    );
+                    .then((data) => {
+                        console.log('~~~ NOTIFY - LIKE COMMENT --> OK');
+
+                        if (typeof data !== 'object') return;
+
+                        global.socketIo
+                            .in(comment.user._id)
+                            .emit(socketEvents.emit.NOTIFICATION, data);
+                    })
+                    .catch((error) => {
+                        console.error('~~~ NOTIFY - LIKE COMMENT --> ERROR');
+                        console.error(error);
+                    });
             } else {
                 notificationService
                     .dislikeComment(_id, commentId)
@@ -281,6 +286,15 @@ module.exports = {
                         console.log('~~~ NOTIFY - DISLIKE COMMENT --> OK'),
                     );
             }
+
+            global.socketIo.emit(
+                socketEvents.emit[isLike ? 'LIKE_COMMENT' : 'DISLIKE_COMMENT'],
+                {
+                    commentId,
+                    userId: _id,
+                    tweetId: comment.post,
+                },
+            );
 
             res.sendStatus(200);
         } catch (error) {

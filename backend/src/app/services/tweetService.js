@@ -80,6 +80,8 @@ const getDetailTweets = (query, userId, page = 1) => {
 };
 
 module.exports = {
+    findById: (id) => tweetModel.findById(id),
+
     incNumberOfComments: (_id) =>
         tweetModel.updateOne(
             {

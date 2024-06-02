@@ -365,6 +365,41 @@ const tweetsSlice = createSlice({
                 tweet.likes.splice(index, 1);
             }
         },
+        toggleLikeCommentSocket: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    commentId: string;
+                    userId: string;
+                    isLike: boolean;
+                };
+            },
+        ) => {
+            const tweet = findById(state.tweets, payload.tweetId);
+            if (!tweet) return state;
+
+            const comment = getComment(tweet.comments, payload.commentId);
+
+            if (!comment) return state;
+
+            if (payload.isLike) {
+                if (!comment.likes.includes(payload.userId)) {
+                    comment.likes.push(payload.userId);
+                    comment.numberOfLikes += 1;
+                }
+            } else {
+                const index = comment.likes.findIndex(
+                    (id) => id === payload.userId,
+                );
+
+                if (index === -1) return state;
+                comment.likes.splice(index, 1);
+                comment.numberOfLikes -= 1;
+            }
+        },
         addCommentSocket: (state, { payload }: { payload: IComment }) => {
             addComment(state, payload);
         },
@@ -498,7 +533,7 @@ const tweetsSlice = createSlice({
 
                 if (!tweet) return state;
 
-                const comment = getComment(tweet, commentId);
+                const comment = getComment(tweet.comments, commentId);
 
                 if (!comment) return state;
 
@@ -574,7 +609,7 @@ const tweetsSlice = createSlice({
                 const tweet = findById(state.tweets, tweetId);
                 if (!tweet) return state;
 
-                const comment = getComment(tweet, payload[0].parent!);
+                const comment = getComment(tweet.comments, payload[0].parent!);
 
                 if (!comment) return state;
 
@@ -584,7 +619,7 @@ const tweetsSlice = createSlice({
                 const tweet = findById(state.tweets, payload.post);
                 if (!tweet) return state;
 
-                const comment = getComment(tweet, payload._id);
+                const comment = getComment(tweet.comments, payload._id);
 
                 if (!comment) return state;
 
@@ -615,7 +650,7 @@ function addComment(state: FollowingTweet, payload: IComment) {
 
     const commentDTO = getCommentDTO(payload);
     if (payload.parent) {
-        const comment = getComment(tweet, payload.parent);
+        const comment = getComment(tweet.comments, payload.parent);
 
         if (!comment) return state;
 
@@ -653,5 +688,6 @@ export const {
     updateTweet,
     setTweetActiveId,
     toggleLikeTweetSocket,
+    toggleLikeCommentSocket,
     addCommentSocket,
 } = tweetsSlice.actions;

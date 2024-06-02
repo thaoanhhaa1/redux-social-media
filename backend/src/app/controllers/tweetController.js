@@ -171,26 +171,21 @@ module.exports = {
                                     socketEvents.emit.NOTIFICATION,
                                     notification,
                                 );
-                            global.socketIo
-                                .in(tweetOwner)
-                                .emit(socketEvents.emit.LIKE_TWEET, {
-                                    tweetId,
-                                    userId: _id,
-                                });
                         })
                         .catch((error) => {
                             console.log('🚀 ~ .catch ~ error:', error);
                         });
                 }
             } else
-                notificationService.dislikeTweet(_id, tweetId).then(() => {
-                    global.socketIo
-                        .in(tweet.user._id)
-                        .emit(socketEvents.emit.DISLIKE_TWEET, {
-                            tweetId,
-                            userId: _id,
-                        });
-                });
+                notificationService.dislikeTweet(_id, tweetId).then(() => {});
+
+            global.socketIo.emit(
+                socketEvents.emit[isLike ? 'LIKE_TWEET' : 'DISLIKE_TWEET'],
+                {
+                    tweetId,
+                    userId: _id,
+                },
+            );
 
             return res.sendStatus(200);
         } catch (error) {

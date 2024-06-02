@@ -10,7 +10,11 @@ import {
     deleteNotificationSocket,
 } from '../features/notifications';
 import { dec, inc } from '../features/profile';
-import { addCommentSocket, toggleLikeTweetSocket } from '../features/tweets';
+import {
+    addCommentSocket,
+    toggleLikeCommentSocket,
+    toggleLikeTweetSocket,
+} from '../features/tweets';
 import { INotification } from '../interfaces';
 import NotificationAllItem from './notification/NotificationAllItem';
 
@@ -64,16 +68,18 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
         socketIo.on(socketEvents.on.UN_FOLLOWING, () =>
             dispatch(dec('following')),
         );
-        socketIo.on(socketEvents.on.LIKE_TWEET, (data) =>
+        socketIo.on(socketEvents.on.LIKE_TWEET, (data) => {
+            if (data.userId === user._id) return;
             dispatch(
                 toggleLikeTweetSocket({
                     tweetId: data.tweetId,
                     userId: data.userId,
                     isLike: true,
                 }),
-            ),
-        );
+            );
+        });
         socketIo.on(socketEvents.on.DISLIKE_TWEET, (data) => {
+            if (data.userId === user._id) return;
             dispatch(
                 toggleLikeTweetSocket({
                     tweetId: data.tweetId,
@@ -99,6 +105,62 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
             if (data.user._id === user._id) return;
             dispatch(addCommentSocket(data));
         });
+
+        socketIo.on(
+            socketEvents.on.LIKE_COMMENT,
+            ({
+                commentId,
+                userId,
+                tweetId,
+            }: {
+                commentId: string;
+                userId: string;
+                tweetId: string;
+            }) => {
+                if (userId === user._id) return;
+
+                dispatch(
+                    toggleLikeCommentSocket({
+                        commentId,
+                        tweetId,
+                        userId,
+                        isLike: true,
+                    }),
+                );
+            },
+        );
+
+        socketIo.on(
+            socketEvents.on.DISLIKE_COMMENT,
+            ({
+                commentId,
+                userId,
+                tweetId,
+            }: {
+                commentId: string;
+                userId: string;
+                tweetId: string;
+            }) => {
+                if (userId === user._id) return;
+
+                dispatch(
+                    toggleLikeCommentSocket({
+                        commentId,
+                        tweetId,
+                        userId,
+                        isLike: false,
+                    }),
+                );
+
+                dispatch(
+                    deleteNotificationSocket({
+                        userId,
+                        document: commentId,
+                        type: 'LIKE_COMMENT',
+                    }),
+                );
+            },
+        );
 
         return () => {
             Object.values(socketEvents.on).forEach((event) =>

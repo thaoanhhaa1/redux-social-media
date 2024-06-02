@@ -9,6 +9,8 @@ const on = {
     DISLIKE_TWEET: 'dislike-tweet',
     NOTIFICATION: 'notification',
     COMMENT_TWEET: 'comment-tweet',
+    LIKE_COMMENT: 'like-comment',
+    DISLIKE_COMMENT: 'dislike-comment',
 };
 const emit = {};
 
