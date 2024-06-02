@@ -2,13 +2,13 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
 import { CommentTweetProvider } from '../../contexts/CommentTweet';
+import { getChildrenComments } from '../../features/tweets';
 import IComment from '../../interfaces/IComment';
 import { classNames, getNextLevelComment } from '../../utils';
 import Avatar from '../Avatar';
 import CardComment from '../cardPopup/CardComment';
 import CommentContentTweet from './CommentContentTweet';
 import CommentUpdateTweet from './CommentUpdateTweet';
-import { getChildrenComments } from '../../features/tweets';
 
 export interface ICommentTweetProps {
     comment: IComment;
@@ -32,6 +32,8 @@ export default function CommentTweet({
     const [showCardComment, setShowCardComment] = useState<boolean>(false);
     const [showPopup, , setShowPopup] = useToggle(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const remainingComments =
+        comment.numberOfComments - comment.comments.length;
     const dispatch = useAppDispatch();
 
     const handleClickCancel = () => setEdit('');
@@ -95,16 +97,16 @@ export default function CommentTweet({
                             />
                         )) || <CommentContentTweet comment={comment} />}
 
-                        {!comment.comments.length && (
+                        {comment.comments.length < comment.numberOfComments && (
                             <div className='flex items-center gap-1'>
-                                {comment.numberOfComments > 0 && (
+                                {loading || (
                                     <span
                                         onClick={handleClickViewAllComments}
                                         className='cursor-pointer pl-4 text-[#65676B] dark:text-white-9 text-sm leading-sm font-semibold hover:underline'
                                     >
-                                        {comment.numberOfComments === 1
+                                        {remainingComments === 1
                                             ? 'View 1 reply'
-                                            : `View all ${comment.numberOfComments} replies`}
+                                            : `View all ${remainingComments} replies`}
                                     </span>
                                 )}
                                 {loading && (

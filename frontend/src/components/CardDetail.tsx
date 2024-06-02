@@ -18,11 +18,12 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [edit, setEdit] = useState<string>('');
     const dispatch = useAppDispatch();
+    const loadedComments = tweet.comments.length;
 
     const handleScroll = () => setScrolled(true);
 
     const loadMoreComment = () => {
-        dispatch(getComments({ tweetId: tweet._id, skip: tweet.skip + 1 }));
+        dispatch(getComments({ tweetId: tweet._id, skip: loadedComments }));
     };
 
     return (
@@ -42,14 +43,15 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
                         comment={comment}
                     />
                 ))}
-                {tweet.skip * 8 < tweet.numberOfComments && (
-                    <div
-                        onClick={loadMoreComment}
-                        className='cursor-pointer hover:underline p-4 text-xs leading-xs text-[#65676B] font-semibold'
-                    >
-                        View more comments
-                    </div>
-                )}
+                {loadedComments < tweet.numberOfComments &&
+                    loadedComments > 0 && (
+                        <div
+                            onClick={loadMoreComment}
+                            className='cursor-pointer hover:underline p-4 text-xs leading-xs text-[#65676B] font-semibold'
+                        >
+                            View more comments
+                        </div>
+                    )}
             </ScrollbarCustomize>
             <CardComment isParent={isPopup} />
         </div>

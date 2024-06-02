@@ -9,7 +9,9 @@ function getParentComment(
     for (let index = 0; index < length; index++) {
         const comment = comments[index];
 
-        if (comment._id === commentId) return undefined;
+        if (comment._id === commentId)
+            if (comment.parent) return comment;
+            else return undefined;
         if (comment.comments?.length) {
             const commentChild = getParentComment(comment.comments, commentId);
 

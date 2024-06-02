@@ -58,10 +58,10 @@ module.exports = {
         return Promise.all(queries);
     },
 
-    insertNotification: function (_id, notifications) {
+    insertNotification: async function (_id, notifications) {
         const date = new Date();
 
-        return notificationModel.findOneAndUpdate(
+        const notification = await notificationModel.findOneAndUpdate(
             {
                 user: new RegExp(`^${_id}_`),
                 count: { $lt: 10 },
@@ -86,6 +86,10 @@ module.exports = {
                 upsert: true,
             },
         );
+
+        return notification.notifications[
+            notification.notifications.length - 1
+        ];
     },
 
     insertToFollowers: async function (_id, notification) {

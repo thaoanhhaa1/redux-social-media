@@ -1,6 +1,7 @@
 import config from '../config';
 import comments from './comments';
 import notifications from './notifications';
+export * as socketEvents from './socketEvents';
 
 const { vneseUpper, vneseLower } = config;
 
@@ -48,4 +49,4 @@ const regex = {
     password: /^(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*[0-9]+)(?=.*[^A-Za-z0-9]+).{8,}$/,
 };
 
-export { regex, message, comments, notifications };
+export { comments, message, notifications, regex };

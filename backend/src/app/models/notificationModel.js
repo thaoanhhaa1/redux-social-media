@@ -1,6 +1,4 @@
-const { Schema, model, default: mongoose } = require('mongoose');
-const followModel = require('./followModel');
-const userModel = require('./userModel');
+const { Schema, model } = require('mongoose');
 const { notificationType } = require('../../constants');
 
 const NotificationSchema = new Schema(

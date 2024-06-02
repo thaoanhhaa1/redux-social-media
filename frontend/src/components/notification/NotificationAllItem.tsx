@@ -42,7 +42,7 @@ const NotificationAllItem = ({
     return (
         <Link
             onClick={handleClick}
-            to={`/users/${data.tweetUsername!}/tweets/${data.tweetId!}`}
+            to={`/${data.tweetUsername!}/tweets/${data.tweetId!}`}
             className={classNames(
                 'group/close flex gap-5 p-5 rounded-2.5 hover:bg-blue-white-4 dark:bg-dark-black-1 dark:hover:bg-dark-black-3 ease-linear duration-300',
                 toastProps ? '' : 'shadow-container dark:shadow-none',

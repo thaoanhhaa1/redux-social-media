@@ -9,6 +9,7 @@ const emit = {
     NOTIFICATION: 'notification',
     LIKE_TWEET: 'like-tweet',
     DISLIKE_TWEET: 'dislike-tweet',
+    COMMENT_TWEET: 'comment-tweet',
 };
 
 module.exports = {

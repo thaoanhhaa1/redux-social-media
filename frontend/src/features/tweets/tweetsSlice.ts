@@ -365,6 +365,9 @@ const tweetsSlice = createSlice({
                 tweet.likes.splice(index, 1);
             }
         },
+        addCommentSocket: (state, { payload }: { payload: IComment }) => {
+            addComment(state, payload);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -422,25 +425,7 @@ const tweetsSlice = createSlice({
                 tweet.comments.push(...comments);
             })
             .addCase(postComment.fulfilled, (state, { payload }) => {
-                payload.comments = [];
-                const tweet = findById(state.tweets, payload.post);
-                if (!tweet) return state;
-
-                const commentDTO = getCommentDTO(payload);
-                if (payload.parent) {
-                    const comment = getParentComment(
-                        tweet.comments,
-                        payload.parent,
-                    );
-                    if (comment) {
-                        comment.comments.push(commentDTO);
-                        comment.numberOfComments += 1;
-                    }
-                    return state;
-                }
-
-                tweet.comments.unshift(commentDTO);
-                tweet.numberOfComments += 1;
+                addComment(state, payload);
             })
             .addCase(toggleLikeTweet.pending, (state, { meta }) => {
                 const { tweetId, isLike, userId } = meta.arg;
@@ -593,9 +578,7 @@ const tweetsSlice = createSlice({
 
                 if (!comment) return state;
 
-                comment.comments.push(
-                    ...getCommentsDTO(payload, comment.level + 1),
-                );
+                comment.comments = getCommentsDTO(payload, comment.level + 1);
             })
             .addCase(editComment.fulfilled, (state, { payload }) => {
                 const tweet = findById(state.tweets, payload.post);
@@ -626,10 +609,34 @@ function findById(tweets: ITweet[], tweetId: string): ITweet | undefined {
     return tweets.find((tweet) => tweet._id === tweetId);
 }
 
+function addComment(state: FollowingTweet, payload: IComment) {
+    const tweet = findById(state.tweets, payload.post);
+    if (!tweet) return state;
+
+    const commentDTO = getCommentDTO(payload);
+    if (payload.parent) {
+        const comment = getComment(tweet, payload.parent);
+
+        if (!comment) return state;
+
+        commentDTO.level = comment.level + 1;
+        comment.comments.push(commentDTO);
+        comment.numberOfComments += 1;
+
+        return state;
+    }
+
+    tweet.comments.unshift(commentDTO);
+    tweet.numberOfComments += 1;
+}
+
 export default tweetsSlice.reducer;
 export {
     countFollowingTweets,
     countMyTweets,
+    deleteComment,
+    editComment,
+    getChildrenComments,
     getComments,
     getMyTweets,
     getTweet,
@@ -638,15 +645,13 @@ export {
     toggleFollow,
     toggleInterested,
     toggleLikeComment,
-    toggleList,
-    deleteComment,
-    getChildrenComments,
-    editComment,
     toggleLikeTweet,
+    toggleList,
 };
 export const {
     addNewTweet,
     updateTweet,
     setTweetActiveId,
     toggleLikeTweetSocket,
+    addCommentSocket,
 } = tweetsSlice.actions;

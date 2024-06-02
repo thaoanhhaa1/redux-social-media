@@ -1,3 +1,4 @@
+export { default as findTweetById } from './findTweetById';
 export { default as getArray } from './getArray';
 export { default as getBookmarkDTO } from './getBookmarkDTO';
 export { default as getBookmarksDTO } from './getBookmarksDTO';

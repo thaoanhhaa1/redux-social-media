@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../../app/hooks';
@@ -55,6 +55,14 @@ const CommentUpdateTweet = ({
 
         element.setSelectionRange(element.value.length, element.value.length);
     };
+
+    useLayoutEffect(() => {
+        if (!ref.current) return;
+
+        const element: HTMLTextAreaElement = ref.current;
+
+        element.focus();
+    }, []);
 
     return (
         <div className='flex-1'>

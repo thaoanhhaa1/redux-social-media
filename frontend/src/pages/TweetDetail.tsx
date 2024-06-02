@@ -1,52 +1,61 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
-import { Loading } from '../components';
+import { CardSkeleton } from '../components';
 import CardDetail from '../components/CardDetail';
 import CardWrapper from '../components/card/CardWrapper';
 import { comments } from '../constants';
 import { getComments, getTweet } from '../features/tweets';
+import { findTweetById } from '../utils';
+import NotFound from './NotFound';
 
+// TODO Skeleton loading
+// FIXME Check user of tweet
 const TweetDetail = () => {
+    const [loading, setLoading] = useState<boolean>(true);
     const { tweet_id: tweetId = '' } = useParams();
     const { tweets } = useAppSelector((state: RootState) => state.tweets);
     const tweet = useMemo(
-        () => tweets.find((tweet) => tweet._id === tweetId),
+        () => findTweetById(tweets, tweetId),
         [tweetId, tweets],
     );
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         async function getData() {
-            const tweet = tweets.find((tweet) => tweet._id === tweetId);
+            try {
+                setLoading(true);
+                const tweet = tweets.find((tweet) => tweet._id === tweetId);
 
-            if (!tweet) {
-                await dispatch(getTweet({ tweetId })).unwrap();
+                if (!tweet) await dispatch(getTweet({ tweetId })).unwrap();
 
-                return;
+                if (tweet && !tweet.skip)
+                    dispatch(
+                        getComments({
+                            tweetId: tweet._id,
+                            skip: tweet.skip * comments.LIMIT,
+                        }),
+                    );
+            } catch (error) {
+            } finally {
+                setLoading(false);
             }
-
-            if (!tweet.skip)
-                return await dispatch(
-                    getComments({
-                        tweetId: tweet._id,
-                        skip: tweet.skip * comments.LIMIT,
-                    }),
-                );
         }
 
         getData();
     }, [dispatch, tweetId, tweets]);
 
-    if (!tweet) return <Loading />;
+    if (!loading && !tweet) return <NotFound />;
 
     return (
-        <CardWrapper tweet={tweet}>
-            <div className='mx-auto max-w-[700px] px-2 pb-5'>
-                <CardDetail tweet={tweet} />
-            </div>
-        </CardWrapper>
+        <div className='mx-auto max-w-[700px] px-2 pb-5'>
+            {(tweet && (
+                <CardWrapper tweet={tweet}>
+                    <CardDetail tweet={tweet} />
+                </CardWrapper>
+            )) || <CardSkeleton />}
+        </div>
     );
 };
 

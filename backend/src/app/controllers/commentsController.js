@@ -1,4 +1,6 @@
-const { Types } = require('mongoose');
+const {
+    Types: { ObjectId },
+} = require('mongoose');
 const CommentModel = require('../models/commentModel');
 const TweetModel = require('../models/tweetModel');
 const { errors } = require('../../utils');
@@ -8,7 +10,7 @@ const {
     notificationService,
     userService,
 } = require('../services');
-const { notificationType } = require('../../constants');
+const { notificationType, socketEvents } = require('../../constants');
 
 module.exports = {
     // ENDPOINT: /api/private/comments
@@ -67,13 +69,9 @@ module.exports = {
             // Inc number of comments
             if (comment.parent)
                 commentService
-                    .incNumberOfComments(new Types.ObjectId(comment.parent))
+                    .incNumberOfComments(new ObjectId(comment.parent))
                     .then();
-            else {
-                tweetService
-                    .incNumberOfComments(new Types.ObjectId(tweetId))
-                    .then();
-            }
+            else tweetService.incNumberOfComments(new ObjectId(tweetId)).then();
 
             // Add notification
             const notification = {
@@ -88,44 +86,61 @@ module.exports = {
             tweetService
                 .getNotInterestedById(tweet._id)
                 .then((notInterested) => {
-                    const queries = [];
-
                     // - Tweet
                     if (
                         _id !== tweet.user._id &&
-                        !notInterested.includes(tweet.user._id)
+                        !notInterested.includes(tweet.user._id) &&
+                        !comment.parent
                     )
-                        queries.push(
-                            notificationService.insertNotification(
-                                tweet.user._id,
-                                notification,
-                            ),
-                        );
+                        return notificationService
+                            .insertNotification(tweet.user._id, notification)
+                            .then((data) => ({
+                                ...data.toObject(),
+                                to: tweet.user._id,
+                            }));
 
                     // - Comment
-                    if (comment.parent)
-                        queries.push(
-                            commentService
-                                .findById(comment.parent)
-                                .then(
-                                    (comment) =>
-                                        comment.user._id === _id ||
-                                        notInterested.includes(
-                                            comment.user._id,
-                                        ) ||
-                                        notificationService.insertNotification(
-                                            comment.user._id,
-                                            notification,
-                                        ),
-                                ),
-                        );
+                    if (comment.parent) {
+                        let parentCommentUserId;
+                        return commentService
+                            .findById(comment.parent)
+                            .then((comment) => {
+                                parentCommentUserId = comment.user._id;
+                                return (
+                                    parentCommentUserId === _id ||
+                                    notInterested.includes(
+                                        parentCommentUserId,
+                                    ) ||
+                                    notificationService.insertNotification(
+                                        parentCommentUserId,
+                                        notification,
+                                    )
+                                );
+                            })
+                            .then((data) => {
+                                return typeof data === 'object'
+                                    ? {
+                                          ...data.toObject(),
+                                          to: parentCommentUserId,
+                                      }
+                                    : Promise.resolve();
+                            });
+                    }
 
-                    return Promise.all(queries);
+                    return Promise.resolve();
                 })
-                .then(() =>
-                    console.log('~~~ NOTIFICATION - POST COMMENT ==> OK'),
-                );
+                .then((notification) => {
+                    console.log('~~~ NOTIFICATION - POST COMMENT ==> OK');
+                    console.log(notification);
 
+                    if (!notification) return;
+
+                    global.socketIo
+                        .in(notification.to)
+                        .emit(socketEvents.emit.NOTIFICATION, notification);
+                });
+
+            global.socketIo.emit(socketEvents.emit.COMMENT_TWEET, result);
             req.status(201).json(result);
         } catch (error) {
             next(error);

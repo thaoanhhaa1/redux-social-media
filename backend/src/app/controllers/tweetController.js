@@ -156,24 +156,15 @@ module.exports = {
                     !tweet.notInterested.includes(tweetOwner) &&
                     tweetOwner !== _id
                 ) {
-                    const date = new Date();
-
                     notificationService
                         .likeTweet(_id, tweetOwner, {
                             document: tweetId,
                             type: notificationType.LIKE_TWEET,
                             description: tweet?.content,
-                            createdAt: date,
-                            _id: date.getTime(),
                             tweetUsername: tweet.user.username,
                             tweetId: tweet._id,
                         })
-                        .then((data) => {
-                            const notification = data.notifications.find(
-                                (notification) =>
-                                    notification._id === date.getTime(),
-                            );
-
+                        .then((notification) => {
                             global.socketIo
                                 .in(tweetOwner)
                                 .emit(
