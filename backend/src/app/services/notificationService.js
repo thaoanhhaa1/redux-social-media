@@ -39,6 +39,18 @@ module.exports = {
             },
         ),
 
+    deleteNotificationOfUserIdByUserId: async ({ userId, otherUserId }) => {
+        const regex = new RegExp(`^${userId}_`);
+
+        return notificationModel.updateMany(
+            { user: regex },
+            { $set: { 'notifications.$[element].deleted': true } },
+            {
+                arrayFilters: [{ 'element.user._id': otherUserId }],
+            },
+        );
+    },
+
     deleteComment: async function (commentId) {
         const queries = [];
 

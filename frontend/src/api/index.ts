@@ -43,7 +43,8 @@ const api = {
         `/private/tweets/${tweetId}/not-interested`,
     interestedTweet: (tweetId: string) =>
         `/private/tweets/${tweetId}/interested`,
-    getTweet: (tweetId: string) => `/private/tweets/${tweetId}`,
+    getTweet: (userId: string, tweetId: string) =>
+        `/private/users/${userId}/tweets/${tweetId}`,
     getBookmarks: () => `/private/bookmarks`,
     getTweetsByUserId: (userId: string) => `/private/users/${userId}/tweets`,
 };

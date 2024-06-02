@@ -1,3 +1,4 @@
+const { listService } = require('.');
 const followModel = require('../models/followModel');
 const userService = require('./userService');
 
@@ -298,14 +299,30 @@ module.exports = {
         ),
 
     block: (_id, userId) =>
-        followModel.updateOne(
-            { user: _id },
-            {
-                $addToSet: {
-                    blocks: userId,
+        Promise.all([
+            followModel.updateOne(
+                { user: _id },
+                {
+                    $addToSet: {
+                        blocks: userId,
+                    },
+                    $pull: {
+                        following: userId,
+                        followers: userId,
+                    },
                 },
-            },
-        ),
+            ),
+            followModel.updateOne(
+                { user: userId },
+                {
+                    $pull: {
+                        following: _id,
+                        followers: _id,
+                    },
+                },
+            ),
+            listService.remove({ _id, userId }),
+        ]),
 
     unblock: (_id, userId) =>
         followModel.updateOne(
@@ -316,4 +333,13 @@ module.exports = {
                 },
             },
         ),
+
+    isBlocked: async (_id, userId) => {
+        const [block, blocked] = await Promise.all([
+            followModel.findOne({ user: _id, blocks: userId }),
+            followModel.findOne({ user: userId, blocks: _id }),
+        ]);
+
+        return block || blocked;
+    },
 };

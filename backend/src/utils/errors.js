@@ -7,6 +7,10 @@ const errors = {
         status: 401,
         message: 'Unauthorized',
     }),
+    403: () => ({
+        status: 403,
+        message: 'Forbidden',
+    }),
     404: (message = 'Not Found') => ({
         status: 404,
         message: message,

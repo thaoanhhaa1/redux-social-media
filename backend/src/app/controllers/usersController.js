@@ -1,6 +1,6 @@
-const { errors } = require('../../utils');
+const { createError } = require('../../utils');
 const UserModel = require('../models/userModel');
-const { userService, tweetService } = require('../services');
+const { userService, tweetService, followService } = require('../services');
 
 module.exports = {
     getUser: async (req, res, next) => {
@@ -59,10 +59,15 @@ module.exports = {
         const page = +(req.query.page ?? 1);
 
         try {
-            const user = await userService.findById(userId);
+            const [user, isBlocked] = await Promise.all([
+                userService.findById(userId),
+                followService.isBlocked(userId, _id),
+            ]);
 
-            if (!user)
-                return res.status(404).json(errors[404]("User wasn't found"));
+            if (!user) throw createError(404, 'User not found');
+
+            if (isBlocked)
+                throw createError(403, 'You are blocked by this user');
 
             const tweets = await tweetService.getTweetsByUserId(
                 _id,

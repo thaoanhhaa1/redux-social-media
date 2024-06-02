@@ -1,4 +1,5 @@
-const ListModel = require('../models/listsModel');
+const { createError } = require('../../utils');
+const { followService, listService } = require('../services');
 
 module.exports = {
     // [POST] /api/private/lists/add
@@ -7,19 +8,16 @@ module.exports = {
         const { _id, userId } = req.body;
 
         try {
-            const find = await ListModel.findOne({ _id });
+            const [find, isBlocked] = await Promise.all([
+                listService.findById(_id),
+                followService.isBlocked(_id, userId),
+            ]);
 
-            if (find) {
-                await ListModel.updateOne(
-                    { _id },
-                    { $addToSet: { list: userId } },
-                );
-            } else {
-                await new ListModel({
-                    _id,
-                    list: [userId],
-                }).save();
-            }
+            if (isBlocked)
+                throw createError(403, 'You are blocked by this user');
+
+            if (find) await listService.add({ _id, userId });
+            else await listService.create({ _id, userId });
             res.json({ result: userId });
         } catch (error) {
             next(error);
@@ -32,7 +30,7 @@ module.exports = {
         const { _id, userId } = req.body;
 
         try {
-            await ListModel.updateOne({ _id }, { $pull: { list: userId } });
+            await listService.remove({ _id, userId });
 
             res.json({ result: userId });
         } catch (error) {

@@ -11,10 +11,9 @@ import { findTweetById } from '../utils';
 import NotFound from './NotFound';
 
 // TODO Skeleton loading
-// FIXME Check user of tweet
 const TweetDetail = () => {
     const [loading, setLoading] = useState<boolean>(true);
-    const { tweet_id: tweetId = '' } = useParams();
+    const { tweet_id: tweetId = '', user_id: userId = '' } = useParams();
     const { tweets } = useAppSelector((state: RootState) => state.tweets);
     const tweet = useMemo(
         () => findTweetById(tweets, tweetId),
@@ -28,7 +27,8 @@ const TweetDetail = () => {
                 setLoading(true);
                 const tweet = tweets.find((tweet) => tweet._id === tweetId);
 
-                if (!tweet) await dispatch(getTweet({ tweetId })).unwrap();
+                if (!tweet)
+                    await dispatch(getTweet({ tweetId, userId })).unwrap();
 
                 if (tweet && !tweet.skip)
                     dispatch(
@@ -44,7 +44,7 @@ const TweetDetail = () => {
         }
 
         getData();
-    }, [dispatch, tweetId, tweets]);
+    }, [dispatch, tweetId, tweets, userId]);
 
     if (!loading && !tweet) return <NotFound />;
 

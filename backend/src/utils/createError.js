@@ -6,6 +6,8 @@ const createMessage = (status, message) => {
             return 'Bad request';
         case 401:
             return 'Unauthorized';
+        case 403:
+            return 'Forbidden';
         case 404:
             return 'Not Found';
         default:

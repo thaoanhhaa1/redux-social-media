@@ -1,8 +1,12 @@
 const FollowModel = require('../models/followModel');
 const TweetModel = require('../models/tweetModel');
 const { notificationType, socketEvents } = require('../../constants');
-const { tweetService, notificationService } = require('../services');
-const { errors } = require('../../utils');
+const {
+    tweetService,
+    notificationService,
+    followService,
+} = require('../services');
+const { createError } = require('../../utils');
 
 module.exports = {
     count: async (req, res, next) => {
@@ -88,14 +92,23 @@ module.exports = {
 
     getTweet: async (req, res, next) => {
         const tweetId = req.params.tweet_id;
+        console.log('🚀 ~ getTweet: ~ tweetId:', tweetId);
+        const userId = req.params.user_id;
+        console.log('🚀 ~ getTweet: ~ userId:', userId);
         const { _id } = req.body;
 
         try {
-            const tweet = await tweetService.getTweet({ tweetId, userId: _id });
+            const [tweet, isBlocked] = await Promise.all([
+                tweetService.getTweet({ tweetId, userId: _id }),
+                followService.isBlocked(userId, _id),
+            ]);
 
-            if (tweet) return res.json(tweet);
+            if (isBlocked)
+                throw createError(403, 'You are blocked by this user');
 
-            res.status(404).json(errors[404]("Tweet wasn't found"));
+            if (tweet && tweet.user.username === userId) return res.json(tweet);
+
+            throw createError(404, 'Tweet not found');
         } catch (error) {
             next(error);
         }

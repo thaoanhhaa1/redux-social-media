@@ -76,8 +76,14 @@ const countFollowingTweets = createAsyncThunk(
 
 const getTweet = createAsyncThunk(
     'tweets/getTweet',
-    async ({ tweetId }: { tweetId: string }): Promise<ITweet> => {
-        const res = await axiosClient.get(api.getTweet(tweetId));
+    async ({
+        tweetId,
+        userId,
+    }: {
+        tweetId: string;
+        userId: string;
+    }): Promise<ITweet> => {
+        const res = await axiosClient.get(api.getTweet(userId, tweetId));
 
         return res.data;
     },

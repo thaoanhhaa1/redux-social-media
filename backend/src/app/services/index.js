@@ -6,4 +6,5 @@ module.exports = {
     followService: require('./followService'),
     storyService: require('./storyService'),
     siteService: require('./siteService'),
+    listService: require('./listService'),
 };
