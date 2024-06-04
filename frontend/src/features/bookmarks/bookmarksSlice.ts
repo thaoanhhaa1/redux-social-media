@@ -75,6 +75,7 @@ const bookmarksSlice = createSlice({
                 state.loading = false;
             })
             .addCase(getTweets.fulfilled, (state, { payload }) => {
+                state.loading = false;
                 if (!payload.length) return state;
 
                 const userId = payload[0].user._id;

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { resetSubs } from '../../features/popupMultiLevel';
-import Modal from '../Modal';
+import Modal from '../modal/Modal';
 import PopupMultiLevel from '../popupMultiLevel';
 import Body from './Body';
 import Footer from './Footer';

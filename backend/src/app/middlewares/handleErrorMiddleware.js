@@ -1,19 +1,12 @@
-function handleErrorMiddleware(err, _, res, _) {
-    console.error(err.stack);
-    console.error(err);
-    console.error(process.env.NODE_ENV);
+function handleErrorMiddleware(err, _req, res, _next) {
+    console.error('Error:', err);
 
-    if (process.env.NODE_ENV === 'development') console.error(err.stack);
+    const status = err.status || 500;
+    const message = err.message || 'Internal Server Error';
 
-    if (err.status)
-        return res.status(err.status).json({
-            status: err.status,
-            message: err.message,
-        });
-
-    return res.status(500).json({
-        status: 500,
-        message: 'Internal Server Error',
+    return res.status(status).json({
+        status: status,
+        message: message,
     });
 }
 

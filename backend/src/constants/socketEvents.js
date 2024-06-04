@@ -12,6 +12,8 @@ const emit = {
     LIKE_COMMENT: 'like-comment',
     DISLIKE_COMMENT: 'dislike-comment',
     COMMENT_TWEET: 'comment-tweet',
+    BLOCK: 'block',
+    UNBLOCK: 'unblock',
 };
 
 module.exports = {

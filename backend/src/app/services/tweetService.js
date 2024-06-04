@@ -5,7 +5,7 @@ const { locationQueries, userQueries } = require('../queries');
 
 const NUMBER_OF_PAGE = 10;
 
-const getDetailTweets = (query, userId, page = 1) => {
+const getDetailTweets = ({ query, userId, page = 1, sort = false }) => {
     const skip = (page - 1) * NUMBER_OF_PAGE;
 
     const pageQuery = [
@@ -16,6 +16,16 @@ const getDetailTweets = (query, userId, page = 1) => {
             $limit: NUMBER_OF_PAGE,
         },
     ];
+
+    if (sort) {
+        pageQuery.unshift({
+            $sort: {
+                numberOfComments: -1,
+                numberOfLikes: -1,
+                createdAt: -1,
+            },
+        });
+    }
 
     return tweetModel.aggregate([
         {
@@ -74,6 +84,9 @@ const getDetailTweets = (query, userId, page = 1) => {
                 notInterested: {
                     $in: [userId, '$notInterested'],
                 },
+                report: {
+                    $in: [userId, '$reporters'],
+                },
             },
         },
     ]);
@@ -128,74 +141,40 @@ module.exports = {
                     notInterested: {
                         $in: [_id, '$notInterested'],
                     },
+                    report: false,
                 },
             },
         ]);
     },
 
     getFollowingTweets: function (_id, following, page) {
-        const skip = (page - 1) * NUMBER_OF_PAGE;
-
-        return tweetModel.aggregate([
-            {
-                $match: {
-                    $expr: {
-                        $and: [
-                            {
-                                $in: ['$user._id', following],
-                            },
-                            {
-                                $not: [{ $in: [_id, '$viewed'] }],
-                            },
-                            {
-                                $not: [{ $in: [_id, '$notInterested'] }],
-                            },
-                        ],
-                    },
-                },
-            },
-            ...locationQueries.lookupLocation,
-            userQueries.lookupTagUser,
-            {
-                $lookup: {
-                    from: 'lists',
-                    as: 'lists',
-                    let: { id: '$user._id' },
-                    pipeline: [
-                        { $match: { $expr: { $in: ['$$id', '$list'] } } },
+        return getDetailTweets({
+            query: {
+                $expr: {
+                    $and: [
+                        {
+                            $in: ['$user._id', following],
+                        },
+                        {
+                            $not: [{ $in: [_id, '$viewed'] }],
+                        },
+                        {
+                            $not: [{ $in: [_id, '$notInterested'] }],
+                        },
+                        {
+                            $not: [
+                                {
+                                    $in: [_id, '$reporters'],
+                                },
+                            ],
+                        },
                     ],
                 },
             },
-            {
-                $addFields: {
-                    'user.isInList': {
-                        $cond: [{ $gt: [{ $size: '$lists' }, 0] }, true, false],
-                    },
-                    'user.follow': true,
-                    numberOfLikes: { $size: '$likes' },
-                },
-            },
-            {
-                $sort: {
-                    numberOfComments: -1,
-                    numberOfLikes: -1,
-                    createdAt: -1,
-                },
-            },
-            {
-                $skip: skip,
-            },
-            {
-                $limit: NUMBER_OF_PAGE,
-            },
-            {
-                $addFields: {
-                    notInterested: {
-                        $in: [_id, '$notInterested'],
-                    },
-                },
-            },
-        ]);
+            userId: _id,
+            page,
+            sort: true,
+        });
     },
 
     countFollowingTweets: async (_id) => {
@@ -263,32 +242,41 @@ module.exports = {
         ),
 
     getTweet: async ({ tweetId, userId }) => {
-        const tweets = await getDetailTweets(
-            {
+        const tweets = await getDetailTweets({
+            query: {
                 _id: new mongoose.Types.ObjectId(tweetId),
             },
             userId,
-        );
+        });
 
         return tweets[0];
     },
 
     getTweetsByUserId: (_id, userId, page) => {
-        return getDetailTweets(
-            {
+        return getDetailTweets({
+            query: {
                 $expr: {
                     $and: [
                         {
                             $eq: ['$user._id', userId],
                         },
-                        {
-                            $not: [{ $in: [_id, '$notInterested'] }],
-                        },
                     ],
                 },
             },
-            userId,
+            userId: _id,
             page,
-        );
+        });
     },
+
+    addReporter: (userId, tweetId) =>
+        tweetModel.updateOne(
+            { _id: tweetId },
+            { $addToSet: { reporters: userId } },
+        ),
+
+    removeReporter: (userId, tweetId) =>
+        tweetModel.updateOne(
+            { _id: tweetId },
+            { $pull: { reporters: userId } },
+        ),
 };

@@ -15,7 +15,8 @@ import {
     toggleLikeCommentSocket,
     toggleLikeTweetSocket,
 } from '../features/tweets';
-import { INotification } from '../interfaces';
+import { addUser, removeUserById } from '../features/userRelations';
+import { INotification, IPerson } from '../interfaces';
 import NotificationAllItem from './notification/NotificationAllItem';
 
 const toastNotification = (data: INotification) =>
@@ -161,6 +162,24 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 );
             },
         );
+
+        socketIo.on(socketEvents.on.BLOCK, (user: IPerson) => {
+            dispatch(
+                addUser({
+                    user,
+                    type: 'beenBlocked',
+                }),
+            );
+        });
+
+        socketIo.on(socketEvents.on.UNBLOCK, (userId: string) => {
+            dispatch(
+                removeUserById({
+                    type: 'beenBlocked',
+                    userId,
+                }),
+            );
+        });
 
         return () => {
             Object.values(socketEvents.on).forEach((event) =>

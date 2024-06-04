@@ -67,7 +67,14 @@ module.exports = {
     getContactUsers: (_id) =>
         followModel.aggregate([
             { $match: { user: _id } },
-            { $project: { _id: 0, following: 1 } },
+            {
+                $project: {
+                    _id: 0,
+                    following: {
+                        $setIntersection: ['$following', '$followers'],
+                    },
+                },
+            },
             { $unwind: '$following' },
             {
                 $lookup: {
@@ -127,4 +134,9 @@ module.exports = {
             { $unwind: '$users' },
             { $replaceWith: '$users' },
         ]),
+
+    getIdFromUsername: (username) =>
+        userModel
+            .findOne({ username }, { _id: 1 })
+            .then((user) => (user?._id ? user._id.toString() : null)),
 };

@@ -1,18 +1,19 @@
-import IComment from './IComment';
+import { Dispatch, SetStateAction } from 'react';
+import { BlockedTweetModalType } from '../types';
 import ITweet from './ITweet';
 
 interface ICardContext {
     tweet: ITweet;
+    blockedType: BlockedTweetModalType;
+    reportLoading: boolean;
+    setBlockedType: Dispatch<SetStateAction<BlockedTweetModalType>>;
     toggleUserList: () => void;
     toggleUserFollow: () => void;
     deleteComment: (commentId: string, parentCommentId?: string) => void;
     toggleLikeComment: (liked: boolean, commentId: string) => void;
-    editComment: (content: string, commentId: string) => void;
     toggleLikeTweet: () => void;
     toggleNotInterested: () => void;
-    addComments: (comments: IComment[]) => void;
-    postComment: (Comment: IComment) => void;
-    addChildrenComments: (comments: IComment[]) => void;
+    toggleReport: () => void;
 }
 
 export default ICardContext;

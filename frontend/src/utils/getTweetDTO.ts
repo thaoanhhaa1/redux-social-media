@@ -5,6 +5,7 @@ function getTweetDTO(tweet: ITweet): ITweet {
 
     tweetNew.skip = 0;
     tweetNew.comments = [];
+    tweetNew.blocked = false;
 
     return tweetNew;
 }

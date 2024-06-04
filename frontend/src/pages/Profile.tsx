@@ -22,7 +22,7 @@ import {
 } from '../components';
 import { CardSkeleton } from '../components/card';
 import CardWrapper from '../components/card/CardWrapper';
-import { FollowSkeleton } from '../components/follow';
+import { PersonSkeleton } from '../components/person';
 import {
     getProfile,
     getWhoToFollow,
@@ -191,7 +191,7 @@ const Profile = () => {
                                 <Follow key={user._id} user={user} />
                             ))}
                         {(loading || loadingFollow) &&
-                            getArray().map(() => <FollowSkeleton key={v4()} />)}
+                            getArray().map(() => <PersonSkeleton key={v4()} />)}
                         {profile.whoToFollowPage < profile.whoToFollowPages &&
                             !loading && (
                                 <button

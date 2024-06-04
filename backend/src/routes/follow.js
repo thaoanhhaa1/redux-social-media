@@ -11,5 +11,6 @@ router.post('/follow', followController.follow);
 router.post('/unfollow', followController.unfollow);
 router.post('/block', followController.block);
 router.post('/unblock', followController.unblock);
+router.get('/blocks', followController.blocks);
 
 module.exports = router;

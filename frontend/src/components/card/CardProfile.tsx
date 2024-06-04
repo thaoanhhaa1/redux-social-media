@@ -1,19 +1,31 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { useAppSelector } from '../../app/hooks';
+import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import { useOnClickOutside } from '../../hooks';
-import { getTimeTweet } from '../../utils';
+import { getTimeTweet, isBlock } from '../../utils';
 import { BottomIcon } from '../Icons';
 import Image from '../Image';
 import TagPeople from '../TagPeople';
 import CardMore from './CardMore';
 
 const CardProfile = () => {
+    const { blocked, beenBlocked } = useAppSelector(
+        (state: RootState) => state.userRelations,
+    );
     const [open, setOpen] = useState<boolean>(false);
-    const { tweet } = useCardContext();
+    const { tweet, setBlockedType } = useCardContext();
     const user = tweet.user;
     const menuBtnRef = useRef(null);
+    const isBlockedUser = useMemo(
+        () => isBlock(blocked, beenBlocked, tweet.user._id),
+        [blocked, beenBlocked, tweet.user._id],
+    );
 
-    const openMenu = useCallback(() => setOpen(true), []);
+    const openMenu = useCallback(() => {
+        if (isBlockedUser) return setBlockedType('MORE_ACTION');
+        setOpen(true);
+    }, [isBlockedUser, setBlockedType]);
     const closeMenu = useCallback(() => setOpen(false), []);
 
     useOnClickOutside(menuBtnRef, closeMenu);

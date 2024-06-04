@@ -1,9 +1,8 @@
-import { useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useEffect, useRef } from 'react';
+import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import useCommentTweet from '../../contexts/CommentTweet';
-import { deleteComment, toggleLikeComment } from '../../features/tweets';
 import { useOnClickOutside } from '../../hooks';
 import { IPopupItem } from '../../interfaces';
 import IComment from '../../interfaces/IComment';
@@ -20,12 +19,11 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
         setShowParent,
         setShowCardComment,
     } = useCommentTweet();
-    const { tweet } = useCardContext();
+    const { deleteComment, toggleLikeComment } = useCardContext();
     const { setEdit } = useCommentTweet();
     const user = useAppSelector((state: RootState) => state.user);
     const moreRef = useRef(null);
     const liked = comment.likes.includes(user._id);
-    const dispatch = useAppDispatch();
 
     const handleClickReply = () => {
         if (level >= 2) setShowParent(true);
@@ -38,26 +36,9 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
         showPopup || setScrolled(false);
     };
 
-    const handleClickLike = () => {
-        dispatch(
-            toggleLikeComment({
-                userId: user._id,
-                commentId: comment._id,
-                isLike: !liked,
-                tweetId: tweet._id,
-            }),
-        );
-    };
+    const handleClickLike = () => toggleLikeComment(!liked, comment._id);
 
-    const handleDelete = () => {
-        dispatch(
-            deleteComment({
-                commentId: comment._id,
-                tweetId: tweet._id,
-                index: tweet.comments.findIndex((c) => c._id === comment._id),
-            }),
-        );
-    };
+    const handleDelete = () => deleteComment(comment._id, comment.parent);
 
     const handleClickEdit = () => setEdit(comment._id);
     const popup: IPopupItem[] = [
@@ -72,6 +53,13 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
     ];
 
     useOnClickOutside(moreRef, () => setShowPopup(false));
+
+    useEffect(() => {
+        window.addEventListener('scroll', () => setShowPopup(false));
+
+        return () =>
+            window.removeEventListener('scroll', () => setShowPopup(false));
+    }, [setShowPopup]);
 
     return (
         <div>

@@ -68,6 +68,7 @@ const Settings = () => {
                     title='Display & accessibility'
                     description='Manage aspects of your Twitter experience color contrast and motion.'
                     icon={<HideIcon />}
+                    to={`/settings/display`}
                 />
                 <SettingItem
                     title='Languages'

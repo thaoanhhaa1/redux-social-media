@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const mongooseDelete = require('mongoose-delete');
-const { user, location } = require('../../utils');
 
 const Schema = mongoose.Schema;
 
@@ -75,6 +74,10 @@ const tweetModel = new Schema(
             default: [],
         },
         notInterested: {
+            type: [String],
+            default: [],
+        },
+        reporters: {
             type: [String],
             default: [],
         },

@@ -1,15 +1,16 @@
-import { Ref, memo, useRef } from 'react';
+import { Ref, memo, useMemo, useRef } from 'react';
 import { useEffectOnce } from 'usehooks-ts';
 import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
-import { images } from '../../assets';
 import { useCardContext } from '../../contexts/CardContext';
 import { classNames } from '../../utils';
-import Button from '../Button';
-import Image from '../Image';
 import Wrapper from '../wrapper/Wrapper';
+import CardBlock from './CardBlock';
+import CardBlockedModal from './CardBlockedModal';
 import CardInformation from './CardInformation';
+import CardNotInterested from './CardNotInterested';
 import CardProfile from './CardProfile';
+import CardReport from './CardReport';
 
 const Card = ({
     className = '',
@@ -18,9 +19,13 @@ const Card = ({
     className?: string;
     isPopup?: boolean;
 }) => {
-    const { tweet, toggleNotInterested } = useCardContext();
+    const { tweet, reportLoading } = useCardContext();
     const ref = useRef<HTMLDivElement | undefined>();
     const user = useAppSelector((state: RootState) => state.user);
+    const showNotInterested = useMemo(
+        () => tweet.notInterested && user._id !== tweet.user._id,
+        [tweet, user],
+    );
 
     useEffectOnce(() => {
         const cardElement = ref.current;
@@ -45,34 +50,17 @@ const Card = ({
                 ref={ref as Ref<HTMLDivElement> | undefined}
                 className={classNames('card p-2 xxs:p-5', className)}
             >
-                {(tweet.notInterested && user._id !== tweet.user._id && (
-                    <div className='flex gap-3'>
-                        <Image
-                            className='w-5 h-5'
-                            src={images.closeBorder}
-                            alt=''
-                        />
-                        <div className='flex-1'>
-                            <div className='text-sm leading-sm font-semibold'>
-                                Hidden
-                            </div>
-                            <p className='text-xs leading-xs mt-1'>
-                                Hiding tweet helps us personalize your Feed.
-                            </p>
-                        </div>
-                        <Button
-                            onClick={toggleNotInterested}
-                            className='bg-[#E4E6EB] text-sm leading-sm font-semibold'
-                        >
-                            Undo
-                        </Button>
-                    </div>
-                )) || (
+                {tweet.blocked && <CardBlock />}
+                {tweet.blocked || tweet.report || showNotInterested || (
                     <>
                         <CardProfile />
                         <CardInformation isPopup={isPopup} />
                     </>
                 )}
+                {tweet.blocked || (showNotInterested && <CardNotInterested />)}
+                {tweet.blocked ||
+                    (tweet.report && <CardReport loading={reportLoading} />)}
+                <CardBlockedModal />
             </Wrapper>
         </div>
     );

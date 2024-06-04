@@ -1,15 +1,20 @@
-import { ReactElement } from 'react';
+import { ReactElement, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import CardProvider from '../../contexts/CardContext';
 import {
+    deleteComment,
     toggleFollow,
     toggleInterested,
+    toggleLikeComment,
     toggleLikeTweet,
     toggleList,
+    toggleReport,
 } from '../../features/tweets';
-import { IComment, ITweet } from '../../interfaces';
-import { getParentComment } from '../../utils';
+import { ITweet } from '../../interfaces';
+import { BlockedTweetModalType } from '../../types';
+import { isBlock } from '../../utils';
 
 type Props = {
     tweet: ITweet;
@@ -17,63 +22,67 @@ type Props = {
 };
 
 const CardWrapper = ({ tweet, children }: Props) => {
+    const [reportLoading, setReportLoading] = useState<boolean>(false);
     const user = useAppSelector((state: RootState) => state.user);
+    const { beenBlocked, blocked } = useAppSelector(
+        (state: RootState) => state.userRelations,
+    );
+    const [blockedType, setBlockedType] =
+        useState<BlockedTweetModalType>('NONE');
     const dispatch = useAppDispatch();
+    const isBlockedUser = useMemo(
+        () => isBlock(blocked, beenBlocked, tweet.user._id),
+        [blocked, beenBlocked, tweet.user._id],
+    );
 
-    const toggleUserList = () =>
+    const toggleUserList = () => {
         dispatch(
             toggleList({
                 userId: tweet.user._id,
                 isAdd: !tweet.user.isInList,
             }),
         );
+    };
 
-    const toggleUserFollow = () =>
+    const toggleUserFollow = () => {
         dispatch(
             toggleFollow({
                 follow: !tweet.user.follow,
                 userId: tweet.user._id,
             }),
         );
+    };
 
-    const deleteComment = (commentId: string, parentCommentId?: string) => {
-        let comments: IComment[] = [];
-
-        if (parentCommentId) {
-            const commentParent = getParentComment(
-                tweet.comments,
+    const handleDeleteComment = (
+        commentId: string,
+        parentCommentId?: string,
+    ) => {
+        dispatch(
+            deleteComment({
+                commentId,
                 parentCommentId,
-            );
-
-            if (commentParent) {
-                commentParent.numberOfComments -= 1;
-                comments = commentParent.comments;
-            }
-        } else {
-            comments = tweet.comments;
-            tweet.numberOfComments -= 1;
-        }
-
-        const index = comments.findIndex(
-            (comment) => comment._id === commentId,
+                tweetId: tweet._id,
+                index: tweet.comments.findIndex((c) => c._id === commentId),
+            }),
         );
-
-        comments.splice(index, 1);
     };
 
-    const toggleLikeComment = (liked: boolean, commentId: string) => {
-        const comment = getParentComment(tweet.comments, commentId);
+    const handleLikeComment = (liked: boolean, commentId: string) => {
+        if (isBlockedUser) return setBlockedType('LIKE_COMMENT');
 
-        if (comment) comment.numberOfLikes += liked ? 1 : -1;
-    };
-
-    const editComment = (content: string, commentId: string) => {
-        const comment = getParentComment(tweet.comments, commentId);
-
-        if (comment) comment.content = content;
+        dispatch(
+            toggleLikeComment({
+                userId: user._id,
+                commentId,
+                isLike: !liked,
+                tweetId: tweet._id,
+            }),
+        );
     };
 
     const handleToggleLikeTweet = () => {
+        if (isBlockedUser) return setBlockedType('LIKE_TWEET');
+
         dispatch(
             toggleLikeTweet({
                 tweetId: tweet._id,
@@ -83,32 +92,46 @@ const CardWrapper = ({ tweet, children }: Props) => {
         );
     };
 
-    const toggleNotInterested = () =>
+    const toggleNotInterested = () => {
         dispatch(
             toggleInterested({
                 tweetId: tweet._id,
                 interested: tweet.notInterested,
             }),
         );
+    };
 
-    const addComments = (comments: IComment[]) => {};
-    const postComment = (comment: IComment) => {};
-    const addChildrenComments = (comments: IComment[]) => {};
+    const handleToggleReport = async () => {
+        setReportLoading(true);
+
+        try {
+            await dispatch(
+                toggleReport({
+                    tweetId: tweet._id,
+                    isReport: !tweet.report,
+                }),
+            ).unwrap();
+        } catch (error) {
+            toast.error('An error occurred while reporting the tweet.');
+        } finally {
+            setReportLoading(false);
+        }
+    };
 
     return (
         <CardProvider
             value={{
                 tweet,
-                deleteComment,
-                editComment,
-                toggleLikeComment,
+                blockedType,
+                reportLoading,
+                setBlockedType,
+                deleteComment: handleDeleteComment,
+                toggleLikeComment: handleLikeComment,
                 toggleLikeTweet: handleToggleLikeTweet,
                 toggleNotInterested,
                 toggleUserFollow,
                 toggleUserList,
-                addComments,
-                postComment,
-                addChildrenComments,
+                toggleReport: handleToggleReport,
             }}
         >
             {children}

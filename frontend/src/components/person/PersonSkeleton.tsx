@@ -1,8 +1,8 @@
 import Skeleton from 'react-loading-skeleton';
 
-const FollowSkeleton = () => {
+const PersonSkeleton = () => {
     return (
-        <div className='flex gap-5 cursor-pointer'>
+        <div className='flex gap-5 cursor-pointer bg-white dark:bg-dark-black-2'>
             <Skeleton width={40} height={40} circle />
             <div className='flex-1 flex justify-between items-center gap-2'>
                 <div className='flex-1'>
@@ -23,4 +23,4 @@ const FollowSkeleton = () => {
     );
 };
 
-export default FollowSkeleton;
+export default PersonSkeleton;

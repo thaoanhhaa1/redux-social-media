@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { AppDispatch } from '../app/store';
@@ -11,10 +11,10 @@ import ErrorMessage from '../components/form/ErrorMessage';
 import FormGroup from '../components/form/FormGroup';
 import Input from '../components/form/Input';
 import Label from '../components/form/Label';
-import config from '../config';
 import { message, regex } from '../constants';
-import { fetchUser, signIn } from '../features/user';
+import { signIn } from '../features/user';
 import { SignInType } from '../types';
+import { token } from '../utils';
 
 const schema = yup
     .object({
@@ -38,18 +38,18 @@ const SignUp = () => {
         resolver: yupResolver(schema),
     });
     const dispatch = useDispatch<AppDispatch>();
+    const location = useLocation();
     const navigate = useNavigate();
 
     const onSubmit = async (data: SignInType) => {
         try {
-            const token = await dispatch(signIn(data)).unwrap();
+            const res = await dispatch(signIn(data)).unwrap();
 
-            document.cookie = token;
-
-            await dispatch(fetchUser()).unwrap();
+            token.set(res);
 
             toast.success('Logged in successfully!');
-            navigate(config.routes.home);
+            const from = location.state?.from || '/';
+            navigate(from);
         } catch (error) {}
     };
 

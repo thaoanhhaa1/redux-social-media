@@ -3,6 +3,7 @@ import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { comments } from '../../constants';
 import { IComment, IPerson, ITweet } from '../../interfaces';
+import { tweetService } from '../../services';
 import {
     getCommentDTO,
     getCommentsDTO,
@@ -289,12 +290,14 @@ const deleteComment = createAsyncThunk<
         commentId: string;
         tweetId: string;
         index: number;
+        parentCommentId?: string;
     },
     {
         rejectValue: {
             commentId: string;
             tweetId: string;
             index: number;
+            parentCommentId?: string;
         };
     }
 >('tweets/deleteComment', async (payload, { rejectWithValue }) => {
@@ -324,6 +327,18 @@ const editComment = createAsyncThunk(
         );
 
         return res.data;
+    },
+);
+
+const toggleReport = createAsyncThunk(
+    'toggleReport',
+    async ({ isReport, tweetId }: { tweetId: string; isReport: boolean }) => {
+        await tweetService[isReport ? 'report' : 'unReport'](tweetId);
+
+        return {
+            tweetId,
+            isReport,
+        };
     },
 );
 
@@ -408,6 +423,24 @@ const tweetsSlice = createSlice({
         },
         addCommentSocket: (state, { payload }: { payload: IComment }) => {
             addComment(state, payload);
+        },
+        setBlock: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    isBlock: boolean;
+                };
+            },
+        ) => {
+            const { tweetId, isBlock } = payload;
+
+            const tweet = findById(state.tweets, tweetId);
+            if (!tweet) return state;
+
+            tweet.blocked = isBlock;
         },
     },
     extraReducers: (builder) => {
@@ -573,36 +606,42 @@ const tweetsSlice = createSlice({
                 else comment.likes.splice(index, 1);
             })
             .addCase(deleteComment.pending, (state, { meta }) => {
-                const { commentId, tweetId, index } = meta.arg;
+                const { tweetId, index, parentCommentId } = meta.arg;
 
                 const tweet = findById(state.tweets, tweetId);
                 if (!tweet) return state;
+                let parent: IComment | ITweet | undefined = tweet;
 
-                const comment = getParentComment(tweet.comments, commentId);
+                if (parentCommentId)
+                    parent = getComment(tweet.comments, parentCommentId);
 
-                const deletedComments = (comment || tweet).comments.splice(
-                    index,
-                    1,
-                );
+                if (!parent) return state;
+
+                const deletedComments = parent.comments.splice(index, 1);
                 state.deletedComment = deletedComments[0];
             })
             .addCase(deleteComment.rejected, (state, { payload }) => {
                 if (!payload) return state;
 
-                const { commentId, tweetId, index } = payload;
+                const { tweetId, index, parentCommentId } = payload;
 
                 const tweet = findById(state.tweets, tweetId);
                 if (!tweet) return state;
 
-                const comment = getParentComment(tweet.comments, commentId);
+                if (!parentCommentId) {
+                    tweet.comments.splice(index, 0, state.deletedComment!);
+                    state.deletedComment = null;
+                    return state;
+                }
 
-                if (!state.deletedComment) return state;
-
-                (comment || tweet).comments.splice(
-                    index,
-                    0,
-                    state.deletedComment,
+                const parentComment = getComment(
+                    tweet.comments,
+                    parentCommentId,
                 );
+
+                if (!parentComment) return state;
+
+                parentComment.comments.splice(index, 0, state.deletedComment!);
                 state.deletedComment = null;
             })
             .addCase(deleteComment.fulfilled, (state) => {
@@ -630,6 +669,13 @@ const tweetsSlice = createSlice({
                 if (!comment) return state;
 
                 comment.content = payload.content;
+            })
+            .addCase(toggleReport.fulfilled, (state, { payload }) => {
+                const tweet = findById(state.tweets, payload.tweetId);
+
+                if (!tweet) return state;
+
+                tweet.report = payload.isReport;
             });
     },
 });
@@ -688,11 +734,13 @@ export {
     toggleLikeComment,
     toggleLikeTweet,
     toggleList,
+    toggleReport,
 };
 export const {
     addNewTweet,
     updateTweet,
     setTweetActiveId,
+    setBlock,
     toggleLikeTweetSocket,
     toggleLikeCommentSocket,
     addCommentSocket,

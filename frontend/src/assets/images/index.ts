@@ -25,6 +25,10 @@ const images = {
     backgroundLifeEvent: require('./st43MlfQdGP.png'),
     work: require('./tv-E-vHm5BI.png'),
     closeBorder: require('./A_NcMeki4UO.png'),
+    userBlock: require('./OKvpjIcm4Eh.png'),
+    manageOption: require('./c9DAzIVshuY.png'),
+    warnChat: require('./gvDUvwYrlpP.png'),
+    clock: require('./mp_faH0qhrY.png'),
 };
 
 export default images;

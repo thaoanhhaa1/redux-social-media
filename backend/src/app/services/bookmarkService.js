@@ -1,8 +1,16 @@
+const followModel = require('../models/followModel');
 const tweetModel = require('../models/tweetModel');
 
 module.exports = {
-    getAll: (userId) =>
-        tweetModel.aggregate([
+    // FIXME
+    getAll: async (userId) => {
+        const follow = await followModel.findOne({
+            user: userId,
+        });
+
+        const blocked = follow ? [...follow.blocks, ...follow.beenBlocks] : [];
+
+        return tweetModel.aggregate([
             {
                 $match: {
                     $expr: {
@@ -10,6 +18,7 @@ module.exports = {
                             { $eq: ['$deleted', false] },
                             { $ne: ['$user._id', userId] },
                             { $not: [{ $in: [userId, '$notInterested'] }] },
+                            { $not: [{ $in: ['$user._id', blocked] }] },
                         ],
                     },
                 },
@@ -28,5 +37,6 @@ module.exports = {
                 },
             },
             { $replaceRoot: { newRoot: '$_id' } },
-        ]),
+        ]);
+    },
 };

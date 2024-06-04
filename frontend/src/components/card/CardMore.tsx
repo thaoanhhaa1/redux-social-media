@@ -1,16 +1,15 @@
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useWindowSize } from 'usehooks-ts';
 import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import {
-    toggleFollow,
-    toggleInterested,
-    toggleList,
-} from '../../features/tweets';
+import { setBlock } from '../../features/tweets';
+import { addUser, removeUser } from '../../features/userRelations';
 import { ICardMoreBtn } from '../../interfaces';
+import { followService } from '../../services';
 import {
     AddListIcon,
     BlockIcon,
@@ -28,16 +27,7 @@ import CardMoreBtn from './CardMoreBtn';
 // TODO Report tweet
 /**
  * Click report
- * ==> Send a request to the server ==> Undo report
  * ==> Open a modal
- */
-
-// TODO Block user
-/**
- * Bạn đã chặn trang cá nhân của Duc Dung ==> 15px 600
- * Các bạn sẽ không thể nhìn thấy hoặc liên hệ với nhau. ==> 12px 400
- * Separate the two sentences with a new line
- * Button: Quản lý Bảng feed ==> 15px 500
  */
 
 const CardMore = ({
@@ -49,10 +39,62 @@ const CardMore = ({
 }) => {
     const {
         tweet: { user, _id, notInterested },
+        toggleNotInterested,
+        toggleUserFollow,
+        toggleUserList,
+        toggleReport,
     } = useCardContext();
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
     const { height, width } = useWindowSize();
+
+    const handleToggleFollow = useCallback(() => {
+        toggleUserFollow();
+        onClose();
+    }, [onClose, toggleUserFollow]);
+
+    const handleToggleList = useCallback(() => {
+        toggleUserList();
+        onClose();
+    }, [onClose, toggleUserList]);
+
+    const handleBlockUser = useCallback(async () => {
+        try {
+            dispatch(
+                setBlock({
+                    isBlock: true,
+                    tweetId: _id,
+                }),
+            );
+            dispatch(
+                addUser({
+                    type: 'blocked',
+                    user,
+                }),
+            );
+            await followService.blockUser(user._id);
+        } catch (error) {
+            dispatch(
+                setBlock({
+                    isBlock: false,
+                    tweetId: _id,
+                }),
+            );
+            dispatch(
+                removeUser({
+                    type: 'blocked',
+                    user,
+                }),
+            );
+            toast.error('Failed to block user');
+        }
+    }, [_id, dispatch, user]);
+
+    const handleToggleReport = useCallback(() => {
+        toggleReport();
+        onClose();
+    }, [onClose, toggleReport]);
+
     const actions = useMemo(() => {
         const temp: ICardMoreBtn[] = [
             {
@@ -60,14 +102,7 @@ const CardMore = ({
                 title: `${
                     notInterested ? 'I' : 'Not i'
                 }nterested in this tweet`,
-                onClick: () => {
-                    dispatch(
-                        toggleInterested({
-                            interested: notInterested,
-                            tweetId: _id,
-                        }),
-                    );
-                },
+                onClick: toggleNotInterested,
             },
             {
                 icon: EmbedIcon,
@@ -84,23 +119,17 @@ const CardMore = ({
                     }`,
                     active: user.follow,
                     activeIcon: UnFollowIcon,
-                    onClick: () => {
-                        dispatch(
-                            toggleFollow({
-                                userId: user._id,
-                                follow: !user.follow,
-                            }),
-                        );
-                        onClose();
-                    },
+                    onClick: handleToggleFollow,
                 },
                 {
                     icon: BlockIcon,
                     title: `Block @${user.username}`,
+                    onClick: handleBlockUser,
                 },
                 {
                     icon: ReportIcon,
                     title: `Report Tweet`,
+                    onClick: handleToggleReport,
                 },
                 {
                     icon: AddListIcon,
@@ -109,25 +138,19 @@ const CardMore = ({
                         user.username
                     } from Lists`,
                     activeIcon: RemoveListIcon,
-                    onClick: () => {
-                        dispatch(
-                            toggleList({
-                                isAdd: !user.isInList,
-                                userId: user._id,
-                            }),
-                        );
-                        onClose();
-                    },
+                    onClick: handleToggleList,
                 },
             );
 
         return temp;
     }, [
-        _id,
-        dispatch,
+        handleBlockUser,
+        handleToggleFollow,
+        handleToggleList,
+        handleToggleReport,
         notInterested,
-        onClose,
         owner._id,
+        toggleNotInterested,
         user._id,
         user.follow,
         user.isInList,

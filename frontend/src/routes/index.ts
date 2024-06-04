@@ -1,5 +1,6 @@
 import config from '../config';
 import { IRoute } from '../interfaces';
+import Blocking from '../pages/Blocking';
 import Bookmark from '../pages/Bookmark';
 import Explore from '../pages/Explore';
 import Home from '../pages/Home';
@@ -8,6 +9,7 @@ import Message from '../pages/Message';
 import NotFound from '../pages/NotFound';
 import Notifications from '../pages/Notifications';
 import Profile from '../pages/Profile';
+import SettingDetail from '../pages/SettingDetail';
 import Settings from '../pages/Settings';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
@@ -68,6 +70,14 @@ const publicRoutes: IRoute[] = [
     {
         path: config.routes.tweetDetail,
         element: TweetDetail,
+    },
+    {
+        path: config.routes.settingDetail,
+        element: SettingDetail,
+    },
+    {
+        path: config.routes.blocking,
+        element: Blocking,
     },
 ];
 

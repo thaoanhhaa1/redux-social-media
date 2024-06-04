@@ -19,6 +19,8 @@ router.get('/count-following-tweets', tweetController.countFollowingTweets);
 router.post('/toggle-like', tweetController.toggleLike);
 router.post('/:tweet_id/not-interested', tweetController.notInterested);
 router.post('/:tweet_id/interested', tweetController.interested);
+router.post('/:tweet_id/reporters', tweetController.addReporter);
+router.delete('/:tweet_id/reporters', tweetController.removeReporter);
 router.post('/', tweetController.createTweet);
 
 module.exports = router;

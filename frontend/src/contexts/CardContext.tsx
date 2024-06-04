@@ -1,5 +1,5 @@
 import { ReactElement, createContext, useContext } from 'react';
-import { ICardContext, IComment } from '../interfaces';
+import { ICardContext } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
     tweet: {
@@ -18,17 +18,19 @@ const CardContext = createContext<ICardContext>({
         createdAt: '',
         notInterested: false,
         likes: [],
+        blocked: false,
+        report: false,
     },
+    blockedType: 'NONE',
+    reportLoading: false,
+    setBlockedType: () => {},
     toggleUserList: () => {},
     toggleUserFollow: () => {},
     deleteComment: (commentId: string, parentCommentId?: string) => {},
     toggleLikeComment: (liked: boolean, commentId: string) => {},
-    editComment: (content: string, commentId: string) => {},
     toggleLikeTweet: () => {},
     toggleNotInterested: () => {},
-    addComments: (comments: IComment[]) => {},
-    postComment: (Comment: IComment) => {},
-    addChildrenComments: (comments: IComment[]) => {},
+    toggleReport: () => {},
 });
 
 const CardProvider = ({

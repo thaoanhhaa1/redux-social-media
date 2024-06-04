@@ -5,6 +5,9 @@ const api = {
     getFriends: () => '/private/follow/friends',
     follow: () => '/private/follow/follow',
     unfollow: () => '/private/follow/unfollow',
+    block: () => '/private/follow/block',
+    unblock: () => '/private/follow/unblock',
+    getBlockedUsers: () => '/private/follow/blocks',
     createTweet: () => '/private/tweets',
     countTweet: () => '/private/tweets/count',
     getMyTweets: () => '/private/tweets/get-my-tweets',
@@ -45,6 +48,10 @@ const api = {
         `/private/tweets/${tweetId}/interested`,
     getTweet: (userId: string, tweetId: string) =>
         `/private/users/${userId}/tweets/${tweetId}`,
+    addReporterToTweet: (tweetId: string) =>
+        `/private/tweets/${tweetId}/reporters`,
+    removeReporterFromTweet: (tweetId: string) =>
+        `/private/tweets/${tweetId}/reporters`,
     getBookmarks: () => `/private/bookmarks`,
     getTweetsByUserId: (userId: string) => `/private/users/${userId}/tweets`,
 };

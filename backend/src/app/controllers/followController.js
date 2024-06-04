@@ -1,7 +1,12 @@
 const UserModel = require('../models/userModel');
 const mongoose = require('mongoose');
 const { createError } = require('../../utils');
-const { notificationService, followService } = require('../services');
+const {
+    notificationService,
+    followService,
+    userService,
+} = require('../services');
+const { socketEvents } = require('../../constants');
 
 module.exports = {
     countFollow: async (req, res, next) => {
@@ -154,7 +159,10 @@ module.exports = {
         try {
             if (!userId) throw createError(400);
 
-            await followService.block(_id, userId);
+            const [, user] = await Promise.all([
+                followService.block(_id, userId),
+                userService.getUserDTO(_id),
+            ]);
 
             Promise.all([
                 notificationService.deleteNotificationOfUserIdByUserId({
@@ -173,6 +181,8 @@ module.exports = {
                     console.error('🚀 ~ Block::', e);
                 });
 
+            global.socketIo.to(userId).emit(socketEvents.emit.BLOCK, user);
+
             res.sendStatus(200);
         } catch (error) {
             next(error);
@@ -187,7 +197,21 @@ module.exports = {
 
             await followService.unblock(_id, userId);
 
+            global.socketIo.to(userId).emit(socketEvents.emit.UNBLOCK, _id);
+
             res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    blocks: async (req, res, next) => {
+        const _id = req.body._id;
+
+        try {
+            const users = await followService.getBlocks(_id);
+
+            res.json(users);
         } catch (error) {
             next(error);
         }

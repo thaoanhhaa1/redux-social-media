@@ -5,6 +5,7 @@ const {
     tweetService,
     notificationService,
     followService,
+    userService,
 } = require('../services');
 const { createError } = require('../../utils');
 
@@ -92,12 +93,14 @@ module.exports = {
 
     getTweet: async (req, res, next) => {
         const tweetId = req.params.tweet_id;
-        console.log('🚀 ~ getTweet: ~ tweetId:', tweetId);
-        const userId = req.params.user_id;
-        console.log('🚀 ~ getTweet: ~ userId:', userId);
+        const username = req.params.user_id;
         const { _id } = req.body;
 
         try {
+            const userId = await userService.getIdFromUsername(username);
+
+            if (!userId) throw createError(404, 'User not found');
+
             const [tweet, isBlocked] = await Promise.all([
                 tweetService.getTweet({ tweetId, userId: _id }),
                 followService.isBlocked(userId, _id),
@@ -106,7 +109,7 @@ module.exports = {
             if (isBlocked)
                 throw createError(403, 'You are blocked by this user');
 
-            if (tweet && tweet.user.username === userId) return res.json(tweet);
+            if (tweet && tweet.user._id === userId) return res.json(tweet);
 
             throw createError(404, 'Tweet not found');
         } catch (error) {
@@ -231,6 +234,32 @@ module.exports = {
 
         try {
             await Promise.all([tweetService.removeNotInterested(_id, tweetId)]);
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    addReporter: async (req, res, next) => {
+        const { _id } = req.body;
+        const tweetId = req.params.tweet_id;
+
+        try {
+            await tweetService.addReporter(_id, tweetId);
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    removeReporter: async (req, res, next) => {
+        const { _id } = req.body;
+        const tweetId = req.params.tweet_id;
+
+        try {
+            await tweetService.removeReporter(_id, tweetId);
 
             res.sendStatus(200);
         } catch (error) {

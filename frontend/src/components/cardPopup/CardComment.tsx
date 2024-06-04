@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { MouseEvent, useMemo, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
+import { postComment } from '../../features/tweets';
 import { useSearch } from '../../hooks';
-import { classNames } from '../../utils';
+import { classNames, isBlock } from '../../utils';
 import Avatar from '../Avatar';
 import { SendIcon } from '../Icons';
 import LoadingSpin from '../LoadingSpin';
 import ScrollbarCustomize from '../ScrollbarCustomize';
-import { postComment } from '../../features/tweets';
 
 const CardComment = ({
     level = 0,
@@ -21,13 +21,28 @@ const CardComment = ({
     name?: string;
     isParent?: boolean;
 }) => {
+    const { beenBlocked, blocked } = useAppSelector(
+        (state: RootState) => state.userRelations,
+    );
     const owner = useAppSelector((state: RootState) => state.user);
-    const { tweet } = useCardContext();
+    const { tweet, setBlockedType } = useCardContext();
     const { value, handleChangeSearch, setValue } = useSearch();
     const [loading, setLoading] = useState<boolean>(false);
     const dispatch = useAppDispatch();
+    const isBlockedUser = useMemo(
+        () => isBlock(blocked, beenBlocked, tweet.user._id),
+        [blocked, beenBlocked, tweet.user._id],
+    );
 
-    const handlePostComment = async () => {
+    const handlePostComment = async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isBlockedUser) {
+            setBlockedType('COMMENT_TWEET');
+            return;
+        }
+
         setLoading(true);
 
         try {

@@ -1,11 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IPerson } from '../../interfaces';
+import { followService } from '../../services';
 
 interface UserRelationsState {
     followers: IPerson[];
     following: IPerson[];
     blocked: IPerson[];
+    beenBlocked: IPerson[];
 }
+
+type ActionType = {
+    payload: {
+        user: IPerson;
+        type: UserRelationType;
+    };
+};
 
 export type UserRelationType = keyof UserRelationsState;
 
@@ -13,27 +22,50 @@ const initialState: UserRelationsState = {
     followers: [],
     following: [],
     blocked: [],
+    beenBlocked: [],
 };
+
+const getBlockedUsers = createAsyncThunk(
+    'handleUnblock',
+    followService.getBlockedUsers,
+);
 
 const userRelationsSlice = createSlice({
     name: 'userRelations',
     initialState,
     reducers: {
-        addUser: (
+        addUser: (state, { payload }: ActionType) => {
+            state[payload.type].push(payload.user);
+        },
+        removeUser: (state, { payload }: ActionType) => {
+            state[payload.type] = state[payload.type].filter(
+                (person) => person._id !== payload.user._id,
+            );
+        },
+        removeUserById: (
             state,
             {
                 payload,
             }: {
                 payload: {
-                    user: IPerson;
                     type: UserRelationType;
+                    userId: string;
                 };
             },
         ) => {
-            state[payload.type].push(payload.user);
+            state[payload.type] = state[payload.type].filter(
+                (person) => person._id !== payload.userId,
+            );
         },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(getBlockedUsers.fulfilled, (state, { payload }) => {
+            state.blocked = payload;
+        });
     },
 });
 
 export default userRelationsSlice.reducer;
-export const { addUser } = userRelationsSlice.actions;
+export const { addUser, removeUser, removeUserById } =
+    userRelationsSlice.actions;
+export { getBlockedUsers };

@@ -7,6 +7,8 @@ const routes = {
     lists: '/lists',
     profile: '/profile',
     settings: '/settings',
+    settingDetail: '/settings/:setting',
+    blocking: '/settings/display/blocking',
     signUp: '/sign-up',
     signIn: '/sign-in',
     search: '/search',

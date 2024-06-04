@@ -1,4 +1,4 @@
-const { listService } = require('.');
+const listService = require('./listService');
 const followModel = require('../models/followModel');
 const userService = require('./userService');
 
@@ -41,6 +41,8 @@ module.exports = {
                     let: {
                         followers: '$followers',
                         following: '$following',
+                        blocks: '$blocks',
+                        beenBlocks: '$beenBlocks',
                     },
                     pipeline: [
                         {
@@ -62,7 +64,13 @@ module.exports = {
                                                         {
                                                             $toString: '$_id',
                                                         },
-                                                        '$$following',
+                                                        {
+                                                            $setUnion: [
+                                                                '$$following',
+                                                                '$$blocks',
+                                                                '$$beenBlocks',
+                                                            ],
+                                                        },
                                                     ],
                                                 },
                                                 false,
@@ -315,6 +323,9 @@ module.exports = {
             followModel.updateOne(
                 { user: userId },
                 {
+                    $addToSet: {
+                        beenBlocks: userId,
+                    },
                     $pull: {
                         following: _id,
                         followers: _id,
@@ -325,14 +336,24 @@ module.exports = {
         ]),
 
     unblock: (_id, userId) =>
-        followModel.updateOne(
-            { user: _id },
-            {
-                $pull: {
-                    blocks: userId,
+        Promise.all([
+            followModel.updateOne(
+                { user: _id },
+                {
+                    $pull: {
+                        blocks: userId,
+                    },
                 },
-            },
-        ),
+            ),
+            followModel.updateOne(
+                { user: userId },
+                {
+                    $pull: {
+                        beenBlocks: _id,
+                    },
+                },
+            ),
+        ]),
 
     isBlocked: async (_id, userId) => {
         const [block, blocked] = await Promise.all([
@@ -342,4 +363,49 @@ module.exports = {
 
         return block || blocked;
     },
+
+    getBlocks: (_id) =>
+        followModel.aggregate([
+            {
+                $match: {
+                    user: _id,
+                },
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    as: 'blocks',
+                    let: {
+                        blocks: '$blocks',
+                    },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $in: [
+                                        {
+                                            $toString: '$_id',
+                                        },
+                                        '$$blocks',
+                                    ],
+                                },
+                            },
+                        },
+                        {
+                            $project: {
+                                username: 1,
+                                name: 1,
+                                avatar: 1,
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $unwind: '$blocks',
+            },
+            {
+                $replaceWith: '$blocks',
+            },
+        ]),
 };

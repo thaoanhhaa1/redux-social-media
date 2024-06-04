@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
+import { token } from '../utils';
 
 const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_END_POINTS,
@@ -12,13 +13,9 @@ axiosClient.interceptors.request.use(async (config) => {
         Authorization?: string;
     } = {};
 
-    if (document.cookie) {
-        const cookie = (document.cookie as string).includes(' ')
-            ? document.cookie.split(' ')[1]
-            : document.cookie;
+    const tokenValue = token.get();
 
-        customersHeader.Authorization = cookie;
-    }
+    if (tokenValue) customersHeader.Authorization = tokenValue;
 
     const newConfig = {
         ...config,

@@ -1,11 +1,13 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { RootState } from '../../app/store';
+import { useCardContext } from '../../contexts/CardContext';
 import useCommentTweet from '../../contexts/CommentTweet';
 import { editComment } from '../../features/tweets';
 import { useSearch } from '../../hooks';
-import { classNames } from '../../utils';
+import { classNames, isBlock } from '../../utils';
 import { SendIcon } from '../Icons';
 import LoadingSpin from '../LoadingSpin';
 
@@ -22,13 +24,21 @@ const CommentUpdateTweet = ({
     tweetId,
     handleClickCancel,
 }: Props) => {
+    const { beenBlocked, blocked } = useAppSelector(
+        (state: RootState) => state.userRelations,
+    );
     const { value, handleChangeSearch } = useSearch(content);
     const [loading, setLoading] = useState<boolean>(false);
+    const { setBlockedType, tweet } = useCardContext();
     const { setEdit } = useCommentTweet();
     const dispatch = useAppDispatch();
     const ref = useRef(null);
 
+    const isBlockedUser = isBlock(blocked, beenBlocked, tweet.user._id);
+
     const handleUpdateComment = async () => {
+        if (isBlockedUser) return setBlockedType('COMMENT_TWEET');
+
         setLoading(true);
 
         try {

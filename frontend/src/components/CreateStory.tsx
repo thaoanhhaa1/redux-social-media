@@ -7,9 +7,10 @@ import deleteImage from '../firebase/deleteImage';
 import { useImageUpload } from '../hooks';
 import { classNames, getNameStorage } from '../utils';
 import Button from './Button';
-import { CloseIcon, ImageVideoUploadIcon } from './Icons';
-import Modal from './Modal';
+import { ImageVideoUploadIcon } from './Icons';
 import ImageUpload from './imageUpload';
+import { ModalFooterButton, ModalHeader } from './modal';
+import Modal from './modal/Modal';
 
 const CreateStory = ({
     isShowModal,
@@ -56,26 +57,7 @@ const CreateStory = ({
                     true ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
-                <div className='relative flex justify-between items-center gap-5 px-2 xxs:px-5 py-2 xxs:py-3.75 border-b border-black-opacity-10'>
-                    <Button
-                        onClick={() => setShowModal(false)}
-                        className='z-1 w-8.5 h-8.5 text-stroke-icon dark:text-white hover:text-red dark:hover:text-red transition-all'
-                    >
-                        <CloseIcon />
-                    </Button>
-                    <div className='absolute left-0 right-0 -ml-[6px] flex-1 font-semibold text-xl leading-xl text-black text-center dark:text-white'>
-                        Create story
-                    </div>
-                    <Button
-                        isLoading={stories.isLoading}
-                        onClick={handleCreateStory}
-                        disabled={story.isLoading || !story.image}
-                        type='submit'
-                        className='z-1 w-[80px] xxs:w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
-                    >
-                        save
-                    </Button>
-                </div>
+                <ModalHeader>Create story</ModalHeader>
                 <div className='flex justify-center items-center w-full aspect-square'>
                     <ImageUpload
                         image={story}
@@ -86,6 +68,17 @@ const CreateStory = ({
                         <ImageVideoUploadIcon className='text-stroke-icon' />
                     </ImageUpload>
                 </div>
+                <ModalFooterButton>
+                    <Button
+                        isLoading={stories.isLoading}
+                        onClick={handleCreateStory}
+                        disabled={story.isLoading || !story.image}
+                        type='submit'
+                        className='z-1 w-[80px] xxs:w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
+                    >
+                        save
+                    </Button>
+                </ModalFooterButton>
             </div>
         </Modal>
     );

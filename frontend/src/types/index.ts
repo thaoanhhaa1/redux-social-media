@@ -1,3 +1,4 @@
+export type { default as BlockedTweetModalType } from './BlockedTweetModalType';
 export type { default as IconType } from './IconType';
 export type { default as NotificationType } from './NotificationType';
 export type { default as ProfileType } from './ProfileType';

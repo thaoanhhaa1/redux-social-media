@@ -10,6 +10,8 @@ interface ITweet extends ITweetPost {
     isNewTweet?: boolean;
     createdAt: string;
     notInterested: boolean;
+    blocked: boolean;
+    report: boolean;
 }
 
 export default ITweet;

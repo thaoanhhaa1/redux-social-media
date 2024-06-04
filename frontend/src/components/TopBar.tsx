@@ -9,6 +9,7 @@ import { RootState } from '../app/store';
 import config from '../config';
 import routes from '../config/routes';
 import { useOnClickOutside } from '../hooks';
+import { token } from '../utils';
 import { DropdownIcon, LogOutIcon } from './Icons';
 import Image from './Image';
 import Search from './search/Search';
@@ -27,7 +28,7 @@ const TopBar = () => {
 
         navigation(config.routes.signIn);
 
-        document.cookie = 'cookie';
+        token.remove();
     };
 
     useOnClickOutside(ref, () => setShowPopup(false));

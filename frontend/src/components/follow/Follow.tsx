@@ -15,11 +15,11 @@ const Follow = ({ user }: { user: IUser }) => {
             setLoading(true);
             await toggleFollow(user._id, isFollow);
 
-            setLoading(false);
             setFollow(!isFollow);
         } catch (error) {
-            console.error('🚀 ~ handleClickBtn ~ error:', error);
             toast.error('Follow error');
+        } finally {
+            setLoading(false);
         }
     };
 

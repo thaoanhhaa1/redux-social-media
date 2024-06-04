@@ -19,7 +19,9 @@ export { default as getTweetDTO } from './getTweetDTO';
 export { default as getTweetsDTO } from './getTweetsDTO';
 export { default as getUserName } from './getUserName';
 export { default as isAdult } from './isAdult';
+export { default as isBlock } from './isBlock';
 export { default as numberShow } from './numberShow';
+export { default as token } from './token';
 
 export const classNames = (
     ...classNameList: (string | boolean | undefined)[]

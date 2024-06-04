@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../app/store';
 import { Loading, Sidebar, TopBar } from '../../components';
 import SocketListener from '../../components/SocketListener';
@@ -11,6 +11,7 @@ import { fetchUser } from '../../features/user';
 const DefaultLayout = ({ children }: { children: ReactNode }) => {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
+    const location = useLocation();
     const { isLoading } = useSelector((state: RootState) => state.page);
     const user = useSelector((state: RootState) => state.user);
 
@@ -20,10 +21,12 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
                 if (user._id) return dispatch(setLoading(false));
                 await dispatch(fetchUser()).unwrap();
             } catch (error) {
-                navigate(config.routes.signIn);
+                navigate(config.routes.signIn, {
+                    state: { from: location.pathname },
+                });
             }
         })();
-    }, [dispatch, navigate, user._id]);
+    }, [dispatch, location.pathname, navigate, user._id]);
 
     return (
         <div className='flex'>

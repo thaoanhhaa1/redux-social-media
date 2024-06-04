@@ -231,12 +231,20 @@ module.exports = {
                         width: '100%',
                     },
                 },
+                'dot-spin': {
+                    '0%': { opacity: 0.265, transform: 'scale(.8, .8)' },
+                    '5%': { opacity: 0.25 },
+                    '50%': { transform: 'scale(1, 1)' },
+                    '55%': { opacity: 1 },
+                    '100%': { opacity: 0.265, transform: 'scale(.8, .8)' },
+                },
             },
             animation: {
                 spin1: 'spin1 3s linear infinite',
                 spin2: 'spin2 3s linear 0.2s infinite',
                 spin3: 'spin3 3s linear 0.3s infinite',
                 spin4: 'spin4 3s linear 0.4s infinite',
+                'dot-spin': 'dot-spin 2s cubic-bezier(.5,0,.5,1) infinite',
                 width: 'width 10s linear forwards',
             },
             zIndex: {

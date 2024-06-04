@@ -2,11 +2,10 @@ import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { comments } from '../../constants';
-import Button from '../Button';
-import CardDetail from '../CardDetail';
-import { CloseIcon } from '../Icons';
-import Modal from '../Modal';
 import { getComments } from '../../features/tweets';
+import CardDetail from '../CardDetail';
+import { ModalHeader } from '../modal';
+import Modal from '../modal/Modal';
 
 // TODO More comment popup when scroll
 // TODO Loading when loading comments
@@ -57,15 +56,8 @@ const CardPopup = ({
 
     return (
         <Modal isShowModal={isShow} handleCloseModal={handleClose}>
-            <div className='cursor-default mx-auto w-[min(calc(100vw-8px),700px)] rounded-lg overflow-y-hidden bg-white dark:bg-dark-black-2'>
-                <header className='relative flex items-center justify-center h-15 text-xl leading-xl border-b border-[#CED0D4] dark:border-dark-black-3 rounded-t-lg'>
-                    <strong>{user.name || user.username}'s Tweet</strong>
-                    <Button
-                        onClick={handleClose}
-                        className='absolute right-2 xxs:right-3.75 transition-colors duration-300 text-stroke-icon hover:text-red dark:hover:text-red dark:text-white'
-                        icon={<CloseIcon />}
-                    />
-                </header>
+            <div className='cursor-default mx-auto w-[min(calc(100vw-8px),700px)] overflow-y-hidden'>
+                <ModalHeader>{user.name || user.username}'s Tweet</ModalHeader>
                 <CardDetail isPopup tweet={tweet} className={className} />
             </div>
         </Modal>

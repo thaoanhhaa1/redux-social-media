@@ -19,6 +19,10 @@ const FollowModel = new Schema({
         type: [String],
         default: [],
     },
+    beenBlocks: {
+        type: [String],
+        default: [],
+    },
 });
 
 module.exports = mongoose.model('follow', FollowModel);

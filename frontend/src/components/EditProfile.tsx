@@ -14,13 +14,13 @@ import { ProfileType } from '../types';
 import { classNames, getDateValue, isAdult } from '../utils';
 import getNameStorage from '../utils/getNameStorage';
 import Button from './Button';
-import { CameraIcon, CloseIcon } from './Icons';
-import Modal from './Modal';
+import { CameraIcon } from './Icons';
 import ErrorMessage from './form/ErrorMessage';
 import FormGroup from './form/FormGroup';
 import Input from './form/Input';
 import Label from './form/Label';
 import ImageUpload from './imageUpload/ImageUpload';
+import Modal, { ModalFooterButton, ModalHeader } from './modal';
 
 const schema = yup
     .object({
@@ -117,24 +117,7 @@ const EditProfile = ({
                     isShowModal ? 'translate-y-0' : '-translate-y-10',
                 )}
             >
-                <div className='flex items-center gap-5 px-5 py-3.75 bg-black-1 dark:bg-dark-black-2'>
-                    <Button
-                        onClick={() => setShowModal(false)}
-                        className='w-8.5 h-8.5'
-                    >
-                        <CloseIcon className='text-white-3' />
-                    </Button>
-                    <div className='-ml-[6px] flex-1 font-semibold text-xl leading-xl text-white'>
-                        Edit profile
-                    </div>
-                    <Button
-                        disabled={avatar.isLoading || background.isLoading}
-                        type='submit'
-                        className='w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
-                    >
-                        save
-                    </Button>
-                </div>
+                <ModalHeader>Edit profile</ModalHeader>
                 <div className='h-[calc(100vh_-_134px)] bg-white dark:bg-[#171616] overflow-auto pb-5'>
                     <ImageUpload
                         className={classNames('aspect-[316/53]')}
@@ -199,6 +182,15 @@ const EditProfile = ({
                         </FormGroup>
                     </div>
                 </div>
+                <ModalFooterButton>
+                    <Button
+                        disabled={avatar.isLoading || background.isLoading}
+                        type='submit'
+                        className='w-[107px] h-8.5 bg-blue-white-2 text-xl leading-xl text-white'
+                    >
+                        save
+                    </Button>
+                </ModalFooterButton>
             </form>
         </Modal>
     );
