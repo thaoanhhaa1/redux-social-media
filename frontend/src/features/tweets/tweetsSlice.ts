@@ -3,7 +3,7 @@ import { tweets } from '../../constants';
 import { IComment, ITweet } from '../../interfaces';
 import { getTweetDTO, getTweetsDTO } from '../../utils';
 import { tweetHelper } from '../helpers';
-const {
+export const {
     getTweets,
     getMyTweets,
     countFollowingTweets,
@@ -348,24 +348,6 @@ const tweetsSlice = createSlice({
 });
 
 export default tweetsSlice.reducer;
-export {
-    countFollowingTweets,
-    countMyTweets,
-    deleteComment,
-    editComment,
-    getChildrenComments,
-    getComments,
-    getMyTweets,
-    getTweet,
-    getTweets,
-    postComment,
-    toggleFollow,
-    toggleInterested,
-    toggleLikeComment,
-    toggleLikeTweet,
-    toggleList,
-    toggleReport,
-};
 export const {
     addNewTweet,
     updateTweet,

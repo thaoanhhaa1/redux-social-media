@@ -6,7 +6,8 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { setBlock } from '../../features/tweets';
+import * as bookmarks from '../../features/bookmarks';
+import * as tweets from '../../features/tweets';
 import { addUser, removeUser } from '../../features/userRelations';
 import { ICardMoreBtn } from '../../interfaces';
 import { followService } from '../../services';
@@ -39,11 +40,16 @@ const CardMore = ({
 }) => {
     const {
         tweet: { user, _id, notInterested },
+        isBookmark,
         toggleNotInterested,
         toggleUserFollow,
         toggleUserList,
         toggleReport,
     } = useCardContext();
+    const action = useMemo(
+        () => (isBookmark ? bookmarks : tweets),
+        [isBookmark],
+    );
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
     const { height, width } = useWindowSize();
@@ -61,7 +67,7 @@ const CardMore = ({
     const handleBlockUser = useCallback(async () => {
         try {
             dispatch(
-                setBlock({
+                action.setBlock({
                     isBlock: true,
                     tweetId: _id,
                     tweetOwner: user._id,
@@ -76,7 +82,7 @@ const CardMore = ({
             await followService.blockUser(user._id);
         } catch (error) {
             dispatch(
-                setBlock({
+                action.setBlock({
                     isBlock: false,
                     tweetId: _id,
                     tweetOwner: user._id,
@@ -90,7 +96,7 @@ const CardMore = ({
             );
             toast.error('Failed to block user');
         }
-    }, [_id, dispatch, user]);
+    }, [_id, action, dispatch, user]);
 
     const handleToggleReport = useCallback(() => {
         toggleReport();

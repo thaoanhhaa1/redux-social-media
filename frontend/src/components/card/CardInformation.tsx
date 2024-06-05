@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
+import * as bookmarks from '../../features/bookmarks';
+import * as tweets from '../../features/tweets';
 import { classNames } from '../../utils';
 import {
     LikeActiveIcon,
@@ -14,12 +16,15 @@ import {
 import Image from '../Image';
 import CardPopup from '../cardPopup/CardPopup';
 import CardButton from './CardButton';
-import { setTweetActiveId } from '../../features/tweets';
 
 const CardInformation = ({ isPopup }: { isPopup: boolean }) => {
     const user = useSelector((state: RootState) => state.user);
     const [isShowCardPopup, setShowCardPopup] = useState(false);
-    const { tweet, toggleLikeTweet } = useCardContext();
+    const { tweet, isBookmark, toggleLikeTweet } = useCardContext();
+    const action = useMemo(
+        () => (isBookmark ? bookmarks : tweets),
+        [isBookmark],
+    );
     const dispatch = useAppDispatch();
     const isLike = tweet.likes?.includes(user._id);
     const numberLike = tweet.likes?.length || 0;
@@ -27,7 +32,7 @@ const CardInformation = ({ isPopup }: { isPopup: boolean }) => {
     const handleComment = () => {
         if (isPopup) return;
 
-        dispatch(setTweetActiveId(tweet._id));
+        dispatch(action.setTweetActiveId(tweet._id));
         setShowCardPopup(true);
     };
 

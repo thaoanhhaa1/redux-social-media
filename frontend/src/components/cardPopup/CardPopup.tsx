@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { RootState } from '../../app/store';
+import { useAppDispatch } from '../../app/hooks';
 import { comments } from '../../constants';
-import { getComments } from '../../features/tweets';
+import { useCardContext } from '../../contexts/CardContext';
+import * as bookmarks from '../../features/bookmarks';
+import * as tweets from '../../features/tweets';
 import CardDetail from '../CardDetail';
 import { ModalHeader } from '../modal';
 import Modal from '../modal/Modal';
@@ -18,12 +19,10 @@ const CardPopup = ({
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const { tweetActiveId, tweets } = useAppSelector(
-        (state: RootState) => state.tweets,
-    );
-    const tweet = useMemo(
-        () => tweets.find((tweet) => tweet._id === tweetActiveId),
-        [tweetActiveId, tweets],
+    const { tweet, isBookmark } = useCardContext();
+    const action = useMemo(
+        () => (isBookmark ? bookmarks : tweets),
+        [isBookmark],
     );
 
     const dispatch = useAppDispatch();
@@ -34,7 +33,7 @@ const CardPopup = ({
                 return;
 
             await dispatch(
-                getComments({
+                action.getComments({
                     tweetId: tweet._id,
                     skip: tweet.skip * comments.LIMIT,
                     tweetOwner: tweet.user._id,
@@ -43,7 +42,7 @@ const CardPopup = ({
         }
 
         getCommentsData();
-    }, [dispatch, isShow, tweet]);
+    }, [action, dispatch, isShow, tweet]);
 
     useEffect(() => {
         tweet?.notInterested && setShow(false);

@@ -3,19 +3,8 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import CardProvider from '../../contexts/CardContext';
-import {
-    deleteComment,
-    editComment,
-    getChildrenComments,
-    getComments,
-    postComment,
-    toggleFollow,
-    toggleInterested,
-    toggleLikeComment,
-    toggleLikeTweet,
-    toggleList,
-    toggleReport,
-} from '../../features/tweets';
+import * as bookmarks from '../../features/bookmarks';
+import * as tweets from '../../features/tweets';
 import { ITweet } from '../../interfaces';
 import { BlockedTweetModalType } from '../../types';
 import { isBlock } from '../../utils';
@@ -23,9 +12,14 @@ import { isBlock } from '../../utils';
 type Props = {
     tweet: ITweet;
     children: ReactElement;
+    isBookmark?: boolean;
 };
 
-const CardWrapper = ({ tweet, children }: Props) => {
+const CardWrapper = ({ tweet, children, isBookmark }: Props) => {
+    const action = useMemo(
+        () => (isBookmark ? bookmarks : tweets),
+        [isBookmark],
+    );
     const [reportLoading, setReportLoading] = useState<boolean>(false);
     const user = useAppSelector((state: RootState) => state.user);
     const { beenBlocked, blocked } = useAppSelector(
@@ -42,7 +36,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
 
     const toggleUserList = () => {
         dispatch(
-            toggleList({
+            action.toggleList({
                 userId: tweet.user._id,
                 isAdd: !tweet.user.isInList,
                 tweetOwner: tweet.user._id,
@@ -52,7 +46,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
 
     const toggleUserFollow = () => {
         dispatch(
-            toggleFollow({
+            action.toggleFollow({
                 follow: !tweet.user.follow,
                 userId: tweet.user._id,
                 tweetOwner: tweet.user._id,
@@ -65,7 +59,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         parentCommentId?: string,
     ) => {
         dispatch(
-            deleteComment({
+            action.deleteComment({
                 commentId,
                 parentCommentId,
                 tweetId: tweet._id,
@@ -78,7 +72,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         if (isBlockedUser) return setBlockedType('LIKE_COMMENT');
 
         dispatch(
-            toggleLikeComment({
+            action.toggleLikeComment({
                 userId: user._id,
                 commentId,
                 isLike: liked,
@@ -92,7 +86,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         if (isBlockedUser) return setBlockedType('LIKE_TWEET');
 
         dispatch(
-            toggleLikeTweet({
+            action.toggleLikeTweet({
                 tweetId: tweet._id,
                 userId: user._id,
                 isLike: !tweet.likes.includes(user._id),
@@ -103,7 +97,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
 
     const toggleNotInterested = () => {
         dispatch(
-            toggleInterested({
+            action.toggleInterested({
                 tweetId: tweet._id,
                 interested: tweet.notInterested,
                 tweetOwner: tweet.user._id,
@@ -116,7 +110,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
 
         try {
             await dispatch(
-                toggleReport({
+                action.toggleReport({
                     tweetId: tweet._id,
                     isReport: !tweet.report,
                     tweetOwner: tweet.user._id,
@@ -131,7 +125,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
 
     const loadMoreComment = () =>
         dispatch(
-            getComments({
+            action.getComments({
                 tweetId: tweet._id,
                 skip: loadedComments,
                 tweetOwner: tweet.user._id,
@@ -146,7 +140,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         parent?: string;
     }) =>
         dispatch(
-            postComment({
+            action.postComment({
                 user,
                 content,
                 tweetId: tweet._id,
@@ -157,7 +151,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
 
     const getAllChildComments = (commentId: string) =>
         dispatch(
-            getChildrenComments({
+            action.getChildrenComments({
                 commentId,
                 tweetOwner: tweet.user._id,
             }),
@@ -171,7 +165,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         commentId: string;
     }) =>
         dispatch(
-            editComment({
+            action.editComment({
                 content,
                 commentId,
                 tweetId: tweet._id,
@@ -183,6 +177,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         <CardProvider
             value={{
                 tweet,
+                isBookmark: !!isBookmark,
                 blockedType,
                 reportLoading,
                 setBlockedType,

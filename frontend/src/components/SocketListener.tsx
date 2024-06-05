@@ -4,17 +4,14 @@ import { Socket } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
 import { socketEvents } from '../constants';
+import * as bookmarks from '../features/bookmarks';
 import { setOffline, setOnline } from '../features/contacts';
 import {
     addNotificationSocket,
     deleteNotificationSocket,
 } from '../features/notifications';
 import { dec, inc } from '../features/profile';
-import {
-    addCommentSocket,
-    toggleLikeCommentSocket,
-    toggleLikeTweetSocket,
-} from '../features/tweets';
+import * as tweets from '../features/tweets';
 import { addUser, removeUserById } from '../features/userRelations';
 import { INotification, IPerson } from '../interfaces';
 import NotificationAllItem from './notification/NotificationAllItem';
@@ -71,25 +68,29 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
         );
         socketIo.on(socketEvents.on.LIKE_TWEET, (data) => {
             if (data.userId === user._id) return;
-            dispatch(
-                toggleLikeTweetSocket({
-                    tweetId: data.tweetId,
-                    userId: data.userId,
-                    tweetOwner: data.tweetOwner,
-                    isLike: true,
-                }),
-            );
+
+            const payload = {
+                tweetId: data.tweetId,
+                userId: data.userId,
+                tweetOwner: data.tweetOwner,
+                isLike: true,
+            };
+
+            dispatch(tweets.toggleLikeTweetSocket(payload));
+            dispatch(bookmarks.toggleLikeTweetSocket(payload));
         });
         socketIo.on(socketEvents.on.DISLIKE_TWEET, (data) => {
             if (data.userId === user._id) return;
-            dispatch(
-                toggleLikeTweetSocket({
-                    tweetId: data.tweetId,
-                    userId: data.userId,
-                    tweetOwner: data.tweetOwner,
-                    isLike: false,
-                }),
-            );
+
+            const payload = {
+                tweetId: data.tweetId,
+                userId: data.userId,
+                tweetOwner: data.tweetOwner,
+                isLike: false,
+            };
+
+            dispatch(tweets.toggleLikeTweetSocket(payload));
+            dispatch(bookmarks.toggleLikeTweetSocket(payload));
             dispatch(
                 deleteNotificationSocket({
                     userId: data.userId,
@@ -106,7 +107,8 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
 
         socketIo.on(socketEvents.on.COMMENT_TWEET, (data) => {
             if (data.user._id === user._id) return;
-            dispatch(addCommentSocket(data));
+            dispatch(tweets.addCommentSocket(data));
+            dispatch(bookmarks.addCommentSocket(data));
         });
 
         socketIo.on(
@@ -124,15 +126,16 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
             }) => {
                 if (userId === user._id) return;
 
-                dispatch(
-                    toggleLikeCommentSocket({
-                        commentId,
-                        tweetId,
-                        userId,
-                        tweetOwner,
-                        isLike: true,
-                    }),
-                );
+                const payload = {
+                    commentId,
+                    userId,
+                    tweetId,
+                    tweetOwner,
+                    isLike: true,
+                };
+
+                dispatch(tweets.toggleLikeCommentSocket(payload));
+                dispatch(bookmarks.toggleLikeCommentSocket(payload));
             },
         );
 
@@ -151,15 +154,16 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
             }) => {
                 if (userId === user._id) return;
 
-                dispatch(
-                    toggleLikeCommentSocket({
-                        commentId,
-                        tweetId,
-                        userId,
-                        tweetOwner,
-                        isLike: false,
-                    }),
-                );
+                const payload = {
+                    commentId,
+                    userId,
+                    tweetId,
+                    tweetOwner,
+                    isLike: false,
+                };
+
+                dispatch(tweets.toggleLikeCommentSocket(payload));
+                dispatch(bookmarks.toggleLikeCommentSocket(payload));
 
                 dispatch(
                     deleteNotificationSocket({

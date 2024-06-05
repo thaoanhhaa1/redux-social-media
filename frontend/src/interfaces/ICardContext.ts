@@ -5,6 +5,7 @@ import ITweet from './ITweet';
 
 interface ICardContext {
     tweet: ITweet;
+    isBookmark: boolean;
     blockedType: BlockedTweetModalType;
     reportLoading: boolean;
     setBlockedType: Dispatch<SetStateAction<BlockedTweetModalType>>;

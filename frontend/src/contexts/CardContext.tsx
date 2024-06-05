@@ -21,6 +21,7 @@ const CardContext = createContext<ICardContext>({
         blocked: false,
         report: false,
     },
+    isBookmark: false,
     blockedType: 'NONE',
     reportLoading: false,
     setBlockedType: () => {},
