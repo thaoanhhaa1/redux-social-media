@@ -9,6 +9,7 @@ module.exports = {
         });
 
         const blocked = follow ? [...follow.blocks, ...follow.beenBlocks] : [];
+        const following = follow ? follow.following : [];
 
         return tweetModel.aggregate([
             {
@@ -19,6 +20,7 @@ module.exports = {
                             { $ne: ['$user._id', userId] },
                             { $not: [{ $in: [userId, '$notInterested'] }] },
                             { $not: [{ $in: ['$user._id', blocked] }] },
+                            { $in: ['$user._id', following] },
                         ],
                     },
                 },

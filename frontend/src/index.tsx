@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'swiper/css';
 import './index.css';
 
 const container = document.getElementById('root')!;

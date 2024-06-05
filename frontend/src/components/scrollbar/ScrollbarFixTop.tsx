@@ -29,7 +29,7 @@ const ScrollbarFixTop = ({
         <Wrapper
             gap={gap}
             className={classNames(
-                'p-5 flex-shrink-0 sticky top-[calc(var(--top-bar-height)_+_20px)] h-fit',
+                'p-2 xxs:p-3 xs:p-4 dl:p-5 flex-shrink-0 sticky top-[calc(var(--top-bar-height)_+_8px)]-2 xxs:top-[calc(var(--top-bar-height)_+_12px)]-3 xs:top-[calc(var(--top-bar-height)_+_16px)]-4 dl:top-[calc(var(--top-bar-height)_+_20px)]-5 h-fit',
                 className,
             )}
             style={{ marginBottom }}

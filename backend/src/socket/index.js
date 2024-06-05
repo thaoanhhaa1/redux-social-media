@@ -39,7 +39,10 @@ function connect(server) {
             };
 
             io.emit(socketEvents.emit.OFFLINE, data);
-            if (userId) setOffline(data).then();
+            if (userId)
+                setOffline(data).then(() =>
+                    console.log(`User ${userId} offline`),
+                );
         });
 
         tweetSocket.join(socket, io);

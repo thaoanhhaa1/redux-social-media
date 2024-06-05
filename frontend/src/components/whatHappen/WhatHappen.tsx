@@ -18,7 +18,7 @@ const WhatHappen = () => {
     const [isShowModal, setShowModal] = useState(false);
 
     return (
-        <Wrapper className='p-2 xxs:p-5'>
+        <Wrapper className='p-2 xxs:p-3 xs:p-4 gx:p-5'>
             <div className='flex items-center gap-2 xxs:gap-[14px]'>
                 <Avatar src={user.avatar} size='lg' />
                 <div

@@ -27,7 +27,7 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
     const handleScroll = () => setScrolled(true);
 
     return (
-        <div className='bg-white dark:bg-dark-black-2 rounded-lg pb-5'>
+        <div className='bg-white dark:bg-dark-black-2 rounded-lg'>
             <ScrollbarCustomize
                 onScroll={handleScroll}
                 className={classNames(isPopup && 'max-h-[50vh]')}

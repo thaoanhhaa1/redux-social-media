@@ -24,14 +24,14 @@ const Follow = ({ user }: { user: IUser }) => {
     };
 
     return (
-        <div className='flex gap-5 cursor-pointer'>
+        <div className='flex gap-2 xxs:gap-3 xs:gap-4 dl:gap-5 cursor-pointer'>
             <Avatar src={user.avatar} size='lg' />
             <div className='flex-1 flex justify-between items-center gap-2'>
                 <div className='flex-1'>
-                    <div className='font-semibold text-sm leading-sm text-black dark:text-white'>
+                    <div className='break-all line-clamp-1 font-semibold text-sm leading-sm text-black dark:text-white'>
                         {user.name || user.username}
                     </div>
-                    <div className='font-semibold text-xs leading-sm text-black-8 dark:text-white'>
+                    <div className='break-all line-clamp-1 font-semibold text-xs leading-sm text-black-8 dark:text-white'>
                         @{user.username}
                     </div>
                 </div>

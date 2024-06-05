@@ -15,12 +15,12 @@ const BookmarkItem = ({
         <div
             onClick={onClick}
             className={classNames(
-                'flex gap-5 p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5',
+                'flex gap-2 xxs:gap-3 xs:gap-4 dl:gap-5 p-2 xxs:p-3 xs:p-4 dl:p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5',
                 active && 'bg-blue-white-4 dark:bg-dark-black-3',
             )}
         >
             <Avatar src={bookmark.avatar} size='lg' />
-            <div className='flex justify-between items-center gap-2 flex-1 overflow-auto'>
+            <div className='justify-between items-center gap-2 flex-1 overflow-auto hidden dl:flex'>
                 <div className='overflow-hidden flex flex-col gap-1.25'>
                     {bookmark.name && (
                         <div className='font-semibold text-sm leading-sm text-black dark:text-white'>
