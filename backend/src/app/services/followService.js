@@ -324,7 +324,7 @@ module.exports = {
                 { user: userId },
                 {
                     $addToSet: {
-                        beenBlocks: userId,
+                        beenBlocks: _id,
                     },
                     $pull: {
                         following: _id,

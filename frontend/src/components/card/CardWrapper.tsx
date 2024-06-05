@@ -74,7 +74,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
             toggleLikeComment({
                 userId: user._id,
                 commentId,
-                isLike: !liked,
+                isLike: liked,
                 tweetId: tweet._id,
             }),
         );
