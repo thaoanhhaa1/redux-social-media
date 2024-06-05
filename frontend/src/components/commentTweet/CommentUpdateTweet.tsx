@@ -1,11 +1,10 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
 import useCommentTweet from '../../contexts/CommentTweet';
-import { editComment } from '../../features/tweets';
 import { useSearch } from '../../hooks';
 import { classNames, isBlock } from '../../utils';
 import { SendIcon } from '../Icons';
@@ -14,14 +13,12 @@ import LoadingSpin from '../LoadingSpin';
 type Props = {
     content: string;
     commentId: string;
-    tweetId: string;
     handleClickCancel: () => void;
 };
 
 const CommentUpdateTweet = ({
     content,
     commentId,
-    tweetId,
     handleClickCancel,
 }: Props) => {
     const { beenBlocked, blocked } = useAppSelector(
@@ -29,9 +26,8 @@ const CommentUpdateTweet = ({
     );
     const { value, handleChangeSearch } = useSearch(content);
     const [loading, setLoading] = useState<boolean>(false);
-    const { setBlockedType, tweet } = useCardContext();
+    const { setBlockedType, tweet, updateComment } = useCardContext();
     const { setEdit } = useCommentTweet();
-    const dispatch = useAppDispatch();
     const ref = useRef(null);
 
     const isBlockedUser = isBlock(blocked, beenBlocked, tweet.user._id);
@@ -42,18 +38,12 @@ const CommentUpdateTweet = ({
         setLoading(true);
 
         try {
-            await dispatch(
-                editComment({
-                    content: value,
-                    commentId,
-                    tweetId,
-                }),
-            ).unwrap();
+            await updateComment({ commentId, content: value });
 
             setEdit('');
-            setLoading(false);
         } catch (error) {
             toast.error('Update comment failed');
+        } finally {
             setLoading(false);
         }
     };

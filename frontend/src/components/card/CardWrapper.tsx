@@ -5,6 +5,10 @@ import { RootState } from '../../app/store';
 import CardProvider from '../../contexts/CardContext';
 import {
     deleteComment,
+    editComment,
+    getChildrenComments,
+    getComments,
+    postComment,
     toggleFollow,
     toggleInterested,
     toggleLikeComment,
@@ -34,6 +38,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         () => isBlock(blocked, beenBlocked, tweet.user._id),
         [blocked, beenBlocked, tweet.user._id],
     );
+    const loadedComments = tweet.comments.length;
 
     const toggleUserList = () => {
         dispatch(
@@ -118,6 +123,47 @@ const CardWrapper = ({ tweet, children }: Props) => {
         }
     };
 
+    const loadMoreComment = () =>
+        dispatch(getComments({ tweetId: tweet._id, skip: loadedComments }));
+
+    const handlePostComment = ({
+        content,
+        parent,
+    }: {
+        content: string;
+        parent?: string;
+    }) =>
+        dispatch(
+            postComment({
+                user,
+                content,
+                tweetId: tweet._id,
+                parent,
+            }),
+        ).unwrap();
+
+    const getAllChildComments = (commentId: string) =>
+        dispatch(
+            getChildrenComments({
+                commentId,
+            }),
+        ).unwrap();
+
+    const updateComment = ({
+        content,
+        commentId,
+    }: {
+        content: string;
+        commentId: string;
+    }) =>
+        dispatch(
+            editComment({
+                content,
+                commentId,
+                tweetId: tweet._id,
+            }),
+        ).unwrap();
+
     return (
         <CardProvider
             value={{
@@ -132,6 +178,10 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 toggleUserFollow,
                 toggleUserList,
                 toggleReport: handleToggleReport,
+                loadMoreComment,
+                postComment: handlePostComment,
+                getAllChildComments,
+                updateComment,
             }}
         >
             {children}

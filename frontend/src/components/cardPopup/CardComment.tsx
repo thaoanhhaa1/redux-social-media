@@ -1,9 +1,8 @@
 import { MouseEvent, useMemo, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import { postComment } from '../../features/tweets';
 import { useSearch } from '../../hooks';
 import { classNames, isBlock } from '../../utils';
 import Avatar from '../Avatar';
@@ -25,10 +24,9 @@ const CardComment = ({
         (state: RootState) => state.userRelations,
     );
     const owner = useAppSelector((state: RootState) => state.user);
-    const { tweet, setBlockedType } = useCardContext();
+    const { tweet, setBlockedType, postComment } = useCardContext();
     const { value, handleChangeSearch, setValue } = useSearch();
     const [loading, setLoading] = useState<boolean>(false);
-    const dispatch = useAppDispatch();
     const isBlockedUser = useMemo(
         () => isBlock(blocked, beenBlocked, tweet.user._id),
         [blocked, beenBlocked, tweet.user._id],
@@ -46,14 +44,10 @@ const CardComment = ({
         setLoading(true);
 
         try {
-            await dispatch(
-                postComment({
-                    user: owner,
-                    content: value,
-                    tweetId: tweet._id,
-                    parent: commentParentId,
-                }),
-            ).unwrap();
+            await postComment({
+                content: value,
+                parent: commentParentId,
+            });
 
             setValue('');
         } catch (error) {

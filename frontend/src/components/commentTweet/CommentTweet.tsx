@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useToggle } from 'usehooks-ts';
-import { useAppDispatch } from '../../app/hooks';
+import { useCardContext } from '../../contexts/CardContext';
 import { CommentTweetProvider } from '../../contexts/CommentTweet';
-import { getChildrenComments } from '../../features/tweets';
 import IComment from '../../interfaces/IComment';
 import { classNames, getNextLevelComment } from '../../utils';
 import Avatar from '../Avatar';
@@ -29,25 +29,25 @@ export default function CommentTweet({
     setScrolled,
     setShowParent = () => {},
 }: ICommentTweetProps) {
+    const { getAllChildComments } = useCardContext();
     const [showCardComment, setShowCardComment] = useState<boolean>(false);
     const [showPopup, , setShowPopup] = useToggle(false);
     const [loading, setLoading] = useState<boolean>(false);
     const remainingComments =
         comment.numberOfComments - comment.comments.length;
-    const dispatch = useAppDispatch();
 
     const handleClickCancel = () => setEdit('');
 
     const handleClickViewAllComments = async () => {
         setLoading(true);
 
-        await dispatch(
-            getChildrenComments({
-                commentId: comment._id,
-            }),
-        );
-
-        setLoading(false);
+        try {
+            await getAllChildComments(comment._id);
+        } catch (error) {
+            toast.error('Failed to load comments');
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -93,7 +93,6 @@ export default function CommentTweet({
                                 handleClickCancel={handleClickCancel}
                                 content={comment.content}
                                 commentId={comment._id}
-                                tweetId={comment.post}
                             />
                         )) || <CommentContentTweet comment={comment} />}
 

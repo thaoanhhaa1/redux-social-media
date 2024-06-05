@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
-import { getComments } from '../features/tweets';
+import { useCardContext } from '../contexts/CardContext';
 import { ITweet } from '../interfaces';
 import { classNames } from '../utils';
 import ScrollbarCustomize from './ScrollbarCustomize';
@@ -16,19 +16,15 @@ type Props = {
 };
 
 const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
+    const { loadMoreComment } = useCardContext();
     const user = useAppSelector((state: RootState) => state.user);
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [edit, setEdit] = useState<string>('');
-    const dispatch = useAppDispatch();
     const loadedComments = tweet.comments.length;
     const notInterested = tweet.notInterested && tweet.user._id !== user._id;
     const isShowDetail = !notInterested && !tweet.report;
 
     const handleScroll = () => setScrolled(true);
-
-    const loadMoreComment = () => {
-        dispatch(getComments({ tweetId: tweet._id, skip: loadedComments }));
-    };
 
     return (
         <div className='bg-white dark:bg-dark-black-2 rounded-lg pb-5'>

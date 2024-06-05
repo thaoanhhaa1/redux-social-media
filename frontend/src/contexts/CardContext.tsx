@@ -1,5 +1,5 @@
 import { ReactElement, createContext, useContext } from 'react';
-import { ICardContext } from '../interfaces';
+import { ICardContext, IComment } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
     tweet: {
@@ -31,6 +31,17 @@ const CardContext = createContext<ICardContext>({
     toggleLikeTweet: () => {},
     toggleNotInterested: () => {},
     toggleReport: () => {},
+    loadMoreComment: () => {},
+    postComment: ({ content, parent }: { content: string; parent?: string }) =>
+        Promise.resolve({} as IComment),
+    getAllChildComments: (commentId: string) => Promise.resolve([]),
+    updateComment: ({
+        commentId,
+        content,
+    }: {
+        content: string;
+        commentId: string;
+    }) => Promise.resolve(),
 });
 
 const CardProvider = ({
