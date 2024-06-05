@@ -39,6 +39,7 @@ const TweetDetail = () => {
                         getComments({
                             tweetId: tweet._id,
                             skip: tweet.skip * comments.LIMIT,
+                            tweetOwner: tweet.user._id,
                         }),
                     );
             } catch (error: AxiosError | any) {

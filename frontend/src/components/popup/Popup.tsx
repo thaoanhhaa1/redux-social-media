@@ -26,7 +26,7 @@ function Popup({ popup }: { popup: IPopupItem[] }) {
             />
             {rect && (
                 <Portal>
-                    <div className='fixed top-0 left-0'>
+                    <div className='fixed top-0 left-0 z-50'>
                         <div
                             style={{
                                 left: `${rect.x}px`,

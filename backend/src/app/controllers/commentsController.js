@@ -287,13 +287,18 @@ module.exports = {
                     );
             }
 
-            global.socketIo.emit(
-                socketEvents.emit[isLike ? 'LIKE_COMMENT' : 'DISLIKE_COMMENT'],
-                {
-                    commentId,
-                    userId: _id,
-                    tweetId: comment.post,
-                },
+            tweetService.findById(comment.post).then((tweet) =>
+                global.socketIo.emit(
+                    socketEvents.emit[
+                        isLike ? 'LIKE_COMMENT' : 'DISLIKE_COMMENT'
+                    ],
+                    {
+                        commentId,
+                        userId: _id,
+                        tweetId: comment.post,
+                        tweetOwner: tweet.user._id,
+                    },
+                ),
             );
 
             res.sendStatus(200);

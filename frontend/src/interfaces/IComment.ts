@@ -15,6 +15,7 @@ interface IComment {
     numberOfLikes: number;
     numberOfComments: number;
     comments: IComment[];
+    deleted: boolean;
 }
 
 export default IComment;

@@ -6,12 +6,16 @@ import { getBookmarksDTO, getTweetsDTO } from '../../utils';
 
 interface IBookmarks {
     bookmarks: Array<IBookmark>;
-    loading: boolean;
+    activeId: string | null;
+    tweetActiveId: string | null;
+    isLoading: boolean;
 }
 
 const initialState: IBookmarks = {
     bookmarks: [],
-    loading: false,
+    activeId: null,
+    tweetActiveId: null,
+    isLoading: false,
 };
 
 const getBookmarks = createAsyncThunk(
@@ -61,21 +65,24 @@ const bookmarksSlice = createSlice({
 
             bookmark.tweets[indexTweet] = payload;
         },
+        setActiveId: (state, { payload }: { payload: string | null }) => {
+            state.activeId = payload;
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(getBookmarks.fulfilled, (state, { payload }) => {
                 state.bookmarks.push(...getBookmarksDTO(payload));
-                state.loading = false;
+                state.isLoading = false;
             })
             .addCase(getBookmarks.pending, (state) => {
-                state.loading = true;
+                state.isLoading = true;
             })
             .addCase(getBookmarks.rejected, (state) => {
-                state.loading = false;
+                state.isLoading = false;
             })
             .addCase(getTweets.fulfilled, (state, { payload }) => {
-                state.loading = false;
+                state.isLoading = false;
                 if (!payload.length) return state;
 
                 const userId = payload[0].user._id;
@@ -93,5 +100,5 @@ const bookmarksSlice = createSlice({
 });
 
 export default bookmarksSlice.reducer;
-export const { updateTweet } = bookmarksSlice.actions;
+export const { updateTweet, setActiveId } = bookmarksSlice.actions;
 export { getBookmarks, getTweets };

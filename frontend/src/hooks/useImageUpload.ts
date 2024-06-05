@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import images from '../config/images';
-import uploadImage from '../firebase/uploadImage';
+import { deleteImage, uploadImage } from '../firebase';
 import { IImageUpload } from '../interfaces';
-import deleteImage from '../firebase/deleteImage';
-import getNameStorage from '../utils/getNameStorage';
+import { getNameStorage } from '../utils';
 
 function useImageUpload(avatarName: string): IImageUpload {
     const imageRef = useRef<HTMLImageElement | null>(null);

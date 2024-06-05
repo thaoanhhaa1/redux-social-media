@@ -45,6 +45,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
             toggleList({
                 userId: tweet.user._id,
                 isAdd: !tweet.user.isInList,
+                tweetOwner: tweet.user._id,
             }),
         );
     };
@@ -54,6 +55,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
             toggleFollow({
                 follow: !tweet.user.follow,
                 userId: tweet.user._id,
+                tweetOwner: tweet.user._id,
             }),
         );
     };
@@ -67,7 +69,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 commentId,
                 parentCommentId,
                 tweetId: tweet._id,
-                index: tweet.comments.findIndex((c) => c._id === commentId),
+                tweetOwner: tweet.user._id,
             }),
         );
     };
@@ -81,6 +83,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 commentId,
                 isLike: liked,
                 tweetId: tweet._id,
+                tweetOwner: tweet.user._id,
             }),
         );
     };
@@ -93,6 +96,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 tweetId: tweet._id,
                 userId: user._id,
                 isLike: !tweet.likes.includes(user._id),
+                tweetOwner: tweet.user._id,
             }),
         );
     };
@@ -102,6 +106,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
             toggleInterested({
                 tweetId: tweet._id,
                 interested: tweet.notInterested,
+                tweetOwner: tweet.user._id,
             }),
         );
     };
@@ -114,6 +119,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 toggleReport({
                     tweetId: tweet._id,
                     isReport: !tweet.report,
+                    tweetOwner: tweet.user._id,
                 }),
             ).unwrap();
         } catch (error) {
@@ -124,7 +130,13 @@ const CardWrapper = ({ tweet, children }: Props) => {
     };
 
     const loadMoreComment = () =>
-        dispatch(getComments({ tweetId: tweet._id, skip: loadedComments }));
+        dispatch(
+            getComments({
+                tweetId: tweet._id,
+                skip: loadedComments,
+                tweetOwner: tweet.user._id,
+            }),
+        );
 
     const handlePostComment = ({
         content,
@@ -139,6 +151,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 content,
                 tweetId: tweet._id,
                 parent,
+                tweetOwner: tweet.user._id,
             }),
         ).unwrap();
 
@@ -146,6 +159,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
         dispatch(
             getChildrenComments({
                 commentId,
+                tweetOwner: tweet.user._id,
             }),
         ).unwrap();
 
@@ -161,6 +175,7 @@ const CardWrapper = ({ tweet, children }: Props) => {
                 content,
                 commentId,
                 tweetId: tweet._id,
+                tweetOwner: tweet.user._id,
             }),
         ).unwrap();
 

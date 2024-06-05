@@ -1,17 +1,26 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api from '../../api';
-import axiosClient from '../../api/axiosClient';
-import { comments } from '../../constants';
-import { IComment, IPerson, ITweet } from '../../interfaces';
-import { tweetService } from '../../services';
-import {
-    getCommentDTO,
-    getCommentsDTO,
-    getParentComment,
-    getTweetDTO,
-    getTweetsDTO,
-} from '../../utils';
-import getComment from '../../utils/getComment';
+import { createSlice } from '@reduxjs/toolkit';
+import { tweets } from '../../constants';
+import { IComment, ITweet } from '../../interfaces';
+import { getTweetDTO, getTweetsDTO } from '../../utils';
+import { tweetHelper } from '../helpers';
+const {
+    getTweets,
+    getMyTweets,
+    countFollowingTweets,
+    countMyTweets,
+    getTweet,
+    getComments,
+    toggleList,
+    toggleFollow,
+    deleteComment,
+    toggleLikeComment,
+    toggleLikeTweet,
+    toggleInterested,
+    toggleReport,
+    postComment,
+    getChildrenComments,
+    editComment,
+} = tweetHelper.asyncThunk;
 
 type FollowingTweet = {
     tweets: ITweet[];
@@ -24,8 +33,6 @@ type FollowingTweet = {
     deletedComment: IComment | null;
 };
 
-const NUMBER_MY_TWEET_OF_PAGE = 8;
-
 const initialState: FollowingTweet = {
     tweets: [],
     isLoading: false,
@@ -37,410 +44,94 @@ const initialState: FollowingTweet = {
     deletedComment: null,
 };
 
-const getMyTweets = createAsyncThunk(
-    'tweets/getMyTweets',
-    async (page: number): Promise<Array<ITweet>> => {
-        const skip = (page - 1) * NUMBER_MY_TWEET_OF_PAGE;
-        const limit = NUMBER_MY_TWEET_OF_PAGE;
-
-        const res = await axiosClient.get(api.getMyTweets(), {
-            params: { skip, limit },
-        });
-
-        return res.data;
-    },
-);
-
-const getTweets = createAsyncThunk(
-    'tweets/getTweets',
-    async (page: number): Promise<Array<ITweet>> => {
-        try {
-            const res = await axiosClient.get(api.getFollowingTweets(), {
-                params: { page },
-            });
-
-            return res.data;
-        } catch (error) {
-            throw error;
-        }
-    },
-);
-
-const countFollowingTweets = createAsyncThunk(
-    'tweets/countFollowingTweets',
-    async (): Promise<number> => {
-        const res = await axiosClient.get(api.countFollowingTweets());
-
-        return res.data;
-    },
-);
-
-const getTweet = createAsyncThunk(
-    'tweets/getTweet',
-    async ({
-        tweetId,
-        userId,
-    }: {
-        tweetId: string;
-        userId: string;
-    }): Promise<ITweet> => {
-        const res = await axiosClient.get(api.getTweet(userId, tweetId));
-
-        return res.data;
-    },
-);
-
-const countMyTweets = createAsyncThunk(
-    'tweets/countMyTweets',
-    async (): Promise<number> => {
-        const res = await axiosClient.get(api.countTweet());
-
-        return res.data;
-    },
-);
-
-const getComments = createAsyncThunk(
-    'tweets/getComments',
-    async ({
-        tweetId,
-        skip,
-    }: {
-        tweetId: string;
-        skip: number;
-    }): Promise<Array<IComment>> => {
-        const res = await axiosClient.get(api.getComments(tweetId), {
-            params: {
-                skip,
-                limit: comments.LIMIT,
-            },
-        });
-
-        return res.data;
-    },
-);
-
-const postComment = createAsyncThunk(
-    'tweets/postComment',
-    async ({
-        user,
-        content,
-        parent,
-        tweetId,
-    }: {
-        user: IPerson;
-        content: string;
-        parent?: string;
-        tweetId: string;
-    }): Promise<IComment> => {
-        const res = await axiosClient.post(api.postComments(tweetId), {
-            user,
-            content,
-            parent,
-        });
-
-        return res.data;
-    },
-);
-
-const getChildrenComments = createAsyncThunk(
-    'tweets/getChildrenComments',
-    async ({ commentId }: { commentId: String }): Promise<IComment[]> => {
-        const res = await axiosClient.get(api.getChildComments(commentId));
-
-        return res.data;
-    },
-);
-
-const toggleLikeTweet = createAsyncThunk<
-    any,
-    {
-        tweetId: string;
-        isLike: boolean;
-        userId: string;
-    },
-    {
-        rejectValue: {
-            tweetId: string;
-            isLike: boolean;
-            userId: string;
-        };
-    }
->(
-    'tweets/toggleLikeTweet',
-    async ({ tweetId, isLike, userId }, { rejectWithValue }) => {
-        try {
-            const res = await axiosClient.post(api.toggleLike(), {
-                isLike,
-                tweetId,
-            });
-
-            return res.data;
-        } catch (error) {
-            return rejectWithValue({ tweetId, isLike, userId });
-        }
-    },
-);
-
-const toggleInterested = createAsyncThunk<
-    any,
-    {
-        interested: boolean;
-        tweetId: string;
-    },
-    {
-        rejectValue: {
-            interested: boolean;
-            tweetId: string;
-        };
-    }
->(
-    'tweets/toggleInterested',
-    async ({ interested, tweetId }, { rejectWithValue }) => {
-        try {
-            const res = await axiosClient.post(
-                api[`${interested ? 'i' : 'notI'}nterestedTweet`](tweetId),
-            );
-
-            return res.data;
-        } catch (error) {
-            return rejectWithValue({
-                interested,
-                tweetId,
-            });
-        }
-    },
-);
-
-const toggleFollow = createAsyncThunk<
-    any,
-    {
-        userId: string;
-        follow: boolean;
-    },
-    {
-        rejectValue: {
-            userId: string;
-            follow: boolean;
-        };
-    }
->('tweets/toggleFollow', async ({ userId, follow }, { rejectWithValue }) => {
-    try {
-        const res = await axiosClient.post(
-            follow ? api.follow() : api.unfollow(),
-            {
-                userId,
-            },
-        );
-
-        return res.data;
-    } catch (error) {
-        return rejectWithValue({ userId, follow });
-    }
-});
-
-const toggleList = createAsyncThunk<
-    any,
-    { userId: string; isAdd: boolean },
-    {
-        rejectValue: { userId: string; isAdd: boolean };
-    }
->('tweets/toggleList', async ({ userId, isAdd }, { rejectWithValue }) => {
-    try {
-        const res = await axiosClient.post(api.toggleList(isAdd), {
-            userId,
-        });
-
-        return res.data;
-    } catch (error) {
-        return rejectWithValue({ userId, isAdd });
-    }
-});
-
-const toggleLikeComment = createAsyncThunk<
-    any,
-    {
-        userId: string;
-        tweetId: string;
-        commentId: string;
-        isLike: boolean;
-    },
-    {
-        rejectValue: {
-            userId: string;
-            tweetId: string;
-            commentId: string;
-            isLike: boolean;
-        };
-    }
->('tweets/toggleLikeComment', async (payload, { rejectWithValue }) => {
-    try {
-        const { isLike, commentId } = payload;
-
-        await axiosClient.post(api.toggleLikeComment(commentId), {
-            isLike,
-        });
-    } catch (error) {
-        return rejectWithValue(payload);
-    }
-});
-
-const deleteComment = createAsyncThunk<
-    any,
-    {
-        commentId: string;
-        tweetId: string;
-        index: number;
-        parentCommentId?: string;
-    },
-    {
-        rejectValue: {
-            commentId: string;
-            tweetId: string;
-            index: number;
-            parentCommentId?: string;
-        };
-    }
->('tweets/deleteComment', async (payload, { rejectWithValue }) => {
-    const { commentId, tweetId } = payload;
-
-    try {
-        await axiosClient.delete(api.deleteComment(tweetId, commentId));
-    } catch (error) {
-        return rejectWithValue(payload);
-    }
-});
-
-const editComment = createAsyncThunk(
-    'tweets/editComment',
-    async (payload: {
-        tweetId: string;
-        commentId: string;
-        content: string;
-    }) => {
-        const { commentId, content, tweetId } = payload;
-
-        const res = await axiosClient.patch(
-            api.editComment(tweetId, commentId),
-            {
-                content,
-            },
-        );
-
-        return res.data;
-    },
-);
-
-const toggleReport = createAsyncThunk(
-    'toggleReport',
-    async ({ isReport, tweetId }: { tweetId: string; isReport: boolean }) => {
-        await tweetService[isReport ? 'report' : 'unReport'](tweetId);
-
-        return {
-            tweetId,
-            isReport,
-        };
-    },
-);
-
 const tweetsSlice = createSlice({
     name: 'tweets',
     initialState,
     reducers: {
         addNewTweet: (state, { payload }: { payload: ITweet }) => {
-            payload.isNewTweet = true;
-            state.tweets.unshift(getTweetDTO(payload));
+            tweetHelper.reducers.addNewTweet(state.tweets, payload);
         },
         updateTweet: (state, { payload }: { payload: ITweet }) => {
-            const index = findIndexTweet(state.tweets, payload._id);
-
-            if (index === -1) return state;
-
-            state.tweets[index] = payload;
+            tweetHelper.reducers.updateTweet(state.tweets, payload);
         },
         setTweetActiveId: (state, { payload }: { payload: string | null }) => {
-            state.tweetActiveId = payload;
-        },
-        toggleLikeTweetSocket: (
-            state,
-            {
-                payload,
-            }: {
-                payload: {
-                    tweetId: string;
-                    userId: string;
-                    isLike: boolean;
-                };
-            },
-        ) => {
-            const tweet = findById(state.tweets, payload.tweetId);
-            if (!tweet) return state;
-
-            if (payload.isLike) {
-                if (!tweet.likes.includes(payload.userId))
-                    tweet.likes.push(payload.userId);
-            } else {
-                const index = tweet.likes.findIndex(
-                    (id) => id === payload.userId,
-                );
-
-                tweet.likes.splice(index, 1);
-            }
-        },
-        toggleLikeCommentSocket: (
-            state,
-            {
-                payload,
-            }: {
-                payload: {
-                    tweetId: string;
-                    commentId: string;
-                    userId: string;
-                    isLike: boolean;
-                };
-            },
-        ) => {
-            const tweet = findById(state.tweets, payload.tweetId);
-            if (!tweet) return state;
-
-            const comment = getComment(tweet.comments, payload.commentId);
-
-            if (!comment) return state;
-
-            if (payload.isLike) {
-                if (!comment.likes.includes(payload.userId)) {
-                    comment.likes.push(payload.userId);
-                    comment.numberOfLikes += 1;
-                }
-            } else {
-                const index = comment.likes.findIndex(
-                    (id) => id === payload.userId,
-                );
-
-                if (index === -1) return state;
-                comment.likes.splice(index, 1);
-                comment.numberOfLikes -= 1;
-            }
-        },
-        addCommentSocket: (state, { payload }: { payload: IComment }) => {
-            addComment(state, payload);
+            tweetHelper.reducers.setTweetActiveId(state, payload);
         },
         setBlock: (
             state,
             {
-                payload,
+                payload: { isBlock, tweetId },
             }: {
                 payload: {
-                    tweetId: string;
                     isBlock: boolean;
+                    tweetId: string;
+                    tweetOwner: string;
                 };
             },
         ) => {
-            const { tweetId, isBlock } = payload;
-
-            const tweet = findById(state.tweets, tweetId);
-            if (!tweet) return state;
-
-            tweet.blocked = isBlock;
+            tweetHelper.reducers.setBlock({
+                isBlock,
+                tweetId,
+                tweets: state.tweets,
+            });
+        },
+        toggleLikeTweetSocket: (
+            state,
+            {
+                payload: { isLike, tweetId, userId },
+            }: {
+                payload: {
+                    isLike: boolean;
+                    tweetId: string;
+                    userId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            tweetHelper.reducers.toggleLikeTweetSocket({
+                isLike,
+                tweetId,
+                tweets: state.tweets,
+                userId,
+            });
+        },
+        toggleLikeCommentSocket: (
+            state,
+            {
+                payload: { commentId, isLike, tweetId, userId },
+            }: {
+                payload: {
+                    commentId: string;
+                    isLike: boolean;
+                    tweetId: string;
+                    userId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            tweetHelper.reducers.toggleLikeCommentSocket({
+                commentId,
+                isLike,
+                tweetId,
+                userId,
+                tweets: state.tweets,
+            });
+        },
+        addCommentSocket: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    comment: IComment;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            tweetHelper.reducers.addCommentSocket(
+                state.tweets,
+                payload.comment,
+            );
         },
     },
     extraReducers: (builder) => {
@@ -451,271 +142,210 @@ const tweetsSlice = createSlice({
             .addCase(getTweets.rejected, (state) => {
                 state.isLoading = false;
             })
-            .addCase(getTweets.fulfilled, (state, { payload }) => {
-                state.isLoading = false;
-                state.followingPage += 1;
+            .addCase(
+                getTweets.fulfilled,
+                (state, { payload }: { payload: ITweet[] }) => {
+                    state.isLoading = false;
+                    state.followingPage += 1;
 
-                const tweetIds = state.tweets.map((tweet) => tweet._id);
+                    const tweetIds = state.tweets.map(
+                        (tweet: ITweet) => tweet._id,
+                    );
 
-                const tweets = payload
-                    .filter((tweet) => !tweetIds.includes(tweet._id))
-                    .map(getTweetDTO);
+                    const tweets = payload
+                        .filter((tweet) => !tweetIds.includes(tweet._id))
+                        .map(getTweetDTO);
 
-                state.tweets.push(...tweets);
-            })
+                    state.tweets.push(...tweets);
+                },
+            )
+
             .addCase(getMyTweets.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(getMyTweets.rejected, (state) => {
                 state.isLoading = false;
             })
-            .addCase(getMyTweets.fulfilled, (state, { payload }) => {
-                if (payload.length) {
-                    state.tweets.push(...getTweetsDTO(payload));
-                    state.isLoading = false;
-                    state.myTweetPage += 1;
-                }
-            })
-            .addCase(countFollowingTweets.fulfilled, (state, { payload }) => {
-                state.followingPages = Math.ceil(payload / 10);
-            })
-            .addCase(countMyTweets.fulfilled, (state, { payload }) => {
-                state.myTweetPages = Math.ceil(
-                    payload / NUMBER_MY_TWEET_OF_PAGE,
-                );
-            })
-            .addCase(getTweet.fulfilled, (state, { payload }) => {
-                state.tweets.push(getTweetDTO(payload));
-            })
+            .addCase(
+                getMyTweets.fulfilled,
+                (
+                    state,
+                    {
+                        payload,
+                    }: {
+                        payload: ITweet[];
+                    },
+                ) => {
+                    if (payload.length) {
+                        state.tweets.push(...getTweetsDTO(payload));
+                        state.isLoading = false;
+                        state.myTweetPage += 1;
+                    }
+                },
+            )
+            .addCase(
+                countFollowingTweets.fulfilled,
+                (state, { payload }: { payload: number }) => {
+                    state.followingPages = Math.ceil(payload / 10);
+                },
+            )
+            .addCase(
+                countMyTweets.fulfilled,
+                (state, { payload }: { payload: number }) => {
+                    state.myTweetPages = Math.ceil(
+                        payload / tweets.NUMBER_OF_PAGES,
+                    );
+                },
+            )
+            .addCase(
+                getTweet.fulfilled,
+                (state, { payload }: { payload: ITweet }) => {
+                    state.tweets.push(getTweetDTO(payload));
+                },
+            );
+
+        //
+        builder
             .addCase(getComments.fulfilled, (state, { payload, meta }) => {
-                const { tweetId } = meta.arg;
-
-                const tweet = findById(state.tweets, tweetId);
-                if (!tweet) return state;
-
-                const comments = getCommentsDTO(payload, 0);
-
-                tweet.skip += 1;
-                tweet.comments.push(...comments);
-            })
-            .addCase(postComment.fulfilled, (state, { payload }) => {
-                addComment(state, payload);
-            })
-            .addCase(toggleLikeTweet.pending, (state, { meta }) => {
-                const { tweetId, isLike, userId } = meta.arg;
-
-                const tweet = findById(state.tweets, tweetId);
-                if (!tweet) return state;
-
-                if (isLike) tweet.likes.push(userId);
-                else tweet.likes.pop();
-            })
-            .addCase(toggleLikeTweet.rejected, (state, { payload }) => {
-                if (!payload) return state;
-
-                const tweet = findById(state.tweets, payload.tweetId);
-                if (!tweet) return state;
-
-                if (payload.isLike) tweet.likes.pop();
-                else tweet.likes.push(payload.userId);
-            })
-            .addCase(toggleInterested.pending, (state, { meta }) => {
-                const { interested, tweetId } = meta.arg;
-
-                const tweet = findById(state.tweets, tweetId);
-                if (!tweet) return state;
-
-                tweet.notInterested = !interested;
-            })
-            .addCase(toggleInterested.rejected, (state, { payload }) => {
-                if (!payload) return state;
-
-                const tweet = findById(state.tweets, payload.tweetId);
-                if (!tweet) return state;
-
-                tweet.notInterested = payload.interested;
-            })
-            .addCase(toggleFollow.pending, (state, { meta }) => {
-                const { userId, follow } = meta.arg;
-
-                state.tweets.forEach((tweet) => {
-                    if (tweet.user._id === userId) tweet.user.follow = follow;
-                });
-            })
-            .addCase(toggleFollow.rejected, (state, { payload }) => {
-                if (!payload) return state;
-
-                state.tweets.forEach((tweet) => {
-                    if (tweet.user._id === payload.userId)
-                        tweet.user.follow = !payload.follow;
+                tweetHelper.extraReducers.getCommentsFulfilled({
+                    comments: payload,
+                    meta,
+                    tweets: state.tweets,
                 });
             })
             .addCase(toggleList.pending, (state, { meta }) => {
-                const { userId, isAdd } = meta.arg;
-
-                state.tweets.forEach((tweet) => {
-                    if (tweet.user._id === userId) tweet.user.isInList = isAdd;
+                tweetHelper.extraReducers.toggleListPending({
+                    tweets: state.tweets,
+                    meta,
                 });
             })
-            .addCase(toggleList.rejected, (state, { payload }) => {
-                if (!payload) return state;
+            .addCase(toggleList.rejected, (state, { meta }) => {
+                const { isAdd, userId } = meta.arg;
 
-                state.tweets.forEach((tweet) => {
-                    if (tweet.user._id === payload.userId)
-                        tweet.user.isInList = !payload.isAdd;
+                tweetHelper.extraReducers.toggleListRejected({
+                    tweets: state.tweets,
+                    isAdd,
+                    userId,
+                });
+            })
+            .addCase(toggleFollow.pending, (state, { meta }) => {
+                tweetHelper.extraReducers.toggleFollowPending({
+                    tweets: state.tweets,
+                    meta,
+                });
+            })
+            .addCase(toggleFollow.rejected, (state, { meta }) => {
+                const { follow, userId } = meta.arg;
+
+                tweetHelper.extraReducers.toggleFollowRejected({
+                    tweets: state.tweets,
+                    follow,
+                    userId,
+                });
+            })
+            .addCase(deleteComment.pending, (state, { meta }) => {
+                tweetHelper.extraReducers.deleteCommentPending({
+                    tweets: state.tweets,
+                    meta,
+                });
+            })
+            .addCase(deleteComment.rejected, (state, { meta }) => {
+                const { commentId, tweetId, parentCommentId } = meta.arg;
+
+                tweetHelper.extraReducers.deleteCommentRejected({
+                    tweets: state.tweets,
+                    commentId,
+                    tweetId,
+                    parentCommentId,
+                });
+            })
+            .addCase(deleteComment.fulfilled, (state, { meta }) => {
+                tweetHelper.extraReducers.deleteCommentFulfilled({
+                    tweets: state.tweets,
+                    meta,
                 });
             })
             .addCase(toggleLikeComment.pending, (state, { meta }) => {
-                const { tweetId, userId, commentId, isLike } = meta.arg;
-
-                const tweet = findById(state.tweets, tweetId);
-
-                if (!tweet) return state;
-
-                const comment = getComment(tweet.comments, commentId);
-
-                if (!comment) return state;
-
-                if (isLike) comment.likes.push(userId);
-                else {
-                    const index = comment.likes.findIndex(
-                        (id) => id === userId,
-                    );
-
-                    comment.likes.splice(index, 1);
-                }
-                comment.numberOfLikes += isLike ? 1 : -1;
+                tweetHelper.extraReducers.toggleLikeCommentPending({
+                    tweets: state.tweets,
+                    meta,
+                });
             })
-            .addCase(toggleLikeComment.rejected, (state, { payload }) => {
-                if (!payload) return state;
+            .addCase(toggleLikeComment.rejected, (state, { meta }) => {
+                const { commentId, isLike, tweetId, userId } = meta.arg;
 
-                const tweet = findById(state.tweets, payload.tweetId);
-                if (!tweet) return state;
-
-                const comment = getParentComment(
-                    tweet.comments,
-                    payload.commentId,
-                );
-                if (!comment) return state;
-
-                const index = comment.likes.findIndex(
-                    (userId) => userId === payload.userId,
-                );
-
-                if (index === -1) comment.likes.push(payload.userId);
-                else comment.likes.splice(index, 1);
+                tweetHelper.extraReducers.toggleLikeCommentRejected({
+                    tweets: state.tweets,
+                    commentId,
+                    isLike,
+                    tweetId,
+                    userId,
+                });
             })
-            .addCase(deleteComment.pending, (state, { meta }) => {
-                const { tweetId, index, parentCommentId } = meta.arg;
-
-                const tweet = findById(state.tweets, tweetId);
-                if (!tweet) return state;
-                let parent: IComment | ITweet | undefined = tweet;
-
-                if (parentCommentId)
-                    parent = getComment(tweet.comments, parentCommentId);
-
-                if (!parent) return state;
-
-                const deletedComments = parent.comments.splice(index, 1);
-                state.deletedComment = deletedComments[0];
+            .addCase(toggleLikeTweet.pending, (state, { meta }) => {
+                tweetHelper.extraReducers.toggleLikeTweetPending({
+                    tweets: state.tweets,
+                    meta,
+                });
             })
-            .addCase(deleteComment.rejected, (state, { payload }) => {
-                if (!payload) return state;
+            .addCase(toggleLikeTweet.rejected, (state, { meta }) => {
+                const { isLike, tweetId, userId } = meta.arg;
 
-                const { tweetId, index, parentCommentId } = payload;
-
-                const tweet = findById(state.tweets, tweetId);
-                if (!tweet) return state;
-
-                if (!parentCommentId) {
-                    tweet.comments.splice(index, 0, state.deletedComment!);
-                    state.deletedComment = null;
-                    return state;
-                }
-
-                const parentComment = getComment(
-                    tweet.comments,
-                    parentCommentId,
-                );
-
-                if (!parentComment) return state;
-
-                parentComment.comments.splice(index, 0, state.deletedComment!);
-                state.deletedComment = null;
+                tweetHelper.extraReducers.toggleLikeTweetRejected({
+                    tweets: state.tweets,
+                    isLike,
+                    tweetId,
+                    userId,
+                });
             })
-            .addCase(deleteComment.fulfilled, (state) => {
-                state.deletedComment = null;
+            .addCase(toggleInterested.pending, (state, { meta }) => {
+                tweetHelper.extraReducers.toggleInterestedPending({
+                    tweets: state.tweets,
+                    meta,
+                });
             })
-            .addCase(getChildrenComments.fulfilled, (state, { payload }) => {
-                if (!payload.length) return state;
+            .addCase(toggleInterested.rejected, (state, { meta }) => {
+                const { tweetId, interested } = meta.arg;
 
-                const tweetId = payload[0].post;
-                const tweet = findById(state.tweets, tweetId);
-                if (!tweet) return state;
-
-                const comment = getComment(tweet.comments, payload[0].parent!);
-
-                if (!comment) return state;
-
-                comment.comments = getCommentsDTO(payload, comment.level + 1);
-            })
-            .addCase(editComment.fulfilled, (state, { payload }) => {
-                const tweet = findById(state.tweets, payload.post);
-                if (!tweet) return state;
-
-                const comment = getComment(tweet.comments, payload._id);
-
-                if (!comment) return state;
-
-                comment.content = payload.content;
+                tweetHelper.extraReducers.toggleInterestedRejected({
+                    tweets: state.tweets,
+                    tweetId,
+                    interested,
+                });
             })
             .addCase(toggleReport.fulfilled, (state, { payload }) => {
-                const tweet = findById(state.tweets, payload.tweetId);
+                const { isReport, tweetId } = payload;
 
-                if (!tweet) return state;
-
-                tweet.report = payload.isReport;
+                tweetHelper.extraReducers.toggleReportFulfilled({
+                    tweets: state.tweets,
+                    isReport,
+                    tweetId,
+                });
+            })
+            .addCase(postComment.fulfilled, (state, { payload }) => {
+                tweetHelper.extraReducers.postCommentFulfilled({
+                    tweets: state.tweets,
+                    comment: payload,
+                });
+            })
+            .addCase(
+                getChildrenComments.fulfilled,
+                (state, { payload, meta }) => {
+                    tweetHelper.extraReducers.getChildrenCommentsFulfilled({
+                        tweets: state.tweets,
+                        comments: payload,
+                        meta,
+                    });
+                },
+            )
+            .addCase(editComment.fulfilled, (state, { payload }) => {
+                tweetHelper.extraReducers.editCommentFulfilled({
+                    tweets: state.tweets,
+                    comment: payload,
+                });
             });
     },
 });
-
-function findIndexTweet(tweets: ITweet[], tweetId: string): number {
-    const length = tweets.length;
-
-    for (let index = 0; index < length; index++) {
-        const tweet = tweets[index];
-
-        if (tweet._id === tweetId) return index;
-    }
-
-    return -1;
-}
-
-function findById(tweets: ITweet[], tweetId: string): ITweet | undefined {
-    return tweets.find((tweet) => tweet._id === tweetId);
-}
-
-function addComment(state: FollowingTweet, payload: IComment) {
-    const tweet = findById(state.tweets, payload.post);
-    if (!tweet) return state;
-
-    const commentDTO = getCommentDTO(payload);
-    if (payload.parent) {
-        const comment = getComment(tweet.comments, payload.parent);
-
-        if (!comment) return state;
-
-        commentDTO.level = comment.level + 1;
-        comment.comments.push(commentDTO);
-        comment.numberOfComments += 1;
-
-        return state;
-    }
-
-    tweet.comments.unshift(commentDTO);
-    tweet.numberOfComments += 1;
-}
 
 export default tweetsSlice.reducer;
 export {

@@ -200,6 +200,7 @@ module.exports = {
                 {
                     tweetId,
                     userId: _id,
+                    tweetOwner: tweet.user._id,
                 },
             );
 

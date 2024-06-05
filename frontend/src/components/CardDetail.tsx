@@ -34,16 +34,19 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
             >
                 <Card isPopup className={className} />
                 {isShowDetail &&
-                    tweet.comments?.map((comment) => (
-                        <CommentTweet
-                            edit={edit}
-                            setEdit={setEdit}
-                            scrolled={scrolled}
-                            setScrolled={setScrolled}
-                            key={comment._id}
-                            comment={comment}
-                        />
-                    ))}
+                    tweet.comments.map(
+                        (comment) =>
+                            comment.deleted || (
+                                <CommentTweet
+                                    edit={edit}
+                                    setEdit={setEdit}
+                                    scrolled={scrolled}
+                                    setScrolled={setScrolled}
+                                    key={comment._id}
+                                    comment={comment}
+                                />
+                            ),
+                    )}
                 {isShowDetail &&
                     loadedComments < tweet.numberOfComments &&
                     loadedComments > 0 && (

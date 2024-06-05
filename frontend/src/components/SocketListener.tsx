@@ -75,6 +75,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 toggleLikeTweetSocket({
                     tweetId: data.tweetId,
                     userId: data.userId,
+                    tweetOwner: data.tweetOwner,
                     isLike: true,
                 }),
             );
@@ -85,6 +86,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 toggleLikeTweetSocket({
                     tweetId: data.tweetId,
                     userId: data.userId,
+                    tweetOwner: data.tweetOwner,
                     isLike: false,
                 }),
             );
@@ -113,10 +115,12 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 commentId,
                 userId,
                 tweetId,
+                tweetOwner,
             }: {
                 commentId: string;
                 userId: string;
                 tweetId: string;
+                tweetOwner: string;
             }) => {
                 if (userId === user._id) return;
 
@@ -125,6 +129,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                         commentId,
                         tweetId,
                         userId,
+                        tweetOwner,
                         isLike: true,
                     }),
                 );
@@ -137,10 +142,12 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 commentId,
                 userId,
                 tweetId,
+                tweetOwner,
             }: {
                 commentId: string;
                 userId: string;
                 tweetId: string;
+                tweetOwner: string;
             }) => {
                 if (userId === user._id) return;
 
@@ -149,6 +156,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                         commentId,
                         tweetId,
                         userId,
+                        tweetOwner,
                         isLike: false,
                     }),
                 );

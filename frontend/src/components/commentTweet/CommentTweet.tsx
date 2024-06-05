@@ -116,18 +116,21 @@ export default function CommentTweet({
                     </div>
                 </div>
 
-                {comment.comments.map((comment) => (
-                    <CommentTweet
-                        scrolled={scrolled}
-                        setScrolled={setScrolled}
-                        comment={comment}
-                        level={getNextLevelComment(level)}
-                        key={comment._id}
-                        setShowParent={setShowCardComment}
-                        edit={edit}
-                        setEdit={setEdit}
-                    />
-                ))}
+                {comment.comments.map(
+                    (comment) =>
+                        comment.deleted || (
+                            <CommentTweet
+                                scrolled={scrolled}
+                                setScrolled={setScrolled}
+                                comment={comment}
+                                level={getNextLevelComment(level)}
+                                key={comment._id}
+                                setShowParent={setShowCardComment}
+                                edit={edit}
+                                setEdit={setEdit}
+                            />
+                        ),
+                )}
 
                 {showCardComment && level < 2 && (
                     <CardComment

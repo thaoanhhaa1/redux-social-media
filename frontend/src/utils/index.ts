@@ -2,6 +2,7 @@ export { default as findTweetById } from './findTweetById';
 export { default as getArray } from './getArray';
 export { default as getBookmarkDTO } from './getBookmarkDTO';
 export { default as getBookmarksDTO } from './getBookmarksDTO';
+export { default as getComment } from './getComment';
 export { default as getCommentDTO } from './getCommentDTO';
 export { default as getCommentsDTO } from './getCommentsDTO';
 export { default as getDateValue } from './getDateValue';

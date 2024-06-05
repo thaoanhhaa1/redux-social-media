@@ -37,6 +37,7 @@ const CardPopup = ({
                 getComments({
                     tweetId: tweet._id,
                     skip: tweet.skip * comments.LIMIT,
+                    tweetOwner: tweet.user._id,
                 }),
             );
         }

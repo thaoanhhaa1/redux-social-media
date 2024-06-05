@@ -5,6 +5,7 @@ function getCommentDTO(comment: IComment, level: number = 0): IComment {
 
     commentNew.comments = [];
     commentNew.level = level;
+    commentNew.deleted = false;
 
     return commentNew;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { v4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -6,37 +6,44 @@ import { RootState } from '../app/store';
 import { BookmarkItem, Card, Loading, ScrollbarFixTop } from '../components';
 import { CardSkeleton } from '../components/card';
 import CardWrapper from '../components/card/CardWrapper';
-import { getBookmarks, getTweets } from '../features/bookmarks';
+import { getBookmarks, getTweets, setActiveId } from '../features/bookmarks';
 import { getArray } from '../utils';
 
 const Bookmark = () => {
-    const { bookmarks, loading } = useAppSelector(
+    const { bookmarks, isLoading, activeId } = useAppSelector(
         (state: RootState) => state.bookmarks,
     );
     const dispatch = useAppDispatch();
-    const [index, setIndex] = useState<number>(-1);
-    const bookmark = bookmarks[index];
+    const bookmark = useMemo(
+        () => bookmarks.find((bm) => bm._id === activeId)!,
+        [activeId, bookmarks],
+    );
 
     const loadMoreCard = useCallback(async () => {
-        if (index > -1)
+        if (activeId)
             await dispatch(
                 getTweets({
-                    userId: bookmarks[index]._id,
-                    page: bookmarks[index].page + 1,
+                    userId: bookmark._id,
+                    page: bookmark.page + 1,
                 }),
             );
-    }, [bookmarks, dispatch, index]);
+    }, [activeId, bookmark?._id, bookmark?.page, dispatch]);
+
+    const handleChangeActiveId = useCallback(
+        (id: string) => dispatch(setActiveId(id)),
+        [dispatch],
+    );
 
     useEffect(() => {
         if (!bookmarks.length) dispatch(getBookmarks());
-        else if (index === -1) setIndex(0);
-    }, [bookmarks, bookmarks.length, dispatch, index]);
+        else if (!activeId) dispatch(setActiveId(bookmarks[0]._id));
+    }, [activeId, bookmarks, bookmarks.length, dispatch]);
 
     useEffect(() => {
         if (bookmark && !bookmark.tweets.length) loadMoreCard();
     }, [bookmark, dispatch, loadMoreCard]);
 
-    if (loading || index === -1 || !bookmark.tweets.length) return <Loading />;
+    if (isLoading || !activeId || !bookmark.tweets.length) return <Loading />;
 
     return (
         <div className='flex gap-5 px-5'>
@@ -49,12 +56,12 @@ const Bookmark = () => {
                     </div>
                 }
             >
-                {bookmarks.map((bm, index) => (
+                {bookmarks.map((bm) => (
                     <BookmarkItem
                         active={bm._id === bookmark?._id}
                         bookmark={bm}
                         key={bm._id}
-                        onClick={() => setIndex(index)}
+                        onClick={() => handleChangeActiveId(bm._id)}
                     />
                 ))}
             </ScrollbarFixTop>

@@ -64,6 +64,7 @@ const CardMore = ({
                 setBlock({
                     isBlock: true,
                     tweetId: _id,
+                    tweetOwner: user._id,
                 }),
             );
             dispatch(
@@ -78,6 +79,7 @@ const CardMore = ({
                 setBlock({
                     isBlock: false,
                     tweetId: _id,
+                    tweetOwner: user._id,
                 }),
             );
             dispatch(
