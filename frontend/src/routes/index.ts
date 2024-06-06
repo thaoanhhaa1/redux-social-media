@@ -15,6 +15,7 @@ import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import Stories from '../pages/Stories';
 import TweetDetail from '../pages/TweetDetail';
+import UserProfile from '../pages/UserProfile';
 
 const publicRoutes: IRoute[] = [
     {
@@ -78,6 +79,10 @@ const publicRoutes: IRoute[] = [
     {
         path: config.routes.blocking,
         element: Blocking,
+    },
+    {
+        path: config.routes.userProfile,
+        element: UserProfile,
     },
 ];
 

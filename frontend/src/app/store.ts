@@ -21,6 +21,7 @@ import storiesDetailReducer from '../features/storiesDetail';
 import tweetReducer from '../features/tweet';
 import tweetsReducer from '../features/tweets';
 import userReducer from '../features/user';
+import userProfilesReducer from '../features/userProfiles';
 import userRelationsReducer from '../features/userRelations';
 
 const combinedReducer = combineReducers({
@@ -41,6 +42,7 @@ const combinedReducer = combineReducers({
     tweet: tweetReducer,
     userRelations: userRelationsReducer,
     lists: listsReducer,
+    userProfiles: userProfilesReducer,
 });
 
 const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {

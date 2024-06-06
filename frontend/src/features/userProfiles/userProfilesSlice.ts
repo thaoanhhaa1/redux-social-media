@@ -29,52 +29,27 @@ export const { getTweetsByUserId, countTweetsByUserId } =
 interface ListsState {
     lists: IList[];
     loading: boolean;
-    activeId: string | null;
     tweetActiveId: string | null;
-    page: number;
-    pages: number;
 }
 
 const initialState: ListsState = {
     lists: [],
     loading: false,
-    activeId: null,
     tweetActiveId: null,
-    page: 0,
-    pages: -1,
 };
 
-const getLists = createAsyncThunk(
-    'getLists',
-    async ({ page }: { page: number }): Promise<IList[]> => {
-        const res = await listService.getUsers({ page });
-
-        return res;
-    },
-);
-
-const countPages = createAsyncThunk('countPages', async (): Promise<number> => {
-    const res = await listService.countPages();
-
-    return res;
-});
-
-const togglePin = createAsyncThunk(
-    'togglePin',
-    async ({ isPin, userId }: { userId: string; isPin: boolean }) => {
-        const res = await listService.togglePin({ userId, isPin });
-
+export const getUserProfile = createAsyncThunk(
+    'lists/getLists',
+    async ({ username }: { username: string }) => {
+        const res = await listService.getUser({ username });
         return res;
     },
 );
 
 const listsSlice = createSlice({
-    name: 'lists',
+    name: 'userProfiles',
     initialState,
     reducers: {
-        setActiveId: (state, { payload }) => {
-            state.activeId = payload;
-        },
         toggleFollowList: (
             state,
             {
@@ -185,28 +160,22 @@ const listsSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(countPages.fulfilled, (state, { payload }) => {
-            state.pages = payload;
-        });
-
-        builder.addCase(getLists.pending, (state) => {
-            state.loading = true;
-        });
-
-        builder.addCase(getLists.fulfilled, (state, action) => {
-            state.lists = action.payload.map((list) => ({
-                ...list,
-                tweets: [],
-                page: 0,
-                pages: -1,
-            }));
-            state.loading = false;
-            state.page += 1;
-        });
-
-        builder.addCase(getLists.rejected, (state) => {
-            state.loading = false;
-        });
+        builder
+            .addCase(getUserProfile.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getUserProfile.fulfilled, (state, { payload }) => {
+                state.lists.push({
+                    ...payload,
+                    tweets: [],
+                    page: 0,
+                    pages: -1,
+                });
+                state.loading = false;
+            })
+            .addCase(getUserProfile.rejected, (state) => {
+                state.loading = false;
+            });
 
         //
         builder
@@ -235,21 +204,8 @@ const listsSlice = createSlice({
 
                     list.pages = Math.ceil(payload / tweets.NUMBER_OF_PAGES);
                 },
-            )
-            .addCase(togglePin.pending, (state, { meta }) => {
-                const list = findByUserId(state.lists, meta.arg.userId);
+            );
 
-                if (!list) return;
-
-                list.isPin = meta.arg.isPin;
-            })
-            .addCase(togglePin.rejected, (state, { meta }) => {
-                const list = findByUserId(state.lists, meta.arg.userId);
-
-                if (!list) return;
-
-                list.isPin = !meta.arg.isPin;
-            });
         builder
             .addCase(getComments.fulfilled, (state, { payload, meta }) => {
                 const list = findByUserId(state.lists, meta.arg.tweetOwner);
@@ -414,6 +370,7 @@ const listsSlice = createSlice({
                 });
             })
             .addCase(postComment.fulfilled, (state, { payload, meta }) => {
+                console.log('🚀 ~ .addCase ~ payload:', payload);
                 const list = findByUserId(state.lists, meta.arg.tweetOwner);
                 if (!list) return state;
 
@@ -479,9 +436,7 @@ function findByUserId(lists: IList[], userId: string) {
 }
 
 export default listsSlice.reducer;
-export { countPages, getLists, togglePin };
 export const {
-    setActiveId,
     toggleFollowList,
     addCommentSocket,
     setBlock,

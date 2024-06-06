@@ -1,5 +1,6 @@
 const followModel = require('../models/followModel');
 const ListModel = require('../models/listsModel');
+const userModel = require('../models/userModel');
 
 const NUMBER_USERS_OF_PAGE = 10;
 
@@ -128,6 +129,84 @@ module.exports = {
         ]);
 
         return users;
+    },
+
+    getUser: async ({ username, userId }) => {
+        const follow = await followModel.findOne({ user: userId });
+        const following = follow ? follow.following : [];
+
+        const users = await userModel.aggregate([
+            {
+                $match: {
+                    username,
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    username: 1,
+                    name: 1,
+                    avatar: 1,
+                    background: 1,
+                },
+            },
+            {
+                $lookup: {
+                    from: 'follows',
+                    as: 'follows',
+                    let: { id: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: [
+                                        {
+                                            $toString: '$$id',
+                                        },
+                                        '$user',
+                                    ],
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $unwind: {
+                    path: '$follows',
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $project: {
+                    username: 1,
+                    name: 1,
+                    avatar: 1,
+                    background: 1,
+                    followers: {
+                        $cond: ['$follows', { $size: '$follows.followers' }, 0],
+                    },
+                    following: {
+                        $cond: ['$follows', { $size: '$follows.following' }, 0],
+                    },
+                    isFollowing: {
+                        $in: [
+                            {
+                                $toString: '$_id',
+                            },
+                            following,
+                        ],
+                    },
+                },
+            },
+            {
+                $addFields: {
+                    isPin: false,
+                },
+            },
+        ]);
+
+        return users?.at(0);
     },
 
     countUsers: async (userId) => {

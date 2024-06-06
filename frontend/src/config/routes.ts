@@ -15,6 +15,7 @@ const routes = {
     liveVideo: '/live-video',
     stories: '/stories',
     tweetDetail: '/:user_id/tweets/:tweet_id',
+    userProfile: '/:username',
     notFound: '*',
 };
 

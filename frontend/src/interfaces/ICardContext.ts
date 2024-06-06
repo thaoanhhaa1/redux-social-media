@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import * as bookmarks from '../features/bookmarks';
 import * as lists from '../features/lists';
 import * as tweets from '../features/tweets';
+import * as userProfiles from '../features/userProfiles';
 import { BlockedTweetModalType } from '../types';
 import IComment from './IComment';
 import ITweet from './ITweet';
@@ -10,7 +11,11 @@ interface ICardContext {
     tweet: ITweet;
     blockedType: BlockedTweetModalType;
     reportLoading: boolean;
-    action: typeof bookmarks | typeof tweets | typeof lists;
+    action:
+        | typeof bookmarks
+        | typeof tweets
+        | typeof lists
+        | typeof userProfiles;
     setBlockedType: Dispatch<SetStateAction<BlockedTweetModalType>>;
     toggleUserList: () => void;
     toggleUserFollow: () => void;

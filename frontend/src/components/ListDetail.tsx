@@ -9,6 +9,7 @@ import {
     toggleFollowList,
 } from '../features/lists';
 import { IList } from '../interfaces';
+import { TweetRenderType } from '../types';
 import Button from './Button';
 import { FollowIcon, MessageIcon, UnFollowIcon } from './Icons';
 import Image from './Image';
@@ -16,8 +17,13 @@ import RenderList from './RenderList';
 import Card, { CardSkeleton } from './card';
 import CardWrapper from './card/CardWrapper';
 
-const ListDetail = ({ list }: { list: IList }) => {
-    console.log('🚀 ~ ListDetail ~ list:', list);
+const ListDetail = ({
+    list,
+    type,
+}: {
+    list: IList;
+    type?: TweetRenderType;
+}) => {
     const dispatch = useAppDispatch();
     const { Icon, title } = useMemo(() => {
         if (list.isFollowing)
@@ -136,7 +142,11 @@ const ListDetail = ({ list }: { list: IList }) => {
                 className='scrollbar mt-7 flex flex-col gap-2 xxs:gap-5'
             >
                 {list.tweets.map((tweet) => (
-                    <CardWrapper type='LISTS' key={tweet._id} tweet={tweet}>
+                    <CardWrapper
+                        type={type || 'LISTS'}
+                        key={tweet._id}
+                        tweet={tweet}
+                    >
                         <Card />
                     </CardWrapper>
                 ))}

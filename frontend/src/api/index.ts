@@ -68,6 +68,7 @@ const api = {
     toggleList: (isAdd: boolean) =>
         `/private/lists/${isAdd ? 'add' : 'remove'}`,
     getUserList: () => '/private/lists/users',
+    getUserProfile: (username: string) => `/private/lists/users/${username}`,
     countListPages: () => '/private/lists/users/count',
     togglePin: (userId: string) => `/private/lists/users/${userId}/pin`,
 

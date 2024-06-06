@@ -9,6 +9,12 @@ export const getUsers = async ({ page }: { page: number }) => {
     return res.data;
 };
 
+export const getUser = async ({ username }: { username: string }) => {
+    const res = await axiosClient.get(api.getUserProfile(username));
+
+    return res.data;
+};
+
 export const countPages = async () => {
     const res = await axiosClient.get(api.countListPages());
 

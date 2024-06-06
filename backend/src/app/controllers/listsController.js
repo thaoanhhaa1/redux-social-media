@@ -54,6 +54,25 @@ module.exports = {
         }
     },
 
+    getUser: async (req, res, next) => {
+        const userId = req.body._id;
+        const { username } = req.params;
+        console.log('🚀 ~ getUser: ~ username:', username);
+
+        try {
+            const user = await listService.getUser({
+                username,
+                userId,
+            });
+
+            if (!user) throw createError(404, 'User not found');
+
+            res.json(user);
+        } catch (error) {
+            next(error);
+        }
+    },
+
     countPages: async (req, res, next) => {
         const _id = req.body._id;
 
