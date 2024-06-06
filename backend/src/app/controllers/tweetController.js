@@ -22,6 +22,18 @@ module.exports = {
         }
     },
 
+    countTweetByUser: async (req, res, next) => {
+        const userId = req.params.user_id;
+
+        try {
+            const result = await tweetService.countTweetsByUserId(userId);
+
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
     getMyTweets: async (req, res, next) => {
         const _id = req.body._id;
         const limit = +req.query.limit || 8;

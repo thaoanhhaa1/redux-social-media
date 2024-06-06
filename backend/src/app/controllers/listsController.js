@@ -37,4 +37,47 @@ module.exports = {
             next(error);
         }
     },
+
+    getUsers: async (req, res, next) => {
+        const _id = req.body._id;
+        const page = +(req.query.page || 1);
+
+        try {
+            const users = await listService.getUsers({
+                userId: _id,
+                page,
+            });
+
+            res.json(users);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    countPages: async (req, res, next) => {
+        const _id = req.body._id;
+
+        try {
+            const count = await listService.countUsers(_id);
+
+            res.json(count);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    togglePin: async (req, res, next) => {
+        const { _id, isPin } = req.body;
+        const userId = req.params.user_id;
+
+        try {
+            const result = await listService.togglePin({ _id, userId, isPin });
+
+            if (result) return res.sendStatus(200);
+
+            throw createError(400, 'Failed to pin/unpin user');
+        } catch (error) {
+            next(error);
+        }
+    },
 };

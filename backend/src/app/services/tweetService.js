@@ -38,7 +38,24 @@ const getDetailTweets = ({ query, userId, page = 1, sort = false }) => {
                 from: 'lists',
                 as: 'lists',
                 let: { id: '$user._id' },
-                pipeline: [{ $match: { $expr: { $in: ['$$id', '$list'] } } }],
+                pipeline: [
+                    {
+                        $match: {
+                            $and: [
+                                {
+                                    $expr: {
+                                        $eq: ['$_id', userId],
+                                    },
+                                },
+                                {
+                                    $expr: {
+                                        $in: ['$$id', '$list.userId'],
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
             },
         },
         {
