@@ -265,6 +265,7 @@ module.exports = {
             dl: '896px',
             gx: '1152px',
             xl: '1160px',
+            xxl: '1290px',
             'sc-100': '400px',
         },
     },

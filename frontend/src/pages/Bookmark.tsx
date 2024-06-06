@@ -48,7 +48,7 @@ const Bookmark = () => {
 
     return (
         <div className='px-2 xxs:px-3 xs:px-4 dl:px-5'>
-            <div className='p-2 xxs:p-3 xs:p-4 dl:p-5 bg-white rounded block xxs:hidden mb-2 xxs:mb-3 xs:mb-4 dl:mb-5'>
+            <div className='p-2 xxs:p-3 xs:p-4 dl:p-5 bg-white dark:bg-dark-black-2 rounded block xxs:hidden mb-2 xxs:mb-3 xs:mb-4 dl:mb-5'>
                 <Swiper spaceBetween={0} slidesPerView='auto'>
                     {bookmarks.map((bm) => (
                         <SwiperSlide key={bm._id} className='!w-fit'>

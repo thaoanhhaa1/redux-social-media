@@ -44,7 +44,7 @@ const NotificationAllItem = ({
             onClick={handleClick}
             to={`/${data.tweetUsername!}/tweets/${data.tweetId!}`}
             className={classNames(
-                'group/close flex gap-5 p-5 rounded-2.5 hover:bg-blue-white-4 dark:bg-dark-black-1 dark:hover:bg-dark-black-3 ease-linear duration-300',
+                'group/close flex p-2 xxs:p-3 xs:p-4 dl:p-5 gap-2 xxs:gap-3 xs:gap-4 dl:gap-5 rounded-2.5 hover:bg-blue-white-4 dark:bg-dark-black-1 dark:hover:bg-dark-black-3 ease-linear duration-300',
                 toastProps ? '' : 'shadow-container dark:shadow-none',
             )}
         >

@@ -29,7 +29,7 @@ const List = ({ list }: { list: IList }) => {
         <div
             onClick={handleChangeList}
             className={classNames(
-                'p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5',
+                'p-2 xxs:p-3 xs:p-4 dl:p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5',
                 activeId === list._id && 'bg-blue-white-4 dark:bg-dark-black-3',
             )}
         >

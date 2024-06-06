@@ -44,7 +44,7 @@ const Notifications = () => {
             scrollHeight='var(--scroll-height)'
             scrollWidth='335px'
         >
-            <Wrapper className='p-5'>
+            <Wrapper className='p-2 xxs:p-3 xs:p-4 dl:p-5'>
                 <div className='font-semibold text-blue-black-2 dark:text-white'>
                     Notifications
                 </div>

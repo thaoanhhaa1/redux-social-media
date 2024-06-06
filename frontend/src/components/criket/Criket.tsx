@@ -3,7 +3,7 @@ import CriketItem from './CriketItem';
 
 const Criket = () => {
     return (
-        <Wrapper className='p-5'>
+        <Wrapper className='p-2 xxs:p-3 xs:p-4 dl:p-5'>
             <div className='text-black-1 dark:text-white font-semibold text-lg'>
                 What’s happening
             </div>
