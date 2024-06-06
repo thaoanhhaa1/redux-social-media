@@ -279,4 +279,17 @@ module.exports = {
             next(error);
         }
     },
+
+    addViewer: async (req, res, next) => {
+        const { _id } = req.body;
+        const tweetId = req.params.tweet_id;
+
+        try {
+            await tweetService.addViewer(_id, tweetId);
+
+            res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
 };

@@ -20,6 +20,7 @@ export const {
     postComment,
     getChildrenComments,
     editComment,
+    addViewer,
 } = tweetHelper.asyncThunk;
 
 type FollowingTweet = {
@@ -342,6 +343,18 @@ const tweetsSlice = createSlice({
                 tweetHelper.extraReducers.editCommentFulfilled({
                     tweets: state.tweets,
                     comment: payload,
+                });
+            })
+            .addCase(addViewer.pending, (state, { meta }) => {
+                tweetHelper.extraReducers.addViewerPending({
+                    tweets: state.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(addViewer.rejected, (state, { meta }) => {
+                tweetHelper.extraReducers.addViewerReject({
+                    tweets: state.tweets,
+                    tweetId: meta.arg.tweetId,
                 });
             });
     },

@@ -21,6 +21,7 @@ router.post('/:tweet_id/not-interested', tweetController.notInterested);
 router.post('/:tweet_id/interested', tweetController.interested);
 router.post('/:tweet_id/reporters', tweetController.addReporter);
 router.delete('/:tweet_id/reporters', tweetController.removeReporter);
+router.patch('/:tweet_id/viewed', tweetController.addViewer);
 router.post('/', tweetController.createTweet);
 
 module.exports = router;

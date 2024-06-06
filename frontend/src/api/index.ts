@@ -31,6 +31,7 @@ const api = {
         `/private/tweets/${tweetId}/reporters`,
     removeReporterFromTweet: (tweetId: string) =>
         `/private/tweets/${tweetId}/reporters`,
+    addViewer: (tweetId: String) => `/private/tweets/${tweetId}/viewed`,
 
     // COMMENT ROUTES
     getChildComments: (commentId: String) =>

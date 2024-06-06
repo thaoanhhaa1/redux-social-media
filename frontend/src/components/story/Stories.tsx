@@ -74,7 +74,13 @@ const Stories = ({
                     }}
                 >
                     <NewStory onClick={() => setShowModal(true)} />
-                    {(loading && <RenderList Control={StorySkeleton} />) ||
+                    {(loading && (
+                        <RenderList
+                            gap='10px'
+                            direction='row'
+                            Control={StorySkeleton}
+                        />
+                    )) ||
                         filteredStories.map((story) => (
                             <Story url={story.story} key={story._id} />
                         ))}

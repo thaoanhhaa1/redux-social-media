@@ -365,6 +365,15 @@ const countTweetsByUserId = createAsyncThunk(
     },
 );
 
+const addViewer = createAsyncThunk(
+    'tweets/addViewer',
+    async ({ tweetId }: { tweetId: string; tweetOwner: string }) => {
+        await tweetService.addViewer(tweetId);
+
+        return tweetId;
+    },
+);
+
 const tweetHelper = {
     asyncThunk: {
         getMyTweets,
@@ -385,6 +394,7 @@ const tweetHelper = {
         toggleReport,
         getTweetsByUserId,
         countTweetsByUserId,
+        addViewer,
     },
     reducers: {
         addNewTweet: (tweets: ITweet[], tweet: ITweet) => {
@@ -780,6 +790,32 @@ const tweetHelper = {
             tweetsResults: ITweet[];
         }) => {
             tweets.push(...getTweetsDTO(tweetsResults));
+        },
+        addViewerPending: ({
+            tweets,
+            tweetId,
+        }: {
+            tweets: ITweet[];
+            tweetId: string;
+        }) => {
+            const tweet = findById(tweets, tweetId);
+
+            if (!tweet) return;
+
+            tweet.viewed = true;
+        },
+        addViewerReject: ({
+            tweets,
+            tweetId,
+        }: {
+            tweets: ITweet[];
+            tweetId: string;
+        }) => {
+            const tweet = findById(tweets, tweetId);
+
+            if (!tweet) return;
+
+            tweet.viewed = false;
         },
     },
 };

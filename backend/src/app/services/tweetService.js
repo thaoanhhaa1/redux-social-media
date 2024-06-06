@@ -104,6 +104,9 @@ const getDetailTweets = ({ query, userId, page = 1, sort = false }) => {
                 report: {
                     $in: [userId, '$reporters'],
                 },
+                viewed: {
+                    $in: [userId, '$viewed'],
+                },
             },
         },
     ]);
@@ -295,5 +298,11 @@ module.exports = {
         tweetModel.updateOne(
             { _id: tweetId },
             { $pull: { reporters: userId } },
+        ),
+
+    addViewer: (userId, tweetId) =>
+        tweetModel.updateOne(
+            { _id: tweetId },
+            { $addToSet: { viewed: userId } },
         ),
 };

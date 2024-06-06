@@ -12,6 +12,7 @@ interface ITweet extends ITweetPost {
     notInterested: boolean;
     blocked: boolean;
     report: boolean;
+    viewed?: boolean;
 }
 
 export default ITweet;

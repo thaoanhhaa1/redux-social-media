@@ -20,6 +20,7 @@ export const {
     postComment,
     getChildrenComments,
     editComment,
+    addViewer,
 } = tweetHelper.asyncThunk;
 
 export const { getTweetsByUserId, countTweetsByUserId } =
@@ -442,6 +443,33 @@ const listsSlice = createSlice({
                 tweetHelper.extraReducers.editCommentFulfilled({
                     tweets: list.tweets,
                     comment: payload,
+                });
+            })
+            .addCase(editComment.pending, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                tweetHelper.extraReducers.addViewerPending({
+                    tweets: list.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(addViewer.rejected, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                tweetHelper.extraReducers.addViewerReject({
+                    tweets: list.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(addViewer.pending, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                tweetHelper.extraReducers.addViewerPending({
+                    tweets: list.tweets,
+                    tweetId: meta.arg.tweetId,
                 });
             });
     },

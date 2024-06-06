@@ -18,6 +18,7 @@ export const {
     postComment,
     getChildrenComments,
     editComment,
+    addViewer,
 } = tweetHelper.asyncThunk;
 
 interface IBookmarks {
@@ -397,6 +398,24 @@ const bookmarksSlice = createSlice({
                 tweetHelper.extraReducers.editCommentFulfilled({
                     tweets: bookmark.tweets,
                     comment: payload,
+                });
+            })
+            .addCase(addViewer.pending, (state, { meta }) => {
+                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
+                if (!bookmark) return state;
+
+                tweetHelper.extraReducers.addViewerPending({
+                    tweets: bookmark.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(addViewer.rejected, (state, { meta }) => {
+                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
+                if (!bookmark) return state;
+
+                tweetHelper.extraReducers.addViewerReject({
+                    tweets: bookmark.tweets,
+                    tweetId: meta.arg.tweetId,
                 });
             });
     },
