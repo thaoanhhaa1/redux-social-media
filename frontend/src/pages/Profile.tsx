@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import { useWindowSize } from 'usehooks-ts';
-import { v4 } from 'uuid';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
@@ -12,10 +11,12 @@ import {
     Card,
     EditProfile,
     EditProfileIcon,
+    Empty,
     Follow,
     Image,
     Loading,
     ProfileItem,
+    RenderList,
     StickyBottom,
     Stories,
     WhatHappen,
@@ -31,7 +32,7 @@ import {
 } from '../features/profile';
 import { getStories } from '../features/stories';
 import { countMyTweets, getMyTweets } from '../features/tweets';
-import { getArray, getMonthYear } from '../utils';
+import { getMonthYear } from '../utils';
 
 const Profile = () => {
     const {
@@ -160,21 +161,13 @@ const Profile = () => {
                     <Stories all={false} loading={loading} />
                     <WhatHappen />
                     {!loading && !profile.tweetCount && !myTweets.length && (
-                        <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
-                            No tweets available
-                        </div>
+                        <Empty>No tweets available</Empty>
                     )}
                     {loading || (
                         <InfiniteScroll
                             dataLength={myTweets.length}
                             hasMore={myTweetPage < myTweetPages}
-                            loader={
-                                <>
-                                    {getArray(3).map(() => (
-                                        <CardSkeleton key={v4()} />
-                                    ))}
-                                </>
-                            }
+                            loader={<RenderList Control={CardSkeleton} />}
                             next={loadMoreCard}
                             className='scrollbar flex flex-col gap-2 xxs:gap-5'
                         >
@@ -185,8 +178,7 @@ const Profile = () => {
                             ))}
                         </InfiniteScroll>
                     )}
-                    {loading &&
-                        getArray().map(() => <CardSkeleton key={v4()} />)}
+                    {loading && <RenderList Control={CardSkeleton} />}
                 </div>
                 <WhoToFollowWrapper>
                     <Wrapper className='w-full dl:w-[300px] p-2 xxs:p-3 xs:p-4 dl:p-5 gx:p-7.5 gx:mb-5'>
@@ -197,8 +189,9 @@ const Profile = () => {
                             profile.whoToFollow.map((user) => (
                                 <Follow key={user._id} user={user} />
                             ))}
-                        {(loading || loadingFollow) &&
-                            getArray().map(() => <PersonSkeleton key={v4()} />)}
+                        {(loading || loadingFollow) && (
+                            <RenderList Control={PersonSkeleton} />
+                        )}
                         {profile.whoToFollowPage < profile.whoToFollowPages &&
                             !loading && (
                                 <button

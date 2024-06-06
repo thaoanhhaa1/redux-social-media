@@ -21,6 +21,7 @@
 body {
     text-rendering: optimizespeed;
     @apply text-black dark:text-white leading-base overflow-x-hidden font-base select-none;
+    overflow-y: scroll;
 }
 
 .bg-blue-blue-white-4 {

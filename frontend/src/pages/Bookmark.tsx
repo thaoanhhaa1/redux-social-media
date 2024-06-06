@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { v4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
-import { BookmarkItem, Card, Loading, ScrollbarFixTop } from '../components';
+import {
+    BookmarkItem,
+    Card,
+    Empty,
+    Loading,
+    RenderList,
+    ScrollbarFixTop,
+} from '../components';
 import { CardSkeleton } from '../components/card';
 import CardWrapper from '../components/card/CardWrapper';
 import { getBookmarks, getTweets, setActiveId } from '../features/bookmarks';
-import { getArray } from '../utils';
 
 const Bookmark = () => {
     const { bookmarks, isLoading, activeId } = useAppSelector(
@@ -44,7 +49,8 @@ const Bookmark = () => {
         if (bookmark && !bookmark.tweets.length) loadMoreCard();
     }, [bookmark, dispatch, loadMoreCard]);
 
-    if (isLoading || !activeId || !bookmark.tweets.length) return <Loading />;
+    if (isLoading) return <Loading />;
+    if (!bookmarks.length) return <Empty>No bookmarks found</Empty>;
 
     return (
         <div className='px-2 xxs:px-3 xs:px-4 dl:px-5'>
@@ -85,25 +91,27 @@ const Bookmark = () => {
                 </ScrollbarFixTop>
                 <div className='flex-1 pb-5'>
                     <div className='max-w-[680px] mx-auto flex flex-col gap-5'>
-                        <InfiniteScroll
-                            dataLength={bookmark.tweets.length}
-                            hasMore={bookmark.page < bookmark.pages}
-                            loader={getArray(3).map(() => (
-                                <CardSkeleton key={v4()} />
-                            ))}
-                            next={loadMoreCard}
-                            className='scrollbar flex flex-col gap-2 xxs:gap-5'
-                        >
-                            {bookmark.tweets.map((tweet) => (
-                                <CardWrapper
-                                    type='BOOKMARKS'
-                                    key={tweet._id}
-                                    tweet={tweet}
-                                >
-                                    <Card />
-                                </CardWrapper>
-                            ))}
-                        </InfiniteScroll>
+                        {bookmark ? (
+                            <InfiniteScroll
+                                dataLength={bookmark.tweets.length}
+                                hasMore={bookmark.page < bookmark.pages}
+                                loader={<RenderList Control={CardSkeleton} />}
+                                next={loadMoreCard}
+                                className='scrollbar flex flex-col gap-2 xxs:gap-5'
+                            >
+                                {bookmark.tweets.map((tweet) => (
+                                    <CardWrapper
+                                        type='BOOKMARKS'
+                                        key={tweet._id}
+                                        tweet={tweet}
+                                    >
+                                        <Card />
+                                    </CardWrapper>
+                                ))}
+                            </InfiniteScroll>
+                        ) : (
+                            <RenderList Control={CardSkeleton} />
+                        )}
                     </div>
                 </div>
             </div>

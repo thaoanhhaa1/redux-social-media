@@ -40,9 +40,8 @@ export default function Avatar({
             alt={alt}
             style={{
                 width: `${width}px`,
-                height: `${width}px`,
             }}
-            className={classNames(className, 'rounded-full')}
+            className={classNames(className, 'rounded-full aspect-square')}
         />
     );
 }

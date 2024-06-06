@@ -220,6 +220,7 @@ const listsSlice = createSlice({
                         tweets: list.tweets,
                         tweetsResults: payload,
                     });
+                    list.page += 1;
                 },
             )
             .addCase(

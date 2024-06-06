@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
-import { List } from '../components';
+import { Empty } from '../components';
 import ListDetail from '../components/ListDetail';
+import ListWrapper from '../components/ListWrapper';
+import ListsSkeleton from '../components/ListsSkeleton';
 import { ScrollbarFixTop } from '../components/scrollbar';
 import { countPages, getLists, setActiveId } from '../features/lists';
 import { IList } from '../interfaces';
 
-// TODO Loading skeleton
 const Lists = () => {
     const { lists, activeId, pages, loading } = useAppSelector(
         (state: RootState) => state.lists,
@@ -44,28 +45,15 @@ const Lists = () => {
 
     const renderListChild = useCallback(() => {
         return (
-            <>
-                {pinList.length ? (
-                    <div className='px-5 py-3 bg-blue-white-4 dark:bg-dark-black-3 rounded-2.5 flex justify-between items-center font-semibold text-blue-black-5 dark:text-white'>
-                        <span>Pinned</span>
-                        <span>Edit</span>
-                    </div>
-                ) : null}
-                {pinList.map((list) => (
-                    <List list={list} key={list._id} />
-                ))}
-                <div className='px-5 py-3 bg-blue-white-4 dark:bg-dark-black-3 rounded-2.5 flex justify-between items-center font-semibold text-blue-black-5 dark:text-white'>
-                    <span>All</span>
-                </div>
-                {allList.map((list) => (
-                    <List list={list} key={list._id} />
-                ))}
-            </>
+            <div className='flex flex-col gap-2 xxs:gap-3'>
+                <ListWrapper title='Pinned' list={pinList} />
+                <ListWrapper title='All' list={allList} />
+            </div>
         );
     }, [pinList, allList]);
 
-    if (loading) return <div>Loading...</div>;
-    if (pages === 0) return <div>Lists is empty</div>;
+    if (loading) return <ListsSkeleton />;
+    if (pages === 0) return <Empty>No lists available</Empty>;
 
     return (
         <div className='px-2 xxs:px-3 xs:px-4 dl:px-5'>

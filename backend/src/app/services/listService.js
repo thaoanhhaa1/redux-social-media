@@ -145,7 +145,7 @@ module.exports = {
             },
         ]);
 
-        return Math.ceil((count[0].count || 0) / NUMBER_USERS_OF_PAGE);
+        return Math.ceil((count[0]?.count || 0) / NUMBER_USERS_OF_PAGE);
     },
 
     togglePin: async ({ _id, userId, isPin }) => {

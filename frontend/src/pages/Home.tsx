@@ -1,7 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
-import { v4 } from 'uuid';
 import { useAppDispatch } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
@@ -11,8 +10,10 @@ import {
     CardSkeleton,
     Contact,
     ContactSkeleton,
+    Empty,
     Group,
     Page,
+    RenderList,
     Stories,
     WhatHappen,
     Wrapper,
@@ -22,7 +23,7 @@ import { WrapperHeader } from '../components/wrapper';
 import { getContacts } from '../features/contacts';
 import { getStories } from '../features/stories';
 import { countFollowingTweets, getTweets } from '../features/tweets';
-import { getArray, getNewTweets } from '../utils';
+import { getNewTweets } from '../utils';
 
 const Home = () => {
     const {
@@ -82,10 +83,9 @@ const Home = () => {
                             to='/'
                             className='mb-3'
                         />
-                        {(loading &&
-                            getArray().map(() => (
-                                <ContactSkeleton key={v4()} />
-                            ))) ||
+                        {(loading && (
+                            <RenderList Control={ContactSkeleton} />
+                        )) ||
                             contacts.map((contact) => (
                                 <Contact
                                     contact={contact}
@@ -99,6 +99,9 @@ const Home = () => {
         >
             <Stories loading={loading} />
             <WhatHappen />
+            {!newTweets.length && !loading && !otherTweet.length && (
+                <Empty>No tweets available</Empty>
+            )}
             {newTweets.map((tweet) => (
                 <CardWrapper key={tweet._id} tweet={tweet}>
                     <Card />
@@ -108,9 +111,7 @@ const Home = () => {
                 <InfiniteScroll
                     dataLength={otherTweet.length}
                     hasMore={followingPage < followingPages}
-                    loader={getArray(3).map(() => (
-                        <CardSkeleton key={v4()} />
-                    ))}
+                    loader={<RenderList Control={CardSkeleton} />}
                     next={loadMoreCard}
                     className='scrollbar flex flex-col gap-2 xxs:gap-5 !overflow-visible'
                 >
@@ -121,7 +122,7 @@ const Home = () => {
                     ))}
                 </InfiniteScroll>
             )}
-            {loading && getArray(3).map(() => <CardSkeleton key={v4()} />)}
+            {loading && <RenderList Control={CardSkeleton} />}
         </Page>
     );
 };

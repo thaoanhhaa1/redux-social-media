@@ -2,17 +2,17 @@ import Skeleton from 'react-loading-skeleton';
 
 const PersonSkeleton = () => {
     return (
-        <div className='flex gap-5 cursor-pointer bg-white dark:bg-dark-black-2'>
+        <div className='flex gap-2 xxs:gap-3 xs:gap-4 dl:gap-5 cursor-pointer bg-white dark:bg-dark-black-2'>
             <Skeleton width={40} height={40} circle />
             <div className='flex-1 flex justify-between items-center gap-2'>
                 <div className='flex-1'>
                     <Skeleton
-                        width={120}
+                        width='70%'
                         height={14}
                         containerClassName='my-[2px]'
                     />
                     <Skeleton
-                        width={70}
+                        width='50%'
                         height={14}
                         containerClassName='my-[1px]'
                     />

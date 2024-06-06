@@ -1,7 +1,8 @@
-import { v4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { getNotifications } from '../../features/notifications';
+import Empty from '../Empty';
+import RenderList from '../RenderList';
 import NotificationAllItem from './NotificationAllItem';
 import NotificationAllItemSkeleton from './NotificationAllItemSkeleton';
 
@@ -30,14 +31,15 @@ const NotificationAll = () => {
                     show more
                 </button>
             )}
-            {loading &&
-                new Array(5)
-                    .fill(null)
-                    .map(() => <NotificationAllItemSkeleton key={v4()} />)}
+            {loading && (
+                <RenderList
+                    quantity={5}
+                    Control={NotificationAllItemSkeleton}
+                />
+            )}
+
             {notifications.length === 0 && !loading && (
-                <div className='font-semibold text-xl text-center leading-xl text-black-8 dark:text-white'>
-                    No notifications available
-                </div>
+                <Empty>No notifications available</Empty>
             )}
         </div>
     );

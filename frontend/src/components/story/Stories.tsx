@@ -5,12 +5,12 @@ import { RootState } from '../../app/store';
 import Button from '../Button';
 import CreateStory from '../CreateStory';
 import { LeftIcon, RightIcon } from '../Icons';
+import RenderList from '../RenderList';
 import Wrapper from '../wrapper/Wrapper';
 import WrapperHeader from '../wrapper/WrapperHeader';
 import NewStory from './NewStory';
 import Story from './Story';
 import StorySkeleton from './StorySkeleton';
-import { v4 } from 'uuid';
 
 const Stories = ({
     all = true,
@@ -27,6 +27,10 @@ const Stories = ({
     const stories = useSelector((state: RootState) => state.stories);
     const user = useSelector((state: RootState) => state.user);
     const { width } = useWindowSize();
+    const filteredStories = useMemo(
+        () => stories.stories.filter((story) => all || story.user === user._id),
+        [all, stories.stories, user._id],
+    );
     const marginLeft = useMemo(
         () =>
             storyLength && storyLength < storyIndex + storyShowCount
@@ -70,15 +74,10 @@ const Stories = ({
                     }}
                 >
                     <NewStory onClick={() => setShowModal(true)} />
-                    {(loading &&
-                        new Array(3)
-                            .fill(null)
-                            .map(() => <StorySkeleton key={v4()} />)) ||
-                        stories.stories
-                            .filter((story) => all || story.user === user._id)
-                            .map((story) => (
-                                <Story url={story.story} key={story._id} />
-                            ))}
+                    {(loading && <RenderList Control={StorySkeleton} />) ||
+                        filteredStories.map((story) => (
+                            <Story url={story.story} key={story._id} />
+                        ))}
                     {storyIndex !== storyLength - storyShowCount + 1 &&
                         storyLength + 1 > storyShowCount && (
                             <Button

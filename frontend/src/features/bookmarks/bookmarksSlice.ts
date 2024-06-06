@@ -31,7 +31,7 @@ const initialState: IBookmarks = {
     bookmarks: [],
     activeId: null,
     tweetActiveId: null,
-    isLoading: false,
+    isLoading: true,
 };
 
 const getBookmarks = createAsyncThunk(

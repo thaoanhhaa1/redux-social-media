@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../app/hooks';
 import {
@@ -11,11 +12,12 @@ import { IList } from '../interfaces';
 import Button from './Button';
 import { FollowIcon, MessageIcon, UnFollowIcon } from './Icons';
 import Image from './Image';
-import Card from './card';
+import RenderList from './RenderList';
+import Card, { CardSkeleton } from './card';
 import CardWrapper from './card/CardWrapper';
 
 const ListDetail = ({ list }: { list: IList }) => {
-    const [tweetLoading, setTweetLoading] = useState<boolean>(true);
+    console.log('🚀 ~ ListDetail ~ list:', list);
     const dispatch = useAppDispatch();
     const { Icon, title } = useMemo(() => {
         if (list.isFollowing)
@@ -57,26 +59,23 @@ const ListDetail = ({ list }: { list: IList }) => {
         }
     };
 
+    const loadMoreCard = useCallback(async () => {
+        await dispatch(
+            getTweetsByUserId({ userId: list._id, page: list.page + 1 }),
+        );
+    }, [dispatch, list._id, list.page]);
+
     useEffect(() => {
-        const getTweets = async () => {
-            setTweetLoading(true);
-            try {
-                if (list.pages === -1) {
-                    await Promise.all([
-                        dispatch(
-                            getTweetsByUserId({ userId: list._id, page: 1 }),
-                        ).unwrap(),
-                        dispatch(countTweetsByUserId(list._id)).unwrap(),
-                    ]);
-                }
-            } catch (error) {
-            } finally {
-                setTweetLoading(false);
-            }
+        const fetchData = async () => {
+            if (list.pages === -1)
+                await Promise.all([
+                    loadMoreCard(),
+                    dispatch(countTweetsByUserId(list._id)),
+                ]);
         };
 
-        getTweets();
-    }, [dispatch, list]);
+        fetchData();
+    }, [dispatch, list, loadMoreCard]);
 
     return (
         <div className='flex-1 mb-2 rounded-2.5 shadow-box dark:shadow-none overflow-hidden dark:bg-dark-black-1'>
@@ -94,13 +93,7 @@ const ListDetail = ({ list }: { list: IList }) => {
                     rounded
                 />
                 <div className='xxl:mt-[18.5px] flex-1 flex flex-col gap-2'>
-                    {/* <div className='font-semibold text-3xl text-black dark:text-white'>
-                            Sunday Suppers
-                        </div>
-                        <div className='font-semibold text-xl leading-xl text-black dark:text-white'>
-                            Delicious dinner ideas
-                        </div> */}
-                    <div className='flex flex-wrap justify-center xxl:justify-start gap-2 xxl:gap-0'>
+                    <div className='flex flex-wrap xxl:items-center justify-center xxl:justify-start gap-2'>
                         <span className='font-semibold text-black dark:text-white break-keep'>
                             {list.name}
                         </span>{' '}
@@ -135,14 +128,19 @@ const ListDetail = ({ list }: { list: IList }) => {
                     </Button>
                 </div>
             </div>
-            <div className='mt-7 flex flex-col gap-5'>
+            <InfiniteScroll
+                dataLength={list.tweets.length}
+                hasMore={list.page < list.pages}
+                loader={<RenderList Control={CardSkeleton} />}
+                next={loadMoreCard}
+                className='scrollbar mt-7 flex flex-col gap-2 xxs:gap-5'
+            >
                 {list.tweets.map((tweet) => (
                     <CardWrapper type='LISTS' key={tweet._id} tweet={tweet}>
                         <Card />
                     </CardWrapper>
                 ))}
-                {tweetLoading && <p>Loading...</p>}
-            </div>
+            </InfiniteScroll>
         </div>
     );
 };
