@@ -8,6 +8,7 @@ import {
 import bookmarksReducer from '../features/bookmarks';
 import contactsReducer from '../features/contacts';
 import gifsReducer from '../features/gifs';
+import listsReducer from '../features/lists';
 import myTweetReducer from '../features/myTweet';
 import notificationsReducer from '../features/notifications';
 import pageReducer from '../features/page';
@@ -39,6 +40,7 @@ const combinedReducer = combineReducers({
     bookmarks: bookmarksReducer,
     tweet: tweetReducer,
     userRelations: userRelationsReducer,
+    lists: listsReducer,
 });
 
 const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {

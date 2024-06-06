@@ -1,4 +1,5 @@
 import { ReactElement, createContext, useContext } from 'react';
+import * as tweets from '../features/tweets';
 import { ICardContext, IComment } from '../interfaces';
 
 const CardContext = createContext<ICardContext>({
@@ -21,7 +22,7 @@ const CardContext = createContext<ICardContext>({
         blocked: false,
         report: false,
     },
-    isBookmark: false,
+    action: tweets,
     blockedType: 'NONE',
     reportLoading: false,
     setBlockedType: () => {},

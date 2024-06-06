@@ -1,30 +1,51 @@
+import React, { MouseEvent } from 'react';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { RootState } from '../app/store';
+import { setActiveId, togglePin } from '../features/lists';
+import { IList } from '../interfaces';
+import { classNames } from '../utils';
 import { PinActiveIcon, PinIcon } from './Icons';
 import Image from './Image';
 
-const List = ({ isPinned = false }: { isPinned?: boolean }) => {
+const List = ({ list }: { list: IList }) => {
+    const Icon: React.ElementType = list.isPin ? PinActiveIcon : PinIcon;
+    const { activeId } = useAppSelector((state: RootState) => state.lists);
+    const dispatch = useAppDispatch();
+
+    const handleChangeList = () => dispatch(setActiveId(list._id));
+
+    const handleTogglePin = async (e: MouseEvent) => {
+        e.stopPropagation();
+
+        try {
+            await dispatch(togglePin({ userId: list._id, isPin: !list.isPin }));
+        } catch (error) {
+            toast.error('Failed to toggle pin');
+        }
+    };
+
     return (
-        <div className="p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5">
-            <div className="font-semibold text-sm leading-sm text-black-1 dark:text-white">
-                Grandslammers
-            </div>
-            <div className="mt-1.25 flex items-center gap-1.25">
-                <Image
-                    alt=""
-                    src="https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=436&q=80"
-                    className="w-10 h-10"
-                    rounded
-                />
-                <div className="flex-1 whitespace-nowrap text-ellipsis overflow-hidden">
-                    <span className="text-black-1 dark:text-white font-semibold text-sm leading-sm">
-                        md mahmudul
+        <div
+            onClick={handleChangeList}
+            className={classNames(
+                'p-5 cursor-pointer hover:bg-blue-white-4 dark:hover:bg-dark-black-3 rounded-2.5',
+                activeId === list._id && 'bg-blue-white-4 dark:bg-dark-black-3',
+            )}
+        >
+            <div className='mt-1.25 flex items-center gap-1.25'>
+                <Image alt='' src={list.avatar} className='w-10 h-10' rounded />
+                <div className='flex-1 whitespace-nowrap text-ellipsis overflow-hidden'>
+                    <span className='text-black-1 dark:text-white font-semibold text-sm leading-sm'>
+                        {list.name}
                     </span>{' '}
-                    <span className="text-black-8 dark:text-white-2 font-medium text-xs leading-xs">
-                        @mahmudul
+                    <span className='text-black-8 dark:text-white-2 font-medium text-xs leading-xs'>
+                        @{list.username}
                     </span>
                 </div>
-                {(isPinned && (
-                    <PinActiveIcon className="text-black-100 dark:text-white" />
-                )) || <PinIcon className="text-black-100 dark:text-white" />}
+                <button onClick={handleTogglePin}>
+                    <Icon className='text-black-100 dark:text-white' />
+                </button>
             </div>
         </div>
     );

@@ -84,7 +84,7 @@ const Bookmark = () => {
                     ))}
                 </ScrollbarFixTop>
                 <div className='flex-1 pb-5'>
-                    <div className='max-w-[700px] mx-auto flex flex-col gap-5'>
+                    <div className='max-w-[680px] mx-auto flex flex-col gap-5'>
                         <InfiniteScroll
                             dataLength={bookmark.tweets.length}
                             hasMore={bookmark.page < bookmark.pages}
@@ -95,7 +95,11 @@ const Bookmark = () => {
                             className='scrollbar flex flex-col gap-2 xxs:gap-5'
                         >
                             {bookmark.tweets.map((tweet) => (
-                                <CardWrapper key={tweet._id} tweet={tweet}>
+                                <CardWrapper
+                                    type='BOOKMARKS'
+                                    key={tweet._id}
+                                    tweet={tweet}
+                                >
                                     <Card />
                                 </CardWrapper>
                             ))}

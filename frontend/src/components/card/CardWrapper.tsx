@@ -4,22 +4,24 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import CardProvider from '../../contexts/CardContext';
 import * as bookmarks from '../../features/bookmarks';
+import * as lists from '../../features/lists';
 import * as tweets from '../../features/tweets';
 import { ITweet } from '../../interfaces';
-import { BlockedTweetModalType } from '../../types';
+import { BlockedTweetModalType, TweetRenderType } from '../../types';
 import { isBlock } from '../../utils';
 
 type Props = {
     tweet: ITweet;
     children: ReactElement;
-    isBookmark?: boolean;
+    type?: TweetRenderType;
 };
 
-const CardWrapper = ({ tweet, children, isBookmark }: Props) => {
-    const action = useMemo(
-        () => (isBookmark ? bookmarks : tweets),
-        [isBookmark],
-    );
+const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
+    const action = useMemo(() => {
+        if (type === 'LISTS') return lists;
+        if (type === 'BOOKMARKS') return bookmarks;
+        return tweets;
+    }, [type]);
     const [reportLoading, setReportLoading] = useState<boolean>(false);
     const user = useAppSelector((state: RootState) => state.user);
     const { beenBlocked, blocked } = useAppSelector(
@@ -177,8 +179,8 @@ const CardWrapper = ({ tweet, children, isBookmark }: Props) => {
         <CardProvider
             value={{
                 tweet,
-                isBookmark: !!isBookmark,
                 blockedType,
+                action,
                 reportLoading,
                 setBlockedType,
                 deleteComment: handleDeleteComment,

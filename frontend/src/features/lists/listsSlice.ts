@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api from '../../api';
-import axiosClient from '../../api/axiosClient';
-import { IBookmark, IComment, ITweet } from '../../interfaces';
-import { tweetService } from '../../services';
-import { getBookmarksDTO, getTweetsDTO } from '../../utils';
+import { tweets } from '../../constants';
+import { IComment, IList } from '../../interfaces';
+import { listService } from '../../services';
 import { tweetHelper } from '../helpers';
-
 export const {
+    getTweets,
+    getMyTweets,
+    countFollowingTweets,
+    countMyTweets,
+    getTweet,
     getComments,
     toggleList,
     toggleFollow,
@@ -20,68 +22,74 @@ export const {
     editComment,
 } = tweetHelper.asyncThunk;
 
-interface IBookmarks {
-    bookmarks: Array<IBookmark>;
+export const { getTweetsByUserId, countTweetsByUserId } =
+    tweetHelper.asyncThunk;
+
+interface ListsState {
+    lists: IList[];
+    loading: boolean;
     activeId: string | null;
     tweetActiveId: string | null;
-    isLoading: boolean;
+    page: number;
+    pages: number;
 }
 
-const initialState: IBookmarks = {
-    bookmarks: [],
+const initialState: ListsState = {
+    lists: [],
+    loading: false,
     activeId: null,
     tweetActiveId: null,
-    isLoading: false,
+    page: 0,
+    pages: -1,
 };
 
-const getBookmarks = createAsyncThunk(
-    'bookmarks/getBookmarks',
-    async (): Promise<Array<IBookmark>> => {
-        const res = await axiosClient.get(api.getBookmarks());
-
-        return res.data;
-    },
-);
-
-const getTweets = createAsyncThunk(
-    'getTweets',
-    async ({
-        userId,
-        page,
-    }: {
-        userId: string;
-        page: number;
-    }): Promise<Array<ITweet>> => {
-        const res = await tweetService.getTweetsByUserId({ userId, page });
+const getLists = createAsyncThunk(
+    'getLists',
+    async ({ page }: { page: number }): Promise<IList[]> => {
+        const res = await listService.getUsers({ page });
 
         return res;
     },
 );
 
-const bookmarksSlice = createSlice({
-    name: 'bookmarks',
+const countPages = createAsyncThunk('countPages', async (): Promise<number> => {
+    const res = await listService.countPages();
+
+    return res;
+});
+
+const togglePin = createAsyncThunk(
+    'togglePin',
+    async ({ isPin, userId }: { userId: string; isPin: boolean }) => {
+        const res = await listService.togglePin({ userId, isPin });
+
+        return res;
+    },
+);
+
+const listsSlice = createSlice({
+    name: 'lists',
     initialState,
     reducers: {
-        updateTweet: (state, { payload }: { payload: ITweet }) => {
-            const userId = payload.user._id;
-
-            const bookmark = state.bookmarks.find(
-                (bookmark) => bookmark._id === userId,
-            );
-
-            if (!bookmark) return state;
-
-            const indexTweet = bookmark.tweets.findIndex(
-                (tweet) => tweet._id === payload._id,
-            );
-
-            bookmark.tweets[indexTweet] = payload;
-        },
-        setActiveId: (state, { payload }: { payload: string | null }) => {
+        setActiveId: (state, { payload }) => {
             state.activeId = payload;
         },
-        setTweetActiveId: (state, { payload }: { payload: string | null }) => {
-            tweetHelper.reducers.setTweetActiveId(state, payload);
+        toggleFollowList: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    userId: string;
+                    isFollow: boolean;
+                };
+            },
+        ) => {
+            const list = findByUserId(state.lists, payload.userId);
+
+            if (!list) return;
+
+            list.isFollowing = payload.isFollow;
         },
         setBlock: (
             state,
@@ -95,7 +103,7 @@ const bookmarksSlice = createSlice({
                 };
             },
         ) => {
-            const bookmark = findById(state.bookmarks, tweetOwner);
+            const bookmark = findByUserId(state.lists, tweetOwner);
             if (!bookmark) return state;
 
             tweetHelper.reducers.setBlock({
@@ -117,7 +125,7 @@ const bookmarksSlice = createSlice({
                 };
             },
         ) => {
-            const bookmark = findById(state.bookmarks, tweetOwner);
+            const bookmark = findByUserId(state.lists, tweetOwner);
             if (!bookmark) return state;
 
             tweetHelper.reducers.toggleLikeTweetSocket({
@@ -141,7 +149,7 @@ const bookmarksSlice = createSlice({
                 };
             },
         ) => {
-            const bookmark = findById(state.bookmarks, tweetOwner);
+            const bookmark = findByUserId(state.lists, tweetOwner);
             if (!bookmark) return state;
 
             tweetHelper.reducers.toggleLikeCommentSocket({
@@ -163,7 +171,7 @@ const bookmarksSlice = createSlice({
                 };
             },
         ) => {
-            const bookmark = findById(state.bookmarks, payload.tweetOwner);
+            const bookmark = findByUserId(state.lists, payload.tweetOwner);
             if (!bookmark) return state;
 
             tweetHelper.reducers.addCommentSocket(
@@ -171,126 +179,165 @@ const bookmarksSlice = createSlice({
                 payload.comment,
             );
         },
+        setTweetActiveId: (state, { payload }) => {
+            state.tweetActiveId = payload;
+        },
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(getBookmarks.fulfilled, (state, { payload }) => {
-                state.bookmarks.push(...getBookmarksDTO(payload));
-                state.isLoading = false;
-            })
-            .addCase(getBookmarks.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(getBookmarks.rejected, (state) => {
-                state.isLoading = false;
-            })
-            .addCase(getTweets.fulfilled, (state, { payload }) => {
-                state.isLoading = false;
-                if (!payload.length) return state;
+        builder.addCase(countPages.fulfilled, (state, { payload }) => {
+            state.pages = payload;
+        });
 
-                const userId = payload[0].user._id;
+        builder.addCase(getLists.pending, (state) => {
+            state.loading = true;
+        });
 
-                const index = state.bookmarks.findIndex(
-                    (bookmark) => bookmark._id === userId,
-                );
+        builder.addCase(getLists.fulfilled, (state, action) => {
+            state.lists = action.payload.map((list) => ({
+                ...list,
+                tweets: [],
+                page: 0,
+                pages: -1,
+            }));
+            state.loading = false;
+            state.page += 1;
+        });
 
-                if (index === -1) return state;
-
-                state.bookmarks[index].tweets.push(...getTweetsDTO(payload));
-                state.bookmarks[index].page += 1;
-            });
+        builder.addCase(getLists.rejected, (state) => {
+            state.loading = false;
+        });
 
         //
         builder
+            .addCase(
+                getTweetsByUserId.fulfilled,
+                (state, { payload, meta }) => {
+                    const list = findByUserId(state.lists, meta.arg.userId);
+
+                    if (!list) return;
+
+                    tweetHelper.extraReducers.getTweetsByUserIdFulfilled({
+                        tweets: list.tweets,
+                        tweetsResults: payload,
+                    });
+                },
+            )
+            .addCase(
+                countTweetsByUserId.fulfilled,
+                (state, { payload, meta }) => {
+                    const userId = meta.arg;
+
+                    const list = findByUserId(state.lists, userId);
+
+                    if (!list) return;
+
+                    list.pages = Math.ceil(payload / tweets.NUMBER_OF_PAGES);
+                },
+            )
+            .addCase(togglePin.pending, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.userId);
+
+                if (!list) return;
+
+                list.isPin = meta.arg.isPin;
+            })
+            .addCase(togglePin.rejected, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.userId);
+
+                if (!list) return;
+
+                list.isPin = !meta.arg.isPin;
+            });
+        builder
             .addCase(getComments.fulfilled, (state, { payload, meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.getCommentsFulfilled({
                     comments: payload,
                     meta,
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                 });
             })
             .addCase(toggleList.pending, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleListPending({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
             .addCase(toggleList.rejected, (state, { meta }) => {
                 const { isAdd, userId, tweetOwner } = meta.arg;
 
-                const bookmark = findById(state.bookmarks, tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleListRejected({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     isAdd,
                     userId,
                 });
             })
             .addCase(toggleFollow.pending, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleFollowPending({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
             .addCase(toggleFollow.rejected, (state, { meta }) => {
                 const { follow, userId, tweetOwner } = meta.arg;
 
-                const bookmark = findById(state.bookmarks, tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleFollowRejected({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     follow,
                     userId,
                 });
             })
             .addCase(deleteComment.pending, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.deleteCommentPending({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
             .addCase(deleteComment.rejected, (state, { meta }) => {
                 const { commentId, tweetId, parentCommentId, tweetOwner } =
                     meta.arg;
-                const bookmark = findById(state.bookmarks, tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.deleteCommentRejected({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     commentId,
                     tweetId,
                     parentCommentId,
                 });
             })
             .addCase(deleteComment.fulfilled, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.deleteCommentFulfilled({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
             .addCase(toggleLikeComment.pending, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleLikeCommentPending({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
@@ -298,11 +345,11 @@ const bookmarksSlice = createSlice({
                 const { commentId, isLike, tweetId, userId, tweetOwner } =
                     meta.arg;
 
-                const bookmark = findById(state.bookmarks, tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleLikeCommentRejected({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     commentId,
                     isLike,
                     tweetId,
@@ -310,44 +357,44 @@ const bookmarksSlice = createSlice({
                 });
             })
             .addCase(toggleLikeTweet.pending, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleLikeTweetPending({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
             .addCase(toggleLikeTweet.rejected, (state, { meta }) => {
                 const { isLike, tweetId, userId } = meta.arg;
 
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleLikeTweetRejected({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     isLike,
                     tweetId,
                     userId,
                 });
             })
             .addCase(toggleInterested.pending, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleInterestedPending({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     meta,
                 });
             })
             .addCase(toggleInterested.rejected, (state, { meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 const { tweetId, interested } = meta.arg;
 
                 tweetHelper.extraReducers.toggleInterestedRejected({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     tweetId,
                     interested,
                 });
@@ -355,65 +402,62 @@ const bookmarksSlice = createSlice({
             .addCase(toggleReport.fulfilled, (state, { payload, meta }) => {
                 const { isReport, tweetId } = payload;
 
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.toggleReportFulfilled({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     isReport,
                     tweetId,
                 });
             })
             .addCase(postComment.fulfilled, (state, { payload, meta }) => {
                 console.log('🚀 ~ .addCase ~ payload:', payload);
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.postCommentFulfilled({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     comment: payload,
                 });
             })
             .addCase(
                 getChildrenComments.fulfilled,
                 (state, { payload, meta }) => {
-                    const bookmark = findById(
-                        state.bookmarks,
-                        meta.arg.tweetOwner,
-                    );
-                    if (!bookmark) return state;
+                    const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                    if (!list) return state;
 
                     tweetHelper.extraReducers.getChildrenCommentsFulfilled({
-                        tweets: bookmark.tweets,
+                        tweets: list.tweets,
                         comments: payload,
                         meta,
                     });
                 },
             )
             .addCase(editComment.fulfilled, (state, { payload, meta }) => {
-                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
-                if (!bookmark) return state;
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
 
                 tweetHelper.extraReducers.editCommentFulfilled({
-                    tweets: bookmark.tweets,
+                    tweets: list.tweets,
                     comment: payload,
                 });
             });
     },
 });
 
-function findById(bookmarks: IBookmark[], id: string) {
-    return bookmarks.find((bookmark) => bookmark._id === id);
+function findByUserId(lists: IList[], userId: string) {
+    return lists.find((list) => list._id === userId);
 }
 
-export default bookmarksSlice.reducer;
+export default listsSlice.reducer;
+export { countPages, getLists, togglePin };
 export const {
-    updateTweet,
     setActiveId,
+    toggleFollowList,
     addCommentSocket,
     setBlock,
-    setTweetActiveId,
     toggleLikeCommentSocket,
     toggleLikeTweetSocket,
-} = bookmarksSlice.actions;
-export { getBookmarks, getTweets };
+    setTweetActiveId,
+} = listsSlice.actions;

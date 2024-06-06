@@ -13,4 +13,26 @@ const unReport = async (tweetId: string) => {
     return res.data;
 };
 
-export { report, unReport };
+const getTweetsByUserId = async ({
+    page,
+    userId,
+}: {
+    userId: string;
+    page: number;
+}) => {
+    const res = await axiosClient.get(api.getTweetsByUserId(userId), {
+        params: {
+            page,
+        },
+    });
+
+    return res.data;
+};
+
+const countTweetsByUserId = async (userId: string) => {
+    const res = await axiosClient.get(api.countTweetsByUserId(userId));
+
+    return res.data;
+};
+
+export { report, unReport, getTweetsByUserId, countTweetsByUserId };

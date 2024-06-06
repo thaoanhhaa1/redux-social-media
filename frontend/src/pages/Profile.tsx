@@ -156,7 +156,7 @@ const Profile = () => {
                 </div>
             </Wrapper>
             <div className='flex flex-col-reverse dl:flex-row gap-5 mt-5 pb-5'>
-                <div className='flex-1 flex flex-col gap-5 overflow-hidden'>
+                <div className='max-w-[680px] mx-auto flex-1 flex flex-col gap-5 overflow-hidden'>
                     <Stories all={false} loading={loading} />
                     <WhatHappen />
                     {!loading && !profile.tweetCount && !myTweets.length && (

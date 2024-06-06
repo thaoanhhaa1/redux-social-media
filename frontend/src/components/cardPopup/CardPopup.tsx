@@ -1,9 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { comments } from '../../constants';
 import { useCardContext } from '../../contexts/CardContext';
-import * as bookmarks from '../../features/bookmarks';
-import * as tweets from '../../features/tweets';
 import CardDetail from '../CardDetail';
 import { ModalHeader } from '../modal';
 import Modal from '../modal/Modal';
@@ -19,11 +17,7 @@ const CardPopup = ({
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
-    const { tweet, isBookmark } = useCardContext();
-    const action = useMemo(
-        () => (isBookmark ? bookmarks : tweets),
-        [isBookmark],
-    );
+    const { tweet, action } = useCardContext();
 
     const dispatch = useAppDispatch();
 

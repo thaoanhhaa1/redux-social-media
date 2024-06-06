@@ -9,6 +9,7 @@ import {
     getCommentDTO,
     getCommentsDTO,
     getTweetDTO,
+    getTweetsDTO,
 } from '../../utils';
 
 const NUMBER_MY_TWEET_OF_PAGE = 8;
@@ -340,6 +341,30 @@ const toggleReport = createAsyncThunk(
     },
 );
 
+const getTweetsByUserId = createAsyncThunk(
+    'bookmarks/getTweets',
+    async ({
+        userId,
+        page,
+    }: {
+        userId: string;
+        page: number;
+    }): Promise<Array<ITweet>> => {
+        const res = await tweetService.getTweetsByUserId({ userId, page });
+
+        return res;
+    },
+);
+
+const countTweetsByUserId = createAsyncThunk(
+    'tweets/countTweetsByUserId',
+    async (userId: string) => {
+        const res = await tweetService.countTweetsByUserId(userId);
+
+        return res;
+    },
+);
+
 const tweetHelper = {
     asyncThunk: {
         getMyTweets,
@@ -358,6 +383,8 @@ const tweetHelper = {
         deleteComment,
         editComment,
         toggleReport,
+        getTweetsByUserId,
+        countTweetsByUserId,
     },
     reducers: {
         addNewTweet: (tweets: ITweet[], tweet: ITweet) => {
@@ -744,6 +771,15 @@ const tweetHelper = {
             if (!tweet) return;
 
             tweet.report = isReport;
+        },
+        getTweetsByUserIdFulfilled: ({
+            tweets,
+            tweetsResults,
+        }: {
+            tweets: ITweet[];
+            tweetsResults: ITweet[];
+        }) => {
+            tweets.push(...getTweetsDTO(tweetsResults));
         },
     },
 };

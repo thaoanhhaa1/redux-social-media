@@ -6,8 +6,6 @@ import { v4 } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
-import * as bookmarks from '../../features/bookmarks';
-import * as tweets from '../../features/tweets';
 import { addUser, removeUser } from '../../features/userRelations';
 import { ICardMoreBtn } from '../../interfaces';
 import { followService } from '../../services';
@@ -40,16 +38,12 @@ const CardMore = ({
 }) => {
     const {
         tweet: { user, _id, notInterested },
-        isBookmark,
+        action,
         toggleNotInterested,
         toggleUserFollow,
         toggleUserList,
         toggleReport,
     } = useCardContext();
-    const action = useMemo(
-        () => (isBookmark ? bookmarks : tweets),
-        [isBookmark],
-    );
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
     const { height, width } = useWindowSize();
