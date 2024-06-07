@@ -1,3 +1,5 @@
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
 import IContact from '../../interfaces/IContact';
 import { classNames, getTime } from '../../utils';
 import { ClockIcon } from '../Icons';
@@ -20,7 +22,8 @@ const Contact = ({
         : 'online';
 
     return (
-        <div
+        <Link
+            to={`/${contact.username}`}
             className={classNames(
                 'p-2 flex gap-4 cursor-pointer rounded-2.5 hover:bg-gray-100 dark:hover:bg-white-opacity-10 transition-all',
                 className,
@@ -48,8 +51,8 @@ const Contact = ({
                     </span>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
-export default Contact;
+export default memo(Contact);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
@@ -10,53 +10,60 @@ import {
     Trend,
 } from '../components';
 import CardWrapper from '../components/card/CardWrapper';
-import { getTweetsByTrending } from '../features/trending';
+import { getTweetsByTrending, setActiveTrending } from '../features/trending';
 import { ITweetTrending } from '../interfaces';
 
 const Explore = () => {
-    const { pages, trendingList, loading } = useAppSelector(
+    const { pages, trendingList, loading, active } = useAppSelector(
         (state: RootState) => state.trending,
     );
-    const firstTrending = trendingList.at(0) as ITweetTrending | undefined;
+    const trending = useMemo(
+        () => trendingList.find((item) => item._id === active),
+        [trendingList, active],
+    ) as ITweetTrending | undefined;
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (
-            pages < 0 ||
-            !firstTrending ||
-            firstTrending.page ||
-            firstTrending.loading
-        )
-            return;
+        if (pages < 0 || !trending || trending.page || trending.loading) return;
 
         dispatch(
             getTweetsByTrending({
-                trending: firstTrending._id,
+                trending: trending._id,
                 page: 1,
             }),
         );
-    }, [dispatch, firstTrending, pages, trendingList]);
+    }, [dispatch, trending, pages, trendingList]);
+
+    useEffect(() => {
+        if (active || !trendingList.length) return;
+
+        dispatch(setActiveTrending(trendingList.at(0)?._id));
+    }, [active, dispatch, trendingList]);
 
     return (
         <Page
             scrollChildren={
                 <>
-                    {((loading && !firstTrending) ||
-                        firstTrending?.loading ||
-                        !firstTrending?.page) && (
+                    {((loading && !trending) ||
+                        trending?.loading ||
+                        !trending?.page) && (
                         <RenderList gap='20px' Control={CardSkeleton} />
                     )}
-                    {firstTrending &&
-                        firstTrending.tweets.map((tweet) => (
-                            <CardWrapper tweet={tweet} key={tweet._id}>
+                    {trending &&
+                        trending.tweets.map((tweet) => (
+                            <CardWrapper
+                                type='TRENDING'
+                                tweet={tweet}
+                                key={tweet._id}
+                            >
                                 <Card />
                             </CardWrapper>
                         ))}
                     {pages === 0 ||
-                        (firstTrending &&
-                            !firstTrending.tweets.length &&
-                            firstTrending.page &&
-                            !firstTrending.loading && (
+                        (trending &&
+                            !trending.tweets.length &&
+                            trending.page &&
+                            !trending.loading && (
                                 <Empty>No tweets available</Empty>
                             )) ||
                         null}

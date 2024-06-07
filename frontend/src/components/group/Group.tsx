@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Image from '../Image';
 import Members from '../Members';
 import Wrapper, { WrapperHeader } from '../wrapper';
@@ -30,4 +31,4 @@ const Group = () => {
     );
 };
 
-export default Group;
+export default memo(Group);

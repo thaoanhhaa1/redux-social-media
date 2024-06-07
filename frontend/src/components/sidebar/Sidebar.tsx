@@ -9,6 +9,8 @@ import SidebarItem from './SidebarItem';
 const Sidebar = () => {
     const [, setDarkTheme] = useLocalStorage(config.THEME_KEY, true);
 
+    const toggleTheme = () => setDarkTheme((isDarkTheme) => !isDarkTheme);
+
     return (
         <div className='sticky py-5 overflow-y-auto top-0 w-[var(--sidebar-left-mobile-width)] xl:w-[var(--sidebar-left-width)] flex-shrink-0 h-screen shadow-container dark:shadow-none dark:bg-dark-black-2'>
             <div className='px-2 xl:px-5'>
@@ -28,7 +30,7 @@ const Sidebar = () => {
                     ))}
                 </div>
                 <Button
-                    onClick={() => setDarkTheme((isDarkTheme) => !isDarkTheme)}
+                    onClick={toggleTheme}
                     isWidthFull
                     className='mt-10 font-semibold bg-blue-white-2 text-sm text-white leading-sm'
                 >

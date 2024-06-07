@@ -1,4 +1,11 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import {
+    ChangeEvent,
+    memo,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDebounce, useOnClickOutside } from 'usehooks-ts';
 import { AppDispatch, RootState } from '../../app/store';
@@ -82,4 +89,4 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default memo(Search);

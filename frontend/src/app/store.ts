@@ -22,7 +22,7 @@ import trendingReducer from '../features/trending';
 import tweetReducer from '../features/tweet';
 import tweetsReducer from '../features/tweets';
 import userReducer from '../features/user';
-import userProfilesReducer from '../features/userProfiles';
+import userProfilesReducer from '../features/userProfile';
 import userRelationsReducer from '../features/userRelations';
 
 const combinedReducer = combineReducers({

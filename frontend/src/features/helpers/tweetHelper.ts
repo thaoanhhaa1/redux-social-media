@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
-import { comments } from '../../constants';
+import { comments, tweets } from '../../constants';
 import { IComment, IPerson, ITweet } from '../../interfaces';
 import { tweetService } from '../../services';
 import {
@@ -12,13 +12,11 @@ import {
     getTweetsDTO,
 } from '../../utils';
 
-const NUMBER_MY_TWEET_OF_PAGE = 8;
-
 const getMyTweets = createAsyncThunk(
     'tweets/getMyTweets',
     async (page: number): Promise<Array<ITweet>> => {
-        const skip = (page - 1) * NUMBER_MY_TWEET_OF_PAGE;
-        const limit = NUMBER_MY_TWEET_OF_PAGE;
+        const skip = (page - 1) * tweets.NUMBER_OF_PAGES;
+        const limit = tweets.NUMBER_OF_PAGES;
 
         const res = await axiosClient.get(api.getMyTweets(), {
             params: { skip, limit },

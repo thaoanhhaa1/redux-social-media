@@ -1,4 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+    memo,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useWindowSize } from 'usehooks-ts';
 import { RootState } from '../../app/store';
@@ -118,4 +125,4 @@ const Stories = ({
     );
 };
 
-export default Stories;
+export default memo(Stories);

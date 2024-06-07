@@ -112,7 +112,7 @@ const EditProfile = ({
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className={classNames(
-                    'w-[632px] cursor-default ease-out duration-300',
+                    'w-full max-w-[632px] cursor-default ease-out duration-300',
                     isShowModal ? 'translate-y-0' : '-translate-y-10',
                 )}
             >

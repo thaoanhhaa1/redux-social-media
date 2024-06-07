@@ -6,7 +6,8 @@ import CardProvider from '../../contexts/CardContext';
 import * as bookmarks from '../../features/bookmarks';
 import * as lists from '../../features/lists';
 import * as tweets from '../../features/tweets';
-import * as userProfiles from '../../features/userProfiles';
+import * as trending from '../../features/trending';
+import * as userProfiles from '../../features/userProfile';
 import { ITweet } from '../../interfaces';
 import { BlockedTweetModalType, TweetRenderType } from '../../types';
 import { isBlock } from '../../utils';
@@ -22,6 +23,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
         if (type === 'LISTS') return lists;
         if (type === 'BOOKMARKS') return bookmarks;
         if (type === 'USER_PROFILE') return userProfiles;
+        if (type === 'TRENDING') return trending;
         return tweets;
     }, [type]);
     const [reportLoading, setReportLoading] = useState<boolean>(false);

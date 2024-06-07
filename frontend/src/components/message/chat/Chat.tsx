@@ -37,8 +37,7 @@ const Chat = () => {
             {
                 date: new Date('2023-06-16 12:28:00'),
                 viewedAt: new Date('2023-06-16 12:28:00'),
-                message:
-                    'Khi Vinh Râu làm đa level nhưng bản tánh lại hiền lành thật thà =))',
+                message: '😂😒',
                 userId: '2',
             },
             {
@@ -74,8 +73,7 @@ const Chat = () => {
             {
                 date: new Date('2023-06-16 12:28:00'),
                 viewedAt: new Date('2023-06-16 12:28:00'),
-                message:
-                    'Khi Vinh Râu làm đa level nhưng bản tánh lại hiền lành thật thà =))',
+                message: '😂😒',
                 userId: '2',
             },
             {

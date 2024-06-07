@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Image from '../Image';
 import Wrapper, { WrapperHeader } from '../wrapper';
 
@@ -22,4 +23,4 @@ const Advertisement = () => {
     );
 };
 
-export default Advertisement;
+export default memo(Advertisement);

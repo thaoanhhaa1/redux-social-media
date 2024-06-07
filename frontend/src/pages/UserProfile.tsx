@@ -5,7 +5,7 @@ import { RootState } from '../app/store';
 import ListDetail from '../components/ListDetail';
 import ListDetailSkeleton from '../components/ListDetailSkeleton';
 import config from '../config';
-import { getUserProfile } from '../features/userProfiles';
+import { getUserProfile } from '../features/userProfile';
 import NotFound from './NotFound';
 
 const UserProfile = () => {
