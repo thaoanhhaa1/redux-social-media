@@ -127,3 +127,13 @@ span.react-loading-skeleton {
 .animation-delay-600 {
     animation-delay: 600ms !important;
 }
+
+.work-break {
+    word-break: break-all;
+}
+
+// Show more/less text
+.show-more-less-clickable {
+    cursor: pointer;
+    display: inline-block;
+}

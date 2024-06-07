@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import ShowMoreText from 'react-show-more-text';
 import { useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
@@ -38,9 +39,16 @@ const CardInformation = ({ isPopup }: { isPopup: boolean }) => {
             )}
         >
             {tweet.content && (
-                <p className='font-medium text-sm leading-[21px] text-black dark:text-white break-words'>
+                <ShowMoreText
+                    keepNewLines
+                    more='Show more'
+                    less='Show less'
+                    className='whitespace-pre-line font-medium text-sm leading-[21px] text-black dark:text-white break-words'
+                    expanded={false}
+                    truncatedEndingComponent={'... '}
+                >
                     {tweet.content}
-                </p>
+                </ShowMoreText>
             )}
             {tweet.images && tweet.images.length > 0 && (
                 <Image

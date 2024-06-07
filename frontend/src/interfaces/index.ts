@@ -24,6 +24,8 @@ export type { default as IStory } from './IStory';
 export type { default as IStoryDetail } from './IStoryDetail';
 export type { default as ISubTweet } from './ISubTweet';
 export type { default as ITheme } from './ITheme';
+export * from './ITrending';
+export type { default as ITrending } from './ITrending';
 export type { default as ITweet } from './ITweet';
 export type { default as ITweetPost } from './ITweetPost';
 export type { default as IUser } from './IUser';

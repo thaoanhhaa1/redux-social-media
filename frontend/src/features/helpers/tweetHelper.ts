@@ -399,6 +399,7 @@ const tweetHelper = {
     reducers: {
         addNewTweet: (tweets: ITweet[], tweet: ITweet) => {
             tweet.isNewTweet = true;
+            tweet.notInterested = false;
             tweets.unshift(getTweetDTO(tweet));
         },
         updateTweet: (tweets: ITweet[], tweet: ITweet) => {

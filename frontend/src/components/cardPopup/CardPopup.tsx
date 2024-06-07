@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useBoolean } from 'usehooks-ts';
 import { useAppDispatch } from '../../app/hooks';
 import { comments } from '../../constants';
 import { useCardContext } from '../../contexts/CardContext';
@@ -18,14 +19,22 @@ const CardPopup = ({
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
     const { tweet, action } = useCardContext();
+    const { value, setTrue, setFalse } = useBoolean(false);
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         async function getCommentsData() {
-            if (!tweet?._id || tweet.skip || tweet?.comments.length || !isShow)
+            if (
+                !tweet?._id ||
+                tweet.skip ||
+                tweet?.comments.length ||
+                !isShow ||
+                value
+            )
                 return;
 
+            setTrue();
             await dispatch(
                 action.getComments({
                     tweetId: tweet._id,
@@ -33,10 +42,11 @@ const CardPopup = ({
                     tweetOwner: tweet.user._id,
                 }),
             );
+            setFalse();
         }
 
         getCommentsData();
-    }, [action, dispatch, isShow, tweet]);
+    }, [action, dispatch, isShow, setFalse, setTrue, tweet, value]);
 
     useEffect(() => {
         tweet?.notInterested && setShow(false);

@@ -11,6 +11,7 @@ import {
 import { IList } from '../interfaces';
 import { TweetRenderType } from '../types';
 import Button from './Button';
+import Empty from './Empty';
 import { FollowIcon, MessageIcon, UnFollowIcon } from './Icons';
 import Image from './Image';
 import RenderList from './RenderList';
@@ -151,6 +152,7 @@ const ListDetail = ({
                     </CardWrapper>
                 ))}
             </InfiniteScroll>
+            {list.pages === 0 && <Empty>No tweets found</Empty>}
         </div>
     );
 };

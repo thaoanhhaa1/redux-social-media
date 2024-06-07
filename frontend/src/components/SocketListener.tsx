@@ -106,7 +106,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
         });
 
         socketIo.on(socketEvents.on.COMMENT_TWEET, (data) => {
-            if (data.user._id === user._id) return;
+            if (data.comment.user._id === user._id) return;
             dispatch(tweets.addCommentSocket(data));
             dispatch(bookmarks.addCommentSocket(data));
         });

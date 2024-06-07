@@ -16,6 +16,7 @@ export { default as getTime } from './getTime';
 export { default as getTimeComment } from './getTimeComment';
 export { default as getTimeString } from './getTimeString';
 export { default as getTimeTweet } from './getTimeTweet';
+export { default as getTrendingDTO } from './getTrendingDTO';
 export { default as getTweetDTO } from './getTweetDTO';
 export { default as getTweetsDTO } from './getTweetsDTO';
 export { default as getUserName } from './getUserName';

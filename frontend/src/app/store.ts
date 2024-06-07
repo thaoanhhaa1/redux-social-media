@@ -18,6 +18,7 @@ import searchReducer from '../features/search';
 import socketReducer from '../features/socket';
 import storiesReducer from '../features/stories';
 import storiesDetailReducer from '../features/storiesDetail';
+import trendingReducer from '../features/trending';
 import tweetReducer from '../features/tweet';
 import tweetsReducer from '../features/tweets';
 import userReducer from '../features/user';
@@ -43,6 +44,7 @@ const combinedReducer = combineReducers({
     userRelations: userRelationsReducer,
     lists: listsReducer,
     userProfiles: userProfilesReducer,
+    trending: trendingReducer,
 });
 
 const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {

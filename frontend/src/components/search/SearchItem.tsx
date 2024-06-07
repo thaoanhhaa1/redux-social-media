@@ -1,7 +1,6 @@
 import { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks';
-import config from '../../config';
 import { remove } from '../../features/search';
 import { IUser } from '../../interfaces';
 import { CloseIcon } from '../Icons';
@@ -25,7 +24,7 @@ const SearchItem = ({
     return (
         <Link
             onClick={handleHiddenSearch}
-            to={`${config.routes.lists}?user=${user.username}`}
+            to={`/${user.username}`}
             className='cursor-pointer group/close flex items-center gap-2 xxs:gap-5 p-2 rounded-2.5 hover:bg-blue-white-4 dark:bg-dark-black-1 dark:hover:bg-dark-black-3 ease-linear duration-300'
         >
             <Image

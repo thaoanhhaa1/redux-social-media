@@ -1,3 +1,5 @@
+import { TrendingType } from '../types';
+
 const api = {
     // FOLLOW ROUTES
     countFollow: () => '/private/follow/count',
@@ -84,6 +86,13 @@ const api = {
 
     // BOOKMARK ROUTES
     getBookmarks: () => `/private/bookmarks`,
+
+    // TRENDING ROUTES
+    getTrending: (type: TrendingType) => `/private/trending/${type}`,
+    countTrendingPages: (type: TrendingType) =>
+        `/private/trending/${type}/count`,
+    getDetailTrending: (type: TrendingType, id: string) =>
+        `/private/trending/${type}/${id}`,
 };
 
 export default api;
