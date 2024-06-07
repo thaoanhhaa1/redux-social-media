@@ -3,6 +3,9 @@ const cron = require('node-cron');
 const { notificationType } = require('../../constants');
 const { userService, notificationService } = require('../services');
 const tokenModel = require('../models/tokenModel');
+const trendingService = require('../services/trendingService');
+
+// mm hh dd mm ww
 
 module.exports = {
     birthdayTaskNotify: () => {
@@ -22,8 +25,6 @@ module.exports = {
                     Promise.all(queries).then(() =>
                         console.log('~~~ Notify birthday ok'),
                     );
-
-                    console.log('Daily task completed successfully.');
                 } catch (error) {
                     console.error('Error during daily task:', error);
                 }
@@ -51,12 +52,32 @@ module.exports = {
                                 ],
                             },
                         })
-                        .then(() => console.log('~~~ OK'));
+                        .then(() => console.log('~~~ DELETE TOKEN OK'));
                 } catch (error) {
                     console.error(
                         'Error during delete token daily task:',
                         error,
                     );
+                }
+            },
+            {
+                scheduled: true,
+                timezone: 'Asia/Ho_Chi_Minh', // Chọn múi giờ phù hợp
+            },
+        );
+
+        dailyTask.start();
+    },
+
+    analyzeTweets: () => {
+        const dailyTask = cron.schedule(
+            '56 14 * * *',
+            async () => {
+                try {
+                    await trendingService.analyzeTweets();
+                    console.log('Analyze tweets completed successfully.');
+                } catch (error) {
+                    console.error('Error during analyze tweets:', error);
                 }
             },
             {

@@ -57,7 +57,6 @@ module.exports = {
     getUser: async (req, res, next) => {
         const userId = req.body._id;
         const { username } = req.params;
-        console.log('🚀 ~ getUser: ~ username:', username);
 
         try {
             const user = await listService.getUser({

@@ -11,6 +11,7 @@ function Router(app) {
     const comments = require('./comments');
     const notifications = require('./notifications');
     const bookmarks = require('./bookmarks');
+    const trending = require('./trending');
 
     app.use('/api/private/users', users);
     app.use('/api/private/tweets', tweets);
@@ -22,6 +23,7 @@ function Router(app) {
     app.use('/api/private/comments', comments);
     app.use('/api/private/notifications', notifications);
     app.use('/api/private/bookmarks', bookmarks);
+    app.use('/api/private/trending', trending);
     app.use('/api/private', sites);
     app.use('/api/auth', auth);
 }

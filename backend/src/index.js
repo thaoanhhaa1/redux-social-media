@@ -11,18 +11,19 @@ const socket = require('./socket');
 const Router = require('./routes');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 const handleErrorMiddleware = require('./app/middlewares/handleErrorMiddleware');
-const OnlineStatusModel = require('./app/models/onlineStatusModel');
 const swaggerDocument = require('../swagger.json');
 const dailyTaskController = require('./app/controllers/dailyTaskController');
 
 const app = express();
 const PORT = process.env.PORT || 7890;
 
+// Static files
+app.use(express.static('public'));
+
 // Use swagger
 const options = {
     explorer: true,
-    customCssUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.10.5/swagger-ui.min.css',
+    customCssUrl: '/customCssSwagger.css',
 };
 
 app.use(
@@ -59,6 +60,7 @@ Router(app);
 //
 dailyTaskController.birthdayTaskNotify();
 dailyTaskController.deleteToken();
+dailyTaskController.analyzeTweets();
 
 // Middleware handle error
 app.use(handleErrorMiddleware);

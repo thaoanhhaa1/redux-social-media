@@ -288,6 +288,27 @@ module.exports = {
         });
     },
 
+    getByIds: (_id, ids, page) => {
+        return getDetailTweets({
+            query: {
+                $expr: {
+                    $and: [
+                        {
+                            $in: [
+                                {
+                                    $toString: '$_id',
+                                },
+                                ids,
+                            ],
+                        },
+                    ],
+                },
+            },
+            userId: _id,
+            page,
+        });
+    },
+
     addReporter: (userId, tweetId) =>
         tweetModel.updateOne(
             { _id: tweetId },

@@ -131,7 +131,6 @@ module.exports = {
                 })
                 .then((notification) => {
                     console.log('~~~ NOTIFICATION - POST COMMENT ==> OK');
-                    console.log(notification);
 
                     if (!notification) return;
 
@@ -140,7 +139,10 @@ module.exports = {
                         .emit(socketEvents.emit.NOTIFICATION, notification);
                 });
 
-            global.socketIo.emit(socketEvents.emit.COMMENT_TWEET, result);
+            global.socketIo.emit(socketEvents.emit.COMMENT_TWEET, {
+                comment: result,
+                tweetOwner: tweet.user._id,
+            });
             req.status(201).json(result);
         } catch (error) {
             next(error);
