@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { useBoolean } from 'usehooks-ts';
-import { useAppDispatch } from '../../app/hooks';
-import { comments } from '../../constants';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useCardContext } from '../../contexts/CardContext';
+import { getComments } from '../../features/comments';
 import CardDetail from '../CardDetail';
 import { ModalHeader } from '../modal';
 import Modal from '../modal/Modal';
@@ -19,6 +19,9 @@ const CardPopup = ({
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
     const { tweet, action } = useCardContext();
+    const comments = useAppSelector(
+        (state) => state.comments[tweet?._id]?.comments || [],
+    );
     const { value, setTrue, setFalse } = useBoolean(false);
 
     const dispatch = useAppDispatch();
@@ -28,7 +31,7 @@ const CardPopup = ({
             if (
                 !tweet?._id ||
                 tweet.skip ||
-                tweet?.comments.length ||
+                comments.length ||
                 !isShow ||
                 value
             )
@@ -36,9 +39,9 @@ const CardPopup = ({
 
             setTrue();
             await dispatch(
-                action.getComments({
+                getComments({
                     tweetId: tweet._id,
-                    skip: tweet.skip * comments.LIMIT,
+                    skip: tweet.skip * 10,
                     tweetOwner: tweet.user._id,
                 }),
             );
@@ -46,7 +49,16 @@ const CardPopup = ({
         }
 
         getCommentsData();
-    }, [action, dispatch, isShow, setFalse, setTrue, tweet, value]);
+    }, [
+        action,
+        comments.length,
+        dispatch,
+        isShow,
+        setFalse,
+        setTrue,
+        tweet,
+        value,
+    ]);
 
     useEffect(() => {
         tweet?.notInterested && setShow(false);

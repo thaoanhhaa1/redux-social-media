@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { tweets } from '../../constants';
-import { IComment, IList } from '../../interfaces';
+import { IList } from '../../interfaces';
 import { listService } from '../../services';
+import { findTweetById } from '../../utils';
+import { deleteComment, postComment } from '../comments';
 import { tweetHelper } from '../helpers';
 export const {
     getTweets,
@@ -9,17 +11,11 @@ export const {
     countFollowingTweets,
     countMyTweets,
     getTweet,
-    getComments,
     toggleList,
     toggleFollow,
-    deleteComment,
-    toggleLikeComment,
     toggleLikeTweet,
     toggleInterested,
     toggleReport,
-    postComment,
-    getChildrenComments,
-    editComment,
     addViewer,
 } = tweetHelper.asyncThunk;
 
@@ -136,50 +132,6 @@ const listsSlice = createSlice({
                 userId,
             });
         },
-        toggleLikeCommentSocket: (
-            state,
-            {
-                payload: { commentId, isLike, tweetId, userId, tweetOwner },
-            }: {
-                payload: {
-                    commentId: string;
-                    isLike: boolean;
-                    tweetId: string;
-                    userId: string;
-                    tweetOwner: string;
-                };
-            },
-        ) => {
-            const bookmark = findByUserId(state.lists, tweetOwner);
-            if (!bookmark) return state;
-
-            tweetHelper.reducers.toggleLikeCommentSocket({
-                commentId,
-                isLike,
-                tweetId,
-                userId,
-                tweets: bookmark.tweets,
-            });
-        },
-        addCommentSocket: (
-            state,
-            {
-                payload,
-            }: {
-                payload: {
-                    comment: IComment;
-                    tweetOwner: string;
-                };
-            },
-        ) => {
-            const bookmark = findByUserId(state.lists, payload.tweetOwner);
-            if (!bookmark) return state;
-
-            tweetHelper.reducers.addCommentSocket(
-                bookmark.tweets,
-                payload.comment,
-            );
-        },
         setTweetActiveId: (state, { payload }) => {
             state.tweetActiveId = payload;
         },
@@ -251,16 +203,7 @@ const listsSlice = createSlice({
                 list.isPin = !meta.arg.isPin;
             });
         builder
-            .addCase(getComments.fulfilled, (state, { payload, meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
 
-                tweetHelper.extraReducers.getCommentsFulfilled({
-                    comments: payload,
-                    meta,
-                    tweets: list.tweets,
-                });
-            })
             .addCase(toggleList.pending, (state, { meta }) => {
                 const list = findByUserId(state.lists, meta.arg.tweetOwner);
                 if (!list) return state;
@@ -303,61 +246,7 @@ const listsSlice = createSlice({
                     userId,
                 });
             })
-            .addCase(deleteComment.pending, (state, { meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
 
-                tweetHelper.extraReducers.deleteCommentPending({
-                    tweets: list.tweets,
-                    meta,
-                });
-            })
-            .addCase(deleteComment.rejected, (state, { meta }) => {
-                const { commentId, tweetId, parentCommentId, tweetOwner } =
-                    meta.arg;
-                const list = findByUserId(state.lists, tweetOwner);
-                if (!list) return state;
-
-                tweetHelper.extraReducers.deleteCommentRejected({
-                    tweets: list.tweets,
-                    commentId,
-                    tweetId,
-                    parentCommentId,
-                });
-            })
-            .addCase(deleteComment.fulfilled, (state, { meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
-
-                tweetHelper.extraReducers.deleteCommentFulfilled({
-                    tweets: list.tweets,
-                    meta,
-                });
-            })
-            .addCase(toggleLikeComment.pending, (state, { meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
-
-                tweetHelper.extraReducers.toggleLikeCommentPending({
-                    tweets: list.tweets,
-                    meta,
-                });
-            })
-            .addCase(toggleLikeComment.rejected, (state, { meta }) => {
-                const { commentId, isLike, tweetId, userId, tweetOwner } =
-                    meta.arg;
-
-                const list = findByUserId(state.lists, tweetOwner);
-                if (!list) return state;
-
-                tweetHelper.extraReducers.toggleLikeCommentRejected({
-                    tweets: list.tweets,
-                    commentId,
-                    isLike,
-                    tweetId,
-                    userId,
-                });
-            })
             .addCase(toggleLikeTweet.pending, (state, { meta }) => {
                 const list = findByUserId(state.lists, meta.arg.tweetOwner);
                 if (!list) return state;
@@ -413,46 +302,7 @@ const listsSlice = createSlice({
                     tweetId,
                 });
             })
-            .addCase(postComment.fulfilled, (state, { payload, meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
 
-                tweetHelper.extraReducers.postCommentFulfilled({
-                    tweets: list.tweets,
-                    comment: payload,
-                });
-            })
-            .addCase(
-                getChildrenComments.fulfilled,
-                (state, { payload, meta }) => {
-                    const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                    if (!list) return state;
-
-                    tweetHelper.extraReducers.getChildrenCommentsFulfilled({
-                        tweets: list.tweets,
-                        comments: payload,
-                        meta,
-                    });
-                },
-            )
-            .addCase(editComment.fulfilled, (state, { payload, meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
-
-                tweetHelper.extraReducers.editCommentFulfilled({
-                    tweets: list.tweets,
-                    comment: payload,
-                });
-            })
-            .addCase(editComment.pending, (state, { meta }) => {
-                const list = findByUserId(state.lists, meta.arg.tweetOwner);
-                if (!list) return state;
-
-                tweetHelper.extraReducers.addViewerPending({
-                    tweets: list.tweets,
-                    tweetId: meta.arg.tweetId,
-                });
-            })
             .addCase(addViewer.rejected, (state, { meta }) => {
                 const list = findByUserId(state.lists, meta.arg.tweetOwner);
                 if (!list) return state;
@@ -471,6 +321,43 @@ const listsSlice = createSlice({
                     tweetId: meta.arg.tweetId,
                 });
             });
+
+        // Comments
+        builder
+            .addCase(postComment.fulfilled, (state, { payload, meta }) => {
+                const { parent } = payload;
+
+                if (parent) return state;
+
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                const tweet = findTweetById(list.tweets, meta.arg.tweetId);
+
+                if (!tweet) return state;
+
+                tweet.numberOfComments += 1;
+            })
+            .addCase(deleteComment.pending, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                const tweet = findTweetById(list.tweets, meta.arg.tweetId);
+
+                if (!tweet) return state;
+
+                tweet.numberOfComments -= 1;
+            })
+            .addCase(deleteComment.rejected, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                const tweet = findTweetById(list.tweets, meta.arg.tweetId);
+
+                if (!tweet) return state;
+
+                tweet.numberOfComments += 1;
+            });
     },
 });
 
@@ -483,9 +370,7 @@ export { countPages, getLists, togglePin };
 export const {
     setActiveId,
     toggleFollowList,
-    addCommentSocket,
     setBlock,
-    toggleLikeCommentSocket,
     toggleLikeTweetSocket,
     setTweetActiveId,
 } = listsSlice.actions;

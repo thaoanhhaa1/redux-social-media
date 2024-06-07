@@ -5,6 +5,10 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
 import { socketEvents } from '../constants';
 import * as bookmarks from '../features/bookmarks';
+import {
+    addCommentSocket,
+    toggleLikeCommentSocket,
+} from '../features/comments';
 import { setOffline, setOnline } from '../features/contacts';
 import {
     addNotificationSocket,
@@ -107,8 +111,8 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
 
         socketIo.on(socketEvents.on.COMMENT_TWEET, (data) => {
             if (data.comment.user._id === user._id) return;
-            dispatch(tweets.addCommentSocket(data));
-            dispatch(bookmarks.addCommentSocket(data));
+
+            dispatch(addCommentSocket(data));
         });
 
         socketIo.on(
@@ -134,8 +138,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                     isLike: true,
                 };
 
-                dispatch(tweets.toggleLikeCommentSocket(payload));
-                dispatch(bookmarks.toggleLikeCommentSocket(payload));
+                dispatch(toggleLikeCommentSocket(payload));
             },
         );
 
@@ -162,8 +165,7 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                     isLike: false,
                 };
 
-                dispatch(tweets.toggleLikeCommentSocket(payload));
-                dispatch(bookmarks.toggleLikeCommentSocket(payload));
+                dispatch(toggleLikeCommentSocket(payload));
 
                 dispatch(
                     deleteNotificationSocket({

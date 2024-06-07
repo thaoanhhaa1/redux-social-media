@@ -41,7 +41,7 @@ const PopupMultiLevel = ({ children }: Props) => {
             <AnimateHeight
                 duration={200}
                 height={height || 'auto'}
-                className='relative bg-white dark:bg-[#242526] cursor-default overflow-hidden'
+                className='relative bg-white dark:bg-dark-black-2 cursor-default overflow-hidden'
             >
                 <div
                     className={classNames(

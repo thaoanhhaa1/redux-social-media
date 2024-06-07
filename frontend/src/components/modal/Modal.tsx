@@ -51,7 +51,7 @@ const Modal = ({
                             onMouseDown={(e) => e.stopPropagation()}
                         >
                             {isShowModal && (
-                                <FocusOn className='w-fit bg-white dark:bg-[#242526] rounded-lg'>
+                                <FocusOn className='w-fit bg-white dark:bg-dark-black-2 rounded-lg'>
                                     {children}
                                 </FocusOn>
                             )}

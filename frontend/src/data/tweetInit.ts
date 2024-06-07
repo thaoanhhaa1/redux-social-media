@@ -1,7 +1,6 @@
 import { ITweet } from '../interfaces';
 
 const tweetInit: ITweet = {
-    comments: [],
     skip: 0,
     numberOfComments: 0,
     _id: '',

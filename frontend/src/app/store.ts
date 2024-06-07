@@ -6,6 +6,7 @@ import {
     configureStore,
 } from '@reduxjs/toolkit';
 import bookmarksReducer from '../features/bookmarks';
+import commentsReducer from '../features/comments';
 import contactsReducer from '../features/contacts';
 import gifsReducer from '../features/gifs';
 import listsReducer from '../features/lists';
@@ -45,6 +46,7 @@ const combinedReducer = combineReducers({
     lists: listsReducer,
     userProfiles: userProfilesReducer,
     trending: trendingReducer,
+    comments: commentsReducer,
 });
 
 const rootReducer = (state: CombinedState<any> | undefined, action: Action) => {

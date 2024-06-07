@@ -53,7 +53,7 @@ const CreateStory = ({
         >
             <div
                 className={classNames(
-                    'max-w-[555px] w-[calc(100vw-16px)] xxs:w-[80vw] cursor-default ease-out duration-300 rounded-2.5 overflow-hidden bg-white dark:bg-[#242526]',
+                    'max-w-[555px] w-[calc(100vw-16px)] xxs:w-[80vw] cursor-default ease-out duration-300 rounded-2.5 overflow-hidden',
                     true ? 'translate-y-0' : '-translate-y-10',
                 )}
             >

@@ -4,9 +4,17 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import CardProvider from '../../contexts/CardContext';
 import * as bookmarks from '../../features/bookmarks';
+import {
+    deleteComment,
+    editComment,
+    getChildrenComments,
+    getComments,
+    postComment,
+    toggleLikeComment,
+} from '../../features/comments';
 import * as lists from '../../features/lists';
-import * as tweets from '../../features/tweets';
 import * as trending from '../../features/trending';
+import * as tweets from '../../features/tweets';
 import * as userProfiles from '../../features/userProfile';
 import { ITweet } from '../../interfaces';
 import { BlockedTweetModalType, TweetRenderType } from '../../types';
@@ -38,7 +46,10 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
         () => isBlock(blocked, beenBlocked, tweet.user._id),
         [blocked, beenBlocked, tweet.user._id],
     );
-    const loadedComments = tweet.comments.length;
+    const comments = useAppSelector(
+        (state: RootState) => state.comments[tweet._id]?.comments || [],
+    );
+    const loadedComments = comments.length;
 
     const toggleUserList = () => {
         dispatch(
@@ -65,7 +76,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
         parentCommentId?: string,
     ) => {
         dispatch(
-            action.deleteComment({
+            deleteComment({
                 commentId,
                 parentCommentId,
                 tweetId: tweet._id,
@@ -78,7 +89,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
         if (isBlockedUser) return setBlockedType('LIKE_COMMENT');
 
         dispatch(
-            action.toggleLikeComment({
+            toggleLikeComment({
                 userId: user._id,
                 commentId,
                 isLike: liked,
@@ -131,7 +142,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
 
     const loadMoreComment = () =>
         dispatch(
-            action.getComments({
+            getComments({
                 tweetId: tweet._id,
                 skip: loadedComments,
                 tweetOwner: tweet.user._id,
@@ -146,7 +157,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
         parent?: string;
     }) =>
         dispatch(
-            action.postComment({
+            postComment({
                 user,
                 content,
                 tweetId: tweet._id,
@@ -157,7 +168,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
 
     const getAllChildComments = (commentId: string) =>
         dispatch(
-            action.getChildrenComments({
+            getChildrenComments({
                 commentId,
                 tweetOwner: tweet.user._id,
             }),
@@ -171,7 +182,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
         commentId: string;
     }) =>
         dispatch(
-            action.editComment({
+            editComment({
                 content,
                 commentId,
                 tweetId: tweet._id,
@@ -187,8 +198,6 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
                 action,
                 reportLoading,
                 setBlockedType,
-                deleteComment: handleDeleteComment,
-                toggleLikeComment: handleLikeComment,
                 toggleLikeTweet: handleToggleLikeTweet,
                 toggleNotInterested,
                 toggleUserFollow,
@@ -198,6 +207,8 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
                 postComment: handlePostComment,
                 getAllChildComments,
                 updateComment,
+                deleteComment: handleDeleteComment,
+                toggleLikeComment: handleLikeComment,
             }}
         >
             {children}

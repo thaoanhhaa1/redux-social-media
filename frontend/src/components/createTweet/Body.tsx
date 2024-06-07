@@ -68,7 +68,7 @@ const Body = () => {
                         value={myTweet.value}
                         onChange={handleChange}
                         className={classNames(
-                            'flex-1 w-full outline-none resize-none text-sm leading-sm text-base-black dark:text-white dark:bg-[#242526] placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
+                            'flex-1 w-full outline-none resize-none text-sm leading-sm text-base-black dark:text-white bg-white dark:bg-dark-black-2 placeholder:text-[#65676B] dark:placeholder:text-[#b0b3b8]',
                             myTweet.value.length > 85 ||
                                 myTweet.isShowUploadImage ||
                                 'xxs:text-2xl',

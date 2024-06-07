@@ -18,9 +18,12 @@ type Props = {
 const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
     const { loadMoreComment } = useCardContext();
     const user = useAppSelector((state: RootState) => state.user);
+    const comments = useAppSelector(
+        (state: RootState) => state.comments[tweet._id]?.comments || [],
+    );
     const [scrolled, setScrolled] = useState<boolean>(false);
     const [edit, setEdit] = useState<string>('');
-    const loadedComments = tweet.comments.length;
+    const loadedComments = comments.length;
     const notInterested = tweet.notInterested && tweet.user._id !== user._id;
     const isShowDetail = !notInterested && !tweet.report;
 
@@ -34,7 +37,7 @@ const CardDetail = ({ tweet, className = '', isPopup }: Props) => {
             >
                 <Card isPopup className={className} />
                 {isShowDetail &&
-                    tweet.comments.map(
+                    comments.map(
                         (comment) =>
                             comment.deleted || (
                                 <CommentTweet

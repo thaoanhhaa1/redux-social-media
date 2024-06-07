@@ -117,7 +117,7 @@ const EditProfile = ({
                 )}
             >
                 <ModalHeader>Edit profile</ModalHeader>
-                <div className='h-[calc(100vh_-_134px)] bg-white dark:bg-[#171616] overflow-auto pb-5'>
+                <div className='max-h-[775px] h-[calc(100vh_-_134px)] bg-white dark:bg-dark-black-2 overflow-auto pb-5'>
                     <ImageUpload
                         className={classNames('aspect-[316/53]')}
                         fallback='/no-background.jpg'

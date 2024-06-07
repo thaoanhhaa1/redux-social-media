@@ -9,7 +9,8 @@ import CardDetail from '../components/CardDetail';
 import Forbidden from '../components/Forbidden';
 import CardWrapper from '../components/card/CardWrapper';
 import { comments } from '../constants';
-import { getComments, getTweet } from '../features/tweets';
+import { getComments } from '../features/comments';
+import { getTweet } from '../features/tweets';
 import { findTweetById } from '../utils';
 import NotFound from './NotFound';
 

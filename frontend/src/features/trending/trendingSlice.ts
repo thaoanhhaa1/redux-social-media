@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IComment, ITrending, ITweet, ITweetTrending } from '../../interfaces';
+import { ITrending, ITweet, ITweetTrending } from '../../interfaces';
 import { trendingService } from '../../services';
 import { TrendingType } from '../../types';
-import { getTrendingDTO, getTweetsDTO } from '../../utils';
+import { findTweetById, getTrendingDTO, getTweetsDTO } from '../../utils';
+import { deleteComment, postComment } from '../comments';
 import { tweetHelper } from '../helpers';
 export const {
     getTweets,
@@ -10,17 +11,11 @@ export const {
     countFollowingTweets,
     countMyTweets,
     getTweet,
-    getComments,
     toggleList,
     toggleFollow,
-    deleteComment,
-    toggleLikeComment,
     toggleLikeTweet,
     toggleInterested,
     toggleReport,
-    postComment,
-    getChildrenComments,
-    editComment,
     addViewer,
 } = tweetHelper.asyncThunk;
 
@@ -127,50 +122,6 @@ const trendingSlice = createSlice({
                 userId,
             });
         },
-        toggleLikeCommentSocket: (
-            state,
-            {
-                payload: { commentId, isLike, tweetId, userId, tweetOwner },
-            }: {
-                payload: {
-                    commentId: string;
-                    isLike: boolean;
-                    tweetId: string;
-                    userId: string;
-                    tweetOwner: string;
-                };
-            },
-        ) => {
-            const trending = findById(state.trendingList, tweetOwner);
-            if (!trending) return state;
-
-            tweetHelper.reducers.toggleLikeCommentSocket({
-                commentId,
-                isLike,
-                tweetId,
-                userId,
-                tweets: (trending as ITweetTrending).tweets,
-            });
-        },
-        addCommentSocket: (
-            state,
-            {
-                payload,
-            }: {
-                payload: {
-                    comment: IComment;
-                    tweetOwner: string;
-                };
-            },
-        ) => {
-            const trending = findById(state.trendingList, payload.tweetOwner);
-            if (!trending) return state;
-
-            tweetHelper.reducers.addCommentSocket(
-                (trending as ITweetTrending).tweets,
-                payload.comment,
-            );
-        },
         setTweetActiveId: (state, { payload }) => {
             state.tweetActiveId = payload;
         },
@@ -234,15 +185,6 @@ const trendingSlice = createSlice({
             });
 
         builder
-            .addCase(getComments.fulfilled, (state, { payload, meta }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.getCommentsFulfilled({
-                        comments: payload,
-                        meta,
-                        tweets,
-                    });
-                });
-            })
             .addCase(toggleList.pending, (state, { meta }) => {
                 updateData(state, (tweets) => {
                     tweetHelper.extraReducers.toggleListPending({
@@ -277,53 +219,6 @@ const trendingSlice = createSlice({
                     tweetHelper.extraReducers.toggleFollowRejected({
                         tweets,
                         follow,
-                        userId,
-                    });
-                });
-            })
-            .addCase(deleteComment.pending, (state, { meta }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.deleteCommentPending({
-                        tweets,
-                        meta,
-                    });
-                });
-            })
-            .addCase(deleteComment.rejected, (state, { meta }) => {
-                const { commentId, tweetId, parentCommentId } = meta.arg;
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.deleteCommentRejected({
-                        tweets,
-                        commentId,
-                        tweetId,
-                        parentCommentId,
-                    });
-                });
-            })
-            .addCase(deleteComment.fulfilled, (state, { meta }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.deleteCommentFulfilled({
-                        tweets,
-                        meta,
-                    });
-                });
-            })
-            .addCase(toggleLikeComment.pending, (state, { meta }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.toggleLikeCommentPending({
-                        tweets,
-                        meta,
-                    });
-                });
-            })
-            .addCase(toggleLikeComment.rejected, (state, { meta }) => {
-                const { commentId, isLike, tweetId, userId } = meta.arg;
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.toggleLikeCommentRejected({
-                        tweets,
-                        commentId,
-                        isLike,
-                        tweetId,
                         userId,
                     });
                 });
@@ -378,42 +273,6 @@ const trendingSlice = createSlice({
                     });
                 });
             })
-            .addCase(postComment.fulfilled, (state, { payload, meta }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.postCommentFulfilled({
-                        tweets,
-                        comment: payload,
-                    });
-                });
-            })
-            .addCase(
-                getChildrenComments.fulfilled,
-                (state, { payload, meta }) => {
-                    updateData(state, (tweets) => {
-                        tweetHelper.extraReducers.getChildrenCommentsFulfilled({
-                            tweets,
-                            comments: payload,
-                            meta,
-                        });
-                    });
-                },
-            )
-            .addCase(editComment.fulfilled, (state, { payload }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.editCommentFulfilled({
-                        tweets,
-                        comment: payload,
-                    });
-                });
-            })
-            .addCase(editComment.pending, (state, { meta }) => {
-                updateData(state, (tweets) => {
-                    tweetHelper.extraReducers.addViewerPending({
-                        tweets,
-                        tweetId: meta.arg.tweetId,
-                    });
-                });
-            })
             .addCase(addViewer.rejected, (state, { meta }) => {
                 updateData(state, (tweets) => {
                     tweetHelper.extraReducers.addViewerReject({
@@ -428,6 +287,39 @@ const trendingSlice = createSlice({
                         tweets,
                         tweetId: meta.arg.tweetId,
                     });
+                });
+            });
+
+        // Comments
+        builder
+            .addCase(postComment.fulfilled, (state, { payload, meta }) => {
+                const { parent } = payload;
+
+                if (parent) return state;
+                updateData(state, (tweets) => {
+                    const tweet = findTweetById(tweets, meta.arg.tweetId);
+
+                    if (!tweet) return state;
+
+                    tweet.numberOfComments += 1;
+                });
+            })
+            .addCase(deleteComment.pending, (state, { meta }) => {
+                updateData(state, (tweets) => {
+                    const tweet = findTweetById(tweets, meta.arg.tweetId);
+
+                    if (!tweet) return state;
+
+                    tweet.numberOfComments -= 1;
+                });
+            })
+            .addCase(deleteComment.rejected, (state, { meta }) => {
+                updateData(state, (tweets) => {
+                    const tweet = findTweetById(tweets, meta.arg.tweetId);
+
+                    if (!tweet) return state;
+
+                    tweet.numberOfComments += 1;
                 });
             });
     },
@@ -446,9 +338,7 @@ function updateData(state: TrendingState, cb: (tweets: ITweet[]) => void) {
 export default trendingSlice.reducer;
 export const {
     setActiveTrending,
-    addCommentSocket,
     setBlock,
     setTweetActiveId,
-    toggleLikeCommentSocket,
     toggleLikeTweetSocket,
 } = trendingSlice.actions;
