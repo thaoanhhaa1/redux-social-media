@@ -94,6 +94,7 @@ module.exports = {
                     type: notificationType.POST_TWEET,
                     tweetUsername: username,
                     tweetId: tweet._id,
+                    content,
                 })
                 .then(() => console.log('~~~ insertToFollowers ok'));
 
@@ -288,6 +289,30 @@ module.exports = {
             await tweetService.addViewer(_id, tweetId);
 
             res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    delete: async (req, res, next) => {
+        const { _id } = req.body;
+        const tweetId = req.params.tweet_id;
+
+        try {
+            if (!tweetId) throw createError(400, 'Tweet id is required');
+
+            const tweet = await tweetService.delete(_id, tweetId);
+
+            notificationService.deleteByTweetId(tweetId).then(() => {
+                console.log('~~~ deleteByTweetId ok');
+            });
+
+            global.socketIo.emit(socketEvents.emit.DELETE_TWEET, {
+                tweetId,
+                tweetOwner: tweet.user._id,
+            });
+
+            res.json(tweet);
         } catch (error) {
             next(error);
         }

@@ -17,6 +17,7 @@ export const {
     toggleInterested,
     toggleReport,
     addViewer,
+    deleteTweet,
 } = tweetHelper.asyncThunk;
 
 export const { getTweetsByUserId, countTweetsByUserId } =
@@ -147,6 +148,24 @@ const listsSlice = createSlice({
                 list.tweets,
                 payload.tweetId,
             );
+        },
+
+        deleteTweetSocket: (
+            state,
+            {
+                payload: { tweetId, tweetOwner },
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            const list = findByUserId(state.lists, tweetOwner);
+
+            if (!list) return state;
+
+            tweetHelper.reducers.deleteTweetSocket(list.tweets, tweetId);
         },
     },
     extraReducers: (builder) => {
@@ -311,6 +330,24 @@ const listsSlice = createSlice({
                     tweets: list.tweets,
                     tweetId: meta.arg.tweetId,
                 });
+            })
+            .addCase(deleteTweet.pending, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                tweetHelper.extraReducers.deleteTweetPending({
+                    tweets: list.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(deleteTweet.rejected, (state, { meta }) => {
+                const list = findByUserId(state.lists, meta.arg.tweetOwner);
+                if (!list) return state;
+
+                tweetHelper.extraReducers.deleteTweetRejected({
+                    tweets: list.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
             });
 
         // Comments
@@ -364,4 +401,5 @@ export const {
     setTweetActiveId,
     decNumberOfComments,
     incNumberOfComments,
+    deleteTweetSocket,
 } = listsSlice.actions;

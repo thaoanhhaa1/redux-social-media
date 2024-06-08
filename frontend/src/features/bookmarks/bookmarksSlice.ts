@@ -14,6 +14,7 @@ export const {
     toggleInterested,
     toggleReport,
     addViewer,
+    deleteTweet,
 } = tweetHelper.asyncThunk;
 
 interface IBookmarks {
@@ -160,6 +161,28 @@ const bookmarksSlice = createSlice({
                 payload.tweetId,
             );
         },
+
+        deleteTweetSocket: (
+            state,
+            {
+                payload: { tweetId, tweetOwner },
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            const bookmark = findById(state.bookmarks, tweetOwner);
+            if (!bookmark) return state;
+
+            tweetHelper.reducers.deleteTweetSocket(bookmark.tweets, tweetId);
+        },
+        decNumberOfTweets: (state, { payload }: { payload: string }) => {
+            const bookmark = findById(state.bookmarks, payload);
+            if (!bookmark) return state;
+            bookmark.numberOfTweets -= 1;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -305,6 +328,24 @@ const bookmarksSlice = createSlice({
                     tweets: bookmark.tweets,
                     tweetId: meta.arg.tweetId,
                 });
+            })
+            .addCase(deleteTweet.pending, (state, { meta }) => {
+                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
+                if (!bookmark) return state;
+
+                tweetHelper.extraReducers.deleteTweetPending({
+                    tweets: bookmark.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(deleteTweet.rejected, (state, { meta }) => {
+                const bookmark = findById(state.bookmarks, meta.arg.tweetOwner);
+                if (!bookmark) return state;
+
+                tweetHelper.extraReducers.deleteTweetRejected({
+                    tweets: bookmark.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
             });
 
         // Comments
@@ -358,6 +399,8 @@ export const {
     setTweetActiveId,
     toggleLikeTweetSocket,
     decNumberOfComments,
+    deleteTweetSocket,
     incNumberOfComments,
+    decNumberOfTweets,
 } = bookmarksSlice.actions;
 export { getBookmarks, getTweets };

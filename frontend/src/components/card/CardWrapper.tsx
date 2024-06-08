@@ -190,6 +190,21 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
             }),
         ).unwrap();
 
+    const deleteTweet = async () => {
+        try {
+            await dispatch(
+                action.deleteTweet({
+                    tweetId: tweet._id,
+                    tweetOwner: tweet.user._id,
+                }),
+            ).unwrap();
+        } catch (error) {
+            toast.error('An error occurred while deleting the tweet.');
+        }
+    };
+
+    if (tweet.deleted) return null;
+
     return (
         <CardProvider
             value={{
@@ -197,6 +212,7 @@ const CardWrapper = ({ tweet, children, type = 'TWEETS' }: Props) => {
                 blockedType,
                 action,
                 reportLoading,
+                deleteTweet,
                 setBlockedType,
                 toggleLikeTweet: handleToggleLikeTweet,
                 toggleNotInterested,

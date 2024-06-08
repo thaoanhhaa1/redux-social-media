@@ -128,11 +128,13 @@ module.exports = {
         const regex = new RegExp(`^${_id}_`);
 
         return notificationModel.aggregate([
-            { $match: { user: regex } },
+            {
+                $match: { user: regex },
+            },
             { $sort: { createdAt: -1, updatedAt: -1 } },
             { $unwind: '$notifications' },
+            { $match: { 'notifications.deleted': false } },
             { $replaceRoot: { newRoot: '$notifications' } },
-            { $match: { deleted: false } },
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: 10 },
@@ -157,7 +159,6 @@ module.exports = {
             { $match: { user: regex } },
             { $unwind: '$notifications' },
             { $replaceRoot: { newRoot: '$notifications' } },
-            { $match: { deleted: false } },
             { $count: 'count' },
         ]);
 
@@ -170,7 +171,16 @@ module.exports = {
         return notificationModel.updateMany(
             { user: regex },
             { $set: { 'notifications.$[element].deleted': true } },
-            { arrayFilters: [{ 'element._id': notificationId }] },
+            {
+                arrayFilters: [
+                    {
+                        $and: [
+                            { 'element._id': notificationId },
+                            { 'element.deleted': false },
+                        ],
+                    },
+                ],
+            },
         );
     },
 
@@ -222,6 +232,23 @@ module.exports = {
         return Promise.all(queries);
     },
 
+    deleteByTweetId: function (tweetId) {
+        return notificationModel.updateMany(
+            {},
+            { $set: { 'notifications.$[element].deleted': true } },
+            {
+                arrayFilters: [
+                    {
+                        $and: [
+                            { 'element.tweetId': tweetId },
+                            { 'element.deleted': false },
+                        ],
+                    },
+                ],
+            },
+        );
+    },
+
     deleteTweetAndRelationByUserId: async (userId, tweetId) => {
         const queries = [];
         const regex = new RegExp(`^${userId}_`);
@@ -245,10 +272,7 @@ module.exports = {
         );
 
         // Comments
-        const comments = await commentModel.find(
-            { post: tweetId, deleted: false },
-            { _id: 1 },
-        );
+        const comments = await commentModel.find({ post: tweetId }, { _id: 1 });
 
         const commentIds = comments.map((comment) => comment._id);
 

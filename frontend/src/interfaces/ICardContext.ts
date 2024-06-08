@@ -18,6 +18,7 @@ interface ICardContext {
         | typeof tweets
         | typeof lists
         | typeof userProfiles;
+    deleteTweet: () => void;
     setBlockedType: Dispatch<SetStateAction<BlockedTweetModalType>>;
     toggleUserList: () => void;
     toggleUserFollow: () => void;

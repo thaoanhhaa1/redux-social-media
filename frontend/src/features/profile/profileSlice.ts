@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api';
 import axiosClient from '../../api/axiosClient';
 import { IProfile, IUserProfile } from '../../interfaces';
+import { tweetHelper } from '../helpers';
 
 const NUMBER_OF_PAGE = 5;
 
@@ -82,6 +83,15 @@ const profileSlice = createSlice({
             .addCase(getWhoToFollow.fulfilled, (state, { payload }) => {
                 state.whoToFollow.push(...payload);
                 state.whoToFollowPage += 1;
+            });
+
+        // Tweets
+        builder
+            .addCase(tweetHelper.asyncThunk.deleteTweet.pending, (state) => {
+                state.tweetCount -= 1;
+            })
+            .addCase(tweetHelper.asyncThunk.deleteTweet.rejected, (state) => {
+                state.tweetCount += 1;
             });
     },
 });

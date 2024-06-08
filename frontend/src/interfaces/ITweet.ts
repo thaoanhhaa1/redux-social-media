@@ -11,6 +11,7 @@ interface ITweet extends ITweetPost {
     blocked: boolean;
     report: boolean;
     viewed?: boolean;
+    deleted?: boolean;
 }
 
 export default ITweet;

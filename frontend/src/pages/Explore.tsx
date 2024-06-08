@@ -22,6 +22,10 @@ const Explore = () => {
         [trendingList, active],
     ) as ITweetTrending | undefined;
     const dispatch = useAppDispatch();
+    const filteredTweets = useMemo(
+        () => trending?.tweets.filter((tweet) => !tweet.deleted) || [],
+        [trending],
+    );
 
     useEffect(() => {
         if (pages < 0 || !trending || trending.page || trending.loading) return;
@@ -49,19 +53,18 @@ const Explore = () => {
                         !trending?.page) && (
                         <RenderList gap='20px' Control={CardSkeleton} />
                     )}
-                    {trending &&
-                        trending.tweets.map((tweet) => (
-                            <CardWrapper
-                                type='TRENDING'
-                                tweet={tweet}
-                                key={tweet._id}
-                            >
-                                <Card />
-                            </CardWrapper>
-                        ))}
+                    {filteredTweets.map((tweet) => (
+                        <CardWrapper
+                            type='TRENDING'
+                            tweet={tweet}
+                            key={tweet._id}
+                        >
+                            <Card />
+                        </CardWrapper>
+                    ))}
                     {pages === 0 ||
                         (trending &&
-                            !trending.tweets.length &&
+                            !filteredTweets.length &&
                             trending.page &&
                             !trending.loading && (
                                 <Empty>No tweets available</Empty>

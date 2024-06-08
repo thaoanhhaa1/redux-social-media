@@ -230,6 +230,15 @@ const addViewer = createAsyncThunk(
     },
 );
 
+const deleteTweet = createAsyncThunk(
+    'tweets/deleteTweet',
+    async ({ tweetId }: { tweetId: string; tweetOwner: string }) => {
+        await tweetService.deleteTweet(tweetId);
+
+        return tweetId;
+    },
+);
+
 const tweetHelper = {
     asyncThunk: {
         getMyTweets,
@@ -245,6 +254,7 @@ const tweetHelper = {
         getTweetsByUserId,
         countTweetsByUserId,
         addViewer,
+        deleteTweet,
     },
     reducers: {
         addNewTweet: (tweets: ITweet[], tweet: ITweet) => {
@@ -311,6 +321,13 @@ const tweetHelper = {
             if (!tweet) return;
 
             tweet.numberOfComments -= 1;
+        },
+        deleteTweetSocket: (tweets: ITweet[], tweetId: string) => {
+            const tweet = findById(tweets, tweetId);
+
+            if (!tweet) return;
+
+            tweet.deleted = true;
         },
     },
     extraReducers: {
@@ -481,6 +498,32 @@ const tweetHelper = {
             if (!tweet) return;
 
             tweet.viewed = false;
+        },
+        deleteTweetPending: ({
+            tweets,
+            tweetId,
+        }: {
+            tweets: ITweet[];
+            tweetId: string;
+        }) => {
+            const tweet = findById(tweets, tweetId);
+
+            if (!tweet) return;
+
+            tweet.deleted = true;
+        },
+        deleteTweetRejected: ({
+            tweets,
+            tweetId,
+        }: {
+            tweets: ITweet[];
+            tweetId: string;
+        }) => {
+            const tweet = findById(tweets, tweetId);
+
+            if (!tweet) return;
+
+            tweet.deleted = false;
         },
     },
 };

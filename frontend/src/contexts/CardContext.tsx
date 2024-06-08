@@ -24,6 +24,7 @@ const CardContext = createContext<ICardContext>({
     action: tweets,
     blockedType: 'NONE',
     reportLoading: false,
+    deleteTweet: () => {},
     setBlockedType: () => {},
     toggleUserList: () => {},
     toggleUserFollow: () => {},

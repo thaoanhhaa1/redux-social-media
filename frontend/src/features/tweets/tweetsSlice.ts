@@ -16,6 +16,7 @@ export const {
     toggleInterested,
     toggleReport,
     addViewer,
+    deleteTweet,
 } = tweetHelper.asyncThunk;
 
 type FollowingTweet = {
@@ -122,6 +123,19 @@ const tweetsSlice = createSlice({
                 state.tweets,
                 payload.tweetId,
             );
+        },
+        deleteTweetSocket: (
+            state,
+            {
+                payload: { tweetId },
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            tweetHelper.reducers.deleteTweetSocket(state.tweets, tweetId);
         },
     },
     extraReducers: (builder) => {
@@ -277,6 +291,18 @@ const tweetsSlice = createSlice({
                     tweets: state.tweets,
                     tweetId: meta.arg.tweetId,
                 });
+            })
+            .addCase(deleteTweet.pending, (state, { meta }) => {
+                tweetHelper.extraReducers.deleteTweetPending({
+                    tweets: state.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
+            })
+            .addCase(deleteTweet.rejected, (state, { meta }) => {
+                tweetHelper.extraReducers.deleteTweetRejected({
+                    tweets: state.tweets,
+                    tweetId: meta.arg.tweetId,
+                });
             });
 
         // Comments
@@ -318,4 +344,5 @@ export const {
     toggleLikeTweetSocket,
     decNumberOfComments,
     incNumberOfComments,
+    deleteTweetSocket,
 } = tweetsSlice.actions;

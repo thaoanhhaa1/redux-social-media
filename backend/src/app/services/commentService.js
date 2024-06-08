@@ -33,9 +33,6 @@ module.exports = {
                         post,
                     },
                     {
-                        deleted: false,
-                    },
-                    {
                         $or: [
                             {
                                 parent: { $exists: false },
@@ -59,9 +56,6 @@ module.exports = {
                 $and: [
                     {
                         parent,
-                    },
-                    {
-                        deleted: false,
                     },
                 ],
             })

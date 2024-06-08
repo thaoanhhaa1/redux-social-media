@@ -1285,7 +1285,10 @@ export const VolumeOffIcon = ({ className = '' }: { className?: string }) => (
 
 export const DeleteIcon = ({ className = '' }: { className?: string }) => (
     <svg
-        className={classNames('stroke-current', className)}
+        className={classNames(
+            'stroke-current fill-none dark:fill-none',
+            className,
+        )}
         width={19}
         height={21}
         viewBox='0 0 19 21'

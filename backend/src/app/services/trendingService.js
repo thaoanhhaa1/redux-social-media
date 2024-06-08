@@ -5,6 +5,7 @@ const tweetModel = require('../models/tweetModel');
 const NUMBER_OF_PAGE = 10;
 
 module.exports = {
+    // FIXME Handle when tweet is deleted
     analyzeTweets: async () => {
         try {
             const trendingOld = await TrendingModel.findOne(

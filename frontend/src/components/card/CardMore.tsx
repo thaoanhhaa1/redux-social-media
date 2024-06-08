@@ -12,6 +12,7 @@ import { followService } from '../../services';
 import {
     AddListIcon,
     BlockIcon,
+    DeleteIcon,
     EmbedIcon,
     FollowIcon,
     NotInterestedIcon,
@@ -43,6 +44,7 @@ const CardMore = ({
         toggleUserFollow,
         toggleUserList,
         toggleReport,
+        deleteTweet,
     } = useCardContext();
     const owner = useSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
@@ -97,6 +99,11 @@ const CardMore = ({
         onClose();
     }, [onClose, toggleReport]);
 
+    const handleDelete = useCallback(() => {
+        deleteTweet();
+        onClose();
+    }, [deleteTweet, onClose]);
+
     const actions = useMemo(() => {
         const temp: ICardMoreBtn[] = [
             {
@@ -144,9 +151,17 @@ const CardMore = ({
                 },
             );
 
+        if (user._id === owner._id)
+            temp.push({
+                icon: DeleteIcon,
+                title: `Delete Tweet`,
+                onClick: handleDelete,
+            });
+
         return temp;
     }, [
         handleBlockUser,
+        handleDelete,
         handleToggleFollow,
         handleToggleList,
         handleToggleReport,

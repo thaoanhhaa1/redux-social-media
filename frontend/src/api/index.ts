@@ -14,6 +14,7 @@ const api = {
 
     // TWEET ROUTES
     createTweet: () => '/private/tweets',
+    deleteTweet: (tweetId: String) => `/private/tweets/${tweetId}`,
     countTweet: () => '/private/tweets/count',
     getMyTweets: () => '/private/tweets/get-my-tweets',
     toggleLike: () => '/private/tweets/toggle-like',

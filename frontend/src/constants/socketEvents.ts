@@ -15,6 +15,7 @@ const on = {
     UNBLOCK: 'unblock',
     EDIT_COMMENT: 'edit-comment',
     DELETE_COMMENT: 'delete-comment',
+    DELETE_TWEET: 'delete-tweet',
 };
 const emit = {};
 

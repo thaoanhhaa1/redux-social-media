@@ -93,6 +93,11 @@ const notificationsSlice = createSlice({
 
             state.notifications.splice(index, 1);
         },
+        deleteByTweetId: (state, { payload }: { payload: string }) => {
+            state.notifications = state.notifications.filter(
+                (item) => item.document !== payload,
+            );
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -118,5 +123,6 @@ export const {
     removeNotification,
     addNotificationSocket,
     deleteNotificationSocket,
+    deleteByTweetId,
 } = notificationsSlice.actions;
 export { deleteNotification, getNotifications };

@@ -2,6 +2,7 @@ const followService = require('./followService');
 const tweetModel = require('../models/tweetModel');
 const { default: mongoose } = require('mongoose');
 const { locationQueries, userQueries } = require('../queries');
+const { createError } = require('../../utils');
 
 const NUMBER_OF_PAGE = 10;
 
@@ -326,4 +327,23 @@ module.exports = {
             { _id: tweetId },
             { $addToSet: { viewed: userId } },
         ),
+
+    delete: async (userId, tweetId) => {
+        const tweet = await tweetModel.findById(tweetId);
+
+        if (!tweet) throw createError(404, 'Tweet not found');
+
+        if (tweet.user._id.toString() !== userId)
+            throw createError(403, 'Permission denied');
+
+        const res = await tweetModel.updateOne(
+            { _id: tweetId },
+            { $set: { deleted: true } },
+        );
+
+        if (res.modifiedCount === 0)
+            throw createError(500, 'Delete tweet failed');
+
+        return tweet;
+    },
 };

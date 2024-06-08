@@ -40,3 +40,9 @@ export const addViewer = async (tweetId: string) => {
 
     return res.data;
 };
+
+export const deleteTweet = async (tweetId: string) => {
+    const res = await axiosClient.delete(api.deleteTweet(tweetId));
+
+    return res.data;
+};

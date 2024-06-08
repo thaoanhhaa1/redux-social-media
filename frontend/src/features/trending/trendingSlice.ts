@@ -17,6 +17,7 @@ export const {
     toggleInterested,
     toggleReport,
     addViewer,
+    deleteTweet,
 } = tweetHelper.asyncThunk;
 
 export const { getTweetsByUserId, countTweetsByUserId } =
@@ -159,6 +160,21 @@ const trendingSlice = createSlice({
                     tweets,
                     payload.tweetId,
                 );
+            });
+        },
+        deleteTweetSocket: (
+            state,
+            {
+                payload: { tweetId, tweetOwner },
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            updateData(state, (tweets) => {
+                tweetHelper.reducers.deleteTweetSocket(tweets, tweetId);
             });
         },
     },
@@ -324,6 +340,22 @@ const trendingSlice = createSlice({
                         tweetId: meta.arg.tweetId,
                     });
                 });
+            })
+            .addCase(deleteTweet.pending, (state, { meta }) => {
+                updateData(state, (tweets) => {
+                    tweetHelper.extraReducers.deleteTweetPending({
+                        tweets,
+                        tweetId: meta.arg.tweetId,
+                    });
+                });
+            })
+            .addCase(deleteTweet.rejected, (state, { meta }) => {
+                updateData(state, (tweets) => {
+                    tweetHelper.extraReducers.deleteTweetRejected({
+                        tweets,
+                        tweetId: meta.arg.tweetId,
+                    });
+                });
             });
 
         // Comments
@@ -378,5 +410,6 @@ export const {
     setTweetActiveId,
     toggleLikeTweetSocket,
     decNumberOfComments,
+    deleteTweetSocket,
     incNumberOfComments,
 } = trendingSlice.actions;

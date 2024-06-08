@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { notificationType } = require('../../constants');
+const MongooseDelete = require('mongoose-delete');
 
 const NotificationSchema = new Schema(
     {
@@ -85,5 +86,10 @@ const NotificationSchema = new Schema(
         timestamps: true,
     },
 );
+
+NotificationSchema.plugin(MongooseDelete, {
+    deletedAt: true,
+    overrideMethods: 'all',
+});
 
 module.exports = model('notifications', NotificationSchema);

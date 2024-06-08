@@ -15,6 +15,7 @@ import { setOffline, setOnline } from '../features/contacts';
 import * as lists from '../features/lists';
 import {
     addNotificationSocket,
+    deleteByTweetId,
     deleteNotificationSocket,
 } from '../features/notifications';
 import { dec, inc } from '../features/profile';
@@ -245,6 +246,17 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                             }),
                         );
                     });
+            },
+        );
+
+        socketIo.on(
+            socketEvents.on.DELETE_TWEET,
+            (data: { tweetId: string; tweetOwner: string }) => {
+                tweetAction.forEach((action) => {
+                    dispatch(action.deleteTweetSocket(data));
+                });
+                dispatch(deleteByTweetId(data.tweetId));
+                dispatch(bookmarks.decNumberOfTweets(data.tweetOwner));
             },
         );
 
