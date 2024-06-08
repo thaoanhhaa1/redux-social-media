@@ -14,6 +14,8 @@ const emit = {
     COMMENT_TWEET: 'comment-tweet',
     BLOCK: 'block',
     UNBLOCK: 'unblock',
+    EDIT_COMMENT: 'edit-comment',
+    DELETE_COMMENT: 'delete-comment',
 };
 
 module.exports = {

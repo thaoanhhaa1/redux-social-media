@@ -91,6 +91,38 @@ const tweetsSlice = createSlice({
                 userId,
             });
         },
+        incNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            tweetHelper.reducers.incNumberOfComments(
+                state.tweets,
+                payload.tweetId,
+            );
+        },
+        decNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            tweetHelper.reducers.decNumberOfComments(
+                state.tweets,
+                payload.tweetId,
+            );
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -284,4 +316,6 @@ export const {
     setTweetActiveId,
     setBlock,
     toggleLikeTweetSocket,
+    decNumberOfComments,
+    incNumberOfComments,
 } = tweetsSlice.actions;

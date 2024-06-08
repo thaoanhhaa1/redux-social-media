@@ -300,6 +300,18 @@ const tweetHelper = {
 
             tweet.blocked = isBlock;
         },
+        incNumberOfComments: (tweets: ITweet[], tweetId: string) => {
+            const tweet = findById(tweets, tweetId);
+            if (!tweet) return;
+
+            tweet.numberOfComments += 1;
+        },
+        decNumberOfComments: (tweets: ITweet[], tweetId: string) => {
+            const tweet = findById(tweets, tweetId);
+            if (!tweet) return;
+
+            tweet.numberOfComments -= 1;
+        },
     },
     extraReducers: {
         toggleLikeTweetPending: ({
@@ -314,8 +326,10 @@ const tweetHelper = {
             const tweet = findById(tweets, tweetId);
             if (!tweet) return;
 
-            if (isLike) tweet.likes.push(userId);
-            else tweet.likes.pop();
+            if (isLike) return tweet.likes.push(userId);
+
+            const index = tweet.likes.findIndex((id) => id === userId);
+            tweet.likes.splice(index, 1);
         },
         toggleLikeTweetRejected: ({
             tweets,
@@ -331,8 +345,10 @@ const tweetHelper = {
             const tweet = findById(tweets, tweetId);
             if (!tweet) return;
 
-            if (isLike) tweet.likes.pop();
-            else tweet.likes.push(userId);
+            if (!isLike) tweet.likes.push(userId);
+
+            const index = tweet.likes.findIndex((id) => id === userId);
+            tweet.likes.splice(index, 1);
         },
         toggleInterestedPending: ({
             meta,

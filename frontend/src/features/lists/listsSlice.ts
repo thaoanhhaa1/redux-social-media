@@ -135,6 +135,44 @@ const listsSlice = createSlice({
         setTweetActiveId: (state, { payload }) => {
             state.tweetActiveId = payload;
         },
+        incNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            const list = findByUserId(state.lists, payload.tweetOwner);
+
+            if (!list) return state;
+            tweetHelper.reducers.incNumberOfComments(
+                list.tweets,
+                payload.tweetId,
+            );
+        },
+        decNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            const list = findByUserId(state.lists, payload.tweetOwner);
+
+            if (!list) return state;
+            tweetHelper.reducers.decNumberOfComments(
+                list.tweets,
+                payload.tweetId,
+            );
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(countPages.fulfilled, (state, { payload }) => {
@@ -373,4 +411,6 @@ export const {
     setBlock,
     toggleLikeTweetSocket,
     setTweetActiveId,
+    decNumberOfComments,
+    incNumberOfComments,
 } = listsSlice.actions;

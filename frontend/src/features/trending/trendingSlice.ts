@@ -125,6 +125,42 @@ const trendingSlice = createSlice({
         setTweetActiveId: (state, { payload }) => {
             state.tweetActiveId = payload;
         },
+        incNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            updateData(state, (tweets) => {
+                tweetHelper.reducers.incNumberOfComments(
+                    tweets,
+                    payload.tweetId,
+                );
+            });
+        },
+        decNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            updateData(state, (tweets) => {
+                tweetHelper.reducers.decNumberOfComments(
+                    tweets,
+                    payload.tweetId,
+                );
+            });
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -341,4 +377,6 @@ export const {
     setBlock,
     setTweetActiveId,
     toggleLikeTweetSocket,
+    decNumberOfComments,
+    incNumberOfComments,
 } = trendingSlice.actions;

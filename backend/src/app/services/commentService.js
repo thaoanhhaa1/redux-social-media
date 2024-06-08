@@ -50,8 +50,6 @@ module.exports = {
             .skip(skip)
             .limit(limit)
             .sort({
-                numberOfComments: -1,
-                numberOfLikes: -1,
                 createdAt: -1,
             }),
 

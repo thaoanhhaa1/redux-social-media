@@ -13,6 +13,8 @@ const on = {
     DISLIKE_COMMENT: 'dislike-comment',
     BLOCK: 'block',
     UNBLOCK: 'unblock',
+    EDIT_COMMENT: 'edit-comment',
+    DELETE_COMMENT: 'delete-comment',
 };
 const emit = {};
 

@@ -198,6 +198,12 @@ module.exports = {
                     .status(404)
                     .json(errors[404]("Comment wasn't found"));
 
+            global.socketIo.emit(socketEvents.emit.EDIT_COMMENT, {
+                content,
+                commentId,
+                tweetId,
+            });
+
             req.json(await CommentModel.findById(commentId));
         } catch (error) {
             next(error);
@@ -206,6 +212,7 @@ module.exports = {
 
     delete: async (req, res, next) => {
         try {
+            const _id = req.body._id;
             const commentId = req.params.comment_id;
             const tweetId = req.params.tweet_id;
 
@@ -217,6 +224,16 @@ module.exports = {
 
             // Notification
             if (comment) {
+                tweetService.findById(tweetId).then((tweet) => {
+                    global.socketIo.emit(socketEvents.emit.DELETE_COMMENT, {
+                        commentId,
+                        tweetId,
+                        parentComment: comment.parent,
+                        tweetOwner: tweet.user._id,
+                        userId: _id,
+                    });
+                });
+
                 notificationService
                     .deleteComment(commentId)
                     .then(() =>

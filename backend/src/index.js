@@ -1,4 +1,5 @@
 require('dotenv').config();
+const compression = require('compression');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -33,6 +34,9 @@ app.use(
 );
 
 // MIDDLEWARES
+// Nén data
+app.use(compression());
+
 app.use(
     cors({
         allowedHeaders: '*',

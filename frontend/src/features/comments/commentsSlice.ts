@@ -225,6 +225,37 @@ const commentsSlice = createSlice({
             }
             comment.numberOfLikes += isLike ? 1 : -1;
         },
+        editCommentSocket: (state, { payload }) => {
+            const { commentId, content, tweetId } = payload;
+
+            const tweet = state[tweetId];
+
+            if (!tweet) return state;
+
+            const comment = getComment(tweet.comments, commentId);
+
+            if (!comment) return state;
+
+            comment.content = content;
+        },
+        deleteCommentSocket: (state, { payload }) => {
+            const { commentId, tweetId, parentComment } = payload;
+
+            const tweet = state[tweetId];
+
+            if (!tweet) return state;
+
+            const comment = getComment(tweet.comments, commentId)!;
+            comment.deleted = true;
+
+            if (parentComment) {
+                const commentParent = getComment(tweet.comments, parentComment);
+
+                if (!commentParent) return state;
+
+                commentParent.numberOfComments -= 1;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getComments.fulfilled, (state, { payload, meta }) => {
@@ -384,5 +415,9 @@ const commentsSlice = createSlice({
 });
 
 export default commentsSlice.reducer;
-export const { addCommentSocket, toggleLikeCommentSocket } =
-    commentsSlice.actions;
+export const {
+    addCommentSocket,
+    toggleLikeCommentSocket,
+    editCommentSocket,
+    deleteCommentSocket,
+} = commentsSlice.actions;

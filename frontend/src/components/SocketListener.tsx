@@ -7,18 +7,25 @@ import { socketEvents } from '../constants';
 import * as bookmarks from '../features/bookmarks';
 import {
     addCommentSocket,
+    deleteCommentSocket,
+    editCommentSocket,
     toggleLikeCommentSocket,
 } from '../features/comments';
 import { setOffline, setOnline } from '../features/contacts';
+import * as lists from '../features/lists';
 import {
     addNotificationSocket,
     deleteNotificationSocket,
 } from '../features/notifications';
 import { dec, inc } from '../features/profile';
+import * as trending from '../features/trending';
 import * as tweets from '../features/tweets';
+import * as userProfile from '../features/userProfile';
 import { addUser, removeUserById } from '../features/userRelations';
-import { INotification, IPerson } from '../interfaces';
+import { IComment, INotification, IPerson } from '../interfaces';
 import NotificationAllItem from './notification/NotificationAllItem';
+
+const tweetAction = [bookmarks, userProfile, trending, lists, tweets];
 
 const toastNotification = (data: INotification) =>
     toast(
@@ -80,8 +87,9 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 isLike: true,
             };
 
-            dispatch(tweets.toggleLikeTweetSocket(payload));
-            dispatch(bookmarks.toggleLikeTweetSocket(payload));
+            tweetAction.forEach((action) => {
+                dispatch(action.toggleLikeTweetSocket(payload));
+            });
         });
         socketIo.on(socketEvents.on.DISLIKE_TWEET, (data) => {
             if (data.userId === user._id) return;
@@ -93,8 +101,10 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 isLike: false,
             };
 
-            dispatch(tweets.toggleLikeTweetSocket(payload));
-            dispatch(bookmarks.toggleLikeTweetSocket(payload));
+            tweetAction.forEach((action) => {
+                dispatch(action.toggleLikeTweetSocket(payload));
+            });
+
             dispatch(
                 deleteNotificationSocket({
                     userId: data.userId,
@@ -109,11 +119,24 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
             toastNotification(data);
         });
 
-        socketIo.on(socketEvents.on.COMMENT_TWEET, (data) => {
-            if (data.comment.user._id === user._id) return;
+        socketIo.on(
+            socketEvents.on.COMMENT_TWEET,
+            (data: { comment: IComment; tweetOwner: string }) => {
+                if (data.comment.user._id === user._id) return;
 
-            dispatch(addCommentSocket(data));
-        });
+                if (!data.comment.parent)
+                    tweetAction.forEach((action) => {
+                        dispatch(
+                            action.incNumberOfComments({
+                                tweetId: data.comment.post,
+                                tweetOwner: data.tweetOwner,
+                            }),
+                        );
+                    });
+
+                dispatch(addCommentSocket(data));
+            },
+        );
 
         socketIo.on(
             socketEvents.on.LIKE_COMMENT,
@@ -194,6 +217,36 @@ const SocketListener = ({ children }: { children: ReactNode }): JSX.Element => {
                 }),
             );
         });
+
+        socketIo.on(
+            socketEvents.on.EDIT_COMMENT,
+            (data: { content: string; commentId: string; tweetId: string }) => {
+                dispatch(editCommentSocket(data));
+            },
+        );
+
+        socketIo.on(
+            socketEvents.on.DELETE_COMMENT,
+            (data: {
+                commentId: string;
+                tweetId: string;
+                parentComment: string;
+                tweetOwner: string;
+                userId: string;
+            }) => {
+                dispatch(deleteCommentSocket(data));
+
+                if (!data.parentComment && data.userId !== user._id)
+                    tweetAction.forEach((action) => {
+                        dispatch(
+                            action.decNumberOfComments({
+                                tweetId: data.tweetId,
+                                tweetOwner: data.tweetOwner,
+                            }),
+                        );
+                    });
+            },
+        );
 
         return () => {
             Object.values(socketEvents.on).forEach((event) =>

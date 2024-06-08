@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { useCardContext } from '../../contexts/CardContext';
@@ -19,7 +19,7 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
         setShowParent,
         setShowCardComment,
     } = useCommentTweet();
-    const { deleteComment, toggleLikeComment } = useCardContext();
+    const { deleteComment, toggleLikeComment, tweet } = useCardContext();
     const { setEdit } = useCommentTweet();
     const user = useAppSelector((state: RootState) => state.user);
     const moreRef = useRef(null);
@@ -38,19 +38,43 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
 
     const handleClickLike = () => toggleLikeComment(!liked, comment._id);
 
-    const handleDelete = () => deleteComment(comment._id, comment.parent);
+    const handleDelete = useCallback(
+        () => deleteComment(comment._id, comment.parent),
+        [comment._id, comment.parent, deleteComment],
+    );
 
-    const handleClickEdit = () => setEdit(comment._id);
-    const popup: IPopupItem[] = [
-        {
-            title: 'Edit',
-            onClick: handleClickEdit,
-        },
-        {
-            title: 'Delete',
-            onClick: handleDelete,
-        },
-    ];
+    const handleClickEdit = useCallback(
+        () => setEdit(comment._id),
+        [comment._id, setEdit],
+    );
+
+    const popup: IPopupItem[] = useMemo(() => {
+        const items: IPopupItem[] = [];
+
+        // Comment owner
+        if (comment.user._id === user._id) {
+            items.push({
+                title: 'Edit',
+                onClick: handleClickEdit,
+            });
+        }
+
+        // Tweet owner or comment owner or user
+        if ([tweet.user._id, comment.user._id, user._id].includes(user._id)) {
+            items.push({
+                title: 'Delete',
+                onClick: handleDelete,
+            });
+        }
+
+        return items;
+    }, [
+        comment.user._id,
+        handleClickEdit,
+        handleDelete,
+        tweet.user._id,
+        user._id,
+    ]);
 
     useOnClickOutside(moreRef, () => setShowPopup(false));
 
@@ -80,7 +104,7 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
                         </span>
                     )}
                 </div>
-                {user._id === comment.user._id && (
+                {popup.length ? (
                     <div className='relative' ref={moreRef}>
                         <button
                             className='flex-shrink-0 text-transparent group-hover/more:text-[#65676B] dark:group-hover/more:text-white-9 self-center flex justify-center items-center w-8 h-8 rounded-full ease-linear hover:bg-[rgba(0,_0,_0,_0.05)] dark:hover:bg-white-opacity-10'
@@ -90,7 +114,7 @@ const CommentContentTweet = ({ comment }: { comment: IComment }) => {
                         </button>
                         {showPopup && <Popup popup={popup} />}
                     </div>
-                )}
+                ) : null}
             </div>
             <div className='mt-1 flex gap-4 px-2 text-[#65676B] dark:text-white-9 text-xs leading-xs font-bold'>
                 <span className='font-normal'>

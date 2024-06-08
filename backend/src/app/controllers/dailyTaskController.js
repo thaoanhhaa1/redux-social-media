@@ -71,7 +71,7 @@ module.exports = {
 
     analyzeTweets: () => {
         const dailyTask = cron.schedule(
-            '56 14 * * *',
+            '30 3 * * *',
             async () => {
                 try {
                     await trendingService.analyzeTweets();

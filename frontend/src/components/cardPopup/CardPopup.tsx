@@ -18,9 +18,10 @@ const CardPopup = ({
     isShow: boolean;
     setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
+    const me = useAppSelector((state) => state.user);
     const { tweet, action } = useCardContext();
     const comments = useAppSelector(
-        (state) => state.comments[tweet?._id]?.comments || [],
+        (state) => state.comments[tweet._id]?.comments || [],
     );
     const { value, setTrue, setFalse } = useBoolean(false);
 
@@ -38,14 +39,14 @@ const CardPopup = ({
                 return;
 
             setTrue();
-            await dispatch(
+            const res = await dispatch(
                 getComments({
                     tweetId: tweet._id,
                     skip: tweet.skip * 10,
                     tweetOwner: tweet.user._id,
                 }),
-            );
-            setFalse();
+            ).unwrap();
+            if (res.length) setFalse();
         }
 
         getCommentsData();
@@ -61,8 +62,8 @@ const CardPopup = ({
     ]);
 
     useEffect(() => {
-        tweet?.notInterested && setShow(false);
-    }, [setShow, tweet]);
+        tweet?.notInterested && me._id !== tweet.user._id && setShow(false);
+    }, [setShow, tweet, me._id]);
 
     if (!tweet) return null;
 

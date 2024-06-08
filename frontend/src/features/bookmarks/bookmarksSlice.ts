@@ -123,6 +123,43 @@ const bookmarksSlice = createSlice({
                 userId,
             });
         },
+        incNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            const bookmark = findById(state.bookmarks, payload.tweetOwner);
+            if (!bookmark) return state;
+            console.log('🚀 ~ bookmark:', bookmark);
+            tweetHelper.reducers.incNumberOfComments(
+                bookmark.tweets,
+                payload.tweetId,
+            );
+        },
+        decNumberOfComments: (
+            state,
+            {
+                payload,
+            }: {
+                payload: {
+                    tweetId: string;
+                    tweetOwner: string;
+                };
+            },
+        ) => {
+            const bookmark = findById(state.bookmarks, payload.tweetOwner);
+            if (!bookmark) return state;
+            tweetHelper.reducers.decNumberOfComments(
+                bookmark.tweets,
+                payload.tweetId,
+            );
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -272,15 +309,15 @@ const bookmarksSlice = createSlice({
 
         // Comments
         builder
-            .addCase(postComment.fulfilled, (state, { payload, meta }) => {
-                const { parent, user } = payload;
+            .addCase(postComment.fulfilled, (state, { meta }) => {
+                const { parent, tweetOwner, tweetId } = meta.arg;
 
                 if (parent) return state;
 
-                const bookmark = findById(state.bookmarks, user._id);
+                const bookmark = findById(state.bookmarks, tweetOwner);
                 if (!bookmark) return state;
 
-                const tweet = findTweetById(bookmark.tweets, meta.arg.tweetId);
+                const tweet = findTweetById(bookmark.tweets, tweetId);
 
                 if (!tweet) return state;
 
@@ -320,5 +357,7 @@ export const {
     setBlock,
     setTweetActiveId,
     toggleLikeTweetSocket,
+    decNumberOfComments,
+    incNumberOfComments,
 } = bookmarksSlice.actions;
 export { getBookmarks, getTweets };
