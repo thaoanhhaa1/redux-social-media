@@ -21,7 +21,7 @@
             "description": "Local server"
         },
         {
-            "url": "https://redux-social-media-backend.vercel.app/api",
+            "url": "https://panicky-maren-social-media-6f7e13fb.koyeb.app/api",
             "description": "Production server"
         }
     ],
