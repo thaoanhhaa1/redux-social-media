@@ -122,7 +122,12 @@ const Home = () => {
                     ))}
                 </InfiniteScroll>
             )}
-            {loading && <RenderList Control={CardSkeleton} />}
+            {loading && (
+                <RenderList
+                    className='gap-2 xxs:gap-5'
+                    Control={CardSkeleton}
+                />
+            )}
         </Page>
     );
 };

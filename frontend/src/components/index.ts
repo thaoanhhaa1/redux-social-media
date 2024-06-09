@@ -1,4 +1,5 @@
-export { default as BookmarkItem } from './BookmarkItem';
+export { default as BookmarkItem } from './bookmarkItem';
+export * from './bookmarkItem';
 export { default as Button } from './Button';
 export { default as EditProfile } from './EditProfile';
 export * from './Icons';

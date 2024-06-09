@@ -4,19 +4,20 @@ const RenderList = ({
     Control,
     direction = 'col',
     quantity = 3,
-    gap = '0px',
+    className,
 }: {
     quantity?: number;
     Control: () => JSX.Element;
     direction?: 'row' | 'col';
-    gap?: string;
+    className?: string;
 }) => {
     return (
         <div
-            style={{
-                gap,
-            }}
-            className={classNames('flex', direction === 'col' && 'flex-col')}
+            className={classNames(
+                'flex',
+                direction === 'col' && 'flex-col',
+                className,
+            )}
         >
             {getArray(quantity).map((_, index) => (
                 <Control key={index} />

@@ -5,15 +5,16 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { RootState } from '../app/store';
 import {
     BookmarkItem,
+    BookmarkItemSkeleton,
     Card,
     Empty,
-    Loading,
     RenderList,
     ScrollbarFixTop,
 } from '../components';
 import { CardSkeleton } from '../components/card';
 import CardWrapper from '../components/card/CardWrapper';
 import { getBookmarks, getTweets, setActiveId } from '../features/bookmarks';
+import { getArray } from '../utils';
 
 const Bookmark = () => {
     const { bookmarks, isLoading, activeId } = useAppSelector(
@@ -49,8 +50,8 @@ const Bookmark = () => {
         if (bookmark && !bookmark.tweets.length) loadMoreCard();
     }, [bookmark, dispatch, loadMoreCard]);
 
-    if (isLoading) return <Loading />;
-    if (!bookmarks.length) return <Empty>No bookmarks found</Empty>;
+    if (!isLoading && !bookmarks.length)
+        return <Empty>No bookmarks found</Empty>;
 
     return (
         <div className='px-2 xxs:px-3 xs:px-4 dl:px-5'>
@@ -65,6 +66,12 @@ const Bookmark = () => {
                             />
                         </SwiperSlide>
                     ))}
+                    {isLoading &&
+                        getArray(3).map((_, index) => (
+                            <SwiperSlide key={index} className='!w-fit'>
+                                <BookmarkItemSkeleton />
+                            </SwiperSlide>
+                        ))}
                 </Swiper>
             </div>
             <div className='flex gap-2 xxs:gap-3 xs:gap-4 dl:gap-5'>
@@ -88,6 +95,10 @@ const Bookmark = () => {
                             onClick={() => handleChangeActiveId(bm._id)}
                         />
                     ))}
+                    {isLoading &&
+                        getArray(3).map((_, index) => (
+                            <BookmarkItemSkeleton key={index} />
+                        ))}
                 </ScrollbarFixTop>
                 <div className='flex-1 pb-5'>
                     <div className='max-w-[680px] mx-auto flex flex-col gap-5'>
@@ -95,7 +106,12 @@ const Bookmark = () => {
                             <InfiniteScroll
                                 dataLength={bookmark.tweets.length}
                                 hasMore={bookmark.page < bookmark.pages}
-                                loader={<RenderList Control={CardSkeleton} />}
+                                loader={
+                                    <RenderList
+                                        className='gap-2 xxs:gap-5'
+                                        Control={CardSkeleton}
+                                    />
+                                }
                                 next={loadMoreCard}
                                 className='scrollbar flex flex-col gap-2 xxs:gap-5'
                             >
@@ -110,7 +126,10 @@ const Bookmark = () => {
                                 ))}
                             </InfiniteScroll>
                         ) : (
-                            <RenderList Control={CardSkeleton} />
+                            <RenderList
+                                className='gap-2 xxs:gap-5'
+                                Control={CardSkeleton}
+                            />
                         )}
                     </div>
                 </div>

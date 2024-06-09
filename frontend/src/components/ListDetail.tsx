@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '../app/hooks';
@@ -25,6 +25,7 @@ const ListDetail = ({
     list: IList;
     type?: TweetRenderType;
 }) => {
+    const [loading, setLoading] = useState(false);
     const dispatch = useAppDispatch();
     const { Icon, title } = useMemo(() => {
         if (list.isFollowing)
@@ -67,9 +68,11 @@ const ListDetail = ({
     };
 
     const loadMoreCard = useCallback(async () => {
+        setLoading(true);
         await dispatch(
             getTweetsByUserId({ userId: list._id, page: list.page + 1 }),
         );
+        setLoading(false);
     }, [dispatch, list._id, list.page]);
 
     useEffect(() => {
@@ -138,7 +141,7 @@ const ListDetail = ({
             <InfiniteScroll
                 dataLength={list.tweets.length}
                 hasMore={list.page < list.pages}
-                loader={<RenderList Control={CardSkeleton} />}
+                loader={null}
                 next={loadMoreCard}
                 className='scrollbar mt-7 flex flex-col gap-2 xxs:gap-5'
             >
@@ -152,6 +155,12 @@ const ListDetail = ({
                     </CardWrapper>
                 ))}
             </InfiniteScroll>
+            {loading && (
+                <RenderList
+                    className='mt-2 xxs:mt-5 gap-2 xxs:gap-5'
+                    Control={CardSkeleton}
+                />
+            )}
             {list.pages === 0 && <Empty>No tweets found</Empty>}
         </div>
     );

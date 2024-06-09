@@ -83,7 +83,7 @@ const Stories = ({
                     <NewStory onClick={() => setShowModal(true)} />
                     {(loading && (
                         <RenderList
-                            gap='10px'
+                            className='gap-2.5'
                             direction='row'
                             Control={StorySkeleton}
                         />

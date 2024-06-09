@@ -137,3 +137,13 @@ span.react-loading-skeleton {
     cursor: pointer;
     display: inline-block;
 }
+
+// Toastify
+.dark .Toastify__toast {
+    background-color: rgb(6 20 29/1);
+    color: #fff;
+}
+
+.dark .Toastify__close-button {
+    color: #fff;
+}

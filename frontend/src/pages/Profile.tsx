@@ -157,7 +157,7 @@ const Profile = () => {
                 </div>
             </Wrapper>
             <div className='flex flex-col-reverse dl:flex-row gap-5 mt-5 pb-5'>
-                <div className='max-w-[680px] mx-auto flex-1 flex flex-col gap-5 overflow-hidden'>
+                <div className='max-w-[680px] mx-auto w-full flex-1 flex flex-col gap-5 overflow-hidden'>
                     <Stories all={false} loading={loading} />
                     <WhatHappen />
                     {!loading && !profile.tweetCount && !myTweets.length && (
@@ -167,7 +167,12 @@ const Profile = () => {
                         <InfiniteScroll
                             dataLength={myTweets.length}
                             hasMore={myTweetPage < myTweetPages}
-                            loader={<RenderList Control={CardSkeleton} />}
+                            loader={
+                                <RenderList
+                                    className='gap-2 xxs:gap-5'
+                                    Control={CardSkeleton}
+                                />
+                            }
                             next={loadMoreCard}
                             className='scrollbar flex flex-col gap-2 xxs:gap-5'
                         >
@@ -178,7 +183,12 @@ const Profile = () => {
                             ))}
                         </InfiniteScroll>
                     )}
-                    {loading && <RenderList Control={CardSkeleton} />}
+                    {loading && (
+                        <RenderList
+                            className='gap-2 xxs:gap-5'
+                            Control={CardSkeleton}
+                        />
+                    )}
                 </div>
                 <WhoToFollowWrapper>
                     <Wrapper className='w-full dl:w-[300px] p-2 xxs:p-3 xs:p-4 dl:p-5 gx:p-7.5 gx:mb-5'>
@@ -190,7 +200,10 @@ const Profile = () => {
                                 <Follow key={user._id} user={user} />
                             ))}
                         {(loading || loadingFollow) && (
-                            <RenderList Control={PersonSkeleton} />
+                            <RenderList
+                                className='gap-2 xxs:gap-5'
+                                Control={PersonSkeleton}
+                            />
                         )}
                         {profile.whoToFollowPage < profile.whoToFollowPages &&
                             !loading && (

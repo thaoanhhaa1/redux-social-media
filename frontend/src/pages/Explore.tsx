@@ -51,7 +51,7 @@ const Explore = () => {
                     {((loading && !trending) ||
                         trending?.loading ||
                         !trending?.page) && (
-                        <RenderList gap='20px' Control={CardSkeleton} />
+                        <RenderList className='gap-5' Control={CardSkeleton} />
                     )}
                     {filteredTweets.map((tweet) => (
                         <CardWrapper

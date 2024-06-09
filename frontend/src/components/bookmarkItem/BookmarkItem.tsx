@@ -1,6 +1,6 @@
-import { IBookmark } from '../interfaces';
-import { classNames } from '../utils';
-import Avatar from './Avatar';
+import { IBookmark } from '../../interfaces';
+import { classNames } from '../../utils';
+import Avatar from '../Avatar';
 
 const BookmarkItem = ({
     active,

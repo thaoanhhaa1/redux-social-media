@@ -26,8 +26,11 @@ const ListDetailSkeleton = () => {
                     <Skeleton width={138} height={40} />
                 </div>
             </div>
-            <div className='mt-7 flex flex-col gap-5'>
-                <RenderList Control={CardSkeleton} />
+            <div className='mt-7 flex flex-col gap-2 xxs:gap-5'>
+                <RenderList
+                    className='gap-2 xxs:gap-5'
+                    Control={CardSkeleton}
+                />
             </div>
         </div>
     );

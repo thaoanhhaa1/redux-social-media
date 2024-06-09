@@ -33,6 +33,7 @@ const NotificationAll = () => {
             )}
             {loading && (
                 <RenderList
+                    className='gap-2.5'
                     quantity={5}
                     Control={NotificationAllItemSkeleton}
                 />
