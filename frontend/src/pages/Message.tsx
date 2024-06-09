@@ -1,10 +1,19 @@
-import { Chat, MessageItem } from '../components/message';
-import { ScrollbarFixTop } from '../components/scrollbar';
+import { Empty } from '../components';
 
 const Message = () => {
     return (
-        <div className='flex gap-[18px] px-5'>
-            <ScrollbarFixTop
+        <div className='flex flex-col gap-[18px] px-5 items-center'>
+            <Empty>Coming soon...</Empty>
+            <a
+                className='mt-5 w-fit bg-blue-white-2 text-white font-semibold px-4 py-2 rounded-2.5'
+                href='https://lola.iuh-mern.id.vn/'
+                target='_blank'
+                rel='noreferrer'
+            >
+                Go to My Lola Chat App
+            </a>
+
+            {/* <ScrollbarFixTop
                 header={
                     <div>
                         <div className='flex justify-between items-center'>
@@ -38,7 +47,7 @@ const Message = () => {
                 <MessageItem />
                 <MessageItem />
             </ScrollbarFixTop>
-            <Chat />
+            <Chat /> */}
         </div>
     );
 };
