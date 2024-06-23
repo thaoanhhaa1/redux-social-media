@@ -69,6 +69,10 @@ dailyTaskController.analyzeTweets();
 // Middleware handle error
 app.use(handleErrorMiddleware);
 
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+  });
+
 mongoose.connection.once('open', () => {
     const server = app.listen(PORT, () =>
         console.log(`Server running on port: ${PORT}`),
